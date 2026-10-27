@@ -33,7 +33,11 @@ def latex_matriz(M, separador=None, cifras=6):
     se dibuja una línea vertical (para [A | b])."""
     n = len(M[0])
     columnas = "".join("c" if separador is None or j != separador else "|c" for j in range(n))
-    filas = r" \\ ".join(" & ".join(latex_numero(v, cifras) for v in fila) for fila in M)
+    # Las fracciones apiladas (\frac) quedan montadas entre filas si no se añade
+    # espacio vertical (defecto visual detectado en la revisión manual).
+    hay_fracciones = any(isinstance(v, Fraction) and v.denominator != 1 for fila in M for v in fila)
+    salto = r" \\[6pt] " if hay_fracciones else r" \\ "
+    filas = salto.join(" & ".join(latex_numero(v, cifras) for v in fila) for fila in M)
     return rf"\left[\begin{{array}}{{{columnas}}} {filas} \end{{array}}\right]"
 
 

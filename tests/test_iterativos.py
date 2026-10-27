@@ -199,7 +199,9 @@ class TestCriterioCyLimites(Ayudas):
     def test_P21_tolerancia_inalcanzable_avisa(self):
         r = ejecutar(S_A, S_b, config(JACOBI, tolerancia=1e-18))
         self.assertTrue(any("inalcanzable" in a for a in r.advertencias))
-        self.assertIn(r.codigo, (TOLERANCIA_CAMBIO, MAXIMO_ITERACIONES))
+        # d_k se estanca en el redondeo (~2.2e-16 > 1e-18): se alcanza el máximo.
+        self.assertEqual((r.codigo, r.k_final), (MAXIMO_ITERACIONES, 50))
+        self.assertGreater(r.d_final, 1e-18)
 
     def test_no_modifica_configuracion(self):
         c = config(JACOBI)
@@ -222,6 +224,15 @@ class TestEntradasInvalidas(unittest.TestCase):
         self.assertInvalida(S_A, S_b, config(criterio=CRITERIO_ITERACIONES, n_iteraciones=0))
         for omega in (0, 2, 2.5, -1, None):
             self.assertInvalida(S_A, S_b, config(SOR, omega=omega))
+
+    def test_tolerancias_extremas_mensajes(self):
+        r = ejecutar(S_A, S_b, config(tolerancia=F(1, 10**400)))
+        self.assertEqual(r.codigo, ENTRADA_INVALIDA)
+        self.assertIn("vale 0", r.mensaje)
+        r = ejecutar(S_A, S_b, config(tolerancia=F(10**400)))
+        self.assertEqual(r.codigo, ENTRADA_INVALIDA)
+        self.assertIn("demasiado grande", r.mensaje)
+        self.assertNotIn("El tolerancia", r.mensaje)
 
     def test_P20_omega_se_ignora_fuera_de_sor(self):
         r = ejecutar(S_A, S_b, config(JACOBI, omega=7))

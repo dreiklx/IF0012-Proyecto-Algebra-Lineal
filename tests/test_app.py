@@ -142,3 +142,17 @@ class TestAplicacion(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+@unittest.skipIf(AppTest is None, "Streamlit no está instalado en este intérprete")
+class TestComponentes(unittest.TestCase):
+
+    def test_latex_separa_filas_con_fracciones(self):
+        from fractions import Fraction
+        from interfaz.componentes import latex_matriz
+        con = latex_matriz([[Fraction(65, 33)], [Fraction(-29, 33)]])
+        self.assertIn(r"\[6pt]", con)
+        self.assertIn(r"\frac{65}{33}", con)
+        self.assertIn(r"-\frac{29}{33}", con)
+        sin = latex_matriz([[1, 2], [3, 4]])
+        self.assertNotIn("6pt", sin)

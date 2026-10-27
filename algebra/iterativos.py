@@ -199,7 +199,8 @@ def _a_float(valor, nombre):
     try:
         resultado = float(a_fraccion(valor))
     except OverflowError:
-        raise ErrorEntrada(f"El {nombre} es demasiado grande para representarse.") from None
+        raise ErrorEntrada(f"El valor de «{nombre}» es demasiado grande para representarse "
+                           f"en punto flotante.") from None
     return resultado
 
 
@@ -271,9 +272,12 @@ def validar_configuracion(A, b, config):
     if config.criterio in (CRITERIO_CAMBIO, CRITERIO_RESIDUO):
         if not es_numero(config.tolerancia):
             raise ErrorEntrada("La tolerancia debe ser un número mayor que 0.")
-        tol_f = _a_float(config.tolerancia, "tolerancia")
-        if not math.isfinite(tol_f) or tol_f <= 0:
+        if config.tolerancia <= 0:
             raise ErrorEntrada("La tolerancia debe ser un número mayor que 0.")
+        tol_f = _a_float(config.tolerancia, "tolerancia")
+        if tol_f == 0:
+            raise ErrorEntrada("La tolerancia es tan pequeña que en punto flotante vale 0; "
+                               "use un valor mayor (por ejemplo 1e-12).")
         if not _es_entero(config.k_max) or not (1 <= config.k_max <= K_TOPE):
             raise ErrorEntrada(f"El máximo de iteraciones debe ser un entero entre 1 y {K_TOPE}.")
         escala = max(1.0, _norma_inf(b_f))
