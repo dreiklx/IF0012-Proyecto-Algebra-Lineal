@@ -34,7 +34,7 @@ python -m venv .venv
 .venv\Scripts\python -m unittest -v
 ```
 
-También puede usar `ejecutar_pruebas.bat`. Hay 167 pruebas: el núcleo matemático, la validación y la interfaz (esta última con `streamlit.testing`).
+También puede usar `ejecutar_pruebas.bat`. Hay 176 pruebas: el núcleo matemático, la validación y la interfaz (esta última con `streamlit.testing`).
 
 ## Documentación
 

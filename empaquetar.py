@@ -23,13 +23,14 @@ INCLUIR = [
     "app.py", "README.md", "requirements.txt", "requirements-bloqueado.txt",
     "ejecutar.bat", "ejecutar_pruebas.bat", "empaquetar.py", ".gitignore", ".gitattributes",
     ".streamlit", "algebra", "interfaz", "visualizacion", "tests", "casos_prueba", "docs",
+    "prototipos",
 ]
 OBLIGATORIOS = [
     "app.py", "README.md", "requirements.txt", "ejecutar.bat",
     os.path.join("docs", "manual_usuario.md"), "casos_prueba",
 ]
 EXCLUIR_DIRECTORIOS = {"__pycache__", ".venv", "venv", ".git", "dist", ".pytest_cache"}
-EXCLUIR_EXTENSIONES = {".pyc", ".pyo", ".zip"}
+EXCLUIR_EXTENSIONES = {".pyc", ".pyo", ".zip", ".png"}
 EXCLUIR_ARCHIVOS = {"secrets.toml"}
 
 

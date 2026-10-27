@@ -14,22 +14,41 @@
 | V · Iterativos con criterios A/B/C | Verificado | `tests/test_iterativos.py` (P1–P21), `casos_prueba/modulo_IV.md` |
 | VI · Radio espectral | Verificado | `tests/test_espectral.py` |
 | VII · Interfaz web Streamlit | Probado | `tests/test_app.py` (AppTest); servidor real en localhost:8501; revisión visual de los módulos I y IV en Chrome |
-| VIII · Visualización 3D | Matplotlib: hecho. PyVista: evaluado, no incluido | `visualizacion/geometria_3d.py`; `docs/herramientas_y_bibliotecas.md` §5 |
-| IX · Pruebas integrales | Hecho | 167 pruebas, 0 fallos |
+| VIII · Visualización 3D | Matplotlib: hecho e integrado. PyVista: prototipo aislado probado (render fuera de pantalla), exportación HTML parcial, no integrado | `visualizacion/geometria_3d.py`; `docs/herramientas_y_bibliotecas.md` §5 |
+| IX · Pruebas integrales | Hecho | 176 pruebas, 0 fallos |
 | X · Documentación | Hecho | `docs/`, `casos_prueba/`, `README.md` |
 | XI · Matriz de cumplimiento | Hecho | `docs/auditoria_requisitos.md` |
+| Incentivo I-03 · Matrices dispersas (CSR) | Probado | `algebra/dispersas.py`, `tests/test_dispersas.py` |
 | XII · Empaquetado | Hecho | `empaquetar.py`, `ejecutar.bat`; ver la prueba de instalación abajo |
 
 ## Últimas pruebas
 
 ```
 .venv\Scripts\python -m unittest
-Ran 167 tests ... OK
+Ran 176 tests ... OK
 ```
 
-## Prueba de instalación aislada
+## Prueba de instalación aislada (27-oct-2026)
 
-Ver la sección «Resultado de la instalación aislada» más abajo.
+**Procedimiento:**
+
+1. Se generó el ZIP con `empaquetar.py 01`.
+2. Se extrajo en una carpeta temporal nueva, sin `.venv`.
+3. Se ejecutó el propio `ejecutar.bat` de esa copia, con `IF0012_SIN_NAVEGADOR=1` para no abrir el navegador.
+
+**Resultado:**
+
+- `ejecutar.bat` creó `.venv` con `py -3` (que en este equipo es **Python 3.14.1**) e instaló `requirements.txt` desde internet: «Successfully installed … matplotlib-3.11.2 … streamlit-1.66.1».
+- Arrancó el servidor, que respondió `ok` en `/_stcore/health` a los 62 s.
+- En esa copia, `python -m unittest` dio **167 pruebas OK**. El ZIP de esa prueba se generó antes de añadir el formato CSR; el ZIP final se volvió a probar:
+- **ZIP final** (53 archivos, con CSR): extraído en otra carpeta nueva, venv creado desde cero con Python 3.13.0 y `pip install -r requirements.txt` → `python -m unittest` dio **176 pruebas OK**.
+
+**Limitación honesta:** se probó en un entorno virtual nuevo **en este mismo equipo**, no en otro computador ni en un Windows sin Python previo.
+
+**Lecciones aplicadas:**
+
+- Sin `headless = true`, Streamlit pide un correo en el primer arranque y la consola se queda esperando. Por eso está en `.streamlit/config.toml`.
+- `ejecutar.bat` abre el navegador unos segundos después de arrancar el servidor.
 
 ## Bloqueos y pendientes que no dependen del código
 
@@ -50,5 +69,4 @@ Ver la sección «Resultado de la instalación aislada» más abajo.
 ## Siguiente paso técnico sugerido
 
 1. Añadir el caso obligatorio cuando llegue (`casos_prueba/README.md`).
-2. Incentivo I-03, matrices dispersas: formato CSR propio para Jacobi y GS.
-3. PyVista como prototipo aislado, solo si queda tiempo después de lo anterior.
+2. PyVista: decidir si vale la pena incrustar el HTML exportado (ver herramientas_y_bibliotecas.md §5).

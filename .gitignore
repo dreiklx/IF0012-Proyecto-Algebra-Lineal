@@ -15,3 +15,6 @@ Thumbs.db
 # Entregables generados
 dist/
 *.zip
+
+# Imágenes generadas por el prototipo opcional
+prototipos/*.png

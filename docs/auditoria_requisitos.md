@@ -15,7 +15,7 @@
 | Bloqueado | Depende de algo externo |
 | No aplicable | Con su justificación |
 
-Última ejecución de pruebas: `python -m unittest` → **167 pruebas, 0 fallos**.
+Última ejecución de pruebas: `python -m unittest` → **176 pruebas, 0 fallos**.
 
 ## Requisitos generales
 
@@ -119,7 +119,7 @@
 |---|---|---|---|
 | I-01 | Visualización avanzada (hasta 1 %) | Implementado | Comparación superpuesta de los 3 métodos (d, r, e); autovalores en el plano complejo con el círculo unidad; barrido de ω; CSV exportable de iteraciones |
 | I-02 | Precondicionamiento (hasta 1.5 %) | Bloqueado | Con M = D no hay efecto en Jacobi, GS ni SOR (demostrado); falta la aclaración de la docente |
-| I-03 | Matrices dispersas (hasta 1 %) | No iniciado | — |
+| I-03 | Matrices dispersas (hasta 1 %) | Probado | Formato CSR propio (`algebra/dispersas.py`), con pasos de Jacobi, GS y SOR que recorren solo los no nulos: O(nnz) por iteración frente a O(n²). Iteraciones idénticas a las densas (prueba); el paso CSR es 52 veces más rápido en una tridiagonal de 400×400 (medido); casilla «almacenamiento disperso» en el Módulo IV |
 | I-04 | Experiencia de usuario (hasta 0.5 %) | Implementado | Ejemplos del curso cargables, ayudas contextuales, mensajes con la posición del error, interpretación geométrica 2D y 3D |
 | I-05 | Extensión matemática (hasta 1 %) | Implementado | ρ(T) para n ≤ 8 con autovalores complejos (Faddeev-LeVerrier + Durand-Kerner, verificados); forma paramétrica de las infinitas soluciones; determinante; decisión exacta de Schur-Cohn |
 

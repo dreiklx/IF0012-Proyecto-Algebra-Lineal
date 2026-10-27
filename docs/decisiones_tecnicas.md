@@ -28,5 +28,6 @@ Cada decisión indica su fundamento y las alternativas descartadas. Las que depe
 | 22 | Planos 3D con **Matplotlib** (`Poly3DCollection`) | Sin dependencias nuevas; funciona dentro de Streamlit | PyVista (ver herramientas_y_bibliotecas.md) |
 | 23 | Configuración de Streamlit: `localhost`, `gatherUsageStats = false`, `headless = true` | Privacidad y no exposición en la red. Sin `headless`, el primer arranque se queda esperando un correo y bloquearía `ejecutar.bat` (comprobado) | Configuración por defecto |
 | 24 | Las figuras se dibujan **sin NumPy en nuestro código** | `plot_surface` exige arreglos de NumPy (error comprobado en Matplotlib 3.11); se usaron polígonos con listas | Importar NumPy en la visualización |
-| 25 | Precondicionamiento diagonal **no implementado como mejora** | Con M = D, Jacobi, GS y SOR no cambian (demostración en guia_matematica.md §9) **[Pendiente de aclaración]** | Implementarlo y presentar una «mejora» inexistente |
+| 25 | Precondicionamiento diagonal **no implementado como mejora** | Con M = D, Jacobi, GS y SOR no cambian (demostración en guia_matematica.md §10) **[Pendiente de aclaración]** | Implementarlo y presentar una «mejora» inexistente |
+| 27 | Formato **CSR propio** como opción, con iteraciones idénticas a las densas | Incentivo de matrices dispersas (OFICIAL p. 5); base en S9-05/10 pp. 8-15 | `scipy.sparse` (prohibido delegar) |
 | 26 | Nombre del ZIP: `Grupo01-…` o `Grupo02-…` | Interpretación de «Grupo(01-02)-IF0012-Proyecto-IIC.zip» **[Pendiente de confirmar]** | — |

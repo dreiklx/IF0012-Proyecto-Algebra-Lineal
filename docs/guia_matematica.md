@@ -258,7 +258,27 @@ La fórmula de T_ω es la estándar (Burden & Faires); no aparece en los PDF rev
 
 En el caso de Jacobi de S9-07/10, la hoja omite el término 4/3 y concluye ρ = 0.
 
-## 9. Precondicionamiento diagonal (no implementado como mejora; ver decisiones_tecnicas.md)
+## 9. Matrices dispersas: formato CSR (`algebra/dispersas.py`) [Incentivo]
+
+**Qué es una matriz dispersa.** Es una matriz en la que casi todos los elementos son cero: nnz ≪ n² (S9-05/10 p. 8).
+
+**Formato CSR** (S9-05/10 p. 9). Guarda tres listas:
+
+- `valores`: los aᵢⱼ no nulos, fila por fila;
+- `columnas`: la columna j de cada valor;
+- `inicio`: dónde empieza cada fila dentro de las otras dos listas.
+
+**Estrategia.** Jacobi, GS y SOR solo necesitan recorrer los no nulos de cada fila, así que cada iteración cuesta O(nnz) en lugar de O(n²). La memoria pasa de n² a 2·nnz + n + 1 números.
+
+**Comprobaciones:**
+
+- Los pasos recorren los no nulos en el mismo orden de columnas que la versión densa, de modo que las iteraciones son **idénticas** (verificado por una prueba).
+- En una tridiagonal 400×400 el paso CSR fue 52 veces más rápido (medido el 27-oct-2026).
+- El tiempo total incluye convertir la entrada densa, que cuesta O(n²).
+
+**Ejemplo:** la tridiagonal 5×5 tiene nnz = 5 + 4 + 4 = 13 (S9-05/10 p. 8).
+
+## 10. Precondicionamiento diagonal (no implementado como mejora; ver decisiones_tecnicas.md)
 
 Con M = D, el sistema D⁻¹Ax = D⁻¹b produce **exactamente las mismas iteraciones** de Jacobi, Gauss-Seidel y SOR que el original, porque D̃ = I, L̃ = D⁻¹L y Ũ = D⁻¹U, de modo que T̃ = T y c̃ = c. Lo que sí cambia es el residuo (r̃ = D⁻¹r) y, en general, κ.
 

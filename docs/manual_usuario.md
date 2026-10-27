@@ -120,7 +120,7 @@ Se muestra la ecuación y = m x + c, la gráfica de los datos con la recta y los
 
 ### Pestaña «Ejecutar un método»
 
-Elija Jacobi, Gauss-Seidel o SOR y pulse **Ejecutar**. Se muestran:
+Elija Jacobi, Gauss-Seidel o SOR y pulse **Ejecutar**. La casilla **«Usar almacenamiento disperso (CSR)»** guarda solo los elementos no nulos e informa nnz, la densidad y la memoria usada; las iteraciones son idénticas. Se muestran:
 
 - **El encabezado** con la configuración usada.
 - **El motivo de terminación:**

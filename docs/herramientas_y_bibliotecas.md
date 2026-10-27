@@ -60,9 +60,24 @@ En el desarrollo se usaron asistentes de IA:
 2. Declarar el uso según lo que ella indique.
 3. Asegurarse de que cada integrante comprende y puede explicar y reproducir cada algoritmo. Para eso está `docs/guia_defensa.md`.
 
-## 5. PyVista (evaluado, no incluido)
+## 5. PyVista (prototipo aislado; no integrado)
 
-- **Qué es:** PyVista 0.49.1 (docs.pyvista.org) es una biblioteca de visualización 3D basada en VTK.
-- **Integración web:** según su documentación, ahora requiere el paquete independiente `trame-pyvista` (0.2.3 en PyPI, publicado el 24-oct-2026). El componente de Streamlit `stpyvista` es de terceros y arrastra Panel y Bokeh.
-- **Decisión:** no se incluyó. No cubre ningún requisito obligatorio, y la misma visualización de planos se resolvió con Matplotlib dentro de Streamlit. Integrarlo añadiría dependencias pesadas y un componente experimental a la aplicación obligatoria.
-- **Estado:** no implementado, no probado y no integrado.
+**Documentación consultada:** docs.pyvista.org (versión 0.49.1). La integración web ahora vive en el paquete independiente `trame-pyvista`; `Plotter.export_html` está deprecado en favor de `plotter.trame.export_html(...)`.
+
+**Prototipo:** `prototipos/pyvista_planos.py`.
+
+- Resuelve el sistema con **nuestro Gauss** y dibuja con PyVista un `pyvista.Plane` por ecuación y una esfera en la solución. PyVista no calcula nada.
+- Se ejecutó en un **entorno virtual separado** (Python 3.13.0, fuera del proyecto): `pip install pyvista==0.49.1` instaló PyVista 0.49.1 y VTK 9.7.1.
+
+| Estado | Resultado (27-oct-2026) |
+|---|---|
+| Implementado | Sí, como prototipo aislado (`prototipos/`) |
+| Probado (render) | **Sí.** El render fuera de pantalla generó `prototipos/planos_pyvista.png` con los tres planos y la solución (1/3, 4, 5/3); la imagen se revisó |
+| Probado (exportación web) | **Parcial.** `plotter.trame.export_html` falló primero con `ImportError: nest_asyncio2`. Tras instalar `nest_asyncio2` generó un HTML autónomo (vtk.js) de 1.08 MB, que cargó en Chrome con el título «VTK.js \| Example - OfflineLocalView». **El render en el navegador no se pudo confirmar visualmente**: la captura de pantalla agotó el tiempo |
+| Integrado en la aplicación | **No.** Hay que añadir PyVista, VTK, `nest_asyncio2` y 10 paquetes `trame`, incluido `trame-pyvista`; la combinación no está en la documentación de Streamlit ni se probó dentro de la aplicación |
+
+**Decisión:**
+
+- La aplicación obligatoria no depende de PyVista. La interpretación geométrica se hace con Matplotlib (`visualizacion/geometria_3d.py`).
+- Posible vía futura, experimental y no probada dentro de la aplicación: incrustar el HTML exportado con `streamlit.components.v1.html`.
+- Antes de integrarlo habría que probar la estabilidad en el equipo de la defensa.
