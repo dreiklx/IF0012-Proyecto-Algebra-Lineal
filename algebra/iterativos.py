@@ -84,13 +84,13 @@ class ConfiguracionIterativa:
 
     def resumen(self):
         """Texto del encabezado que muestra la configuración usada."""
-        metodo = f"SOR (ω = {formatear_numero(self.omega)})" if self.metodo == SOR else self.metodo
+        metodo = f"SOR (ω = {formatear_numero(float(a_fraccion(self.omega)))})" if self.metodo == SOR else self.metodo
         x0 = "(" + ", ".join(formatear_numero(v) for v in (self.x0 or [])) + ")"
         if self.criterio == CRITERIO_ITERACIONES:
             criterio = f"N = {self.n_iteraciones} iteraciones fijas"
             return f"Método: {metodo} · x⁽⁰⁾ = {x0} · Criterio: {criterio}"
         texto = DESCRIPCION_CRITERIO[self.criterio].split(" (")[0]
-        texto = texto.replace("ε", f"ε = {formatear_numero(self.tolerancia)}")
+        texto = texto.replace("ε", f"ε = {formatear_numero(float(a_fraccion(self.tolerancia)))}")
         return (f"Método: {metodo} · x⁽⁰⁾ = {x0} · Criterio: {texto} · "
                 f"Máximo: {self.k_max} iteraciones")
 

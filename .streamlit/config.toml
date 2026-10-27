@@ -1,0 +1,20 @@
+# Configuración local de Streamlit para el proyecto IF0012.
+[browser]
+# No enviar estadísticas de uso a Streamlit.
+gatherUsageStats = false
+
+[server]
+# Solo accesible desde este equipo (no desde la red local).
+address = "localhost"
+port = 8501
+# Sin preguntas interactivas en el primer arranque (Streamlit pediría un correo
+# y la consola quedaría esperando). ejecutar.bat abre el navegador por su cuenta.
+headless = true
+
+[theme]
+base = "light"
+primaryColor = "#1f4e9c"
+
+[client]
+# Oculta el botón "Deploy" (no se publica la aplicación).
+toolbarMode = "minimal"
