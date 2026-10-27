@@ -1,0 +1,17 @@
+# Entorno virtual y cachés de Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Streamlit / editores / sistema
+.streamlit/secrets.toml
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# Entregables generados
+dist/
+*.zip
