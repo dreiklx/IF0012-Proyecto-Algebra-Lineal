@@ -44,3 +44,12 @@ Los radios espectrales se verificaron con oráculos independientes:
 | IV-15 | S9-07/10, Jacobi | Polinomio −λ³ − (4/9)λ + 4/3. ρ = 1.174364, por un par complejo: \|λ\|² = (4/3)/λ_real por Vieta. **La hoja concluye ρ = 0 (error)** | ρ = 1.174364, NO converge, 2 autovalores complejos | Sí |
 | IV-16 | S9-07/10, Gauss-Seidel | Polinomio −λ³ + (2/9)λ² + (2/3)λ, igual al manuscrito; ρ = (2 + √220)/18 = 0.935133 | ρ = 0.935133, converge | Sí |
 | IV-17 | Tridiagonal [−1, 4, −1], n = 4 | Por teoría: ρ_J = cos(π/5)/2 = 0.404508; ρ_GS = ρ_J² = 0.163627; ρ_SOR(ω = 1.25) = ω − 1 = 0.25 | Coinciden con 10, 10 y 6 decimales | Sí |
+
+## Casos añadidos en la auditoría final (27-oct-2026)
+
+| ID | Caso | Salida esperada | Resultado obtenido | ¿Coincide? |
+|---|---|---|---|---|
+| IV-18 | A = [[−4, −1, 3, −1], [2, 5, 1, 0], [1, −3, 5, 0], [2, 2, 2, 5]], SOR ω = 1/2 | Autovalores simples; ρ ≈ 0.5951 < 1; conclusión «converge» y resultado fiable (antes salía «indeterminado» por un defecto). Comprobación independiente: las iteraciones de SOR alcanzan ε = 10⁻¹⁰ | ρ = 0.5950974, CONVERGE, fiable; la ejecución termina por tolerancia | Sí |
+| IV-19 | A = [[2, 1, 1], [1, 2, 1], [3, 3, 2]] (singular), SOR ω = 1/2 | λ = 1 es autovalor exacto de T, luego ρ ≥ 1: «no converge», con decisión exacta | NO_CONVERGE, decisión exacta | Sí |
+| IV-20 | T con el autovalor 1/2 triple (bloque de Jordan) | ρ = 1/2, pero con raíz múltiple Durand-Kerner es impreciso: debe declararse «no fiable», no presentarse como garantizado | No fiable, aviso de autovalor múltiple, \|λ\| ≈ 0.500 | Sí |
+| IV-21 | ε = 10⁻⁴⁰⁰ (se anula en float) y ε = 10⁴⁰⁰ | Mensajes claros y específicos | «…en punto flotante vale 0…» / «…demasiado grande…» | Sí |

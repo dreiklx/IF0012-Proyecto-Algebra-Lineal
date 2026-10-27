@@ -2,6 +2,9 @@
 
 ## Formato de la defensa (OFICIAL p. 3-4)
 
+Integrantes: Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Arias y Samir Sandoval Ramírez. La defensa es en la semana del 16 de noviembre de 2026.
+
+
 - **Duración:** 6 a 8 minutos por integrante.
 - **Contenido:**
   - demostrar que la aplicación funciona;
@@ -20,7 +23,7 @@
 1. **Por qué fracciones exactas.** En Gauss, la inversa, κ y los mínimos cuadrados los resultados son exactos: 1/3 se guarda como 1/3, no como 0.333… Así un pivote es cero solo si es realmente cero, y la clasificación no depende de redondeos.
 2. **Por qué `float` en los iterativos.** Son aproximaciones que se detienen por tolerancia. Con fracciones, los denominadores crecerían en cada iteración.
 3. **Núcleo e interfaz.** `algebra/` contiene todos los cálculos, en Python puro. `interfaz/` solo lee los datos y muestra los resultados. `visualizacion/` solo dibuja.
-4. **Cómo se verifica.** Hay 176 pruebas automáticas (`python -m unittest`). Los valores esperados se calcularon de forma independiente: a mano, con Cramer, con fórmulas cerradas o con teoremas. No se copiaron de las láminas.
+4. **Cómo se verifica.** Hay 184 pruebas automáticas (`python -m unittest`) y una auditoría independiente en `auditoria/`, que compara el núcleo con oráculos escritos aparte (Leibniz, adjunta, Cramer, Gelfand). Los valores esperados se calcularon de forma independiente: a mano, con Cramer, con fórmulas cerradas o con teoremas. No se copiaron de las láminas.
 5. **Errores de las láminas.** Algunos ejemplos impresos están mal (tabla de la sección 6). Si en la defensa la aplicación «no coincide» con una lámina, hay que poder mostrar por qué: sustituir la solución en el sistema y ver el residuo.
 
 ---
@@ -168,6 +171,13 @@
 - `plot_surface` de Matplotlib 3.11 no acepta listas; los planos se dibujan con polígonos (`Poly3DCollection`). Lo detectó la prueba `test_app`.
 - Una constante de prueba mal redondeada (0.5798 en lugar de 0.57985). La implementación era correcta: lo confirmó la comprobación por bisección.
 - Streamlit se quedaba esperando un correo electrónico en el primer arranque. Se configuró `headless = true` para que `ejecutar.bat` no se bloquee.
+
+## 7b. Defectos encontrados en la auditoría final (27-oct-2026)
+
+- **Durand-Kerner tenía una tolerancia de parada inalcanzable (10⁻¹⁵).** Con raíces simples, a veces declaraba «no fiable» y la aplicación concluía «indeterminado» aunque el método convergía (por ejemplo, ρ = 0.595). Se cambió a 10⁻¹²; la verificación posterior (|p(λ)|, traza) se mantiene.
+- **λ = ±1 se comprueba ahora de forma exacta.** Si p(1) = 0 o p(−1) = 0 con fracciones, ρ ≥ 1 con certeza. Esto ocurre, por ejemplo, si A es singular, porque T = I − M⁻¹A tiene entonces el autovalor 1.
+- **Limitación que hay que saber explicar.** Con autovalores **múltiples** (raíz doble o triple) Durand-Kerner pierde precisión, y la aplicación responde «indeterminado» en lugar de dar un número dudoso.
+- **Fracciones en LaTeX:** se añadió espacio entre filas para que las fracciones no se monten.
 
 ## 8. Cómo comprobar un resultado en vivo
 

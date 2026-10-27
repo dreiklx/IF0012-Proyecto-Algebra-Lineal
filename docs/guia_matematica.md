@@ -236,7 +236,10 @@ La fórmula de T_ω es la estándar (Burden & Faires); no aparece en los PDF rev
    - Σλ = traza(T);
    - aviso si hay raíces casi repetidas, que reducen la precisión;
    - aviso si Durand-Kerner no converge.
-5. **Conclusión:**
+   **Corrección de la auditoría final:** la tolerancia de parada de Durand-Kerner es 10⁻¹². Con 10⁻¹⁵, el ruido de redondeo (~10⁻¹⁵) impedía a veces declarar la convergencia incluso con raíces simples.
+5. **Conclusión** (función `concluir`):
+   - Si λ = 1 o λ = −1 anulan p(λ) **exactamente** (con fracciones), entonces ρ ≥ 1 y el método no converge. La decisión es exacta.
+   - Con raíces casi repetidas, la banda de indeterminación se amplía a 10⁻⁶.
    - Si |ρ − 1| < 10⁻⁹ o el cálculo no es fiable, el resultado es «indeterminado».
    - Para polinomios reducidos de grado ≤ 2 se decide de forma **exacta** con las condiciones de Schur-Cohn **[Extensión]**: |c₂| < 1 y |c₁| < 1 + c₂.
    - Para n > 8 no se calcula ρ y se informa la limitación.

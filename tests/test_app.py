@@ -156,3 +156,21 @@ class TestComponentes(unittest.TestCase):
         self.assertIn(r"-\frac{29}{33}", con)
         sin = latex_matriz([[1, 2], [3, 4]])
         self.assertNotIn("6pt", sin)
+
+    def test_csv_exportado_contiene_historial_completo(self):
+        import csv
+        import io
+        from algebra.iterativos import ConfiguracionIterativa, ejecutar
+        from interfaz.modulo_iterativos import csv_historial
+        r = ejecutar([[10, -1, 2], [-1, 11, -1], [2, -1, 10]], [6, 25, -11],
+                     ConfiguracionIterativa())
+        filas = list(csv.reader(io.StringIO(csv_historial(r))))
+        self.assertTrue(filas[0][0].startswith("# Método: Jacobi"))
+        self.assertIn("Criterio satisfecho", filas[1][0])
+        self.assertEqual(filas[2], ["k", "x1", "x2", "x3", "d_k", "r_k"])
+        datos = filas[3:]
+        self.assertEqual(len(datos), len(r.historial))          # k = 0..7
+        self.assertEqual(datos[0][4], "")                        # d_0 no existe
+        # precisión completa: los valores se pueden reconstruir exactamente
+        self.assertEqual([float(v) for v in datos[-1][1:4]], r.x_final)
+        self.assertEqual(float(datos[-1][4]), r.d_final)

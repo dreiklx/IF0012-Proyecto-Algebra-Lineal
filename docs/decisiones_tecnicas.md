@@ -21,7 +21,7 @@ Cada decisión indica su fundamento y las alternativas descartadas. Las que depe
 | 15 | Comparación con **condiciones homogéneas** por defecto y aviso si no lo son | Comparación justa (OFICIAL p. 2) | — |
 | 16 | **e_k** se calcula solo respecto a la solución exacta del método directo | No se confunde con d_k ni con r_k | Usar d_k como «error» |
 | 17 | ρ(T) por **polinomio característico exacto (Faddeev-LeVerrier) y Durand-Kerner** | Procedimiento del curso (det(T − λI) = 0) generalizado a n > 3 y a raíces complejas. Son algoritmos propios, documentados como extensión **[Pendiente de confirmar el alcance]** | Método de la potencia, que falla con pares complejos y ±μ; `numpy.roots` está prohibido |
-| 18 | Decisión exacta de ρ < 1 para grado ≤ 2 (Schur-Cohn); banda de indeterminación de 10⁻⁹ en el resto | Evita conclusiones falsas cuando ρ ≈ 1 | Comparar siempre ρ con 1 en `float` |
+| 18 | Decisión exacta de ρ < 1 para grado ≤ 2 (Schur-Cohn) y de ρ ≥ 1 si p(±1) = 0; banda de indeterminación de 10⁻⁹ (10⁻⁶ con raíces casi repetidas); tolerancia de Durand-Kerner 10⁻¹² (corregida en la auditoría) | Evita conclusiones falsas cuando ρ ≈ 1 | Comparar siempre ρ con 1 en `float` |
 | 19 | Límite de **n ≤ 8** para el cálculo de ρ | Prioriza la fiabilidad sobre el tamaño (OFICIAL: «cuando el procedimiento estudiado lo permita») | Sin límite |
 | 20 | No hay reordenamiento automático de filas | No está pedido; puede cambiar el procedimiento esperado **[Pendiente de confirmar]**. El usuario puede reordenar a mano | Reordenar en silencio |
 | 21 | **Streamlit** como interfaz web local | Formularios, tablas y gráficas con poco código. Se probó con AppTest y con el servidor real | Tkinter; Trame |
@@ -30,4 +30,4 @@ Cada decisión indica su fundamento y las alternativas descartadas. Las que depe
 | 24 | Las figuras se dibujan **sin NumPy en nuestro código** | `plot_surface` exige arreglos de NumPy (error comprobado en Matplotlib 3.11); se usaron polígonos con listas | Importar NumPy en la visualización |
 | 25 | Precondicionamiento diagonal **no implementado como mejora** | Con M = D, Jacobi, GS y SOR no cambian (demostración en guia_matematica.md §10) **[Pendiente de aclaración]** | Implementarlo y presentar una «mejora» inexistente |
 | 27 | Formato **CSR propio** como opción, con iteraciones idénticas a las densas | Incentivo de matrices dispersas (OFICIAL p. 5); base en S9-05/10 pp. 8-15 | `scipy.sparse` (prohibido delegar) |
-| 26 | Nombre del ZIP: `Grupo01-…` o `Grupo02-…` | Interpretación de «Grupo(01-02)-IF0012-Proyecto-IIC.zip» **[Pendiente de confirmar]** | — |
+| 26 | Nombre del ZIP: `Grupo01-…` o `Grupo02-…` | Interpretación de «Grupo(01-02)-IF0012-Proyecto-IIC.zip». **El número de grupo está pendiente de confirmar por el grupo**; las fechas (entrega 11-nov, defensa en la semana del 16-nov) ya están confirmadas | — |

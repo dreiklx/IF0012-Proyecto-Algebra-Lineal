@@ -1,72 +1,100 @@
 # Estado del desarrollo
 
-**Última actualización:** 27-oct-2026. El historial completo está en `git log`.
+**Última actualización:** 27-oct-2026, tras la auditoría final. El historial completo está en `git log`.
 
-## Resumen
+## Datos del proyecto (confirmados por el grupo)
 
-| Etapa | Estado | Evidencia |
-|---|---|---|
-| Entorno (venv con Python 3.13.0, git local, `.gitignore`) | Hecho | `.venv/`, repositorio git sin remoto |
-| I · Operaciones matriciales y validación | Probado | `tests/test_matriz.py`, `tests/test_validacion.py` |
-| II · Métodos directos (Gauss, Gauss-Jordan, inversa, det) | Verificado | `tests/test_directos.py`, `casos_prueba/modulo_I.md` |
-| III · Condicionamiento y perturbaciones | Verificado | `tests/test_condicion.py`, `casos_prueba/modulo_II.md` |
-| IV · Mínimos cuadrados y ajuste | Verificado | `tests/test_minimos.py`, `casos_prueba/modulo_III.md` |
-| V · Iterativos con criterios A/B/C | Verificado | `tests/test_iterativos.py` (P1–P21), `casos_prueba/modulo_IV.md` |
-| VI · Radio espectral | Verificado | `tests/test_espectral.py` |
-| VII · Interfaz web Streamlit | Probado | `tests/test_app.py` (AppTest); servidor real en localhost:8501; revisión visual de los módulos I y IV en Chrome |
-| VIII · Visualización 3D | Matplotlib: hecho e integrado. PyVista: prototipo aislado probado (render fuera de pantalla), exportación HTML parcial, no integrado | `visualizacion/geometria_3d.py`; `docs/herramientas_y_bibliotecas.md` §5 |
-| IX · Pruebas integrales | Hecho | 176 pruebas, 0 fallos |
-| X · Documentación | Hecho | `docs/`, `casos_prueba/`, `README.md` |
-| XI · Matriz de cumplimiento | Hecho | `docs/auditoria_requisitos.md` |
-| Incentivo I-03 · Matrices dispersas (CSR) | Probado | `algebra/dispersas.py`, `tests/test_dispersas.py` |
-| XII · Empaquetado | Hecho | `empaquetar.py`, `ejecutar.bat`; ver la prueba de instalación abajo |
+| Dato | Valor |
+|---|---|
+| Curso | IF0012 Álgebra Lineal para Informática Empresarial, II Ciclo 2026 |
+| Integrantes | Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Arias, Samir Sandoval Ramírez |
+| Entrega | **11 de noviembre de 2026** |
+| Defensa individual | Semana del **16 de noviembre de 2026** |
+| Número de grupo (01 o 02) | **Sin confirmar**. Determina el nombre del ZIP |
 
-## Últimas pruebas
+## Pruebas: resultados reales
 
 ```
 .venv\Scripts\python -m unittest
-Ran 176 tests ... OK
+Ran 184 tests ... OK            (0 fallos, 0 omitidas)
 ```
 
-## Prueba de instalación aislada (27-oct-2026)
+| Archivo | Pruebas | Qué cubre | Tipo de oráculo |
+|---|---:|---|---|
+| test_matriz | 47 | Validación, operaciones, normas, residuo | Valores calculados a mano y ejemplos del curso |
+| test_validacion | 13 | Lectura de texto, parámetros, formato | Casos construidos a mano |
+| test_directos | 26 | Gauss, Gauss-Jordan, clasificación, inversa, determinante | Sustitución a mano; inversa por adjunta |
+| test_condicion | 13 | κ∞, escala, perturbaciones | Inversa 2×2 por fórmula; estructura I + 10J |
+| test_minimos | 10 | Ecuaciones normales, residuo, ajuste | Cramer; fórmula cerrada de la recta; Aᵀr = 0 |
+| test_iterativos | 31 | Jacobi, GS y SOR, criterios A/B/C, motivos, comparación | Programa independiente (27-oct) más contrastes con manuscritos y el ZIP |
+| test_espectral | 24 | T, polinomio, autovalores, ρ, regresiones de la auditoría | Sarrus a mano, formas cerradas, bisección, teoría tridiagonal |
+| test_dispersas | 8 | Formato CSR | Construcción a mano; igualdad con la versión densa |
+| test_app | 12 | La interfaz con AppTest (sin navegador) y el contenido del CSV | **Superficiales:** comprueban que no hay excepciones y que aparecen los mensajes esperados, **no** el contenido visual de las gráficas |
 
-**Procedimiento:**
+**Auditoría independiente** (`auditoria/`, unos 20 s, semilla fija):
 
-1. Se generó el ZIP con `empaquetar.py 01`.
-2. Se extrajo en una carpeta temporal nueva, sin `.venv`.
-3. Se ejecutó el propio `ejecutar.bat` de esa copia, con `IF0012_SIN_NAVEGADOR=1` para no abrir el navegador.
+- 4500 sistemas: rangos por menores (Leibniz), soluciones y direcciones;
+- 400 inversas, determinantes y κ (adjunta);
+- 200 perturbaciones (Cramer);
+- 300 mínimos cuadrados (Cramer, Aᵀr = 0);
+- 600 ejecuciones iterativas (implementación independiente);
+- 300 análisis espectrales: cada λ anula det(T − λI) por Leibniz, el producto es igual a det(T) y ρ concuerda con Gelfand ‖Tᵏ‖^(1/k).
 
-**Resultado:**
+Resultado: **0 fallos**.
 
-- `ejecutar.bat` creó `.venv` con `py -3` (que en este equipo es **Python 3.14.1**) e instaló `requirements.txt` desde internet: «Successfully installed … matplotlib-3.11.2 … streamlit-1.66.1».
-- Arrancó el servidor, que respondió `ok` en `/_stcore/health` a los 62 s.
-- En esa copia, `python -m unittest` dio **167 pruebas OK**. El ZIP de esa prueba se generó antes de añadir el formato CSR; el ZIP final se volvió a probar:
-- **ZIP final** (53 archivos, con CSR): extraído en otra carpeta nueva, venv creado desde cero con Python 3.13.0 y `pip install -r requirements.txt` → `python -m unittest` dio **176 pruebas OK**.
+**Revisión visual manual** (Chrome, 27-oct):
 
-**Limitación honesta:** se probó en un entorno virtual nuevo **en este mismo equipo**, no en otro computador ni en un Windows sin Python previo.
+- **Vistos:**
+  - Módulo I: solución y pasos (fase VII).
+  - Módulo II: κ, inversa, tabla de perturbación y errores.
+  - Módulo III: ecuaciones normales, x̂, residuos y la gráfica del ajuste.
+  - Módulo IV: tabla de iteraciones (fase VII), comparación homogénea (tabla y gráfica), pestaña de convergencia (T, polinomio, autovalores, ρ).
+  - Planos 3D: figuras de solución única e infinitas guardadas como PNG y revisadas fuera del navegador.
+- **No vistos:** varias capturas agotaron el tiempo mientras la página se redibujaba, y no se dan por vistas:
+  - la gráfica de convergencia de una ejecución individual (Módulo IV);
+  - la figura 3D dentro del navegador;
+  - el espaciado corregido de las fracciones.
 
-**Lecciones aplicadas:**
+## Defectos encontrados y corregidos en la auditoría final
 
-- Sin `headless = true`, Streamlit pide un correo en el primer arranque y la consola se queda esperando. Por eso está en `.streamlit/config.toml`.
-- `ejecutar.bat` abre el navegador unos segundos después de arrancar el servidor.
+| # | Defecto | Efecto | Corrección | Prueba de regresión |
+|---|---|---|---|---|
+| 1 | Tolerancia de Durand-Kerner (10⁻¹⁵) inalcanzable por redondeo | Raíces **simples** marcadas «no fiables» y conclusión «indeterminado» en casos que convergen (5 de 300 en la auditoría aleatoria, por ejemplo ρ = 0.595) | Tolerancia 10⁻¹²; se mantiene la verificación posterior | test_raices_simples_no_deben_marcarse_no_fiables |
+| 2 | λ = ±1 exacto (por ejemplo, A singular) con grado ≥ 3 | Se informaba «indeterminado» aunque ρ ≥ 1 es seguro | Comprobación exacta p(±1) = 0 con fracciones → «no converge» | test_autovalor_uno_exacto_decide_no_convergencia |
+| 3 | Con raíces casi repetidas el error de ρ (~10⁻⁸) superaba la banda de 10⁻⁹ | Riesgo de conclusión invertida si ρ ≈ 1 | Banda de 10⁻⁶ cuando hay raíces casi repetidas; función `concluir` | test_bandas, test_raiz_doble_cerca_de_uno |
+| 4 | Aviso de raíz múltiple ausente cuando Durand-Kerner no converge | Mensaje poco claro | El aviso menciona el «autovalor múltiple» | test_raiz_multiple_se_declara_indeterminada |
+| 5 | ε positiva que se anula en float (10⁻⁴⁰⁰) | Mensaje engañoso: «debe ser mayor que 0» | Mensaje específico | test_tolerancias_extremas_mensajes |
+| 6 | «El tolerancia es demasiado grande» | Error gramatical | Mensaje genérico correcto | ídem |
+| 7 | Fracciones apiladas que se montaban en vectores y matrices LaTeX | Defecto visual (Módulos III y IV) | Espacio entre filas cuando hay fracciones | test_latex_separa_filas_con_fracciones (visual **sin confirmar**) |
+| 8 | P21 aceptaba dos resultados posibles | Prueba débil | Ahora comprueba el resultado determinista | P21 |
+| 9 | La exportación CSV no tenía prueba | Funcionalidad sin evidencia | Prueba del contenido y de la precisión completa | test_csv_exportado_contiene_historial_completo |
 
-## Bloqueos y pendientes que no dependen del código
+## Limitaciones conocidas (no resueltas)
+
+1. Autovalores múltiples: ρ queda como «indeterminado» (ver auditoria_requisitos.md).
+2. La interfaz no tiene pruebas automáticas del contenido visual de las gráficas.
+3. La instalación se probó en entornos virtuales nuevos **en este equipo**, no en otro computador.
+4. Streamlit y Matplotlib instalan NumPy como dependencia interna; nuestro código no lo importa.
+
+## Instalación aislada
+
+- **Fase anterior:** `ejecutar.bat` en una copia extraída del ZIP creó `.venv` (Python 3.14.1), instaló las dependencias y el servidor respondió `ok`. En esa copia pasaron 167 pruebas (la versión de entonces).
+- **ZIP de la auditoría final (27-oct):** 56 archivos (119 KB), una sola carpeta raíz, sin `.venv`, cachés, `.git` ni imágenes; `ejecutar.bat` con fin de línea CRLF.
+  - Extraído en una carpeta nueva, el propio `ejecutar.bat` creó `.venv` (Python 3.14.1), instaló las dependencias y el servidor respondió `ok` a los 51 s.
+  - En esa copia: **184 pruebas OK** y auditoría independiente con **0 fallos**.
+  - El ZIP se generó con el nombre provisional `Grupo01-…` solo para esta verificación y **se borró**: el número de grupo no está confirmado.
+
+## Pendientes que no dependen del código
 
 | # | Pendiente | Impacto | Quién |
 |---|---|---|---|
-| 1 | **Autorización del uso de IA** (PROG p. 7 §6.2) | Integridad académica | Grupo → docente |
-| 2 | Fecha de entrega y defensa: el 11-nov (OFICIAL) o la semana 15 (programa) | Planificación | Grupo → docente |
-| 3 | Número de grupo (01 o 02) para el nombre del ZIP | Entregable | Grupo |
-| 4 | Caso de validación obligatorio de la docente | C-07 (3 %) | Docente |
-| 5 | Si se permite NumPy como dependencia transitiva de Streamlit y Matplotlib | Restricción | Docente |
-| 6 | Alcance de ρ(T) (n > 3, autovalores complejos, métodos extra) | M4-05 | Docente |
-| 7 | Qué es el «error final» en la comparación | M4-07 | Docente |
-| 8 | Qué comparación espera en el precondicionamiento diagonal | I-02 (1.5 %) | Docente |
-| 9 | Si se acepta el reordenamiento automático de filas | — | Docente |
-| 10 | Probar el manual con una persona ajena al equipo | C-06 | Grupo |
-| 11 | Preparar la defensa individual (4 integrantes) | 35 % | Grupo |
-
-## Siguiente paso técnico sugerido
-
-1. Añadir el caso obligatorio cuando llegue (`casos_prueba/README.md`).
-2. PyVista: decidir si vale la pena incrustar el HTML exportado (ver herramientas_y_bibliotecas.md §5).
+| 1 | **Autorización expresa del uso de IA** en el código entregable (PROG p. 7 §6.2) | Integridad académica | Grupo → docente |
+| 2 | **Número de grupo** (01 o 02) | Nombre del ZIP | Grupo |
+| 3 | **Caso de validación obligatorio** | C-07 (3 %) | Docente |
+| 4 | Significado oficial del **«error final»** | M4-07 | Docente |
+| 5 | **Alcance exigido del radio espectral** (n > 3, autovalores complejos o múltiples, métodos extra) | M4-05 | Docente |
+| 6 | NumPy como dependencia transitiva; `math.sqrt` como operación elemental | R-02, R-03 | Docente |
+| 7 | Interpretación de la perturbación porcentual | M2-03 | Docente |
+| 8 | Comparación esperada en el precondicionamiento diagonal | I-02 (1.5 %) | Docente |
+| 9 | Revisión visual de lo no confirmado; manual probado por un tercero | C-05, C-06 | Grupo |
+| 10 | Preparación de la defensa individual | 35 % | Los 4 integrantes |

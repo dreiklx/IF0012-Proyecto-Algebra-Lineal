@@ -1,5 +1,8 @@
 # Proyecto IF0012 — Álgebra Lineal Numérica
 
+**Integrantes:** Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Arias y Samir Sandoval Ramírez.  
+**Entrega:** 11 de noviembre de 2026; defensa individual en la semana del 16 de noviembre de 2026.
+
 Aplicación web local e integrada para el proyecto final de **IF0012 Álgebra Lineal para Informática Empresarial** (Universidad de Costa Rica, II Ciclo 2026). Sirve para modelar, resolver y analizar problemas de álgebra lineal y análisis numérico. Todos los algoritmos centrales se implementaron **desde cero** en Python.
 
 ## Funcionalidades
@@ -34,7 +37,14 @@ python -m venv .venv
 .venv\Scripts\python -m unittest -v
 ```
 
-También puede usar `ejecutar_pruebas.bat`. Hay 176 pruebas: el núcleo matemático, la validación y la interfaz (esta última con `streamlit.testing`).
+También puede usar `ejecutar_pruebas.bat`. Hay 184 pruebas: el núcleo matemático, la validación y la interfaz (esta última con `streamlit.testing`).
+
+Auditoría independiente (unos 20 s), que compara el núcleo con oráculos escritos aparte:
+
+```
+.venv\Scripts\python auditoria/auditoria_directos.py .
+.venv\Scripts\python auditoria/auditoria_iterativos.py .
+```
 
 ## Documentación
 

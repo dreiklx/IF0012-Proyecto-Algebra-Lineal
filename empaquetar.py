@@ -22,7 +22,7 @@ RAIZ = os.path.dirname(os.path.abspath(__file__))
 INCLUIR = [
     "app.py", "README.md", "requirements.txt", "requirements-bloqueado.txt",
     "ejecutar.bat", "ejecutar_pruebas.bat", "empaquetar.py", ".gitignore", ".gitattributes",
-    ".streamlit", "algebra", "interfaz", "visualizacion", "tests", "casos_prueba", "docs",
+    ".streamlit", "algebra", "interfaz", "visualizacion", "tests", "casos_prueba", "docs", "auditoria",
     "prototipos",
 ]
 OBLIGATORIOS = [
