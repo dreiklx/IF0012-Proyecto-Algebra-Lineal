@@ -118,6 +118,15 @@ class TestAplicacion(unittest.TestCase):
         self.assertFalse(at.exception)
         self.assertIn("mayor que 0", textos(at.error))
 
+    def test_modulo_IV_formato_csr(self):
+        at = self.abrir("IV · Métodos iterativos")
+        at.checkbox(key="it_csr").check()
+        at.button(key="it_ejecutar").click()
+        at.run()
+        self.assertFalse(at.exception)
+        self.assertIn("Formato CSR: nnz = 9", textos(at.info))
+        self.assertIn("Criterio satisfecho: d_7", textos(at.success))
+
     def test_modulo_IV_jacobi_no_converge(self):
         at = self.abrir("IV · Métodos iterativos")
         at.selectbox(key="it_ejemplo").set_value("S9-07/10 — Jacobi no converge (ρ ≈ 1.174)")

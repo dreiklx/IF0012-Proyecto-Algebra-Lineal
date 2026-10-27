@@ -5,6 +5,7 @@ import io
 
 import streamlit as st
 
+from algebra.dispersas import a_csr
 from algebra.espectral import CONVERGE, NO_CALCULADO, NO_CONVERGE, radio_espectral
 from algebra.iterativos import (
     CRITERIO_CAMBIO,
@@ -115,6 +116,11 @@ def mostrar():
 
     with pestana_uno:
         metodo = st.selectbox("Método", METODOS, key="it_metodo")
+        disperso = st.checkbox(
+            "Usar almacenamiento disperso (CSR)", key="it_csr",
+            help="Guarda solo los elementos no nulos y cada iteración recorre únicamente "
+                 "esos elementos (O(nnz) en lugar de O(n²)). Produce exactamente las "
+                 "mismas iteraciones que el almacenamiento denso.")
         if st.button("Ejecutar", type="primary", key="it_ejecutar"):
             st.session_state.pop("it_resultado", None)
             datos = leer_todo(metodo == SOR)
@@ -122,9 +128,17 @@ def mostrar():
                 config = ConfiguracionIterativa(
                     metodo=metodo, criterio=criterio, x0=datos["x0"],
                     tolerancia=datos.get("tolerancia", 1e-3), k_max=datos.get("k_max", 50),
-                    n_iteraciones=datos.get("n_iteraciones", 5), omega=datos["omega"])
+                    n_iteraciones=datos.get("n_iteraciones", 5), omega=datos["omega"],
+                    formato="csr" if disperso else "densa")
                 st.session_state["it_resultado"] = ejecutar(datos["A"], datos["b"], config)
+                st.session_state["it_csr_info"] = a_csr(datos["A"]) if disperso else None
         if "it_resultado" in st.session_state:
+            info = st.session_state.get("it_csr_info")
+            if info is not None:
+                memoria = info.memoria()
+                st.info(f"🧩 Formato CSR: nnz = {info.nnz} de {info.n}² = {info.n * info.n} "
+                        f"elementos (densidad {info.densidad:.1%}). Números almacenados: "
+                        f"{memoria['csr']} (CSR) frente a {memoria['densa']} (denso).")
             mostrar_ejecucion(st.session_state["it_resultado"])
 
     with pestana_comparar:

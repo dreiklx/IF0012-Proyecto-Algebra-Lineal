@@ -34,6 +34,13 @@ import math
 from dataclasses import dataclass, field, replace
 
 from algebra.directos import ErrorSistema, a_fraccion, solucion_unica
+from algebra.dispersas import (
+    a_csr,
+    paso_gauss_seidel_csr,
+    paso_jacobi_csr,
+    paso_sor_csr,
+    residuo_inf_csr,
+)
 from algebra.matriz import ErrorMatriz, es_numero, validar_cuadrada, validar_vector
 from algebra.validacion import ErrorEntrada, formatear_numero
 
@@ -81,6 +88,7 @@ class ConfiguracionIterativa:
     k_max: int = 50
     n_iteraciones: int = 5
     omega: float = 1.2
+    formato: str = "densa"    # "densa" o "csr" (almacenamiento disperso, algebra/dispersas.py)
 
     def resumen(self):
         """Texto del encabezado que muestra la configuración usada."""
@@ -179,6 +187,8 @@ def paso_sor(A, b, x_anterior, omega):
 
 
 PASOS = {JACOBI: paso_jacobi, GAUSS_SEIDEL: paso_gauss_seidel, SOR: paso_sor}
+PASOS_CSR = {JACOBI: paso_jacobi_csr, GAUSS_SEIDEL: paso_gauss_seidel_csr, SOR: paso_sor_csr}
+FORMATOS = ("densa", "csr")
 
 
 # ---------------------------------------------------------------------------
@@ -245,6 +255,8 @@ def validar_configuracion(A, b, config):
         raise ErrorEntrada(f"Método desconocido: {config.metodo}.")
     if config.criterio not in CRITERIOS:
         raise ErrorEntrada(f"Criterio de parada desconocido: {config.criterio}.")
+    if config.formato not in FORMATOS:
+        raise ErrorEntrada(f"Formato de almacenamiento desconocido: {config.formato}.")
     n = validar_cuadrada(A, "matriz A")
     if validar_vector(b, "vector b") != n:
         raise ErrorEntrada(f"b debe tener {n} componentes (A es {n}x{n}).")
@@ -314,13 +326,21 @@ def _ejecutar(A, b, config):
                 mensaje=f"a_{i + 1}{i + 1} = 0 en la fila {i + 1}: el método no puede "
                         f"iniciarse. Considere reordenar las ecuaciones.")
 
-    paso = PASOS[config.metodo]
+    # Con formato CSR solo se recorren los elementos no nulos (mismas iteraciones).
+    if config.formato == "csr":
+        matriz = a_csr(A_f)
+        paso = PASOS_CSR[config.metodo]
+        residuo = residuo_inf_csr
+    else:
+        matriz = A_f
+        paso = PASOS[config.metodo]
+        residuo = _residuo_inf
     omega = _a_float(config.omega, "ω") if config.metodo == SOR else None
     tol = _a_float(config.tolerancia, "tolerancia") if config.criterio != CRITERIO_ITERACIONES else None
     limite = config.n_iteraciones if config.criterio == CRITERIO_ITERACIONES else config.k_max
 
     x = list(x0)
-    r0 = _residuo_inf(A_f, b_f, x)
+    r0 = residuo(matriz, b_f, x)
     historial = [FilaIteracion(k=0, x=list(x), d=None, r=r0)]
 
     def resultado(codigo, mensaje, cumplido, k_error=None):
@@ -336,11 +356,11 @@ def _ejecutar(A, b, config):
             f"no se realizaron iteraciones.", True)
 
     for k in range(1, limite + 1):
-        x_nuevo = paso(A_f, b_f, x, omega)
+        x_nuevo = paso(matriz, b_f, x, omega)
         d = r = None
         if all(math.isfinite(v) for v in x_nuevo):
             d = _norma_inf([x_nuevo[i] - x[i] for i in range(n)])
-            r = _residuo_inf(A_f, b_f, x_nuevo)
+            r = residuo(matriz, b_f, x_nuevo)
         if d is None or not (math.isfinite(d) and math.isfinite(r)):
             return resultado(
                 ERROR_NO_FINITO,
