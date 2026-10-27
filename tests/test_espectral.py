@@ -180,6 +180,72 @@ class TestRadioEspectral(unittest.TestCase):
                                          [6, 25, -11], JACOBI).conclusion, CONVERGE)
 
 
+class TestRegresionAuditoria(unittest.TestCase):
+    """Defectos encontrados en la auditoría final (27-oct-2026)."""
+
+    def test_raices_simples_no_deben_marcarse_no_fiables(self):
+        # SOR ω = 1/2 sobre esta matriz: autovalores simples y separados
+        # (par complejo dominante de módulo ≈ 0.5951).  Antes, la tolerancia de
+        # parada de Durand-Kerner (1e-15) era inalcanzable por redondeo y el
+        # resultado salía «no fiable» / INDETERMINADO.
+        A = [[-4, -1, 3, -1], [2, 5, 1, 0], [1, -3, 5, 0], [2, 2, 2, 5]]
+        r = radio_espectral(A, [1, 1, 1, 1], SOR, F(1, 2))
+        self.assertTrue(r.fiable, r.advertencias)
+        self.assertEqual(r.conclusion, CONVERGE)
+        self.assertAlmostEqual(r.rho, 0.5950974, places=6)
+        # Comprobación independiente: las iteraciones de SOR efectivamente convergen
+        corrida = ejecutar(A, [1, 1, 1, 1], ConfiguracionIterativa(
+            metodo=SOR, omega=0.5, tolerancia=1e-10, k_max=500))
+        self.assertEqual(corrida.codigo, "TOLERANCIA_CAMBIO")
+
+    def test_autovalor_uno_exacto_decide_no_convergencia(self):
+        # A singular  <=>  T = I - M^-1 A tiene el autovalor λ = 1, luego ρ(T) >= 1.
+        # A = [[2,1,1],[1,2,1],[3,3,2]] es singular (fila 3 = fila 1 + fila 2).
+        # Con SOR (ω = 1/2) el polinomio reducido es de grado 3 y λ = 1 es raíz exacta.
+        A = [[2, 1, 1], [1, 2, 1], [3, 3, 2]]
+        r = radio_espectral(A, [1, 1, 1], SOR, F(1, 2))
+        self.assertEqual(len(r.coeficientes) - 1 - r.multiplicidad_cero, 3)
+        self.assertTrue(r.decision_exacta)
+        self.assertEqual(r.conclusion, NO_CONVERGE)
+
+    def test_raiz_multiple_se_declara_indeterminada_no_garantizada(self):
+        # T triangular con el autovalor 1/2 triple (bloque de Jordan): ρ = 1/2 < 1,
+        # pero Durand-Kerner pierde precisión con raíces múltiples: la aplicación
+        # no debe presentar como fiable un ρ impreciso.
+        from algebra.espectral import raices
+        av, ceros, fiable, avisos, decision = raices(polinomio_caracteristico(
+            [[F(1, 2), 1, 0], [0, F(1, 2), 1], [0, 0, F(1, 2)]]))
+        self.assertFalse(fiable)
+        self.assertTrue(any("múltiple" in a for a in avisos))
+        for z in av:
+            self.assertAlmostEqual(abs(z), 0.5, places=3)
+
+
+class TestConclusion(unittest.TestCase):
+
+    def test_bandas(self):
+        from algebra.espectral import concluir
+        self.assertEqual(concluir(0.5, True), CONVERGE)
+        self.assertEqual(concluir(1.5, True), NO_CONVERGE)
+        self.assertEqual(concluir(1 - 1e-10, True), INDETERMINADO)
+        self.assertEqual(concluir(1 - 1e-7, True), CONVERGE)
+        # con raíces casi repetidas la banda es 1e-6
+        self.assertEqual(concluir(1 - 1e-7, True, casi_repetidas=True), INDETERMINADO)
+        self.assertEqual(concluir(0.5, False), INDETERMINADO)
+        # la decisión exacta prevalece
+        self.assertEqual(concluir(1.0, True, decision_exacta=False), NO_CONVERGE)
+        self.assertEqual(concluir(0.99999999999, False, decision_exacta=True), CONVERGE)
+
+    def test_raiz_doble_cerca_de_uno_no_da_conclusion_falsa(self):
+        # (λ - a)²(λ - 1/10) con a = 1 ± 1e-7: el ρ verdadero está a 1e-7 de 1.
+        from algebra.espectral import AVISO_CASI_REPETIDOS, concluir, raices
+        for a, verdadero in ((1 - F(1, 10**7), CONVERGE), (1 + F(1, 10**7), NO_CONVERGE)):
+            coef = [F(1), -(2 * a + F(1, 10)), a * a + 2 * a / 10, -a * a / 10]
+            av, _, fiable, avisos, decision = raices(coef)
+            c = concluir(max(abs(z) for z in av), fiable, decision, AVISO_CASI_REPETIDOS in avisos)
+            self.assertIn(c, (verdadero, INDETERMINADO))
+
+
 class TestDurandKerner(unittest.TestCase):
 
     def test_raices_conocidas(self):

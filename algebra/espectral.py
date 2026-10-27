@@ -51,6 +51,10 @@ from algebra.validacion import ErrorEntrada, formatear_numero
 N_MAX_ESPECTRAL = 8            # tamaño máximo para el que se calcula ρ
 UMBRAL_RHO_UNO = 1e-9          # banda alrededor de 1 donde la conclusión es indeterminada
 UMBRAL_RAICES_CERCANAS = 1e-6  # raíces más cercanas que esto: posible raíz múltiple
+# Con raíces (casi) múltiples el error de ρ puede ser ~1e-8: se amplía la banda.
+UMBRAL_RHO_UNO_MULTIPLE = 1e-6
+AVISO_CASI_REPETIDOS = ("Hay autovalores casi repetidos: con raíces múltiples la "
+                        "precisión numérica disminuye.")
 
 CONVERGE = "CONVERGE"
 NO_CONVERGE = "NO_CONVERGE"
@@ -198,10 +202,16 @@ def _evaluar(coeficientes, z):
     return valor
 
 
-def durand_kerner(coeficientes, max_iter=2000, tol=1e-15):
+def durand_kerner(coeficientes, max_iter=2000, tol=1e-12):
     """Aproxima todas las raíces de un polinomio mónico de grado >= 1.
 
     Devuelve (raices, convergio).  coeficientes: [1, c1, ..., cd] (float o Fraction).
+
+    La tolerancia relativa 1e-12 es alcanzable con raíces simples: al evaluar el
+    polinomio en punto flotante las correcciones se estancan en un ruido de
+    ~1e-15, por lo que una tolerancia de 1e-15 fallaba aleatoriamente (defecto
+    corregido en la auditoría final).  Con raíces múltiples la convergencia es
+    lenta y la precisión baja a ~eps^(1/m): no se alcanza 1e-12 y se informa.
     """
     c = [complex(float(v)) for v in coeficientes]
     d = len(c) - 1
@@ -281,15 +291,14 @@ def raices(coeficientes):
             fiable = False
             advertencias.append(
                 "El método de Durand-Kerner no alcanzó la precisión pedida: los "
-                "autovalores pueden ser imprecisos.")
+                "autovalores pueden ser imprecisos (lo más probable es un autovalor "
+                "múltiple, para el que la precisión numérica disminuye).")
         escala = max(1.0, max(abs(z) for z in aproximadas))
         autovalores.extend(_limpiar(z, escala) for z in aproximadas)
         for i in range(len(aproximadas)):
             for j in range(i + 1, len(aproximadas)):
                 if abs(aproximadas[i] - aproximadas[j]) < UMBRAL_RAICES_CERCANAS * escala:
-                    advertencias.append(
-                        "Hay autovalores casi repetidos: con raíces múltiples la "
-                        "precisión numérica disminuye.")
+                    advertencias.append(AVISO_CASI_REPETIDOS)
                     break
             else:
                 continue
@@ -300,6 +309,21 @@ def raices(coeficientes):
 # ---------------------------------------------------------------------------
 # Análisis completo
 # ---------------------------------------------------------------------------
+
+def concluir(rho, fiable, decision_exacta=None, casi_repetidas=False):
+    """Conclusión de convergencia a partir de ρ.
+
+    decision_exacta (True/False) tiene prioridad: viene de un criterio exacto.
+    Si el cálculo numérico no es fiable, o ρ está dentro de la banda de
+    incertidumbre alrededor de 1, la conclusión es INDETERMINADO.
+    """
+    if decision_exacta is not None:
+        return CONVERGE if decision_exacta else NO_CONVERGE
+    banda = UMBRAL_RHO_UNO_MULTIPLE if casi_repetidas else UMBRAL_RHO_UNO
+    if not fiable or abs(rho - 1) < banda:
+        return INDETERMINADO
+    return CONVERGE if rho < 1 else NO_CONVERGE
+
 
 def radio_espectral(A, b, metodo, omega=None):
     """Construye T, su polinomio característico, sus autovalores y ρ(T)."""
@@ -338,13 +362,20 @@ def radio_espectral(A, b, metodo, omega=None):
         multiplicidad_cero=ceros, rho=rho, fiable=fiable, verificaciones=verificaciones,
         advertencias=advertencias)
 
-    if decision is not None:
-        resultado.decision_exacta = True
-        resultado.conclusion = CONVERGE if decision else NO_CONVERGE
-    elif not fiable or abs(rho - 1) < UMBRAL_RHO_UNO:
-        resultado.conclusion = INDETERMINADO
-    else:
-        resultado.conclusion = CONVERGE if rho < 1 else NO_CONVERGE
+    # Comprobación exacta (fracciones): si λ = 1 o λ = -1 anulan p(λ), entonces
+    # ρ(T) >= 1 con certeza (λ = 1 aparece, por ejemplo, cuando A es singular).
+    raiz_unitaria = None
+    if all(isinstance(c, Fraction) for c in coeficientes):
+        for candidato in (1, -1):
+            if _evaluar(coeficientes, Fraction(candidato)) == 0:
+                raiz_unitaria = candidato
+                break
+    if raiz_unitaria is not None:
+        decision = False
+        advertencias.append(f"λ = {raiz_unitaria} es autovalor exacto de T: ρ(T) ≥ 1.")
+
+    resultado.decision_exacta = decision is not None
+    resultado.conclusion = concluir(rho, fiable, decision, AVISO_CASI_REPETIDOS in advertencias)
 
     rho_txt = formatear_numero(rho)
     if resultado.conclusion == CONVERGE:
