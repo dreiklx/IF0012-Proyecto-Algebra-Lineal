@@ -979,4 +979,4 @@ Esta propuesta la debe decidir el grupo. Cada uno **igual debe dominar los cuatr
 
 **Errores de las láminas que la aplicación corrige** (detalle en `docs/guia_defensa.md` §6). Si la docente pregunta por qué la aplicación no coincide con una lámina, sustituyan la solución en el sistema y muestren el residuo. Por ejemplo, en S6-14/09 p. 29 la lámina da (1/2, −1, −1), y la 2.ª ecuación da 0.5 + 3 − 2 = 1.5 ≠ 4.
 
-**Uso de IA:** está declarado en `docs/herramientas_y_bibliotecas.md` §4. **La autorización de la docente está pendiente** (P-2). No afirmen que está autorizado hasta tener su respuesta.
+**Uso de IA:** está declarado en `docs/herramientas_y_bibliotecas.md` §4. Ni el enunciado ni el programa exigen una autorización previa: lo que se exige es declararlo y poder defender el trabajo. Si la docente pregunta, digan con honestidad para qué se usó y demuestren que entienden el código. No afirmen que ella lo autorizó expresamente.

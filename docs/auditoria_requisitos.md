@@ -44,7 +44,7 @@
 | Diseño del código | 5 % | «Código modular, legible, reutilizable y comentado» | 3 capas (`algebra/`, `interfaz/`, `visualizacion/`); un paso por método y un bucle común; `analizar_matriz` reutilizado; docstrings con fórmulas y referencias | `docs/arquitectura.md` | COMPLETADO |
 | Validaciones y errores | 4 % | «Validaciones completas y mensajes claros; no se producen cierres inesperados» | `validacion.py`, `matriz.validar_*`, `validar_configuracion`; `ejecutar` nunca lanza excepciones | V-01 a V-07 (abajo); `test_validacion`, P20, `test_tolerancias_extremas`, `test_app` | COMPLETADO |
 | Interfaz y usabilidad | 5 % | «Interfaz intuitiva, consistente y resultados fáciles de interpretar» | Ejemplos cargables, ayudas, errores con la posición, colores por tipo de resultado | `test_app` (15 pruebas de funcionamiento); revisión visual parcial | COMPLETADO. Falta una prueba con un usuario ajeno, que es recomendable |
-| Manual de usuario | 3 % | «Manual claro, completo, reproducible y coherente con la aplicación» | `docs/manual_usuario.md`: formato de entradas, instalación, un ejemplo por módulo, funciones principales, dependencias. Actualizado el 03-nov con las funciones nuevas | Instalación desde el ZIP en una carpeta limpia (este equipo) | INCOMPLETO: «reproducible» sin ayuda del equipo (lista p. 5) **no se ha probado en otra computadora** |
+| Manual de usuario | 3 % | «Manual claro, completo, reproducible y coherente con la aplicación» | `docs/manual_usuario.md`: formato de entradas, instalación, un ejemplo por módulo, funciones principales, dependencias. Actualizado el 03-nov con las funciones nuevas | Instalación desde el ZIP en una carpeta limpia; **el equipo confirmó (03-nov) que funciona en otra computadora** siguiendo el manual | COMPLETADO |
 | Casos de prueba | 3 % | «Casos documentados y aplicación supera el caso obligatorio» | `casos_prueba/modulo_I..IV.md` (entrada, esperado, obtenido) | Las mismas comprobaciones automatizadas | Casos propios: COMPLETADO. **Caso obligatorio: PENDIENTE DE CONFIRMACIÓN** (no recibido) |
 
 ## 2. Rúbrica de la defensa oral (35 %, OFICIAL p. 4)
@@ -81,7 +81,7 @@
 | R-02 | Algoritmos centrales desde cero | `algebra/` | Revisión de imports; auditoría | COMPLETADO |
 | R-03 | Documentar las bibliotecas de interfaz y gráficas | `docs/herramientas_y_bibliotecas.md`, `requirements.txt` | — | COMPLETADO |
 | R-04 | Todas las entradas con validación | `validacion.py`, `validar_configuracion`, `precondicionar_diagonal` | Pruebas V-01 a V-07 | COMPLETADO |
-| R-05 | Código externo citado | No se copió código externo. El uso de IA está declarado en `herramientas_y_bibliotecas.md` §4 | — | PENDIENTE DE CONFIRMACIÓN: **autorización del uso de IA** (P-2) |
+| R-05 | Código externo citado | No se copió código externo. El uso de IA está declarado en `herramientas_y_bibliotecas.md` §4 | — | COMPLETADO: uso de IA **declarado**. Ningún documento exige autorización previa (P-2) |
 
 ### Módulo I
 
@@ -146,7 +146,7 @@
 |---|---|---|---|
 | E-01 | ZIP `Grupo(01-02)-IF0012-Proyecto-IIC.zip` | `empaquetar.py`, `dist/` | COMPLETADO: grupo 01, confirmado por el equipo el 03-nov-2026 (`Grupo01-IF0012-Proyecto-IIC.zip`) |
 | E-02 | Mecanismo de ejecución | `ejecutar.bat` | COMPLETADO (probado desde una copia limpia del ZIP en este equipo) |
-| E-03/E-04 | Manual e instrucciones | `docs/manual_usuario.md`, `README.md` | INCOMPLETO (ver la fila «Manual de usuario») |
+| E-03/E-04 | Manual e instrucciones | `docs/manual_usuario.md`, `README.md` | COMPLETADO (probado en otra computadora, confirmado por el equipo) |
 | E-05 | Código fuente comentado | Todo el proyecto | COMPLETADO |
 | E-06 | Carpeta de casos de prueba con los obligatorios | `casos_prueba/` | PENDIENTE DE CONFIRMACIÓN (caso obligatorio, P-3) |
 
@@ -159,7 +159,7 @@
 | Los procedimientos matemáticos pueden visualizarse o verificarse | COMPLETADO |
 | Las entradas inválidas generan mensajes claros y no cierran la aplicación | COMPLETADO |
 | Hay casos de prueba y se verificó el caso obligatorio | Casos: COMPLETADO. Caso obligatorio: PENDIENTE DE CONFIRMACIÓN |
-| El manual permite instalar, ejecutar y usar el programa sin ayuda del equipo | INCOMPLETO (falta la prueba con un tercero en otra computadora) |
+| El manual permite instalar, ejecutar y usar el programa sin ayuda del equipo | COMPLETADO (confirmado por el equipo en otra computadora, 03-nov) |
 | El ZIP tiene el nombre solicitado y todos los elementos | COMPLETADO (grupo 01 confirmado; contenido verificado). El caso obligatorio se añadirá cuando llegue |
 | Cada integrante está preparado para defender el trabajo | NO VERIFICABLE (material listo: guía, HTML y resumen) |
 

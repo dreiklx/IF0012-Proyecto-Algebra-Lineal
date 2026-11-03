@@ -290,7 +290,7 @@ La diapositiva 19 de S9-05/10 afirma que Jacobi mejora: no es reproducible y hay
 4. **Durand-Kerner y Faddeev-LeVerrier no se vieron en clase.** Son una extensión verificada; el alcance está pendiente con la docente (P-5 en [pendientes_docente.md](pendientes_docente.md)).
 5. **Iterativos en `float`:** las diferencias se justifican por ε.
 6. **Precondicionador M = D:** no acelera Jacobi, GS ni SOR. Es un teorema y no una falla.
-7. **Uso de IA:** está declarado; **la autorización está pendiente** (P-2). No digan que está autorizado.
+7. **Uso de IA:** está declarado. No hay requisito de autorización previa; lo exigible es declararlo y defender el trabajo. No digan que la docente lo autorizó expresamente.
 
 ## Lista de comprobación personal antes de la defensa
 

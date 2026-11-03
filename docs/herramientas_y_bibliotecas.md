@@ -54,11 +54,19 @@ En el desarrollo se usaron asistentes de IA:
 - **Claude Code** (Anthropic): inspección de documentos, implementación del código, pruebas y documentación.
 - **ChatGPT** (OpenAI): análisis académico y revisión.
 
-**La autorización de la docente para este uso todavía no está confirmada.** El programa del curso (PROG p. 7, §6.2) sanciona el «uso indebido de herramientas de inteligencia artificial no autorizadas». Antes de entregar, el grupo debe:
+**Marco aplicable:**
 
-1. Consultar a la docente si el uso está autorizado y en qué condiciones.
-2. Declarar el uso según lo que ella indique.
-3. Asegurarse de que cada integrante comprende y puede explicar y reproducir cada algoritmo. Para eso está `docs/guia_defensa.md`.
+- El enunciado del proyecto no contiene disposiciones sobre la IA.
+- El programa del curso (PROG p. 7, §6.2) sanciona el «uso indebido de herramientas de inteligencia artificial no autorizadas», como forma de copia o plagio.
+- Ninguno de los dos exige un trámite de autorización previa.
+
+En consecuencia:
+
+1. Este uso **se declara aquí**, sin ocultarlo, y la declaración forma parte de la entrega.
+2. **No se afirma** que la docente lo haya autorizado expresamente: no hay una respuesta suya al respecto.
+3. Cada integrante debe comprender, explicar y reproducir cada algoritmo, porque la defensa es individual. Para eso están `docs/guia_defensa_equipo.md` y `docs/resumen_logica_por_modulo.md`.
+
+El análisis completo está en `docs/pendientes_docente.md`, P-2.
 
 ## 5. PyVista (prototipo aislado; no integrado)
 

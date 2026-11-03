@@ -1,4 +1,4 @@
-# Pendientes que dependen de la docente o del grupo
+# Pendientes que dependen de la docente
 
 **Fecha:** 03-nov-2026 (revisada tras releer los PDF). **Entrega:** 11-nov-2026.
 
@@ -6,12 +6,21 @@
 
 Se usó un solo criterio: si el enunciado oficial (OFICIAL) basta para decidir, se decide y se explica. Si no basta, el pendiente queda abierto, con una interpretación provisional.
 
+## Organización del grupo (sin pendientes)
+
+| Tema | Estado | Detalle |
+|---|---|---|
+| Grupo | **CONFIRMADO: grupo 01** | Integrantes: Derek Farley Noguera, Elmer López Hernández, Samir Sandoval Ramírez y Daniel Córdoba Arias. Entrega: `Grupo01-IF0012-Proyecto-IIC.zip` |
+| Manual en otra computadora | **COMPLETADO** | El equipo confirmó el 03-nov-2026 que la aplicación funciona en otra computadora siguiendo el manual |
+| Repositorio GitHub | **CREADO Y SINCRONIZADO** | Privado: `https://github.com/dreiklx/IF0012-Proyecto-Algebra-Lineal`, rama `main` |
+| Invitaciones (permiso de escritura) | **ENVIADAS el 03-nov-2026; pendientes de aceptación** | `samir24cr` (GitHub lo registra como `Samir24cr`), `NaygellArias` y `ELMER100102`. Cada uno debe aceptar desde el correo o en `https://github.com/dreiklx/IF0012-Proyecto-Algebra-Lineal/invitations`. Hasta entonces, solo `dreiklx` tiene acceso efectivo |
+
 ## Resumen
 
 | # | Pendiente | ¿Lo resuelve el enunciado? | Qué parte afecta | Riesgo si no se aclara |
 |---|---|---|---|---|
 | P-1 | Número de grupo | **Resuelto:** grupo 01, confirmado por el equipo | Nombre del ZIP | Ninguno |
-| P-2 | Autorización del uso de IA | No | Integridad académica (PROG p. 7, §6.2) | **Muy alto** |
+| P-2 | Uso de IA | **Sí:** no hay ningún requisito de autorización previa; se exige declarar y defender | Integridad académica (PROG p. 7, §6.2) | Bajo. **No bloquea la entrega**; se mantiene la declaración |
 | P-3 | Caso de validación obligatorio | No: la docente lo debe entregar (OFICIAL p. 3); no está en ningún PDF | Rúbrica «Casos de prueba» (3 %) | Medio |
 | P-4 | Significado de «error final» | **Sí: la lámina S9-05/10 p. 17 lo define** | M4-07 | **Resuelto** |
 | P-5 | Alcance del radio espectral | En parte | M4-05 e incentivo I-05 | Medio |
@@ -27,14 +36,31 @@ Se usó un solo criterio: si el enunciado oficial (OFICIAL) basta para decidir, 
 - **Evidencia documental coincidente:** el horario del grupo (L 16:00-17:50 y M 13:00-15:50) corresponde en el programa (PROG p. 9, Sede del Caribe, Aula de Siquirres) al grupo 01, de la profesora Imelda Sáenz Pineda.
 - **Nombre de entrega:** `Grupo01-IF0012-Proyecto-IIC.zip`, generado con `python empaquetar.py 01`.
 
-## P-2. Autorización del uso de inteligencia artificial
+## P-2. Uso de inteligencia artificial — DECLARADO; no hay un requisito de autorización previa
 
-- **Por qué está pendiente:** el programa del curso (PROG p. 7, §6.2) sanciona el «uso indebido de herramientas de inteligencia artificial no autorizadas». Ni el programa ni el enunciado dicen qué uso está autorizado.
-- **Qué afecta:** todo el código entregable y la defensa. En el desarrollo se usaron Claude Code y ChatGPT; está declarado en `docs/herramientas_y_bibliotecas.md` §4.
-- **Interpretación provisional:** **ninguna**. No se puede suponer que está autorizado. Mientras tanto, el uso queda declarado sin ocultarlo.
-- **Qué hacer:** consultarlo **por escrito**, antes del 11-nov, y guardar la respuesta.
-- **Pregunta exacta:** «Profesora, en el desarrollo del proyecto final usamos asistentes de inteligencia artificial (Claude Code y ChatGPT) para escribir y revisar código y documentación. Todos los integrantes estamos estudiando el código para defenderlo. ¿Está permitido este uso? Si lo está, ¿en qué condiciones y cómo debemos declararlo en la entrega?»
-- **Si la respuesta es negativa:** hay que decidir con la docente cómo proceder **antes** de entregar. No se debe ocultar el uso.
+**Qué dicen los documentos** (releídos el 03-nov-2026):
+
+| Documento | Texto (literal) | Qué exige |
+|---|---|---|
+| Enunciado del proyecto (OFICIAL), pp. 1-5 | No menciona la inteligencia artificial. Lo más cercano: «El código externo no citado o copiado será tratado de acuerdo con la normativa académica aplicable» y «Si se utiliza una librería únicamente para visualización, interfaz o manejo de archivos, debe indicarse en la documentación» | **Citar y declarar**, no pedir permiso |
+| Programa del curso (PROG p. 7, §6.2, «Consideraciones académicas y éticas») | «En caso de detectarse una falta, como copia o plagio, […] mediante el uso indebido de herramientas de inteligencia artificial no autorizadas, se procederá de acuerdo con lo estipulado en el Reglamento de Orden y Disciplina Estudiantil» | Prohíbe el uso **indebido** como forma de copia o plagio. **No establece ningún trámite de autorización previa por escrito** |
+| Tarea II y láminas del curso | Sin disposiciones sobre IA (búsqueda en el texto) | — |
+
+**Conclusión:**
+
+- No existe un requisito explícito de autorización previa, así que **deja de ser un bloqueo de entrega**.
+- Lo que sí rige:
+  1. no presentar como propio, sin declararlo, un trabajo hecho con IA (honestidad académica, §6.2);
+  2. que cada integrante comprenda, explique y defienda el trabajo (OFICIAL p. 3: defensa individual con caso no preparado; lista de la p. 5: «Cada integrante está preparado para explicar y defender matemáticamente el trabajo»).
+
+**Lo que se hace:**
+
+- **Se conserva la declaración** de `docs/herramientas_y_bibliotecas.md` §4: Claude Code y ChatGPT, y para qué se usaron. Esa declaración se entrega en el ZIP.
+- **No se afirma** que la docente haya autorizado el uso: no hay ninguna respuesta suya al respecto.
+
+**Riesgo residual (bajo):** §6.2 habla de herramientas «no autorizadas» sin definir cuáles lo están. Si el grupo quiere eliminar toda duda, puede **informar** a la docente, sin que sea un requisito de entrega:
+
+> «Profesora, para su conocimiento: en el proyecto final usamos asistentes de inteligencia artificial (Claude Code y ChatGPT) como apoyo en la programación y la revisión, y lo declaramos en docs/herramientas_y_bibliotecas.md. Todos los integrantes estudiamos el código para defenderlo. Si tiene alguna indicación sobre cómo declararlo, la aplicaremos.»
 
 ## P-3. Caso de validación obligatorio
 

@@ -12,6 +12,15 @@
 | Defensa individual | Semana del **16 de noviembre de 2026** |
 | Número de grupo | **01, confirmado por el equipo (03-nov-2026)**. Integrantes, exclusivamente los cuatro de arriba |
 
+## Actualización del 03-nov-2026 (tercera parte): organización del grupo
+
+- **Grupo 01 confirmado:** Derek, Elmer, Samir y Daniel.
+- **Manual:** la prueba en otra computadora quedó completada (confirmada por el equipo).
+- **Repositorio:** GitHub creado y sincronizado.
+- **Invitaciones:** enviadas a `samir24cr`, `NaygellArias` y `ELMER100102`, con permiso de escritura. Estaban **pendientes de aceptación** al momento de registrarlas.
+- **IA:** el pendiente se reevaluó. No hay requisito de autorización previa y se mantiene la declaración. Detalle en `pendientes_docente.md`.
+- **Sin cambios** en la lógica ni en la interfaz.
+
 ## Revisión del 03-nov-2026 (segunda parte): grupo, GitHub y separación de archivos
 
 1. **Grupo 01 confirmado por el equipo.** Integrantes, exclusivamente: Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Arias y Samir Sandoval Ramírez. Se actualizaron los pendientes, la matriz de cumplimiento, las decisiones técnicas y el README. Los números de carné **no** se incluyen en el repositorio, porque son datos personales que ningún requisito del enunciado pide.
@@ -142,14 +151,15 @@ Los que dependen de la docente están detallados en [pendientes_docente.md](pend
 | # | Pendiente | Impacto | Quién |
 |---|---|---|---|
 | P-1 | ~~Número de grupo~~ | **Resuelto:** grupo 01, confirmado por el equipo | — |
-| P-2 | **Autorización expresa del uso de IA** (PROG p. 7 §6.2) | Integridad académica: **prioridad máxima** | Grupo → docente |
+| P-2 | Uso de IA | **Declarado.** No hay requisito de autorización previa (PROG §6.2 y OFICIAL revisados); no bloquea | — |
 | P-3 | **Caso de validación obligatorio** | C-07 (3 %) | Docente |
 | P-4 | Significado de «error final» | **Resuelto** con la lámina S9-05/10 p. 17 | — |
 | P-5 | Alcance del radio espectral (métodos que no se vieron en clase) | M4-05 | Docente |
 | P-6 | NumPy como dependencia interna | Resuelto por el enunciado; confirmación opcional | — |
 | P-7 | Perturbación porcentual | Resuelto: ‖Δb‖/‖b‖ = p/100 en ambas lecturas; confirmación opcional | — |
 | P-8 | Precondicionamiento | **Implementado** con la comparación de la lámina; confirmación opcional | — |
-| G-1 | Una persona ajena sigue el manual en **otro** equipo | C-06, lista de verificación | Grupo |
+| G-1 | ~~Manual en otra computadora~~ | **Completado:** confirmado por el equipo el 03-nov | — |
+| G-4 | Aceptar las invitaciones a GitHub (`samir24cr`, `NaygellArias`, `ELMER100102`) | Acceso al repositorio central | Cada compañero |
 | G-2 | Cada integrante instala, ensaya la demostración y estudia la guía | Defensa (35 %) | Los 4 integrantes |
 | G-3 | Mirar dentro del navegador la figura 3D y las fracciones | C-05 (estético) | Grupo |
 
