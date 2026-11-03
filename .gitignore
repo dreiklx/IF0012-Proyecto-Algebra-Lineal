@@ -31,8 +31,6 @@ CLAUDE.local.md
 .mcp.json
 
 # Credenciales y configuración local (nunca se versionan)
-.env
-.env.*
 *.pem
 *.key
 .streamlit/secrets.toml
