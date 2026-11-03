@@ -247,7 +247,7 @@ La fórmula de T_ω es la estándar (Burden & Faires); no aparece en los PDF rev
 **Limitaciones:**
 
 - Durand-Kerner no tiene garantía teórica de convergencia global.
-- Con raíces múltiples la precisión baja a ≈ 10⁻⁸.
+- Con raíces múltiples la precisión baja: ≈ 10⁻⁸ con raíces dobles y ≈ 10⁻⁵ con triples (error ≈ ε_máquina^(1/m)). Con raíces triples o de mayor multiplicidad Durand-Kerner no suele alcanzar la tolerancia, y el resultado queda «indeterminado».
 - Por eso la aplicación verifica cada resultado y advierte cuando no es fiable, en lugar de mostrar un número engañoso.
 
 **Ejemplos comprobados:**

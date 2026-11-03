@@ -1,142 +1,136 @@
-# Matriz de cumplimiento (rúbrica oficial) — revisión tras la auditoría final
+# Matriz de cumplimiento — revisión del 02-nov-2026
 
-- **Fuente:** `INTRUCCIONES-PROYECTO FINAL-ÁLGEBRA LINEAL-IIC2026.pdf` (OFICIAL). Los identificadores son los de la auditoría documental.
-- **Fecha:** 27-oct-2026.
+- **Fuente de los requisitos:** `INTRUCCIONES-PROYECTO FINAL-ÁLGEBRA LINEAL-IIC2026.pdf` (OFICIAL), páginas 1 a 5, leído de nuevo el 02-nov-2026. Los identificadores (R-, M1-…, V-, E-, C-, I-) son los de la auditoría documental.
+- **Formato:** REQUISITO → IMPLEMENTACIÓN → ARCHIVO O FUNCIÓN → PRUEBA → ESTADO.
+- **Pendientes con la docente:** el detalle de cada uno está en [pendientes_docente.md](pendientes_docente.md).
 
-## Qué significa cada estado
+## Estados
 
 | Estado | Significado |
 |---|---|
-| **Implementado** | Existe el código o el documento. No implica que esté probado |
-| **Probado** | Hay pruebas automáticas que se ejecutaron y pasan |
-| **Verificado** | Probado, y además el resultado se contrastó con oráculos independientes: la auditoría aleatoria de `auditoria/` y/o valores calculados a mano. En la interfaz, se revisó también visualmente |
-| **Pendiente de revisión manual** | Necesita que una persona lo mire o lo use |
-| **Bloqueado** | Depende de algo externo al código |
+| **COMPLETADO** | Existe la implementación y hay evidencia ejecutada: pruebas automáticas que pasan y, en el núcleo, contraste con oráculos independientes (`auditoria/`, cálculos a mano o teoremas) |
+| **INCOMPLETO** | Falta una parte que el grupo **sí** puede hacer, por ejemplo una prueba con una persona ajena |
+| **FALLIDO** | Implementado, pero con resultados incorrectos. **Ningún requisito está en este estado** |
+| **PENDIENTE DE CONFIRMACIÓN EXTERNA** | Depende de una respuesta de la docente o de un dato que el grupo debe confirmar |
 
-## Tipos de evidencia
+## Evidencia general (02-nov-2026)
 
-| Evidencia | Qué es | Resultado (27-oct-2026) |
-|---|---|---|
-| **A. Pruebas automáticas** | `python -m unittest`: 184 pruebas en `tests/` (ver el desglose en estado_desarrollo.md) | 184 ejecutadas, 184 OK, 0 fallos, 0 omitidas |
-| **B. Auditoría independiente** | `auditoria/*.py`. Compara el núcleo con oráculos escritos aparte: Leibniz, adjunta, Cramer, una implementación separada de las iteraciones y la fórmula de Gelfand ‖Tᵏ‖^(1/k) | 4500 sistemas, 400 inversas, 200 perturbaciones, 300 mínimos cuadrados, 600 ejecuciones iterativas y 300 análisis espectrales: **0 fallos** |
-| **C. Revisión visual manual** | Capturas de Chrome sobre la aplicación real, o figuras guardadas como imagen | Ver la columna «Evidencia» de cada fila. Varias capturas fallaron por un problema de la herramienta (página en redibujado) y esas secciones **no** se dan por vistas |
+| Evidencia | Resultado |
+|---|---|
+| Pruebas automáticas: `.venv\Scripts\python -m unittest` | **185 pruebas, 185 OK.** Son las 184 anteriores más una nueva (IV-22) |
+| Auditoría independiente: `auditoria/*.py` | **0 fallos** en 4500 sistemas, 400 inversas, determinantes y κ, 200 perturbaciones, 300 mínimos cuadrados, 600 ejecuciones iterativas y 300 análisis espectrales (0 indeterminados y 0 no fiables entre los aleatorios) |
+| Ejemplos precargados de la interfaz recalculados con oráculos nuevos (02-nov) | Cramer y Leibniz (Módulo I), adjunta (κ), fórmula cerrada de la recta (Módulo III) y fórmula de Gelfand ‖T¹²⁸‖^(1/128) (ρ). **Todos coinciden** |
+| Imports de `algebra/` | Solo `fractions`, `math`, `cmath`, `dataclasses` y módulos propios. **Ningún** `.py` del proyecto importa NumPy, SciPy ni SymPy |
 
-## Requisitos generales
+## Restricciones generales (OFICIAL p. 1)
 
-| ID | Requisito (pág.) | Archivo | Evidencia | Prueba | Estado | Pendiente |
-|---|---|---|---|---|---|---|
-| R-01 | Una sola aplicación con los 4 módulos (p. 2, 5) | `app.py` | A; C: los 4 módulos se abrieron desde la barra lateral en Chrome | test_app (navegación) | **Verificado** | — |
-| R-02 | Algoritmos centrales desde cero (p. 1, 5) | `algebra/` | Los imports de `algebra/` son solo `fractions`, `math`, `cmath`, `dataclasses` y módulos propios | revisión de imports | **Verificado** | Confirmar con la docente que `math.sqrt` y `cmath.sqrt` cuentan como operaciones elementales |
-| R-03 | Documentar las bibliotecas de interfaz y gráficas (p. 1) | `docs/herramientas_y_bibliotecas.md` | Documento | — | Implementado | NumPy entra como dependencia transitiva de Streamlit y Matplotlib: confirmar con la docente |
+| ID | Requisito | Implementación | Archivo o función | Prueba | Estado |
+|---|---|---|---|---|---|
+| R-01 | Una sola aplicación con los 4 módulos | Navegación lateral de Streamlit | `app.py` (`PAGINAS`) | `test_app` (abre los 4 módulos) | COMPLETADO |
+| R-02 | Algoritmos centrales desde cero, sin bibliotecas que los implementen | Python puro con listas y `Fraction` | `algebra/` | Revisión de imports (arriba) y auditoría | COMPLETADO |
+| R-03 | Documentar las bibliotecas de interfaz y gráficas | Streamlit y Matplotlib, con versiones fijadas | `docs/herramientas_y_bibliotecas.md`, `requirements.txt` | — | COMPLETADO (ver P-6 en pendientes: NumPy entra como dependencia interna) |
+| R-04 | Todas las entradas validadas | Lectura de texto a `Fraction` y validación de dimensiones y parámetros | `algebra/validacion.py`, `algebra/matriz.py` (`validar_*`), `validar_configuracion` | `test_validacion`, `test_matriz`, P20, `test_app` | COMPLETADO |
+| R-05 | Interfaz intuitiva, clara y funcional | Ejemplos cargables, ayudas, mensajes por color | `interfaz/` | `test_app` (solo funcionamiento) | INCOMPLETO: falta que la use una persona ajena al desarrollo. La calidad la juzga la docente |
 
 ## Módulo I — Sistemas lineales (8 %)
 
-| ID | Requisito | Archivo | Evidencia | Prueba | Estado | Pendiente |
-|---|---|---|---|---|---|---|
-| M1-01 | Entrada Ax = b | `modulo_directos.py`, `validacion.py` | A; C (texto editable, revisión de la fase VII) | test_validacion, test_app | **Verificado** | — |
-| M1-02 | Gauss / Gauss-Jordan desde cero | `directos.py` | A; B (4500 casos, 3 variantes) | test_directos | **Verificado** | — |
-| M1-03 | Procedimiento paso a paso | `directos.py` (`Paso`) | A; C (pasos vistos en Chrome) | test_pasos_registrados | **Verificado** | — |
-| M1-04 | Clasificación única / infinitas / inconsistente | `directos.py` | B: rangos por menores (Leibniz) en 4500 casos | test_directos, test_app | **Verificado** | — |
-| M1-05 | Dimensiones y pivotes nulos o problemáticos | `matriz.py`, `directos.py` | A | test_directos | Probado | El umbral de pivote pequeño (10⁻¹⁰) es técnico |
-| — | Interpretación geométrica (extra) | `geometria_3d.py` | C: figuras de solución única e infinitas guardadas como PNG y revisadas (correctas) | test_app (genera la figura) | Probado | **Pendiente de revisión manual dentro del navegador**: la captura falló |
+| ID | Requisito | Implementación | Archivo o función | Prueba | Estado |
+|---|---|---|---|---|---|
+| M1-01 | Ingreso de Ax = b en forma matricial | Áreas de texto, una fila por línea | `modulo_directos.mostrar`, `leer_matriz`, `leer_vector` | `test_validacion`, `test_app` | COMPLETADO |
+| M1-02 | Gauss o Gauss-Jordan desde cero | Eliminación exacta con fracciones; los dos métodos | `directos._escalonar`, `resolver_gauss`, `resolver_gauss_jordan` | `test_directos`; auditoría: 4500 casos | COMPLETADO |
+| M1-03 | Procedimiento paso a paso | Cada operación elemental guarda un `Paso` (texto y matriz) | `directos.Paso`, `_escalonar`, `componentes.mostrar_pasos` | `test_pasos_registrados` | COMPLETADO |
+| M1-04 | Clasificación automática: única, infinitas o inconsistente | Rangos de A y [A\|b] (Rouché-Frobenius); forma paramétrica | `_resolver`, `_rango_aumentada`, `_sustitucion_atras` | `test_directos`; auditoría: rangos por menores (Leibniz) | COMPLETADO |
+| M1-05 | Validar dimensiones y detectar pivotes nulos o numéricamente problemáticos | Intercambio de filas con su motivo; aviso si \|pivote\| < 10⁻¹⁰·máx\|aᵢⱼ\| | `validar_sistema`, `_buscar_pivote`, `UMBRAL_PIVOTE_PEQUENO` | `test_directos` | COMPLETADO |
+| — | Extra: interpretación geométrica 2D y 3D | Rectas y planos dibujados con el resultado del núcleo | `visualizacion/geometria_3d.py` | `test_app` (genera la figura); PNG revisados el 27-oct | COMPLETADO (no se vio dentro del navegador) |
 
 ## Módulo II — Condicionamiento (8 %)
 
-| ID | Requisito | Archivo | Evidencia | Prueba | Estado | Pendiente |
-|---|---|---|---|---|---|---|
-| M2-01 | κ∞ con inversa propia | `condicion.py`, `directos.py` | B: inversa por adjunta y κ en 400 casos | test_condicion | **Verificado** | — |
-| M2-02 | Interpretación con la escala 10/100 | `condicion.py` | A (límites exactos 10 y 100); C (mensaje visto) | test_umbrales | **Verificado** | — |
-| M2-03 | Perturbación absoluta o porcentual | `condicion.py`, `modulo_condicionamiento.py` | A | test_condicion | Probado | El porcentaje se interpreta como Δbᵢ = p/100·bᵢ (una componente bᵢ = 0 no se perturba). **Confirmar la interpretación** |
-| M2-04 | Comparar las soluciones original y perturbada | `condicion.py` | B: x̃ por Cramer en 200 casos; C: tabla vista en Chrome | test_condicion | **Verificado** | — |
-| M2-05 | ‖Δb‖/‖b‖ y ‖Δx‖/‖x‖ con denominador ≠ 0 | `condicion.py` | B; A (denominador cero) | test_denominador_cero | **Verificado** | — |
-| M2-06 | Explicación de la sensibilidad | `condicion.py` | C: el texto distingue el error observado de la cota teórica | test_app | **Verificado** | — |
+| ID | Requisito | Implementación | Archivo o función | Prueba | Estado |
+|---|---|---|---|---|---|
+| M2-01 | κ∞(A) = ‖A‖∞·‖A⁻¹‖∞ con inversa propia | Inversa por Gauss-Jordan [A\|I] → [I\|A⁻¹], verificada con A·A⁻¹ = I | `numero_condicion_infinito`, `inversa_gauss_jordan`, `norma_infinito_matriz` | `test_condicion`; auditoría: adjunta en 400 casos | COMPLETADO |
+| M2-02 | Valor de κ e interpretación con la escala 10/100 | Escala oficial con los límites exactos | `clasificar_kappa`, `_TEXTO_SENSIBILIDAD` | `test_umbrales` | COMPLETADO |
+| M2-03 | Perturbación de b por valor absoluto o porcentaje | Absoluta: Δb dado. Porcentual: Δbᵢ = p/100·bᵢ | `construir_delta_b` | `test_condicion` | COMPLETADO. Con un único p ambas lecturas del porcentaje dan el mismo ‖Δb‖∞/‖b‖∞ = \|p\|/100 (ver P-7); confirmarlo con la docente es opcional |
+| M2-04 | Comparar las soluciones original y perturbada | Se resuelven Ax = b y Ax̃ = b + Δb con el Gauss propio | `analizar_perturbacion` | `test_condicion`; auditoría: Cramer en 200 casos | COMPLETADO |
+| M2-05 | ‖Δb‖∞/‖b‖∞ y ‖Δx‖∞/‖x‖∞ cuando los denominadores no son cero | `None` y aviso si el denominador es 0 | `analizar_perturbacion` | `test_denominador_cero` | COMPLETADO |
+| M2-06 | Explicar qué indica sobre la sensibilidad | Texto automático: amplificación observada frente a la cota κ·‖Δb‖/‖b‖ | `_interpretar` | `test_app` | COMPLETADO |
+| V-03 | Matriz singular distinta de «κ grande» | Clasificación `MATRIZ_SINGULAR` aparte | `numero_condicion_infinito` | `test_modulo_II_singular` | COMPLETADO |
 
 ## Módulo III — Mínimos cuadrados (8 %)
 
-| ID | Requisito | Archivo | Evidencia | Prueba | Estado | Pendiente |
-|---|---|---|---|---|---|---|
-| M3-01 | Detectar un sistema sobredeterminado | `minimos.py` | A; C (mensaje visto) | test_minimos | **Verificado** | — |
-| M3-02 | AᵀA x = Aᵀb | `minimos.py` | B: 300 casos por Cramer; C (matrices vistas) | test_minimos | **Verificado** | — |
-| M3-03 | Resolver con el método directo propio | `minimos.py` → `resolver_gauss` | Código; B | test_minimos | **Verificado** | — |
-| M3-04 | r = b − Ax̂ y ‖r‖₂ | `minimos.py` | B: Aᵀr = 0 exacto en todos los casos; C (tabla de residuos vista) | test_minimos | **Verificado** | — |
-| M3-05 | Ajuste lineal y ecuación de la recta | `minimos.py` | A (fórmula cerrada); C («y = 3/4 x + 6/5» visto) | test_minimos, test_app | **Verificado** | — |
-| M3-06 | Gráfica de datos y recta | `graficos.py` | C: gráfica vista en Chrome, con puntos, recta y residuos | test_app (genera la figura) | **Verificado** | — |
-| — | AᵀA singular / ajuste imposible | `minimos.py` | A | test_columnas_dependientes, test_datos_invalidos | Probado | — |
+| ID | Requisito | Implementación | Archivo o función | Prueba | Estado |
+|---|---|---|---|---|---|
+| M3-01 | Detectar si el sistema es sobredeterminado | Compara m y n | `clasificar_forma` | `test_minimos` | COMPLETADO |
+| M3-02 | Construir AᵀA x = Aᵀb | Transpuesta y productos propios | `minimos_cuadrados` (`transpuesta`, `multiplicar_matrices`) | `test_minimos`; auditoría: 300 casos | COMPLETADO |
+| M3-03 | Resolverlas con un método directo ya implementado | `resolver_gauss` del Módulo I | `minimos_cuadrados` | `test_minimos` | COMPLETADO |
+| M3-04 | r = b − Ax̂ y ‖r‖₂ | ‖r‖₂² exacta y raíz en float; se comprueba Aᵀr = 0 | `minimos_cuadrados` (`norma_2_cuadrado_vector`) | `test_minimos`; auditoría: Aᵀr = 0 exacto | COMPLETADO |
+| M3-05 | Ajuste lineal y ecuación de la recta | Matriz de diseño [[xᵢ, 1]] | `ajuste_lineal` | `test_minimos` (fórmula cerrada), `test_app` | COMPLETADO |
+| M3-06 | Gráfica de los datos y la recta | Puntos, recta y residuos | `graficos.grafica_ajuste` | `test_app`; vista en Chrome el 27-oct | COMPLETADO |
+| — | AᵀA singular o datos insuficientes | Mensaje; no se presenta ningún x̂ | `minimos_cuadrados`, `ErrorAjuste` | `test_columnas_dependientes`, `test_datos_invalidos` | COMPLETADO |
 
 ## Módulo IV — Métodos iterativos (8 %)
 
-| ID | Requisito | Archivo | Evidencia | Prueba | Estado | Pendiente |
-|---|---|---|---|---|---|---|
-| M4-01 | Jacobi, GS y SOR desde cero | `iterativos.py` | B: 600 ejecuciones aleatorias idénticas a la implementación independiente (k final y x) | test_iterativos (P1–P21) | **Verificado** | — |
-| M4-02 | x⁽⁰⁾, ε, k_max y ω validados | `iterativos.py`, `validacion.py` | A, incluidos ε que se anulan en float y ε enormes | P20, test_tolerancias_extremas | Probado | — |
-| M4-03 | Tabla k, x⁽ᵏ⁾ y error de parada | `modulo_iterativos.py` | C: tabla con la columna «(criterio de parada)» vista; A | test_app | **Verificado** | — |
-| M4-04 | Dominancia diagonal | `iterativos.py` | A; C (tabla vista) | TestDominancia | **Verificado** | — |
-| M4-05 | Matriz de iteración y ρ(T) sin bibliotecas | `espectral.py` | B: 300 casos (Leibniz, producto = det, Gelfand); casos difíciles; C (pestaña vista; polinomio comprobado a mano) | test_espectral (24) | **Verificado, con limitación** | Con autovalores **múltiples** la conclusión es «indeterminado» (ver Limitaciones). **Alcance pendiente de confirmar** con la docente |
-| M4-06 | Motivo de finalización | `iterativos.py` | A; C | P8–P14, P16 | **Verificado** | — |
-| M4-07 | Comparación por iteraciones y error final | `iterativos.py` | C: tabla homogénea con d, r, e y ρ vista; ρ contrastado con Gelfand | P18, P19 | **Verificado** | **«Error final» oficial pendiente de confirmar**: se muestran d, r y e |
-| M4-08 | Gráfica de error frente a iteración | `graficos.py` | C: gráfica comparativa vista (parte superior) | test_app | Probado | **La gráfica de una sola ejecución no se capturó** en el navegador |
-
-## Criterios transversales
-
-| ID | Criterio (peso) | Evidencia | Estado | Pendiente |
-|---|---|---|---|---|
-| C-01 | Procedimiento matemático visible (7 %) | C: pasos de Gauss, ecuaciones normales, D/L/U/T/polinomio | **Verificado** | — |
-| C-02 | Análisis e interpretación (6 %) | C: textos de los módulos II, III y IV | Implementado | La calidad la juzga la docente |
-| C-03 | Código modular y comentado (5 %) | `docs/arquitectura.md` | Implementado | — |
-| C-04 | Validaciones sin cierres inesperados (4 %) | A: entradas inválidas en el núcleo y en la interfaz; `ejecutar` nunca lanza excepciones | Probado | — |
-| C-05 | Interfaz intuitiva (5 %) | C: revisión parcial; se corrigió el espaciado de fracciones apiladas | **Pendiente de revisión manual** | La corrección del espaciado no se confirmó visualmente (la captura falló); falta que lo pruebe un usuario |
-| C-06 | Manual de usuario (3 %) | `docs/manual_usuario.md` | Implementado | **Pendiente**: que una persona ajena siga el manual en otro equipo |
-| C-07 | Casos de prueba y caso obligatorio (3 %) | `casos_prueba/` | **Bloqueado (parcial)** | El caso obligatorio de la docente no se ha recibido |
+| ID | Requisito | Implementación | Archivo o función | Prueba | Estado |
+|---|---|---|---|---|---|
+| M4-01 | Jacobi, Gauss-Seidel y SOR desde cero | Un paso por método y un bucle común | `paso_jacobi`, `paso_gauss_seidel`, `paso_sor`, `_ejecutar` | P1–P21; auditoría: 600 ejecuciones | COMPLETADO |
+| M4-02 | Ingresar x⁽⁰⁾, ε y k_max; ω validado para SOR | Vector cero, bᵢ/aᵢᵢ o personalizado; 0 < ω < 2 | `validar_configuracion`, `leer_tolerancia`, `leer_omega`, `vector_diagonal` | P20, `test_tolerancias_extremas` | COMPLETADO |
+| M4-03 | Tabla con k, x⁽ᵏ⁾ y el error usado como criterio de parada | Columnas d_k y r_k, rotuladas «(criterio de parada)» o «(informativo)» | `modulo_iterativos.filas_tabla` | `test_app` | COMPLETADO |
+| M4-04 | Dominancia diagonal como criterio suficiente | Fila por fila: \|aᵢᵢ\| > Σ\|aᵢⱼ\| | `dominancia_diagonal` | `TestDominancia` | COMPLETADO |
+| M4-05a | Matriz de iteración y ρ(T) sin funciones de biblioteca | T exacta, Faddeev-LeVerrier, raíces y decisiones exactas | `espectral.matriz_iteracion`, `polinomio_caracteristico`, `raices`, `radio_espectral` | `test_espectral` (25); auditoría: 300 casos | COMPLETADO para n ≤ 8. Con autovalores triples o de mayor multiplicidad suele dar «indeterminado» (ver Limitaciones) |
+| M4-05b | ρ(T) «mediante los procedimientos estudiados en el curso» | Para n ≤ 3 el polinomio coincide con Sarrus; para las raíces y para n > 3 se usan métodos que no se vieron en clase | ídem | `test_faddeev_coincide_con_sarrus_3x3` | PENDIENTE DE CONFIRMACIÓN EXTERNA (P-5) |
+| M4-06 | Motivo de finalización | Ocho códigos con mensaje | `ejecutar`, `_ejecutar` | P8–P14, P16 | COMPLETADO |
+| M4-07a | Comparar los 3 métodos por iteraciones y error final | Experimento homogéneo; tabla con k, motivo, d, r, e = ‖x⁽ᵏ⁾ − x*‖∞ y ρ | `comparar_metodos`, `configuraciones_homogeneas`, `modulo_iterativos.comparar` | P18, P19, `test_app` | COMPLETADO |
+| M4-07b | Significado oficial de «error final» | Se muestran las tres medidas (d, r, e) | ídem | — | PENDIENTE DE CONFIRMACIÓN EXTERNA (P-4). Riesgo bajo: cualquiera de las tres lecturas está en la tabla |
+| M4-08 | Gráfica de error frente a iteración | Una ejecución (d_k y r_k con la línea ε) y comparación (d, r o e) | `grafica_convergencia`, `grafica_comparacion` | `test_app`. 02-nov: la gráfica individual (criterios A y B) se revisó como imagen y coincide con IV-1 e IV-4 | COMPLETADO |
 
 ## Validaciones obligatorias (OFICIAL p. 3)
 
-| ID | Validación | Prueba | Estado |
-|---|---|---|---|
-| V-01 | Campos vacíos o no numéricos | test_validacion, test_app (celda (2, 2)) | **Verificado** (mensaje visto) |
-| V-02 | Dimensiones incompatibles | test_matriz, test_directos, P20 | Probado |
-| V-03 | Matriz singular o casi singular | test_directos, test_condicion; aviso de pivote pequeño y de κ alto | Probado |
-| V-04 | Divisiones entre cero y pivotes nulos | test_directos, P14 | Probado |
-| V-05 | ε > 0 y k_max entero positivo | P20, test_tolerancias_extremas | Probado |
-| V-06 | 0 < ω < 2 con aviso | P20 | Probado |
-| V-07 | Sin cierres; mensajes comprensibles | test_app; `ejecutar` devuelve códigos | Probado |
+| ID | Validación | Archivo o función | Prueba | Estado |
+|---|---|---|---|---|
+| V-01 | Campos vacíos y no numéricos | `leer_numero`, `leer_matriz` (indica la posición) | `test_validacion`, `test_modulo_I_entrada_invalida` | COMPLETADO |
+| V-02 | Dimensiones incompatibles entre A y b | `validar_sistema`, `validar_configuracion` | `test_matriz`, `test_directos`, P20 | COMPLETADO |
+| V-03 | Matriz singular o casi singular cuando el método exige que no lo sea | `inversa_gauss_jordan`, `solucion_unica` (`ErrorSistema`), aviso de pivote pequeño, κ alto | `test_directos`, `test_condicion` | COMPLETADO |
+| V-04 | Divisiones entre cero y pivotes nulos | Intercambio de filas; `DIAGONAL_CERO` en los iterativos | `test_directos`, P14 | COMPLETADO |
+| V-05 | ε > 0 y k_max entero positivo | `leer_tolerancia`, `leer_entero_positivo`, `validar_configuracion` | P20, `test_tolerancias_extremas` | COMPLETADO |
+| V-06 | 0 < ω < 2, aclarando que no garantiza la convergencia | `leer_omega`, `validar_configuracion` | P20 | COMPLETADO |
+| V-07 | Sin cierres inesperados y con mensajes comprensibles | `ejecutar` nunca lanza excepciones; la interfaz atrapa `ErrorEntrada` y `ErrorMatriz` | `test_app` | COMPLETADO |
 
-## Entregables (OFICIAL p. 1)
+## Casos de prueba, manual y entregables (OFICIAL pp. 1, 3, 5)
 
-| ID | Entregable | Estado | Pendiente |
-|---|---|---|---|
-| E-01 | ZIP `Grupo(01-02)-IF0012-Proyecto-IIC.zip` | Implementado (`empaquetar.py 01|02`) | **Número de grupo sin confirmar** |
-| E-02 | Mecanismo de ejecución | Probado (`ejecutar.bat` en una copia limpia) | No se probó en otro equipo |
-| E-03 | Manual de usuario | Implementado | Prueba con un tercero |
-| E-04 | Instrucciones de ejecución | Implementado (README y manual §1) | — |
-| E-05 | Código fuente comentado | Implementado | — |
-| E-06 | Carpeta de casos de prueba | Implementado | Falta el caso obligatorio |
-| E-07 | Bibliotecas documentadas | Implementado | — |
-| E-08 | Código externo citado | No aplicable: no se copió código externo | El uso de IA está declarado; **la autorización está pendiente** |
+| ID | Requisito | Implementación | Archivo | Prueba | Estado |
+|---|---|---|---|---|---|
+| C-07a | Al menos un caso documentado por módulo (entrada, salida esperada, resultado) | Tablas con oráculos independientes | `casos_prueba/modulo_I.md` … `modulo_IV.md` | Las mismas comprobaciones están automatizadas | COMPLETADO |
+| C-07b | Superar el caso obligatorio de la docente | Procedimiento preparado | `casos_prueba/README.md` | — | PENDIENTE DE CONFIRMACIÓN EXTERNA (P-3): **no se ha recibido** |
+| C-06 | Manual: formato de entradas, pasos de ejecución, un ejemplo por módulo, funciones principales y dependencias | Los cinco apartados existen (§1, §2, §4–7, §8) | `docs/manual_usuario.md` | — | INCOMPLETO: falta que alguien ajeno lo siga en **otro** equipo (lista de verificación, p. 5) |
+| E-01 | ZIP `Grupo(01-02)-IF0012-Proyecto-IIC.zip` | `empaquetar.py 01\|02`, una sola carpeta raíz | `dist/` | Verificación del ZIP (estado_desarrollo.md) | PENDIENTE DE CONFIRMACIÓN EXTERNA (P-1): el número 01 es provisional |
+| E-02 | Ejecutable o mecanismo de ejecución documentado | `ejecutar.bat` (crea `.venv`, instala y abre el navegador) | `ejecutar.bat`, README, manual §1 | Copia limpia del ZIP en este equipo | COMPLETADO en este equipo. Probarlo en otro equipo forma parte de C-06 |
+| E-03/E-04 | Manual e instrucciones de ejecución | — | `docs/manual_usuario.md`, `README.md` | — | COMPLETADO (ver C-06) |
+| E-05 | Código fuente completo, legible y comentado | Docstrings con fórmulas y referencias | todo el proyecto | — | COMPLETADO |
+| E-08 | Código externo citado | No se copió código externo; el uso de IA está declarado | `docs/herramientas_y_bibliotecas.md` §4 | — | PENDIENTE DE CONFIRMACIÓN EXTERNA (P-2): **autorización del uso de IA** |
 
 ## Defensa (35 %)
 
-| ID | Criterio | Estado |
-|---|---|---|
-| D-01 a D-05 | Dominio, explicación, uso, claridad, comunicación | **No iniciado**: preparación del grupo (Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Arias y Samir Sandoval Ramírez) con `docs/guia_defensa.md`. Defensa en la semana del 16-nov-2026 |
+| ID | Criterio | Implementación | Estado |
+|---|---|---|---|
+| D-01 a D-05 | Dominio, explicación matemática, uso del programa, claridad y comunicación | Material: `docs/guia_defensa_equipo.md` (guía completa) y `docs/resumen_logica_por_modulo.md` (estudio rápido) | INCOMPLETO: falta que **cada integrante** estudie y ensaye. Defensa en la semana del 16-nov-2026 |
 
 ## Incentivos por innovación (OFICIAL p. 5)
 
-**No se afirma ningún punto adicional:** la evaluación corresponde a la docente. Se indica la evidencia concreta que existe.
+**No se afirma ningún punto adicional**: la evaluación corresponde a la docente.
 
-| ID | Incentivo (máx.) | Criterio oficial | Evidencia concreta | Estado |
+| ID | Incentivo (máx.) | Evidencia | Archivo | Estado |
 |---|---|---|---|---|
-| I-01 | Visualización avanzada (1 %) | «Gráficas comparativas adicionales, historial de convergencia o reportes exportables con utilidad real» | Comparación superpuesta de los 3 métodos (vista); autovalores con el círculo unidad; barrido de ω; **CSV del historial con precisión completa** (contenido probado) | Probado; parcialmente visto |
-| I-02 | Precondicionamiento (1.5 %) | «Implementación correcta de un precondicionador diagonal y comparación documentada de su efecto» | Demostración de que con M = D, Jacobi, GS y SOR no cambian (guia_matematica §10) | **Bloqueado**: falta la aclaración de la docente. No implementado |
-| I-03 | Matrices dispersas (1 %) | «Representación o tratamiento eficiente… con explicación de la estrategia» | CSR propio; iteraciones idénticas a las densas (prueba); paso unas 52 veces más rápido en una tridiagonal de 400×400 (medido); explicación en guia_matematica §9 | Probado |
-| I-04 | Experiencia de usuario (0.5 %) | «Mejoras sustantivas de accesibilidad, ayuda contextual o interacción» | Ejemplos cargables, ayudas, errores con la posición, interpretación geométrica | Implementado; pendiente de revisión manual |
-| I-05 | Extensión matemática (1 %) | «Funcionalidad adicional pertinente, correctamente implementada y defendida» | ρ(T) con autovalores complejos (verificado, con la limitación de raíces múltiples); solución paramétrica; determinante | Verificado; **defenderlo requiere dominar Faddeev-LeVerrier y Durand-Kerner** |
+| I-01 | Visualización avanzada (1 %) | Comparación superpuesta de los 3 métodos (d, r, e); autovalores con el círculo unidad; barrido de ω; CSV del historial con precisión completa | `graficos.py`, `csv_historial` | COMPLETADO (`test_csv_exportado_contiene_historial_completo`) |
+| I-02 | Precondicionamiento diagonal (1.5 %) | Se demostró que con M = D Jacobi, GS y SOR no cambian | `guia_matematica.md` §10 | PENDIENTE DE CONFIRMACIÓN EXTERNA (P-8). No implementado |
+| I-03 | Matrices dispersas (1 %) | CSR propio con iteraciones idénticas a las densas | `algebra/dispersas.py` | COMPLETADO (`test_dispersas`, `test_modulo_IV_formato_csr`) |
+| I-04 | Experiencia de usuario (0.5 %) | Ejemplos cargables, ayudas contextuales, errores con la posición | `interfaz/` | COMPLETADO (juicio de la docente) |
+| I-05 | Extensión matemática (1 %) | ρ con autovalores complejos; decisiones exactas (Schur-Cohn, p(±1) = 0); solución paramétrica; determinante | `espectral.py`, `directos.py` | COMPLETADO. Defenderlo exige dominar Faddeev-LeVerrier y Durand-Kerner |
 
-## Limitaciones conocidas que afectan a requisitos
+## Limitaciones reales (no son fallos, pero hay que saber defenderlas)
 
-1. **Radio espectral con autovalores múltiples** (M4-05).
-   - Durand-Kerner pierde precisión con raíces repetidas, del orden de 10⁻⁴ en una raíz triple.
-   - La aplicación marca el resultado como no fiable y concluye «indeterminado», aunque ρ esté lejos de 1 (por ejemplo, la triple de 1/2).
-   - **No da conclusiones falsas**, pero en esos casos no decide.
-   - Las raíces λ = 0, el grado ≤ 2 y λ = ±1 se deciden de forma exacta.
-2. **ρ cerca de 1.** Dentro de una banda de 10⁻⁹, o de 10⁻⁶ si hay raíces casi repetidas, la conclusión es «indeterminado».
-3. **Revisión visual incompleta.** No se capturaron: la gráfica de una ejecución individual del Módulo IV, la figura 3D dentro del navegador y el espaciado corregido de las fracciones.
+1. **Autovalores múltiples:** Durand-Kerner pierde precisión (≈10⁻⁸ en una raíz doble y ≈10⁻⁵ en una triple).
+   - Con raíces dobles suele converger: se avisa y se decide con la banda ampliada de 10⁻⁶.
+   - Con raíces triples o de mayor multiplicidad suele no converger: el resultado se marca no fiable y la conclusión es «indeterminado». **Nunca da una conclusión falsa**, pero en esos casos no decide.
+2. **ρ muy cerca de 1:** dentro de una banda de 10⁻⁹ (10⁻⁶ si hay raíces casi repetidas) la conclusión es «indeterminado», salvo que una decisión exacta la resuelva.
+3. **n > 8:** no se calcula ρ. Se informa y se remite a la dominancia diagonal y a las iteraciones.
+4. **Iterativos en punto flotante:** los resultados son aproximaciones. Las diferencias en los últimos decimales se justifican por la tolerancia ε (OFICIAL p. 3), no por redondeos arbitrarios.
+5. **Sin pruebas automáticas del contenido visual** de las gráficas. Se revisaron manualmente como imagen.

@@ -1,8 +1,8 @@
 # Estado del desarrollo
 
-**Última actualización:** 27-oct-2026, tras la auditoría final. El historial completo está en `git log`.
+**Última actualización:** 02-nov-2026, revisión completa del estado real. El historial completo está en `git log`.
 
-## Datos del proyecto (confirmados por el grupo)
+## Datos del proyecto
 
 | Dato | Valor |
 |---|---|
@@ -10,13 +10,36 @@
 | Integrantes | Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Arias, Samir Sandoval Ramírez |
 | Entrega | **11 de noviembre de 2026** |
 | Defensa individual | Semana del **16 de noviembre de 2026** |
-| Número de grupo (01 o 02) | **Sin confirmar**. Determina el nombre del ZIP |
+| Número de grupo (01 o 02) | **Sin confirmar.** El ZIP usa 01 de forma **provisional** |
 
-## Pruebas: resultados reales
+## Revisión del 02-nov-2026: qué se hizo
+
+1. **Requisitos.** Se releyó el enunciado oficial (pp. 1-5) y se rehízo la matriz de cumplimiento con los estados COMPLETADO, INCOMPLETO, FALLIDO y PENDIENTE DE CONFIRMACIÓN EXTERNA. Ver [auditoria_requisitos.md](auditoria_requisitos.md). **Ningún requisito queda FALLIDO.**
+2. **Revisión matemática de los cuatro módulos.** Se leyeron completos `matriz`, `validacion`, `directos`, `condicion`, `minimos`, `iterativos`, `espectral` y `dispersas`, y las interfaces.
+   - Se comprobaron:
+     - las fórmulas: Gauss, Gauss-Jordan, determinante, κ∞, ecuaciones normales, los tres pasos iterativos, T_J, T_GS, T_ω, Faddeev-LeVerrier, Schur-Cohn y Durand-Kerner;
+     - el tratamiento de los casos especiales;
+     - la coherencia entre lo que se calcula y lo que se muestra.
+   - **No se encontró ningún error matemático, así que no se modificó el código del núcleo ni de la interfaz.**
+   - Pruebas adicionales ejecutadas en esta revisión:
+     - casos límite: matriz cero (infinitas o inconsistente), sistemas 1×1, 3×2 consistente e inconsistente, 1×3 y 2×3, inversa 1×1, κ(I) = 1, mínimos cuadrados cuadrado y subdeterminado, iterativos con n = 1, SOR con ω = 1 igual a GS, y radio espectral en 2×2 con raíces complejas o λ = ±1;
+     - tiempos: ρ para n = 8 en 0.03 s; comparación con n = 50 en 0.07 s;
+     - **todos los ejemplos precargados** recalculados con oráculos escritos aparte: Cramer con determinantes de Leibniz (I), inversa por adjunta (κ), fórmula cerrada de la recta (III) y fórmula de Gelfand ‖T¹²⁸‖^(1/128) (ρ). Todos coinciden.
+3. **Nuevo caso verificado (IV-22).** En S9-07/10 con SOR y ω = 6/5 (el ω por defecto), λ = −1 es autovalor exacto: det((2 − ω)D + ωL − ωU) = 0, comprobado a mano. Se añadió la prueba `test_sor_s9_omega_6_5_autovalor_menos_uno_exacto`, de modo que ahora hay **185 pruebas**.
+4. **Revisión visual pendiente.** La gráfica de convergencia de una ejecución individual (criterios A y B, sistema S) se generó como imagen y se revisó: d₇ = 3.78·10⁻⁴ < ε y r₇ = 8.79·10⁻⁴ < ε, como en IV-1 e IV-4. **Siguen sin verse dentro del navegador** la figura 3D y el espaciado de las fracciones.
+5. **Correcciones de documentación.**
+   - La precisión con raíces múltiples ahora es exacta: ≈10⁻⁸ en una raíz doble, que suele decidirse con la banda de 10⁻⁶, y ≈10⁻⁵ en una triple, que queda «indeterminado».
+   - Se añadieron `dispersas.py` y `auditoria/` al árbol de `arquitectura.md`.
+6. **Documentos nuevos:**
+   - [guia_defensa_equipo.md](guia_defensa_equipo.md): guía completa para el equipo;
+   - [resumen_logica_por_modulo.md](resumen_logica_por_modulo.md): resumen de estudio;
+   - [pendientes_docente.md](pendientes_docente.md): pendientes con la docente, con su interpretación provisional y la pregunta exacta.
+
+## Pruebas: resultados reales (02-nov-2026)
 
 ```
 .venv\Scripts\python -m unittest
-Ran 184 tests ... OK            (0 fallos, 0 omitidas)
+Ran 185 tests ... OK            (0 fallos, 0 omitidas)
 ```
 
 | Archivo | Pruebas | Qué cubre | Tipo de oráculo |
@@ -26,75 +49,62 @@ Ran 184 tests ... OK            (0 fallos, 0 omitidas)
 | test_directos | 26 | Gauss, Gauss-Jordan, clasificación, inversa, determinante | Sustitución a mano; inversa por adjunta |
 | test_condicion | 13 | κ∞, escala, perturbaciones | Inversa 2×2 por fórmula; estructura I + 10J |
 | test_minimos | 10 | Ecuaciones normales, residuo, ajuste | Cramer; fórmula cerrada de la recta; Aᵀr = 0 |
-| test_iterativos | 31 | Jacobi, GS y SOR, criterios A/B/C, motivos, comparación | Programa independiente (27-oct) más contrastes con manuscritos y el ZIP |
-| test_espectral | 24 | T, polinomio, autovalores, ρ, regresiones de la auditoría | Sarrus a mano, formas cerradas, bisección, teoría tridiagonal |
+| test_iterativos | 31 | Jacobi, GS y SOR, criterios A/B/C, motivos, comparación | Programa independiente, manuscritos y el ZIP de la Tarea II |
+| test_espectral | 25 | T, polinomio, autovalores, ρ, regresiones | Sarrus a mano, formas cerradas, bisección, teoría tridiagonal, determinante a mano (IV-22) |
 | test_dispersas | 8 | Formato CSR | Construcción a mano; igualdad con la versión densa |
-| test_app | 12 | La interfaz con AppTest (sin navegador) y el contenido del CSV | **Superficiales:** comprueban que no hay excepciones y que aparecen los mensajes esperados, **no** el contenido visual de las gráficas |
+| test_app | 12 | La interfaz con AppTest (sin navegador) y el CSV | **Superficiales:** comprueban que no hay excepciones y que aparecen los mensajes, **no** el contenido visual de las gráficas |
 
-**Auditoría independiente** (`auditoria/`, unos 20 s, semilla fija):
+**Auditoría independiente** (`auditoria/`, semilla fija) — **0 fallos**:
 
-- 4500 sistemas: rangos por menores (Leibniz), soluciones y direcciones;
-- 400 inversas, determinantes y κ (adjunta);
-- 200 perturbaciones (Cramer);
-- 300 mínimos cuadrados (Cramer, Aᵀr = 0);
-- 600 ejecuciones iterativas (implementación independiente);
-- 300 análisis espectrales: cada λ anula det(T − λI) por Leibniz, el producto es igual a det(T) y ρ concuerda con Gelfand ‖Tᵏ‖^(1/k).
-
-Resultado: **0 fallos**.
-
-**Revisión visual manual** (Chrome, 27-oct):
-
-- **Vistos:**
-  - Módulo I: solución y pasos (fase VII).
-  - Módulo II: κ, inversa, tabla de perturbación y errores.
-  - Módulo III: ecuaciones normales, x̂, residuos y la gráfica del ajuste.
-  - Módulo IV: tabla de iteraciones (fase VII), comparación homogénea (tabla y gráfica), pestaña de convergencia (T, polinomio, autovalores, ρ).
-  - Planos 3D: figuras de solución única e infinitas guardadas como PNG y revisadas fuera del navegador.
-- **No vistos:** varias capturas agotaron el tiempo mientras la página se redibujaba, y no se dan por vistas:
-  - la gráfica de convergencia de una ejecución individual (Módulo IV);
-  - la figura 3D dentro del navegador;
-  - el espaciado corregido de las fracciones.
-
-## Defectos encontrados y corregidos en la auditoría final
-
-| # | Defecto | Efecto | Corrección | Prueba de regresión |
-|---|---|---|---|---|
-| 1 | Tolerancia de Durand-Kerner (10⁻¹⁵) inalcanzable por redondeo | Raíces **simples** marcadas «no fiables» y conclusión «indeterminado» en casos que convergen (5 de 300 en la auditoría aleatoria, por ejemplo ρ = 0.595) | Tolerancia 10⁻¹²; se mantiene la verificación posterior | test_raices_simples_no_deben_marcarse_no_fiables |
-| 2 | λ = ±1 exacto (por ejemplo, A singular) con grado ≥ 3 | Se informaba «indeterminado» aunque ρ ≥ 1 es seguro | Comprobación exacta p(±1) = 0 con fracciones → «no converge» | test_autovalor_uno_exacto_decide_no_convergencia |
-| 3 | Con raíces casi repetidas el error de ρ (~10⁻⁸) superaba la banda de 10⁻⁹ | Riesgo de conclusión invertida si ρ ≈ 1 | Banda de 10⁻⁶ cuando hay raíces casi repetidas; función `concluir` | test_bandas, test_raiz_doble_cerca_de_uno |
-| 4 | Aviso de raíz múltiple ausente cuando Durand-Kerner no converge | Mensaje poco claro | El aviso menciona el «autovalor múltiple» | test_raiz_multiple_se_declara_indeterminada |
-| 5 | ε positiva que se anula en float (10⁻⁴⁰⁰) | Mensaje engañoso: «debe ser mayor que 0» | Mensaje específico | test_tolerancias_extremas_mensajes |
-| 6 | «El tolerancia es demasiado grande» | Error gramatical | Mensaje genérico correcto | ídem |
-| 7 | Fracciones apiladas que se montaban en vectores y matrices LaTeX | Defecto visual (Módulos III y IV) | Espacio entre filas cuando hay fracciones | test_latex_separa_filas_con_fracciones (visual **sin confirmar**) |
-| 8 | P21 aceptaba dos resultados posibles | Prueba débil | Ahora comprueba el resultado determinista | P21 |
-| 9 | La exportación CSV no tenía prueba | Funcionalidad sin evidencia | Prueba del contenido y de la precisión completa | test_csv_exportado_contiene_historial_completo |
+- 4500 sistemas;
+- 400 inversas, determinantes y κ;
+- 200 perturbaciones;
+- 300 mínimos cuadrados;
+- 600 ejecuciones iterativas;
+- 300 análisis espectrales aleatorios (0 indeterminados, 0 no fiables);
+- casos difíciles: con raíces casi iguales, escalas muy distintas o ρ = 0.999999 el resultado es fiable; con el par complejo doble y la raíz cuádruple se marca «no fiable», como corresponde.
 
 ## Limitaciones conocidas (no resueltas)
 
-1. Autovalores múltiples: ρ queda como «indeterminado» (ver auditoria_requisitos.md).
-2. La interfaz no tiene pruebas automáticas del contenido visual de las gráficas.
+1. **Autovalores múltiples.** Con raíces triples o de mayor multiplicidad ρ suele quedar «indeterminado». Con raíces dobles se decide con la banda de 10⁻⁶ y un aviso.
+2. Las gráficas no tienen pruebas automáticas de su contenido visual.
 3. La instalación se probó en entornos virtuales nuevos **en este equipo**, no en otro computador.
-4. Streamlit y Matplotlib instalan NumPy como dependencia interna; nuestro código no lo importa.
+4. Streamlit y Matplotlib instalan NumPy como dependencia interna. Ningún archivo del proyecto lo importa.
 
-## Instalación aislada
+## Empaquetado
 
-- **Fase anterior:** `ejecutar.bat` en una copia extraída del ZIP creó `.venv` (Python 3.14.1), instaló las dependencias y el servidor respondió `ok`. En esa copia pasaron 167 pruebas (la versión de entonces).
-- **ZIP de la auditoría final (27-oct):** 56 archivos (119 KB), una sola carpeta raíz, sin `.venv`, cachés, `.git` ni imágenes; `ejecutar.bat` con fin de línea CRLF.
-  - Extraído en una carpeta nueva, el propio `ejecutar.bat` creó `.venv` (Python 3.14.1), instaló las dependencias y el servidor respondió `ok` a los 51 s.
-  - En esa copia: **184 pruebas OK** y auditoría independiente con **0 fallos**.
-  - El ZIP se generó con el nombre provisional `Grupo01-…` solo para esta verificación y **se borró**: el número de grupo no está confirmado.
+Ver la sección «Verificación del ZIP», al final de este archivo.
 
-## Pendientes que no dependen del código
+## Pendientes
+
+Los que dependen de la docente están detallados en [pendientes_docente.md](pendientes_docente.md), con la pregunta exacta para cada uno.
 
 | # | Pendiente | Impacto | Quién |
 |---|---|---|---|
-| 1 | **Autorización expresa del uso de IA** en el código entregable (PROG p. 7 §6.2) | Integridad académica | Grupo → docente |
-| 2 | **Número de grupo** (01 o 02) | Nombre del ZIP | Grupo |
-| 3 | **Caso de validación obligatorio** | C-07 (3 %) | Docente |
-| 4 | Significado oficial del **«error final»** | M4-07 | Docente |
-| 5 | **Alcance exigido del radio espectral** (n > 3, autovalores complejos o múltiples, métodos extra) | M4-05 | Docente |
-| 6 | NumPy como dependencia transitiva; `math.sqrt` como operación elemental | R-02, R-03 | Docente |
-| 7 | Interpretación de la perturbación porcentual | M2-03 | Docente |
-| 8 | Comparación esperada en el precondicionamiento diagonal | I-02 (1.5 %) | Docente |
-| 9 | Revisión visual de lo no confirmado; manual probado por un tercero | C-05, C-06 | Grupo |
-| 10 | Preparación de la defensa individual | 35 % | Los 4 integrantes |
+| P-1 | **Número de grupo** (01 o 02) | Nombre del ZIP; regenerarlo tarda segundos (`python empaquetar.py 02`) | Grupo |
+| P-2 | **Autorización expresa del uso de IA** (PROG p. 7 §6.2) | Integridad académica: **prioridad máxima** | Grupo → docente |
+| P-3 | **Caso de validación obligatorio** | C-07 (3 %) | Docente |
+| P-4 | Significado oficial de «error final» | M4-07 (riesgo bajo: se muestran d, r y e) | Docente |
+| P-5 | Alcance del radio espectral (métodos que no se vieron en clase) | M4-05 | Docente |
+| P-6 | NumPy como dependencia interna | Resuelto por el enunciado; confirmación opcional | — |
+| P-7 | Perturbación porcentual | Resuelto: ‖Δb‖/‖b‖ = p/100 en ambas lecturas; confirmación opcional | — |
+| P-8 | Comparación esperada en el precondicionamiento | Incentivo I-02 (opcional) | Docente |
+| G-1 | Una persona ajena sigue el manual en **otro** equipo | C-06, lista de verificación | Grupo |
+| G-2 | Cada integrante instala, ensaya la demostración y estudia la guía | Defensa (35 %) | Los 4 integrantes |
+| G-3 | Mirar dentro del navegador la figura 3D y las fracciones | C-05 (estético) | Grupo |
+
+## Verificación del ZIP
+
+ZIP generado el 02-nov-2026 con `python empaquetar.py 01`: `dist/Grupo01-IF0012-Proyecto-IIC.zip`. El número 01 es **provisional**.
+
+- **Contenido:** 59 archivos, una sola carpeta raíz (`Grupo01-IF0012-Proyecto-IIC/`) y `testzip` sin errores.
+- **Exclusiones:** sin `.venv`, `__pycache__`, `.pyc`, `.git`, `dist`, imágenes ni `secrets.toml`.
+- **Fines de línea:** `ejecutar.bat` tiene fin de línea CRLF.
+- **Prueba en una copia limpia:**
+  - El ZIP se extrajo en una carpeta nueva.
+  - `ejecutar.bat` creó `.venv` (Python 3.14.1) e instaló Streamlit 1.66.1 y Matplotlib 3.11.2 (más NumPy 2.5.4 como dependencia interna).
+  - El servidor respondió `ok` a los ~60 s. Se usó el puerto 8502 (`STREAMLIT_SERVER_PORT`) porque el 8501 estaba ocupado por la sesión de trabajo.
+  - En esa copia: **185 pruebas OK** y auditoría independiente con **0 fallos**.
+- **Candidato anterior:** el del 27-oct (SHA-256 `54f76588…6946c`) se conservó, sin sobrescribirlo, en `dist/anteriores/`.
+- **Después de la verificación** solo se añadió esta sección a `estado_desarrollo.md` y se regeneró el ZIP. El SHA-256 final está en `dist/SHA256.txt`.
+- **Si el grupo resulta ser el 02:** `python empaquetar.py 02`.

@@ -208,6 +208,19 @@ class TestRegresionAuditoria(unittest.TestCase):
         self.assertTrue(r.decision_exacta)
         self.assertEqual(r.conclusion, NO_CONVERGE)
 
+    def test_sor_s9_omega_6_5_autovalor_menos_uno_exacto(self):
+        # Ejemplo S9-07/10 con SOR, ω = 6/5 (el ω por defecto de la interfaz).
+        # λ = -1 es autovalor de T_ω = (D+ωL)⁻¹[(1-ω)D - ωU]  <=>
+        # det((1-ω)D - ωU + (D+ωL)) = det((2-ω)D + ωL - ωU) = 0.
+        # Con ω = 6/5 esa matriz es (6/5)·[[2,-3,-3],[3,2,-2],[-3,-2,2]], cuya fila 3
+        # es la fila 2 cambiada de signo: es singular (oráculo a mano).
+        A = [[3, 3, 3], [3, 3, 2], [-3, -2, 3]]
+        r = radio_espectral(A, [9, 9, -2], SOR, F(6, 5))
+        self.assertEqual(r.coeficientes, [1, F(11, 125), F(-113, 125), F(1, 125)])
+        self.assertTrue(r.decision_exacta)
+        self.assertEqual(r.conclusion, NO_CONVERGE)
+        self.assertTrue(any("λ = -1" in a for a in r.advertencias))
+
     def test_raiz_multiple_se_declara_indeterminada_no_garantizada(self):
         # T triangular con el autovalor 1/2 triple (bloque de Jordan): ρ = 1/2 < 1,
         # pero Durand-Kerner pierde precisión con raíces múltiples: la aplicación

@@ -53,3 +53,9 @@ Los radios espectrales se verificaron con oráculos independientes:
 | IV-19 | A = [[2, 1, 1], [1, 2, 1], [3, 3, 2]] (singular), SOR ω = 1/2 | λ = 1 es autovalor exacto de T, luego ρ ≥ 1: «no converge», con decisión exacta | NO_CONVERGE, decisión exacta | Sí |
 | IV-20 | T con el autovalor 1/2 triple (bloque de Jordan) | ρ = 1/2, pero con raíz múltiple Durand-Kerner es impreciso: debe declararse «no fiable», no presentarse como garantizado | No fiable, aviso de autovalor múltiple, \|λ\| ≈ 0.500 | Sí |
 | IV-21 | ε = 10⁻⁴⁰⁰ (se anula en float) y ε = 10⁴⁰⁰ | Mensajes claros y específicos | «…en punto flotante vale 0…» / «…demasiado grande…» | Sí |
+
+## Caso añadido en la revisión del 02-nov-2026
+
+| ID | Caso | Salida esperada | Resultado obtenido | ¿Coincide? |
+|---|---|---|---|---|
+| IV-22 | S9-07/10 (A = [[3, 3, 3], [3, 3, 2], [−3, −2, 3]]) con SOR, ω = 6/5 (el ω por defecto de la interfaz) | λ = −1 es autovalor de T_ω si y solo si det((2 − ω)D + ωL − ωU) = 0. Con ω = 6/5 esa matriz es (6/5)·[[2, −3, −3], [3, 2, −2], [−3, −2, 2]], cuya fila 3 es la fila 2 con el signo cambiado: es singular. Por tanto ρ ≥ 1 y el método **no converge**, con decisión exacta (oráculo a mano) | Polinomio λ³ + (11/125)λ² − (113/125)λ + 1/125; aviso «λ = −1 es autovalor exacto de T»; NO_CONVERGE, decisión exacta. En la comparación, SOR llega a k_max = 50 | Sí |

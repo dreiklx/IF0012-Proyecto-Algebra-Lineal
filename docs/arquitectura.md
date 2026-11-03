@@ -10,7 +10,8 @@ proyecto-algebra/
 │   ├── condicion.py        κ∞, perturbación de b, errores relativos
 │   ├── minimos.py          Ecuaciones normales, residuo, ajuste lineal
 │   ├── iterativos.py       Jacobi, GS, SOR, criterios A/B/C, comparación, dominancia
-│   └── espectral.py        Matrices de iteración, polinomio característico, ρ(T)
+│   ├── espectral.py        Matrices de iteración, polinomio característico, ρ(T)
+│   └── dispersas.py        Formato CSR propio (incentivo de matrices dispersas)
 ├── interfaz/               PRESENTACIÓN: Streamlit; no contiene cálculos
 │   ├── componentes.py      LaTeX, tablas, lectura con mensajes de error
 │   ├── ejemplos.py         Ejemplos del curso (resultados verificados)
@@ -19,6 +20,7 @@ proyecto-algebra/
 │   ├── graficos.py         Ajuste, convergencia, comparación, autovalores
 │   └── geometria_3d.py     Rectas (2D) y planos (3D) de un sistema
 ├── tests/                  Pruebas unittest del núcleo y de la interfaz (AppTest)
+├── auditoria/              Comparación aleatoria del núcleo con oráculos independientes
 ├── casos_prueba/           Casos documentados: entrada, esperado, obtenido
 ├── docs/                   Documentación
 ├── .streamlit/config.toml  Solo localhost, sin telemetría, sin preguntas al arrancar

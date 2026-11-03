@@ -37,7 +37,7 @@ python -m venv .venv
 .venv\Scripts\python -m unittest -v
 ```
 
-También puede usar `ejecutar_pruebas.bat`. Hay 184 pruebas: el núcleo matemático, la validación y la interfaz (esta última con `streamlit.testing`).
+También puede usar `ejecutar_pruebas.bat`. Hay 185 pruebas: el núcleo matemático, la validación y la interfaz (esta última con `streamlit.testing`).
 
 Auditoría independiente (unos 20 s), que compara el núcleo con oráculos escritos aparte:
 
@@ -52,7 +52,10 @@ Auditoría independiente (unos 20 s), que compara el núcleo con oráculos escri
 |---|---|
 | [docs/manual_usuario.md](docs/manual_usuario.md) | Manual de usuario: entradas, pasos y un ejemplo por módulo |
 | [docs/guia_matematica.md](docs/guia_matematica.md) | Fórmulas, procedimientos, casos especiales y ejemplos verificados |
-| [docs/guia_defensa.md](docs/guia_defensa.md) | Guía de estudio para la defensa individual |
+| [docs/guia_defensa_equipo.md](docs/guia_defensa_equipo.md) | **Guía de defensa del equipo**: el código real explicado módulo por módulo, la matemática, 30 preguntas con respuesta y el guion de demostración |
+| [docs/resumen_logica_por_modulo.md](docs/resumen_logica_por_modulo.md) | Resumen de estudio rápido por módulo |
+| [docs/guia_defensa.md](docs/guia_defensa.md) | Guía de estudio anterior (incluye la tabla de errores de las láminas) |
+| [docs/pendientes_docente.md](docs/pendientes_docente.md) | Pendientes que dependen de la docente, con interpretación provisional y pregunta exacta |
 | [docs/arquitectura.md](docs/arquitectura.md) | Estructura del código |
 | [docs/decisiones_tecnicas.md](docs/decisiones_tecnicas.md) | Decisiones y alternativas descartadas |
 | [docs/herramientas_y_bibliotecas.md](docs/herramientas_y_bibliotecas.md) | Dependencias y declaración de uso de IA |
