@@ -96,6 +96,12 @@ La barra lateral izquierda tiene cinco opciones: Inicio y los módulos I a IV. E
 
 La aplicación detecta si el sistema es sobredeterminado (m > n). Después muestra AᵀA, Aᵀb, x̂, la tabla de residuos rᵢ, ‖r‖₂, ‖r‖₂² y ‖r‖∞, y la comprobación Aᵀr = 0. Si las columnas de A son dependientes, advierte que no hay un x̂ único.
 
+El desplegable **«Verificación con el procedimiento de clase»** repite los pasos del manuscrito S8-30/09 pp. 6-7:
+
+1. det([A | b]), cuando m = n + 1;
+2. las ecuaciones normales;
+3. la regla de Cramer (para n ≤ 3), que debe coincidir exactamente con Gauss.
+
 **Pestaña «Ajuste lineal de datos»:**
 
 1. Escriba los valores de x y de y; el punto i es (xᵢ, yᵢ).
@@ -107,7 +113,7 @@ Se muestra la ecuación y = m x + c, la gráfica de los datos con la recta y los
 
 ## 7. Módulo IV — Métodos iterativos
 
-### Datos y parámetros (comunes a las tres pestañas)
+### Datos y parámetros (comunes a las cuatro pestañas)
 
 - A (n × n) y b.
 - **Criterio de parada:**
@@ -140,22 +146,38 @@ Ejecuta los tres métodos con las mismas condiciones y avisa si el experimento n
 
 - iteraciones y motivo de parada;
 - d final y r final;
-- **e final** = ‖x⁽ᵏ⁾ − x*‖∞, donde x* es la solución del método directo;
+- **error final e** = ‖x⁽ᵏ⁾ − x*‖∞, donde x* es la solución del método directo. Es el «error final ‖x⁽ᵏ⁾ − x‖∞» de la tabla de la lámina S9-05/10 p. 17;
 - ρ(T) de cada método.
 
-Hay una gráfica superpuesta de d, r o e. En «Influencia de ω en SOR» se pueden probar varios valores de ω.
+Hay una gráfica superpuesta de e (por defecto), d o r. En «Influencia de ω en SOR» se pueden probar varios valores de ω.
 
 ### Pestaña «Convergencia: dominancia y radio espectral»
 
 Para el método elegido muestra:
 
 - la tabla de dominancia diagonal por filas, con su conclusión (condición suficiente);
+- si no es dominante, el **reordenamiento de las ecuaciones** que la haría dominante, si existe (como en la Tarea II #2-3). La aplicación no cambia los datos: hay que copiar A' y b' a mano. Se muestra aunque algún aᵢᵢ sea 0;
 - D, L y U;
 - la matriz de iteración T y el vector c;
-- det(T − λI);
+- det(T − λI) y, si T es 3×3, el desarrollo de clase por Sarrus (tr(T), suma de menores, det(T)), comprobado contra el polinomio;
 - los autovalores, incluidos los complejos;
 - ρ(T) y la conclusión: converge, no converge o indeterminado;
 - la gráfica de los autovalores con el círculo unidad.
+
+### Pestaña «Precondicionamiento diagonal» (incentivo)
+
+Pulse **Analizar el precondicionador M = D**. Se usan los mismos criterio, ε, k_max, x⁽⁰⁾ y ω de arriba. Se muestran:
+
+- M = D, B = D⁻¹A y b̃ = D⁻¹b;
+- κ∞(A) y κ∞(D⁻¹A), y los autovalores de A y de B;
+- una tabla con Jacobi, Gauss-Seidel, SOR y Richardson sobre el sistema original y el precondicionado: iteraciones, motivo, ρ(T), si T y c son idénticas (comparación exacta) y si las iteraciones coinciden;
+- las conclusiones y una gráfica de d_k (original con línea continua, precondicionado con línea discontinua).
+
+Resultado esperado con la tridiagonal [−1, 4, −1]:
+
+- κ no cambia, porque la diagonal es uniforme;
+- Jacobi, GS y SOR dan las mismas iteraciones;
+- Richardson pasa de ρ ≈ 4.618 (no converge) a ρ ≈ 0.405 (converge).
 
 *Ejemplo:* «S8-30/09 — 10x−y+2z=6» con Jacobi y criterio A termina en 7 iteraciones. «S9-07/10» con Jacobi da ρ ≈ 1.174 > 1, es decir, no converge.
 
@@ -166,9 +188,12 @@ Para el método elegido muestra:
 | `resolver_gauss`, `resolver_gauss_jordan` | `algebra/directos.py` | Resuelven y clasifican A x = b con registro de pasos |
 | `inversa_gauss_jordan`, `determinante` | `algebra/directos.py` | [A\|I] → [I\|A⁻¹]; det por eliminación |
 | `numero_condicion_infinito`, `analizar_perturbacion` | `algebra/condicion.py` | κ∞ y análisis de Δb |
-| `minimos_cuadrados`, `ajuste_lineal` | `algebra/minimos.py` | Ecuaciones normales, residuo y recta |
+| `minimos_cuadrados`, `ajuste_lineal`, `cramer` | `algebra/minimos.py` | Ecuaciones normales, residuo, recta y verificación por Cramer |
 | `ejecutar`, `comparar_metodos`, `dominancia_diagonal` | `algebra/iterativos.py` | Jacobi, GS y SOR con criterios A, B y C |
-| `matriz_iteracion`, `radio_espectral` | `algebra/espectral.py` | T, polinomio característico, autovalores y ρ |
+| `reordenamiento_dominante` | `algebra/iterativos.py` | Orden de las ecuaciones que logra la dominancia diagonal |
+| `matriz_iteracion`, `radio_espectral`, `analizar_matriz`, `desarrollo_sarrus` | `algebra/espectral.py` | T, polinomio característico (y Sarrus en 3×3), autovalores y ρ |
+| `precondicionar_diagonal`, `analizar_precondicionador` | `algebra/precondicionamiento.py` | M = D, D⁻¹A y comparación original frente a precondicionado |
+| `a_csr` y pasos CSR | `algebra/dispersas.py` | Almacenamiento disperso |
 | `leer_matriz`, `leer_vector`, … | `algebra/validacion.py` | Lectura y validación del texto introducido |
 
 ## 9. Problemas frecuentes

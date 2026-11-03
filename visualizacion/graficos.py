@@ -146,3 +146,42 @@ def grafica_autovalores(autovalores, rho):
 def cerrar(fig):
     """Libera la memoria de una figura ya mostrada."""
     plt.close(fig)
+
+
+TOPE_GRAFICA = 1e6
+
+
+def grafica_precondicionador(comparaciones):
+    """d_k de cada método sobre el sistema original (línea continua) y sobre el
+    precondicionado con M = D (línea discontinua).  Recibe la lista de
+    ComparacionMetodo de algebra.precondicionamiento."""
+    fig, ax = _figura()
+    colores = dict(COLORES, Richardson="#9467bd")
+    hay_datos = False
+    minimo = None
+    recortado = False
+    for f in comparaciones:
+        for resultado, estilo, sufijo in ((f.original, "o-", "original"),
+                                          (f.precondicionado, "s--", "con M = D")):
+            puntos, _ = _positivos([fila.k for fila in resultado.historial],
+                                   [fila.d for fila in resultado.historial])
+            if not puntos:
+                continue
+            hay_datos = True
+            recortado = recortado or max(p[1] for p in puntos) > TOPE_GRAFICA
+            minimo = min([p[1] for p in puntos] + ([minimo] if minimo else []))
+            ax.plot([p[0] for p in puntos], [p[1] for p in puntos], estilo, markersize=3,
+                    color=colores.get(f.metodo), label=f"{f.metodo} ({sufijo})")
+    if hay_datos:
+        ax.set_yscale("log")
+        if recortado:
+            # Una curva divergente (p. ej. Richardson sin precondicionar) taparía a las demás.
+            ax.set_ylim(min(minimo, 1.0) / 10, TOPE_GRAFICA)
+            ax.text(0.99, 0.02, f"Eje recortado en {TOPE_GRAFICA:.0e}: hay una curva que diverge",
+                    transform=ax.transAxes, ha="right", va="bottom", fontsize=7, color="#555555")
+    ax.set_xlabel("Iteración k")
+    ax.set_ylabel("d_k = ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞ (escala log.)")
+    ax.set_title("Efecto del precondicionador diagonal M = D")
+    ax.legend(loc="best", fontsize=7)
+    fig.tight_layout()
+    return fig

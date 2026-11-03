@@ -1,6 +1,6 @@
 # Guía de estudio para la defensa individual
 
-> **Versión ampliada (02-nov-2026):** [guia_defensa_equipo.md](guia_defensa_equipo.md) explica el código real función por función, incluye 30 preguntas con respuesta y el guion de demostración. Para repasar rápido: [resumen_logica_por_modulo.md](resumen_logica_por_modulo.md). Esta guía se conserva por la tabla de errores de las láminas (§6).
+> **Versión ampliada (02-nov-2026):** [guia_defensa_equipo.md](guia_defensa_equipo.md) explica el código real función por función, incluye 34 preguntas con respuesta y el guion de demostración. Para repasar rápido: [resumen_logica_por_modulo.md](resumen_logica_por_modulo.md). Esta guía se conserva por la tabla de errores de las láminas (§6).
 
 ## Formato de la defensa (OFICIAL p. 3-4)
 
@@ -25,7 +25,7 @@ Integrantes: Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Aria
 1. **Por qué fracciones exactas.** En Gauss, la inversa, κ y los mínimos cuadrados los resultados son exactos: 1/3 se guarda como 1/3, no como 0.333… Así un pivote es cero solo si es realmente cero, y la clasificación no depende de redondeos.
 2. **Por qué `float` en los iterativos.** Son aproximaciones que se detienen por tolerancia. Con fracciones, los denominadores crecerían en cada iteración.
 3. **Núcleo e interfaz.** `algebra/` contiene todos los cálculos, en Python puro. `interfaz/` solo lee los datos y muestra los resultados. `visualizacion/` solo dibuja.
-4. **Cómo se verifica.** Hay 185 pruebas automáticas (`python -m unittest`) y una auditoría independiente en `auditoria/`, que compara el núcleo con oráculos escritos aparte (Leibniz, adjunta, Cramer, Gelfand). Los valores esperados se calcularon de forma independiente: a mano, con Cramer, con fórmulas cerradas o con teoremas. No se copiaron de las láminas.
+4. **Cómo se verifica.** Hay 202 pruebas automáticas (`python -m unittest`) y una auditoría independiente en `auditoria/`, que compara el núcleo con oráculos escritos aparte (Leibniz, adjunta, Cramer, Gelfand). Los valores esperados se calcularon de forma independiente: a mano, con Cramer, con fórmulas cerradas o con teoremas. No se copiaron de las láminas.
 5. **Errores de las láminas.** Algunos ejemplos impresos están mal (tabla de la sección 6). Si en la defensa la aplicación «no coincide» con una lámina, hay que poder mostrar por qué: sustituir la solución en el sistema y ver el residuo.
 
 ---

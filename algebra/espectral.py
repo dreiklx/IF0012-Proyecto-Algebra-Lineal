@@ -325,17 +325,44 @@ def concluir(rho, fiable, decision_exacta=None, casi_repetidas=False):
     return CONVERGE if rho < 1 else NO_CONVERGE
 
 
-def radio_espectral(A, b, metodo, omega=None):
-    """Construye T, su polinomio característico, sus autovalores y ρ(T)."""
-    n = validar_cuadrada(A, "matriz A")
-    iteracion = matriz_iteracion(A, b, metodo, omega)
-    if n > N_MAX_ESPECTRAL:
-        return ResultadoEspectral(
-            iteracion=iteracion, conclusion=NO_CALCULADO,
-            mensaje=(f"No se calcula ρ(T) para n > {N_MAX_ESPECTRAL}: el procedimiento "
-                     f"por polinomio característico pierde fiabilidad. Use la dominancia "
-                     f"diagonal y el comportamiento observado de las iteraciones."))
-    coeficientes = polinomio_caracteristico(iteracion.T)
+def desarrollo_sarrus(T):
+    """Procedimiento de clase para 3x3 (S9-05/10 pp. 32-34; S9-07/10 p. 4):
+    det(T - λI) = -λ³ + tr(T) λ² - (suma de menores principales 2x2) λ + det(T),
+    con det(T) por la regla de Sarrus.  Devuelve (traza, suma_menores, det) exactos.
+
+    Es independiente de Faddeev-LeVerrier y sirve para mostrar y verificar el
+    polinomio tal como se calcula en clase."""
+    if validar_cuadrada(T, "matriz T") != 3:
+        raise ErrorEntrada("El desarrollo por Sarrus solo aplica a matrices 3x3.")
+    t = [[a_fraccion(v) for v in fila] for fila in T]
+    traza = t[0][0] + t[1][1] + t[2][2]
+    menores = ((t[0][0] * t[1][1] - t[0][1] * t[1][0])
+               + (t[0][0] * t[2][2] - t[0][2] * t[2][0])
+               + (t[1][1] * t[2][2] - t[1][2] * t[2][1]))
+    det = (t[0][0] * t[1][1] * t[2][2] + t[0][1] * t[1][2] * t[2][0] + t[0][2] * t[1][0] * t[2][1]
+           - t[0][2] * t[1][1] * t[2][0] - t[0][0] * t[1][2] * t[2][1] - t[0][1] * t[1][0] * t[2][2])
+    return traza, menores, det
+
+
+@dataclass
+class AnalisisMatriz:
+    """Autovalores y radio espectral de una matriz cuadrada cualquiera (n <= 8)."""
+    coeficientes: list
+    autovalores: list
+    multiplicidad_cero: int
+    rho: float
+    fiable: bool
+    decision: object              # True/False (todas |λ| < 1) si es exacta; None si no
+    verificaciones: dict
+    advertencias: list
+
+
+def analizar_matriz(T):
+    """Polinomio característico exacto, autovalores, ρ y verificaciones de la matriz T.
+
+    Es el núcleo común de radio_espectral y del análisis del precondicionador."""
+    n = validar_cuadrada(T, "matriz T")
+    coeficientes = polinomio_caracteristico(T)
     autovalores, ceros, fiable, advertencias, decision = raices(coeficientes)
     rho = max(abs(z) for z in autovalores) if autovalores else 0.0
 
@@ -343,7 +370,7 @@ def radio_espectral(A, b, metodo, omega=None):
     escala = max(1.0, max(abs(float(c)) for c in coeficientes))
     residuos = [abs(_evaluar([float(c) for c in coeficientes], z)) / escala for z in autovalores]
     suma = sum(autovalores)
-    traza = sum(iteracion.T[i][i] for i in range(n))
+    traza = sum(a_fraccion(T[i][i]) for i in range(n))
     verificaciones = {
         "max |p(λ)| relativo": max(residuos) if residuos else 0.0,
         "suma de autovalores": suma,
@@ -356,26 +383,40 @@ def radio_espectral(A, b, metodo, omega=None):
         fiable = False
         advertencias.append("Algún autovalor no anula el polinomio con la precisión esperada.")
 
-    resultado = ResultadoEspectral(
-        iteracion=iteracion, conclusion="", mensaje="", coeficientes=coeficientes,
-        polinomio_curso=texto_polinomio_curso(coeficientes), autovalores=autovalores,
-        multiplicidad_cero=ceros, rho=rho, fiable=fiable, verificaciones=verificaciones,
-        advertencias=advertencias)
-
     # Comprobación exacta (fracciones): si λ = 1 o λ = -1 anulan p(λ), entonces
     # ρ(T) >= 1 con certeza (λ = 1 aparece, por ejemplo, cuando A es singular).
-    raiz_unitaria = None
     if all(isinstance(c, Fraction) for c in coeficientes):
         for candidato in (1, -1):
             if _evaluar(coeficientes, Fraction(candidato)) == 0:
-                raiz_unitaria = candidato
+                decision = False
+                advertencias.append(f"λ = {candidato} es autovalor exacto de T: ρ(T) ≥ 1.")
                 break
-    if raiz_unitaria is not None:
-        decision = False
-        advertencias.append(f"λ = {raiz_unitaria} es autovalor exacto de T: ρ(T) ≥ 1.")
+    return AnalisisMatriz(coeficientes=coeficientes, autovalores=autovalores,
+                          multiplicidad_cero=ceros, rho=rho, fiable=fiable, decision=decision,
+                          verificaciones=verificaciones, advertencias=advertencias)
 
-    resultado.decision_exacta = decision is not None
-    resultado.conclusion = concluir(rho, fiable, decision, AVISO_CASI_REPETIDOS in advertencias)
+
+def radio_espectral(A, b, metodo, omega=None):
+    """Construye T, su polinomio característico, sus autovalores y ρ(T)."""
+    n = validar_cuadrada(A, "matriz A")
+    iteracion = matriz_iteracion(A, b, metodo, omega)
+    if n > N_MAX_ESPECTRAL:
+        return ResultadoEspectral(
+            iteracion=iteracion, conclusion=NO_CALCULADO,
+            mensaje=(f"No se calcula ρ(T) para n > {N_MAX_ESPECTRAL}: el procedimiento "
+                     f"por polinomio característico pierde fiabilidad. Use la dominancia "
+                     f"diagonal y el comportamiento observado de las iteraciones."))
+    analisis = analizar_matriz(iteracion.T)
+    rho, advertencias = analisis.rho, analisis.advertencias
+    resultado = ResultadoEspectral(
+        iteracion=iteracion, conclusion="", mensaje="", coeficientes=analisis.coeficientes,
+        polinomio_curso=texto_polinomio_curso(analisis.coeficientes),
+        autovalores=analisis.autovalores, multiplicidad_cero=analisis.multiplicidad_cero,
+        rho=rho, fiable=analisis.fiable, verificaciones=analisis.verificaciones,
+        advertencias=advertencias)
+    resultado.decision_exacta = analisis.decision is not None
+    resultado.conclusion = concluir(rho, analisis.fiable, analisis.decision,
+                                    AVISO_CASI_REPETIDOS in advertencias)
 
     rho_txt = formatear_numero(rho)
     if resultado.conclusion == CONVERGE:

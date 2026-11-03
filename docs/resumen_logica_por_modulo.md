@@ -1,6 +1,6 @@
 # Resumen de la lógica por módulo — material de estudio para la defensa
 
-**Versión:** 02-nov-2026. Es la versión condensada de [guia_defensa_equipo.md](guia_defensa_equipo.md); allí están las demostraciones y las 30 preguntas con su respuesta completa.
+**Versión:** 03-nov-2026. Es la versión condensada de [guia_defensa_equipo.md](guia_defensa_equipo.md); allí están las demostraciones y las 34 preguntas con su respuesta completa.
 **Regla de oro:** la docente elige al menos dos módulos y puede pedir un caso no preparado. **Estudien los cuatro.**
 
 ## Lo que hay que saber de memoria en cualquier módulo
@@ -20,7 +20,7 @@
    | III | Aᵀr = 0 |
    | IV | r_k pequeño; Σλ = traza(T) |
 
-5. **Evidencia.** 185 pruebas OK y la auditoría aleatoria con 0 fallos. Los valores esperados son independientes: **no** salen de las láminas, varias de las cuales tienen errores.
+5. **Evidencia.** 202 pruebas OK y la auditoría aleatoria con 0 fallos. Los valores esperados son independientes: **no** salen de las láminas, varias de las cuales tienen errores.
 
 ---
 
@@ -133,6 +133,7 @@
 - `clasificar_forma`;
 - `minimos_cuadrados`, que usa `transpuesta`, `multiplicar_matrices`, `resolver_gauss` y `norma_2_cuadrado_vector`;
 - `ajuste_lineal`, que construye la matriz de diseño `[[xᵢ, 1]]`;
+- `cramer` y el campo `det_aumentada`: el **procedimiento de clase** (S8-30/09 pp. 6-7), mostrado como verificación;
 - la gráfica, `grafica_ajuste`.
 
 **Fórmulas:**
@@ -167,7 +168,7 @@
 - ¿Qué significa Aᵀr = 0?
 - ¿Qué indica ‖r‖₂?
 - ¿Cuándo no hay x̂ único?
-- ¿Con qué método se resuelven? → El Gauss propio del Módulo I.
+- ¿Con qué método se resuelven? → El Gauss propio del Módulo I, porque lo exige el enunciado. Cramer, que usa la docente, se muestra como verificación y coincide: det([A|b]) = −11; 363, 715 y −319.
 
 ---
 
@@ -179,9 +180,10 @@
 
 - pasos: `paso_jacobi`, `paso_gauss_seidel`, `paso_sor`;
 - `validar_configuracion` y `ejecutar`/`_ejecutar`, el bucle común;
-- `dominancia_diagonal` y `comparar_metodos` con `configuraciones_homogeneas`;
-- `matriz_iteracion`, `polinomio_caracteristico`, `raices`/`durand_kerner`, `concluir` y `radio_espectral`;
-- `a_csr` y `paso_*_csr`.
+- `dominancia_diagonal`, `reordenamiento_dominante` (sugiere el orden de las ecuaciones, como en la Tarea II), y `comparar_metodos` con `configuraciones_homogeneas`;
+- `matriz_iteracion`, `polinomio_caracteristico`, `desarrollo_sarrus` (procedimiento de clase en 3×3), `raices`/`durand_kerner`, `analizar_matriz`, `concluir` y `radio_espectral`;
+- `a_csr` y `paso_*_csr`;
+- incentivo: `precondicionar_diagonal`, `analizar_precondicionador` y `paso_richardson`.
 
 **Fórmulas por componentes:**
 
@@ -201,7 +203,7 @@
 
 - d_k = ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞;
 - r_k = ‖b − Ax⁽ᵏ⁾‖∞ (sistema original);
-- e_k = ‖x⁽ᵏ⁾ − x*‖∞ (x* del Gauss exacto; solo en la comparación).
+- e_k = ‖x⁽ᵏ⁾ − x*‖∞ (x* del Gauss exacto; solo en la comparación). Es el **«Error final (‖x⁽ᵏ⁾ − x‖∞)»** de la tabla de la lámina S9-05/10 p. 17.
 
 **Criterios de parada** (desigualdad estricta):
 
@@ -260,10 +262,21 @@ La norma ∞ es el **máximo**, no la suma.
 - ¿Cómo se calcula ρ sin bibliotecas?
 - ¿Por qué no el método de la potencia? → Falla con pares complejos y con ±μ.
 - ¿Qué pasa con raíces múltiples o con ρ ≈ 1? → Indeterminado en lugar de una conclusión falsa.
-- ¿Qué es «e final»? → Error respecto a x* exacto; se muestran d, r y e.
+- ¿Qué es «error final»? → ‖x⁽ᵏ⁾ − x*‖∞, igual que en la lámina S9-05/10 p. 17; también se muestran d y r.
+- ¿Cómo sigue la aplicación el procedimiento de clase del radio espectral? → En 3×3 muestra tr(T), Σ menores y det(T) por Sarrus, y comprueba que el polinomio coincide.
 - ¿Qué hace ω y por qué 0 < ω < 2 no basta?
 - ¿Qué aporta CSR? → O(nnz) por iteración, con las mismas iteraciones.
-- ¿Por qué el precondicionador M = D no cambia las iteraciones? → T̃ = T.
+- ¿Por qué el precondicionador M = D no cambia las iteraciones? → En D⁻¹A la diagonal es I, así que T̃_J = −D⁻¹(L + U) = T_J, y lo mismo pasa con GS y SOR. Sí cambian κ (si la diagonal no es uniforme), el residuo y Richardson (que se convierte en Jacobi).
+
+**Precondicionamiento** (pestaña «Precondicionamiento diagonal»), ejemplo con la tridiagonal [−1, 4, −1]:
+
+| | Original | Con M = D |
+|---|---|---|
+| κ∞ | 30/11 | 30/11 (B = A/4) |
+| Jacobi / GS / SOR | 7 / 5 / 7 | 7 / 5 / 7, idénticas (T y c iguales, exacto) |
+| Richardson | no converge (ρ(I − A) ≈ 4.618) | converge (ρ = ρ(T_J) ≈ 0.405) |
+
+La diapositiva 19 de S9-05/10 afirma que Jacobi mejora: no es reproducible y hay que saber explicar por qué.
 
 ---
 
@@ -276,12 +289,13 @@ La norma ∞ es el **máximo**, no la suma.
 3. **n > 8** → no se calcula ρ.
 4. **Durand-Kerner y Faddeev-LeVerrier no se vieron en clase.** Son una extensión verificada; el alcance está pendiente con la docente (P-5 en [pendientes_docente.md](pendientes_docente.md)).
 5. **Iterativos en `float`:** las diferencias se justifican por ε.
-6. **Uso de IA:** está declarado; **la autorización está pendiente** (P-2). No digan que está autorizado.
+6. **Precondicionador M = D:** no acelera Jacobi, GS ni SOR. Es un teorema y no una falla.
+7. **Uso de IA:** está declarado; **la autorización está pendiente** (P-2). No digan que está autorizado.
 
 ## Lista de comprobación personal antes de la defensa
 
 - [ ] Instalé y abrí la aplicación en mi computadora con `ejecutar.bat`.
-- [ ] Ejecuté las pruebas (185 OK).
+- [ ] Ejecuté las pruebas (202 OK).
 - [ ] Hice la demostración de los cuatro módulos (guion en la guía, parte F) y obtuve los resultados esperados.
 - [ ] Sé explicar `_escalonar`, `analizar_perturbacion`, `minimos_cuadrados`, `_ejecutar` y `radio_espectral` sin leer.
 - [ ] Sé deducir la cota de κ, las ecuaciones normales y las tres matrices T, y enunciar el teorema de ρ.

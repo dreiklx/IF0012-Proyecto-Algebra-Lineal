@@ -6,7 +6,7 @@ import io
 import streamlit as st
 
 from algebra.dispersas import a_csr
-from algebra.espectral import CONVERGE, NO_CALCULADO, NO_CONVERGE, radio_espectral
+from algebra.espectral import CONVERGE, NO_CALCULADO, NO_CONVERGE, desarrollo_sarrus, radio_espectral
 from algebra.iterativos import (
     CRITERIO_CAMBIO,
     CRITERIO_ITERACIONES,
@@ -26,9 +26,11 @@ from algebra.iterativos import (
     configuraciones_homogeneas,
     dominancia_diagonal,
     ejecutar,
+    reordenamiento_dominante,
     vector_diagonal,
 )
 from algebra.matriz import ErrorMatriz
+from algebra.precondicionamiento import analizar_precondicionador
 from algebra.validacion import (
     ErrorEntrada,
     formatear_numero,
@@ -39,7 +41,13 @@ from algebra.validacion import (
 )
 from interfaz import ejemplos
 from interfaz.componentes import ayuda_formato, latex_matriz, latex_vector, leer_matriz_ui, leer_vector_ui
-from visualizacion.graficos import cerrar, grafica_autovalores, grafica_comparacion, grafica_convergencia
+from visualizacion.graficos import (
+    cerrar,
+    grafica_autovalores,
+    grafica_comparacion,
+    grafica_convergencia,
+    grafica_precondicionador,
+)
 
 ETIQUETAS_CRITERIO = {
     CRITERIO_CAMBIO: "A · Cambio entre iteraciones  ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞ < ε",
@@ -86,8 +94,9 @@ def mostrar():
     texto_x0 = st.text_input("x⁽⁰⁾ personalizado (n números)", "0 0 0", key="it_x0") \
         if tipo_x0 == "Personalizado" else None
 
-    pestana_uno, pestana_comparar, pestana_conv = st.tabs(
-        ["Ejecutar un método", "Comparar métodos", "Convergencia: dominancia y radio espectral"])
+    pestana_uno, pestana_comparar, pestana_conv, pestana_prec = st.tabs(
+        ["Ejecutar un método", "Comparar métodos", "Convergencia: dominancia y radio espectral",
+         "Precondicionamiento diagonal"])
 
     def leer_todo(necesita_omega):
         """Lee A, b y los parámetros; devuelve un diccionario o None si hay errores."""
@@ -146,6 +155,9 @@ def mostrar():
 
     with pestana_conv:
         convergencia(texto_A, texto_b, texto_omega)
+
+    with pestana_prec:
+        precondicionamiento(leer_todo)
 
 
 # ---------------------------------------------------------------------------
@@ -268,7 +280,7 @@ def comparar(leer_todo):
             "¿Criterio cumplido?": {True: "Sí", False: "No", None: "No aplica"}[r.criterio_cumplido],
             "d final": "—" if r.d_final is None else formatear_numero(r.d_final, 6),
             "r final": "—" if r.r_final is None else formatear_numero(r.r_final, 6),
-            "e final = ‖x⁽ᵏ⁾ − x*‖∞": "no disponible" if e is None else formatear_numero(e, 6),
+            "Error final e = ‖x⁽ᵏ⁾ − x*‖∞": "no disponible" if e is None else formatear_numero(e, 6),
             "ρ(T)": "—" if rho is None or rho.rho is None else formatear_numero(rho.rho, 6),
         })
     st.dataframe(filas, hide_index=True, width="stretch")
@@ -276,15 +288,17 @@ def comparar(leer_todo):
     if comp.referencia is not None:
         st.caption("x* = solución del método directo (Gauss exacto): (" +
                    ", ".join(formatear_numero(v, 10) for v in comp.referencia) + "). "
-                   "e final es el error respecto a esa solución; no es d_k ni r_k.")
+                   "El error final e es el error respecto a esa solución, como en la tabla "
+                   "comparativa de la lámina S9-05/10 p. 17 (‖x⁽ᵏ⁾ − x‖∞); no es d_k ni r_k.")
     else:
         st.caption("No hay solución de referencia (el sistema no tiene solución única): "
                    "e final no está disponible.")
     for r in comp.resultados:
         if r.codigo not in ("TOLERANCIA_CAMBIO", "TOLERANCIA_RESIDUO", "N_COMPLETADAS"):
             st.warning(f"{r.configuracion.metodo}: {r.mensaje}")
-    opciones = {"d": "Cambio entre iteraciones d_k", "r": "Residuo r_k",
-                "e": "Error respecto a la solución del método directo e_k"}
+    # e_k primero: es el «error final ‖x⁽ᵏ⁾ − x‖∞» de la lámina S9-05/10 p. 17 (diapositiva 13).
+    opciones = {"e": "Error respecto a la solución del método directo e_k",
+                "d": "Cambio entre iteraciones d_k", "r": "Residuo r_k"}
     metrica = st.radio("Métrica a graficar", list(opciones), format_func=opciones.get,
                        horizontal=True, key="it_metrica")
     if metrica == "e" and comp.referencia is None:
@@ -333,25 +347,49 @@ def convergencia(texto_A, texto_b, texto_omega):
     metodo = st.selectbox("Método a analizar", METODOS, key="it_conv_metodo")
     if st.button("Analizar convergencia", type="primary", key="it_conv"):
         st.session_state.pop("it_convergencia", None)
+        st.session_state.pop("it_reorden", None)
         A = leer_matriz_ui(texto_A, "matriz A")
         b = leer_vector_ui(texto_b, "vector b")
         if A is not None and b is not None:
+            # La dominancia y el reordenamiento se muestran aunque T no se pueda
+            # construir (por ejemplo, con un a_ii = 0, que es cuando más ayuda reordenar).
             try:
+                st.session_state["it_convergencia"] = (dominancia_diagonal(A), None, None)
+                st.session_state["it_reorden"] = reordenamiento_dominante(A, b)
                 omega = leer_omega(texto_omega) if metodo == SOR else None
                 st.session_state["it_convergencia"] = (
-                    dominancia_diagonal(A), radio_espectral(A, b, metodo, omega))
+                    dominancia_diagonal(A), radio_espectral(A, b, metodo, omega), None)
             except (ErrorEntrada, ErrorMatriz) as error:
-                st.error(f"❌ {error}")
+                if "it_convergencia" in st.session_state:
+                    st.session_state["it_convergencia"] = (
+                        st.session_state["it_convergencia"][0], None, str(error))
+                else:
+                    st.error(f"❌ {error}")
     if "it_convergencia" not in st.session_state:
         return
-    dom, esp = st.session_state["it_convergencia"]
+    dom, esp, error_T = st.session_state["it_convergencia"]
 
     st.subheader("1. Dominancia diagonal estricta por filas")
     st.table([{"Fila": f[0] + 1, "|aᵢᵢ|": formatear_numero(f[1]),
                "Σ_{j≠i} |aᵢⱼ|": formatear_numero(f[2]), "¿|aᵢᵢ| > Σ?": "✔" if f[3] else "✘"}
               for f in dom.filas])
     (st.success if dom.estricta else st.warning)(dom.mensaje)
+    if not dom.estricta:
+        reorden = st.session_state.get("it_reorden")
+        if reorden is not None:
+            A_r, b_r, orden = reorden
+            st.info("🔀 Reordenando las ecuaciones como en clase (Tarea II #2-3), la matriz SÍ es "
+                    "estrictamente dominante con el orden " +
+                    ", ".join(f"E{i + 1}" for i in orden) + ":")
+            st.latex(r"A' = " + latex_matriz(A_r) + r",\quad b' = " + latex_vector(b_r))
+            st.caption("La aplicación no reordena por su cuenta: copie A' y b' en los campos "
+                       "de entrada si desea usar ese orden.")
+        else:
+            st.caption("Ningún reordenamiento de las ecuaciones logra dominancia diagonal estricta.")
 
+    if esp is None:
+        st.error(f"❌ {error_T}")
+        return
     it = esp.iteracion
     st.subheader(f"2. Matriz de iteración de {it.metodo}")
     formulas = {
@@ -368,6 +406,14 @@ def convergencia(texto_A, texto_b, texto_omega):
         st.warning(esp.mensaje)
         return
     st.markdown(f"`{esp.polinomio_curso} = 0`")
+    if len(it.T) == 3:
+        traza, menores, det = desarrollo_sarrus(it.T)
+        coincide = [-1, traza, -menores, det] == [-c for c in esp.coeficientes]
+        st.caption(
+            "Desarrollo de clase (Sarrus): det(T − λI) = −λ³ + tr(T)λ² − (Σ menores 2×2)λ + det(T), "
+            f"con tr(T) = {formatear_numero(traza)}, Σ menores = {formatear_numero(menores)} y "
+            f"det(T) = {formatear_numero(det)} — "
+            + ("coincide con el polinomio calculado." if coincide else "⚠️ no coincide."))
     st.caption("Coeficientes calculados de forma exacta (método de Faddeev-LeVerrier; para 3×3 "
                "coincide con el desarrollo por Sarrus visto en clase). Raíces: λ = 0 exactas, "
                "fórmula cuadrática o método de Durand-Kerner (ver guía matemática).")
@@ -391,3 +437,68 @@ def convergencia(texto_A, texto_b, texto_omega):
     cerrar(fig)
     st.info("💡 Teorema: x⁽ᵏ⁺¹⁾ = T x⁽ᵏ⁾ + c converge para todo x⁽⁰⁾ si y solo si ρ(T) < 1. "
             "La dominancia diagonal es solo una condición suficiente.")
+
+
+# ---------------------------------------------------------------------------
+# Precondicionamiento diagonal (incentivo, OFICIAL p. 5)
+# ---------------------------------------------------------------------------
+
+def precondicionamiento(leer_todo):
+    st.markdown(
+        "Precondicionador diagonal de clase (S9-05/10, diapositivas 16-18): "
+        r"$M = D = \mathrm{diag}(a_{11},\dots,a_{nn})$ y sistema equivalente "
+        r"$M^{-1}Ax = M^{-1}b$. Se comparan κ∞, los autovalores y las iteraciones del sistema "
+        "original y del precondicionado con **la misma** configuración (criterio, ε, k_max, x⁽⁰⁾ y ω).")
+    if st.button("Analizar el precondicionador M = D", type="primary", key="it_prec"):
+        st.session_state.pop("it_precondicionado", None)
+        datos = leer_todo(True)
+        if datos:
+            config = ConfiguracionIterativa(
+                criterio=datos["criterio"], x0=datos["x0"],
+                tolerancia=datos.get("tolerancia", 1e-3), k_max=datos.get("k_max", 50),
+                n_iteraciones=datos.get("n_iteraciones", 5))
+            try:
+                st.session_state["it_precondicionado"] = analizar_precondicionador(
+                    datos["A"], datos["b"], config, datos["omega"])
+            except (ErrorEntrada, ErrorMatriz) as error:
+                st.error(f"❌ {error}")
+    if "it_precondicionado" not in st.session_state:
+        return
+    r = st.session_state["it_precondicionado"]
+    st.latex(r"M = " + latex_matriz(r.M) + r",\quad B = M^{-1}A = " + latex_matriz(r.B)
+             + r",\quad \tilde b = M^{-1}b = " + latex_vector(r.b_tilde))
+    c1, c2 = st.columns(2)
+    c1.metric("κ∞(A)", "singular" if r.kappa_A is None else formatear_numero(r.kappa_A))
+    c2.metric("κ∞(D⁻¹A)", "singular" if r.kappa_B is None else formatear_numero(r.kappa_B))
+    if r.analisis_A is not None:
+        st.table([{"Matriz": nombre,
+                   "Autovalores": ", ".join(formatear_numero(z.real if z.imag == 0 else z, 6)
+                                            for z in a.autovalores),
+                   "ρ (máx |λ|)": formatear_numero(a.rho, 6)}
+                  for nombre, a in (("A", r.analisis_A), ("B = D⁻¹A", r.analisis_B))])
+    filas = []
+    for f in r.comparaciones:
+        filas.append({
+            "Método": f.metodo,
+            "Iteraciones (original)": "—" if f.original.k_final is None else f.original.k_final,
+            "Motivo (original)": f.original.codigo,
+            "Iteraciones (precondicionado)":
+                "—" if f.precondicionado.k_final is None else f.precondicionado.k_final,
+            "Motivo (precondicionado)": f.precondicionado.codigo,
+            "ρ(T) original": "—" if f.rho_original is None else formatear_numero(f.rho_original, 6),
+            "ρ(T) precondicionado":
+                "—" if f.rho_precondicionado is None else formatear_numero(f.rho_precondicionado, 6),
+            "¿T y c idénticas?": {True: "Sí (exacto)", False: "No", None: "—"}[f.T_identicas],
+            "¿Mismas iteraciones?": "Sí" if f.mismas_iteraciones else "No",
+        })
+    st.dataframe(filas, hide_index=True, width="stretch")
+    for texto in r.conclusiones:
+        st.info("💡 " + texto)
+    st.caption("Richardson (x ← x + (b − Ax)) no es uno de los métodos del enunciado: se incluye "
+               "porque es el método estacionario más simple sobre el que M = D sí tiene efecto; "
+               "Richardson precondicionado con M = D es exactamente Jacobi. La lámina de la "
+               "diapositiva 19 muestra una mejora para Jacobi que no se puede reproducir, porque "
+               "Jacobi, Gauss-Seidel y SOR ya están normalizados por la diagonal.")
+    fig = grafica_precondicionador(r.comparaciones)
+    st.pyplot(fig)
+    cerrar(fig)

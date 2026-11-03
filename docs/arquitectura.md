@@ -11,7 +11,8 @@ proyecto-algebra/
 │   ├── minimos.py          Ecuaciones normales, residuo, ajuste lineal
 │   ├── iterativos.py       Jacobi, GS, SOR, criterios A/B/C, comparación, dominancia
 │   ├── espectral.py        Matrices de iteración, polinomio característico, ρ(T)
-│   └── dispersas.py        Formato CSR propio (incentivo de matrices dispersas)
+│   ├── dispersas.py        Formato CSR propio (incentivo de matrices dispersas)
+│   └── precondicionamiento.py  Precondicionador diagonal M = D (incentivo)
 ├── interfaz/               PRESENTACIÓN: Streamlit; no contiene cálculos
 │   ├── componentes.py      LaTeX, tablas, lectura con mensajes de error
 │   ├── ejemplos.py         Ejemplos del curso (resultados verificados)

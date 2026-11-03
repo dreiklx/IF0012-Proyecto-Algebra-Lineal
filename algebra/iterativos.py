@@ -37,6 +37,7 @@ from algebra.directos import ErrorSistema, a_fraccion, solucion_unica
 from algebra.dispersas import (
     a_csr,
     paso_gauss_seidel_csr,
+    producto_csr_vector,
     paso_jacobi_csr,
     paso_sor_csr,
     residuo_inf_csr,
@@ -48,6 +49,10 @@ JACOBI = "Jacobi"
 GAUSS_SEIDEL = "Gauss-Seidel"
 SOR = "SOR"
 METODOS = (JACOBI, GAUSS_SEIDEL, SOR)
+# Richardson no es uno de los métodos del enunciado: solo se usa en el análisis del
+# precondicionador diagonal (algebra/precondicionamiento.py), porque es el método
+# estacionario más simple sobre el que M = D sí tiene efecto.
+RICHARDSON = "Richardson"
 
 CRITERIO_CAMBIO = "A"
 CRITERIO_RESIDUO = "B"
@@ -186,8 +191,30 @@ def paso_sor(A, b, x_anterior, omega):
     return x
 
 
-PASOS = {JACOBI: paso_jacobi, GAUSS_SEIDEL: paso_gauss_seidel, SOR: paso_sor}
-PASOS_CSR = {JACOBI: paso_jacobi_csr, GAUSS_SEIDEL: paso_gauss_seidel_csr, SOR: paso_sor_csr}
+def paso_richardson(A, b, x_anterior, omega=None):
+    """Una iteración de Richardson (paso 1): x(k) = x(k-1) + (b - A x(k-1)).
+
+    Su matriz de iteración es T_R = I - A.  Aplicado al sistema precondicionado
+    D⁻¹A x = D⁻¹b da x(k) = x(k-1) + D⁻¹(b - A x(k-1)), que es exactamente Jacobi."""
+    n = len(A)
+    x_nuevo = [0.0] * n
+    for i in range(n):
+        ax = 0.0
+        for j in range(n):
+            ax += A[i][j] * x_anterior[j]
+        x_nuevo[i] = x_anterior[i] + (b[i] - ax)
+    return x_nuevo
+
+
+def paso_richardson_csr(M, b, x_anterior, omega=None):
+    ax = producto_csr_vector(M, x_anterior)
+    return [x_anterior[i] + (b[i] - ax[i]) for i in range(M.n)]
+
+
+PASOS = {JACOBI: paso_jacobi, GAUSS_SEIDEL: paso_gauss_seidel, SOR: paso_sor,
+         RICHARDSON: paso_richardson}
+PASOS_CSR = {JACOBI: paso_jacobi_csr, GAUSS_SEIDEL: paso_gauss_seidel_csr, SOR: paso_sor_csr,
+             RICHARDSON: paso_richardson_csr}
 FORMATOS = ("densa", "csr")
 
 
@@ -252,7 +279,7 @@ def validar_configuracion(A, b, config):
 
     Devuelve (A_float, b_float, x0_float, advertencias).
     """
-    if config.metodo not in METODOS:
+    if config.metodo not in PASOS:
         raise ErrorEntrada(f"Método desconocido: {config.metodo}.")
     if config.criterio not in CRITERIOS:
         raise ErrorEntrada(f"Criterio de parada desconocido: {config.criterio}.")
@@ -322,7 +349,7 @@ def _ejecutar(A, b, config):
     # la copia guarda el x(0) efectivamente usado (por defecto, el vector cero).
     config = replace(config, x0=list(x0))
     n = len(A_f)
-    for i in range(n):
+    for i in range(n if config.metodo in METODOS else 0):   # Richardson no divide entre a_ii
         if A_f[i][i] == 0:
             return ResultadoIterativo(
                 configuracion=config, codigo=DIAGONAL_CERO, criterio_cumplido=None,
@@ -428,6 +455,30 @@ def dominancia_diagonal(A):
                    f"{malas}). Esto NO implica que los métodos diverjan: la dominancia es solo "
                    f"una condición suficiente; analice el radio espectral o reordene las ecuaciones.")
     return ResultadoDominancia(estricta=estricta, filas=filas, mensaje=mensaje)
+
+
+def reordenamiento_dominante(A, b):
+    """Busca un reordenamiento de las ECUACIONES (filas de A y de b) que haga A
+    estrictamente diagonalmente dominante por filas, como en clase (Tarea II #2-3;
+    S9-05/10 p. 32).  No modifica nada: devuelve (A_reordenada, b_reordenado, orden)
+    o None si no existe.
+
+    Si la fila i es dominante con el elemento de la columna j, entonces
+    2|a_ij| > Σ_k |a_ik|; como esto solo lo cumple a lo sumo una columna por fila,
+    basta con asignar a cada fila su única columna candidata y comprobar que la
+    asignación es una permutación (coste O(n²), sin búsqueda exhaustiva)."""
+    n = validar_cuadrada(A, "matriz A")
+    if validar_vector(b, "vector b") != n:
+        raise ErrorEntrada(f"b debe tener {n} componentes (A es {n}x{n}).")
+    posicion = [None] * n          # posicion[j] = fila original que irá a la fila j
+    for i in range(n):
+        fila = [abs(a_fraccion(v)) for v in A[i]]
+        total = sum(fila)
+        candidatas = [j for j in range(n) if 2 * fila[j] > total]
+        if not candidatas or posicion[candidatas[0]] is not None:
+            return None
+        posicion[candidatas[0]] = i
+    return [list(A[i]) for i in posicion], [b[i] for i in posicion], posicion
 
 
 # ---------------------------------------------------------------------------

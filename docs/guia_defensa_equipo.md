@@ -2,7 +2,7 @@
 
 **Para:** Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Arias y Samir Sandoval Ramírez.
 **Defensa:** semana del 16-nov-2026, individual, de 6 a 8 minutos por persona.
-**Versión:** 02-nov-2026. Explica el código **real** del repositorio. Todos los números de los ejemplos se obtuvieron ejecutando la aplicación y se contrastaron con un cálculo independiente.
+**Versión:** 03-nov-2026 (revisada tras compararla con los PDF de la docente; ver `docs/comparacion_procedimientos.md`). Explica el código **real** del repositorio. Todos los números de los ejemplos se obtuvieron ejecutando la aplicación y se contrastaron con un cálculo independiente.
 
 > **Cómo usar esta guía.** La docente elige **al menos dos módulos** y puede pedir un caso no preparado (OFICIAL p. 3). Por eso **cada integrante debe dominar los cuatro**. Primero lean las partes A y B, luego el módulo de la parte C junto con su teoría en la parte D, y al final practiquen las preguntas de la parte E con la aplicación abierta (parte F).
 > Para repasar rápido está [resumen_logica_por_modulo.md](resumen_logica_por_modulo.md).
@@ -68,7 +68,8 @@ proyecto-algebra/
 │   ├── minimos.py             ← Módulo III: ecuaciones normales, residuo, recta
 │   ├── iterativos.py          ← Módulo IV: Jacobi, GS, SOR, parada, dominancia, comparación
 │   ├── espectral.py           ← Módulo IV: D, L, U, T, polinomio, autovalores, ρ(T)
-│   └── dispersas.py           ← Incentivo: formato CSR
+│   ├── dispersas.py           ← Incentivo: formato CSR
+│   └── precondicionamiento.py ← Incentivo: precondicionador diagonal M = D
 ├── interfaz/                  ← Streamlit: una pantalla por módulo
 │   ├── componentes.py         ← LaTeX, tablas y lectura de datos con mensajes de error
 │   ├── ejemplos.py            ← ejemplos precargados del curso
@@ -76,7 +77,7 @@ proyecto-algebra/
 ├── visualizacion/             ← Matplotlib: solo dibuja
 │   ├── graficos.py            ← recta de ajuste, convergencia, comparación, autovalores
 │   └── geometria_3d.py        ← rectas y planos del Módulo I
-├── tests/                     ← 185 pruebas automáticas (unittest)
+├── tests/                     ← 202 pruebas automáticas (unittest)
 ├── auditoria/                 ← comparación aleatoria contra oráculos independientes
 ├── casos_prueba/              ← casos documentados por módulo (entrada, esperado, obtenido)
 └── docs/                      ← manual, guías, decisiones, matriz de cumplimiento
@@ -141,19 +142,26 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
 | `algebra/directos.py:152` `_escalonar` | **Corazón del Módulo I**: pivotes, intercambios, eliminación, determinante |
 | `algebra/directos.py:244` `_resolver` | Clasificación por rangos y solución (única o paramétrica) |
 | `algebra/directos.py:331` `inversa_gauss_jordan` | [A \| I] → [I \| A⁻¹] y verificación A·A⁻¹ = I |
+| `algebra/directos.py:363` `determinante` | (−1)^intercambios · Π pivotes |
 | `algebra/condicion.py:104` `numero_condicion_infinito` | κ∞ e interpretación |
 | `algebra/condicion.py:133` `construir_delta_b` / `:157` `analizar_perturbacion` | Δb absoluta o porcentual; x frente a x̃ |
-| `algebra/minimos.py:92` `minimos_cuadrados` / `:145` `ajuste_lineal` | Ecuaciones normales, residuo, recta |
-| `algebra/iterativos.py:149` `paso_jacobi` / `:162` `paso_gauss_seidel` / `:175` `paso_sor` | Una iteración de cada método |
-| `algebra/iterativos.py:250` `validar_configuracion` | Valida A, b, x⁽⁰⁾, ε, k_max, N y ω |
-| `algebra/iterativos.py:304` `ejecutar` / `:319` `_ejecutar` | Bucle común, métricas d_k y r_k, criterios A, B y C, motivos de parada |
-| `algebra/iterativos.py:408` `dominancia_diagonal` | \|aᵢᵢ\| > Σ_{j≠i}\|aᵢⱼ\| fila por fila |
-| `algebra/iterativos.py:461` `comparar_metodos` | Los 3 métodos con las mismas condiciones; e_k respecto a x* |
+| `algebra/minimos.py:111` `minimos_cuadrados` / `:182` `ajuste_lineal` | Ecuaciones normales, residuo, recta; det([A\|b]) si m = n + 1 |
+| `algebra/minimos.py:168` `cramer` | Regla de Cramer (procedimiento de clase), usada como verificación |
+| `algebra/iterativos.py:154` `paso_jacobi` / `:167` `paso_gauss_seidel` / `:180` `paso_sor` | Una iteración de cada método |
+| `algebra/iterativos.py:194` `paso_richardson` | Richardson x ← x + (b − Ax): solo para el análisis del precondicionador |
+| `algebra/iterativos.py:277` `validar_configuracion` | Valida A, b, x⁽⁰⁾, ε, k_max, N y ω |
+| `algebra/iterativos.py:331` `ejecutar` / `:346` `_ejecutar` | Bucle común, métricas d_k y r_k, criterios A, B y C, motivos de parada |
+| `algebra/iterativos.py:435` `dominancia_diagonal` | \|aᵢᵢ\| > Σ_{j≠i}\|aᵢⱼ\| fila por fila |
+| `algebra/iterativos.py:460` `reordenamiento_dominante` | Orden de las ecuaciones que logra la dominancia (como en la Tarea II) |
+| `algebra/iterativos.py:512` `comparar_metodos` | Los 3 métodos con las mismas condiciones; error final e = ‖x⁽ᵏ⁾ − x*‖∞ |
 | `algebra/espectral.py:114` `matriz_iteracion` | T y c exactas para Jacobi, GS y SOR |
 | `algebra/espectral.py:153` `polinomio_caracteristico` | Faddeev-LeVerrier (exacto) |
+| `algebra/espectral.py:328` `desarrollo_sarrus` | Procedimiento de clase en 3×3: tr(T), Σ menores, det(T) por Sarrus |
 | `algebra/espectral.py:205` `durand_kerner` / `:257` `raices` | Raíces: λ = 0 exactas, grado ≤ 2 por fórmula, grado ≥ 3 por Durand-Kerner |
-| `algebra/espectral.py:313` `concluir` / `:328` `radio_espectral` | ρ(T), verificaciones y conclusión |
+| `algebra/espectral.py:360` `analizar_matriz` | Autovalores, ρ, verificaciones y p(±1) = 0 de cualquier matriz |
+| `algebra/espectral.py:313` `concluir` / `:399` `radio_espectral` | ρ(T), verificaciones y conclusión |
 | `algebra/dispersas.py:61` `a_csr` | Densa → CSR (`valores`, `columnas`, `inicio`) |
+| `algebra/precondicionamiento.py:82` `precondicionar_diagonal` / `:125` `analizar_precondicionador` | M = D, B = D⁻¹A, b̃; comparación original frente a precondicionado |
 
 ---
 
@@ -251,6 +259,11 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
    4. `transpuesta`, `multiplicar_matrices(Aᵀ, A)` y `multiplicar_matriz_vector(Aᵀ, b)`.
    5. `resolver_gauss(AᵀA, Aᵀb)`, el método directo del Módulo I. Si no da solución única, AᵀA es singular (columnas dependientes): se informa y no se presenta x̂.
    6. Calcula A x̂, r = b − A x̂, ‖r‖₂² **exacta**, ‖r‖₂ con `math.sqrt` (lo único inexacto), ‖r‖∞ y Aᵀr.
+   7. **Procedimiento de clase como verificación** (S8-30/09 pp. 6-7):
+      - si m = n + 1, `det_aumentada` = det([A | b]): si es ≠ 0, b ∉ Col(A);
+      - si n ≤ 3, `cramer(AtA, Atb)` resuelve con la regla de Cramer, x_j = det(M_j)/det(AᵀA).
+      - La pantalla muestra los tres pasos de la docente en «Verificación con el procedimiento de clase», y Cramer **coincide exactamente** con Gauss.
+      - Ejemplo del manuscrito: det([A|b]) = −11, |AᵀA| = 363, |Aₓ| = 715, |A_y| = −319, x̂ = (65/33, −29/33).
    - `ajuste_lineal(xs, ys)`:
      1. exige listas de la misma longitud, al menos 2 puntos y que no todos los x sean iguales;
      2. arma la matriz de diseño `[[xᵢ, 1]]` y llama a `minimos_cuadrados`;
@@ -265,7 +278,7 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
 
 ### Módulo IV — Métodos iterativos y convergencia
 
-**Archivos:** `algebra/iterativos.py`, `algebra/espectral.py`, `algebra/dispersas.py` e `interfaz/modulo_iterativos.py`. La pantalla tiene tres pestañas: «Ejecutar un método», «Comparar métodos» y «Convergencia».
+**Archivos:** `algebra/iterativos.py`, `algebra/espectral.py`, `algebra/dispersas.py`, `algebra/precondicionamiento.py` e `interfaz/modulo_iterativos.py`. La pantalla tiene cuatro pestañas: «Ejecutar un método», «Comparar métodos», «Convergencia» y «Precondicionamiento diagonal».
 
 1. **Problema.** Aproximar la solución de Ax = b (A n×n) con iteraciones x⁽ᵏ⁾, y saber si convergen.
 2. **Entrada:**
@@ -297,14 +310,17 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
 6. **Comparación** (`comparar_metodos`):
    - Ejecuta las configuraciones de `configuraciones_homogeneas`: mismo criterio, ε, k_max, N y x⁽⁰⁾; SOR usa además su ω.
    - Comprueba la homogeneidad campo por campo (`CAMPOS_HOMOGENEOS`).
-   - Calcula x* con `solucion_unica` y el error e_k de cada iteración.
+   - Calcula x* con `solucion_unica` y el error e_k de cada iteración. El **error final** e = ‖x⁽ᵏ⁾ − x*‖∞ es la misma columna «Error final (‖x⁽ᵏ⁾ − x‖∞)» de la tabla de la lámina S9-05/10 p. 17. Por eso e_k es la primera métrica de la gráfica comparativa.
    - La pantalla agrega ρ(T) de cada método.
 7. **Convergencia:**
    - `dominancia_diagonal(A)` comprueba fila por fila |aᵢᵢ| > Σ_{j≠i}|aᵢⱼ|.
+   - `reordenamiento_dominante(A, b)` busca el orden de las ecuaciones que hace la matriz dominante, como hace la docente en la Tarea II #2-3.
+     - Idea: si la fila i es dominante con su elemento de la columna j, entonces 2|aᵢⱼ| > Σₖ|aᵢₖ|, y solo una columna puede cumplirlo. Se asigna cada fila a esa columna y se comprueba que sea una permutación.
+     - La pantalla lo **sugiere** (no cambia los datos), aunque algún aᵢᵢ sea 0.
    - `radio_espectral(A, b, método, ω)`:
      1. `matriz_iteracion` construye D, L, U, T y c **exactas**.
      2. Si n > 8 → `NO_CALCULADO`.
-     3. `polinomio_caracteristico(T)` aplica Faddeev-LeVerrier y da [1, c₁, …, cₙ] de det(λI − T).
+     3. `polinomio_caracteristico(T)` aplica Faddeev-LeVerrier y da [1, c₁, …, cₙ] de det(λI − T). Si T es 3×3, la pantalla muestra además el **desarrollo de clase por Sarrus** (`desarrollo_sarrus`: tr(T), Σ menores 2×2, det(T)) y comprueba que da el mismo polinomio.
      4. `raices` obtiene los autovalores, si son fiables y, si es posible, una decisión exacta.
      5. ρ = máx|λ|.
      6. Verificaciones: |p(λ)| relativo < 10⁻⁸ y Σλ = traza(T).
@@ -331,6 +347,15 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
     - `a_csr` guarda solo los no nulos en `valores`, `columnas` e `inicio`.
     - `paso_*_csr` recorre solo esos elementos, de modo que cada iteración cuesta O(nnz) en lugar de O(n²).
     - Las iteraciones son **idénticas** a las densas: se suman los mismos productos en el mismo orden.
+11. **Precondicionamiento diagonal** (`algebra/precondicionamiento.py`, pestaña «Precondicionamiento diagonal»):
+    - `precondicionar_diagonal(A, b)` construye M = D, M⁻¹, B = D⁻¹A y b̃ = D⁻¹b, de forma exacta. Exige que no haya ningún aᵢᵢ = 0.
+    - `analizar_precondicionador(A, b, config, ω)` calcula:
+      - κ∞(A) y κ∞(B), con `numero_condicion_infinito`;
+      - los autovalores de A y de B, con `analizar_matriz`;
+      - la ejecución de Jacobi, GS, SOR y **Richardson** (`paso_richardson`) sobre los dos sistemas, con la misma configuración;
+      - ρ de cada matriz de iteración;
+      - la comparación **exacta** de T y c (`T_identicas`) y si las iteraciones coinciden (`mismas_iteraciones`).
+    - Devuelve `ResultadoPrecondicionamiento` con la lista `comparaciones` (de tipo `ComparacionMetodo`) y las `conclusiones` en texto. La gráfica es `grafica_precondicionador`.
 
 ---
 
@@ -557,6 +582,20 @@ Usa solo productos, sumas y trazas, y con fracciones es **exacto**.
 - Por tanto λ = −1 es autovalor, ρ ≥ 1 y el método no converge.
 - La aplicación lo informa: «λ = -1 es autovalor exacto de T: ρ(T) ≥ 1».
 
+### D.5b Lo que enseña la docente y cómo lo seguimos en el radio espectral
+
+En S9-07/10 p. 4 la docente calcula det(T − λI) por Sarrus para T_J = [[0, −1, −1], [−1, 0, −2/3], [1, 2/3, 0]]. Nuestro `desarrollo_sarrus` hace el mismo desarrollo:
+
+- tr(T) = 0;
+- Σ menores 2×2 = (0 − 1) + (0 + 1) + (0 + 4/9) = 4/9;
+- det(T) por Sarrus = 4/3.
+
+Por tanto, det(T − λI) = −λ³ + 0·λ² − (4/9)λ + 4/3.
+
+La hoja de clase escribe −λ³ − (4/9)λ: **omite el término 4/3**, porque los productos +2/3 y +2/3 de la regla de Sarrus se tacharon como si se cancelaran. Así concluye ρ = 0. La aplicación muestra el desarrollo completo, y ρ ≈ 1.174 > 1.
+
+Si la docente pregunta, se enseñan en la pantalla los tres números (tr, Σ menores, det), que se pueden comprobar a mano.
+
 ### D.6 CSR (incentivo de matrices dispersas)
 
 La tridiagonal 3×3 [[4, −1, 0], [−1, 4, −1], [0, −1, 4]] se guarda así:
@@ -568,6 +607,43 @@ La tridiagonal 3×3 [[4, −1, 0], [−1, 4, −1], [0, −1, 4]] se guarda así
 La memoria es 2·nnz + n + 1 números en lugar de n², y cada iteración cuesta O(nnz) en lugar de O(n²).
 
 ---
+
+### D.7 Precondicionamiento diagonal: qué cambia y qué no
+
+**Lo que dice la lámina** (S9-05/10 pp. 21-22, diapositivas 17-18):
+
+- M = D = diag(aᵢᵢ) y se resuelve M⁻¹Ax = M⁻¹b, que tiene la misma solución;
+- un buen precondicionador busca κ(B) < κ(A) y ρ(B) < ρ(A).
+
+**Demostración de que Jacobi no cambia.**
+
+- En B = D⁻¹A la diagonal es 1 y la parte fuera de la diagonal es D⁻¹(L + U).
+- Entonces T̃_J = −I⁻¹·D⁻¹(L + U) = T_J y c̃ = I⁻¹·D⁻¹b = D⁻¹b = c.
+- Para GS: (I + D⁻¹L)⁻¹ = (D⁻¹(D + L))⁻¹ = (D + L)⁻¹D, así que T̃_GS = −(D + L)⁻¹D·D⁻¹U = −(D + L)⁻¹U = T_GS.
+- SOR es análogo.
+- Intuición: Jacobi, GS y SOR ya dividen cada ecuación entre su aᵢᵢ, así que dividirla antes no cambia nada.
+
+**Ejemplo real de la aplicación** (tridiagonal [−1, 4, −1] de la lámina):
+
+| | Original | Con M = D |
+|---|---|---|
+| κ∞ | 30/11 | 30/11 (B = A/4) |
+| Jacobi | 7 iteraciones | 7 (idénticas) |
+| GS | 5 | 5 |
+| SOR (ω = 1.2) | 7 | 7 |
+| Richardson | no converge (ρ(I − A) ≈ 4.618) | converge (ρ = ρ(T_J) ≈ 0.405) |
+
+(Iteraciones con ε = 10⁻³ y x⁽⁰⁾ = 0.)
+
+**Dónde sí hay efecto:**
+
+- κ cuando la diagonal no es uniforme. Por ejemplo, [[100, 1], [1, 1/50]] pasa de κ∞ = 10201 a 5202.
+- El residuo r̃ = D⁻¹r.
+- **Richardson**, x ← x + (b − Ax): precondicionado se convierte en x ← x + D⁻¹(b − Ax), que es exactamente Jacobi.
+
+**Valores propios.** μ(B) = 1 − λ(T_J), así que «agrupados cerca de 1» significa ρ(T_J) pequeño.
+
+**Discrepancia con la lámina.** La diapositiva 19 muestra que Jacobi mejora con M = D. Eso no puede pasar: la aplicación lo demuestra en vivo con la columna «¿T y c idénticas? Sí (exacto)».
 
 ## E. Preguntas de defensa, con respuestas
 
@@ -587,11 +663,11 @@ Cada respuesta se puede comprobar en el código (se indica dónde) o con la apli
 
 3. **¿Cómo está organizado el código y por qué así?**
    - Hay tres capas: `algebra/` (cálculos), `interfaz/` (pantallas) y `visualizacion/` (dibujos).
-   - El núcleo no depende de la interfaz. Por eso se prueba solo (185 pruebas) y la interfaz no repite cálculos.
+   - El núcleo no depende de la interfaz. Por eso se prueba solo (202 pruebas) y la interfaz no repite cálculos.
    - En los iterativos, cada método es una función `paso_*` y el bucle de parada es uno solo (`_ejecutar`), para no triplicar la lógica.
 
 4. **¿Cómo saben que los resultados son correctos?**
-   - Hay 185 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.
+   - Hay 202 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.
    - La auditoría aleatoria (`auditoria/`) compara miles de casos con oráculos escritos aparte (Leibniz, adjunta, Cramer, una implementación separada de las iteraciones, Gelfand) y da 0 fallos.
    - La aplicación además se autoverifica:
      - b − Ax = 0 en el Módulo I;
@@ -700,7 +776,7 @@ Cada respuesta se puede comprobar en el código (se indica dónde) o con la apli
 22. **¿La dominancia diagonal garantiza convergencia? ¿Y si no se cumple?**
     - Si A es estrictamente dominante por filas, ‖T_J‖∞ < 1, de modo que ρ < 1 y Jacobi converge. Gauss-Seidel también.
     - Es suficiente, no necesaria. Si no se cumple, no se concluye nada y hay que mirar ρ(T): por ejemplo, Gauss-Seidel en S9-07/10 converge sin dominancia.
-    - La aplicación no reordena filas automáticamente.
+    - Como la docente en la Tarea II, se puede **reordenar las ecuaciones**. La aplicación busca ese orden (`reordenamiento_dominante`) y lo sugiere, pero no lo aplica sola: cambiaría el sistema que dio el usuario.
 
 23. **¿Cómo calculan el radio espectral sin bibliotecas?**
     1. T exacta con nuestro Gauss-Jordan.
@@ -734,17 +810,36 @@ Cada respuesta se puede comprobar en el código (se indica dónde) o con la apli
 28. **¿Qué es «e final» en la tabla de comparación?**
     - e = ‖x⁽ᵏ⁾ − x*‖∞, donde x* es la solución **exacta** obtenida con nuestro Gauss.
     - Es el error verdadero; no es d ni r.
-    - Como el enunciado no define «error final», la tabla muestra las tres medidas (pendiente P-4 con la docente).
+    - Es exactamente la definición de la lámina S9-05/10 p. 17: columna «Error final (‖x⁽ᵏ⁾ − x‖∞)». La tabla muestra además d y r.
 
 29. **¿Qué ventaja tiene el formato CSR y cómo saben que da lo mismo?**
     - Guarda solo los nnz no nulos (`valores`, `columnas`, `inicio`). Memoria O(nnz), y cada iteración O(nnz) en lugar de O(n²).
     - Los pasos CSR recorren los no nulos en el mismo orden de columnas que los densos. Sumar productos por cero no cambia nada en punto flotante, así que las iteraciones son idénticas bit a bit (prueba en `test_dispersas`).
 
-30. **¿Qué es el precondicionamiento diagonal y por qué no lo implementaron como mejora?**
-    - Consiste en resolver D⁻¹Ax = D⁻¹b.
-    - Para Jacobi, GS y SOR no cambia nada: en el sistema nuevo D̃ = I, L̃ = D⁻¹L y Ũ = D⁻¹U, así que T̃ = T y c̃ = c, y las iteraciones son idénticas.
-    - Lo que sí cambia es el residuo (D⁻¹r) y κ.
-    - Está pendiente de que la docente aclare qué comparación espera (P-8).
+30. **¿Qué es el precondicionamiento diagonal y qué efecto tiene en su aplicación?**
+    - Se resuelve D⁻¹Ax = D⁻¹b, con M = D, como en la lámina. Archivo: `algebra/precondicionamiento.py`.
+    - Para Jacobi, GS y SOR **no cambia nada**: T̃ = T y c̃ = c (demostración en D.7). La aplicación lo comprueba con fracciones y lo muestra en la tabla.
+    - Sí cambia κ (si la diagonal no es uniforme), el residuo y Richardson, que precondicionado se convierte en Jacobi.
+    - Si la docente pregunta por qué no coincide con la diapositiva 19, se muestra la demostración y la tabla en vivo.
+
+31. **En mínimos cuadrados, la docente usó Cramer. ¿Por qué ustedes usan Gauss?**
+    - El enunciado exige resolver las ecuaciones normales «con un método directo ya implementado», que es nuestro `resolver_gauss`.
+    - Aun así, la aplicación muestra el procedimiento de clase completo: det([A|b]) ≠ 0 y Cramer (`cramer`), y comprueba que da exactamente lo mismo.
+    - Ejemplo del manuscrito: 715/363 = 65/33 y −319/363 = −29/33.
+
+32. **¿Cómo comprueban que b no está en el espacio columna de A?**
+    - En general, con el rango: `resolver_gauss(A, b)` da INCONSISTENTE.
+    - Si m = n + 1, también como en clase: det([A|b]) ≠ 0 implica que [A|b] tiene rango n + 1, así que b no es combinación lineal de las columnas.
+
+33. **¿Su polinomio característico es el mismo que el de Sarrus?**
+    - Sí, en 3×3 son idénticos.
+    - La aplicación muestra tr(T), la suma de los menores principales 2×2 y det(T) (Sarrus), arma −λ³ + tr·λ² − Σmen·λ + det y comprueba que coincide con Faddeev-LeVerrier.
+    - Faddeev-LeVerrier se usa porque también vale para n > 3.
+
+34. **¿Qué es Richardson y por qué aparece en la pestaña de precondicionamiento?**
+    - Es la iteración x⁽ᵏ⁾ = x⁽ᵏ⁻¹⁾ + (b − Ax⁽ᵏ⁻¹⁾), con T_R = I − A.
+    - No es uno de los métodos del enunciado ni se vio en clase. Se incluye porque es el método más simple sobre el que M = D tiene efecto: con M = D se convierte en Jacobi.
+    - Así se documenta un efecto real del precondicionador, en vez de inventar uno.
 
 ---
 
@@ -766,8 +861,8 @@ python -m venv .venv
 .venv\Scripts\python -m streamlit run app.py
 ```
 
-5. Pruebas: `ejecutar_pruebas.bat` o `.venv\Scripts\python -m unittest`. Deben salir **185 pruebas OK**.
-6. Auditoría (opcional, unos 20 s): `.venv\Scripts\python auditoria\auditoria_directos.py .` y `.venv\Scripts\python auditoria\auditoria_iterativos.py .`. Deben dar «fallos 0».
+5. Pruebas: `ejecutar_pruebas.bat` o `.venv\Scripts\python -m unittest`. Deben salir **202 pruebas OK**.
+6. Auditoría (opcional, unos 20 s): `.venv\Scripts\python auditoria\auditoria_directos.py .` y `.venv\Scripts\python auditoria\auditoria_iterativos.py .` (y `auditoria_precondicionamiento.py`). Deben dar «fallos 0».
 
 > **Antes de la defensa:** cada integrante debe hacer la instalación **en su propia computadora** al menos una vez. La primera instalación necesita internet; no la dejen para el aula.
 
@@ -810,6 +905,7 @@ Los parámetros por defecto del Módulo IV son: x⁽⁰⁾ = vector cero, criter
 
 1. Pestaña «Sistema sobredeterminado», «S8-30/09 pp. 6-7» → sistema sobredeterminado 3×2.
    - x̂ = (65/33, −29/33), r = (−1/3, 1/3, 1/3), ‖r‖₂ ≈ 0.57735 y Aᵀr = (0, 0).
+   - Abrir «Verificación con el procedimiento de clase»: det([A|b]) = −11, Cramer 363, 715 y −319, que coincide exactamente. Son los mismos números del manuscrito de la docente.
 2. Pestaña «Ajuste lineal», «y = 0.75x + 1.2» → **y = 3/4 x + 6/5**, ‖r‖₂ ≈ 0.339. La gráfica muestra los puntos, la recta y los residuos.
 3. «Columnas dependientes» → AᵀA singular; no se presenta ningún x̂.
 
@@ -820,13 +916,15 @@ Los parámetros por defecto del Módulo IV son: x⁽⁰⁾ = vector cero, criter
    - Cambiar al criterio B con SOR → termina en k = 7 con r_7 ≈ 8.79·10⁻⁴.
 2. Pestaña «Comparar métodos» → «Experimento homogéneo».
    - Jacobi: 7 iteraciones; Gauss-Seidel: 4; SOR (ω = 1.2): 6. ρ = 0.268, 0.043 y 0.217.
-   - Mostrar la gráfica de d, r o e.
-3. Pestaña «Convergencia» con el mismo ejemplo → la matriz es dominante (10 > 3, 11 > 2, 10 > 3). Se ven T, el polinomio y ρ_J ≈ 0.2679 < 1.
+   - Mostrar la gráfica: por defecto e_k, el «error final» de la lámina.
+3. Pestaña «Convergencia» con el mismo ejemplo → la matriz es dominante (10 > 3, 11 > 2, 10 > 3). Se ven T, el polinomio con su desarrollo por Sarrus y ρ_J ≈ 0.2679 < 1.
 4. Ejemplo «S9-07/10 — Jacobi no converge»:
    - Convergencia con Jacobi → polinomio −λ³ − 4/9λ + 4/3, par complejo y ρ ≈ 1.174 > 1: **no converge**.
    - Ejecutar Jacobi → «máximo de iteraciones sin satisfacer el criterio».
    - Gauss-Seidel en el mismo ejemplo → ρ ≈ 0.935 < 1: converge, pero lentamente (no llega en 50 iteraciones).
-5. Otros radios esperados (Jacobi / GS / SOR ω = 1.2):
+5. Pestaña «Precondicionamiento diagonal» con el ejemplo «Tridiagonal dispersa» → B = A/4, κ igual, Jacobi, GS y SOR «Sí (exacto)» e iteraciones idénticas; Richardson no converge sin precondicionar y converge con M = D.
+6. Reordenamiento: escribir A = `-1 4 -1` / `0 -1 3` / `4 -1 0` y b = `10 10 15`, y pulsar «Analizar convergencia». La aplicación avisa del a₃₃ = 0 y propone el orden E3, E1, E2, que es dominante.
+7. Otros radios esperados (Jacobi / GS / SOR ω = 1.2):
 
    | Ejemplo | ρ_J | ρ_GS | ρ_SOR |
    |---|---|---|---|
@@ -857,7 +955,7 @@ Esta propuesta la debe decidir el grupo. Cada uno **igual debe dominar los cuatr
 | Elmer López Hernández | Módulo I | `_escalonar`, rangos, forma paramétrica, determinante e inversa |
 | Derek Farley Noguera | Módulo II y la arquitectura | Demostración de la cota de κ, singular frente a mal condicionada, flujo de datos y validaciones |
 | Daniel Córdoba Arias | Módulo III | Deducción de las ecuaciones normales, Aᵀr = 0, matriz de diseño, ajuste |
-| Samir Sandoval Ramírez | Módulo IV | Los tres pasos, criterios y códigos, deducción de T, teorema de ρ, Faddeev-LeVerrier y Durand-Kerner |
+| Samir Sandoval Ramírez | Módulo IV | Los tres pasos, criterios y códigos, deducción de T, teorema de ρ, Faddeev-LeVerrier, Durand-Kerner y el precondicionador M = D |
 
 ---
 
@@ -874,7 +972,8 @@ Esta propuesta la debe decidir el grupo. Cada uno **igual debe dominar los cuatr
 | No hay reordenamiento automático de filas | Una matriz no dominante se informa tal cual | Reordenar cambiaría el sistema que dio el usuario; se puede reordenar a mano |
 | Perturbación porcentual por componente | bᵢ = 0 no se perturba | Con un único p, ‖Δb‖/‖b‖ = p/100 exactamente. Para bᵢ = 0 está el modo absoluto |
 | Aviso de pivote pequeño (10⁻¹⁰) | Solo advierte | Es un umbral técnico: con fracciones el resultado es exacto |
-| Precondicionamiento no implementado | Incentivo opcional | Con M = D no cambian las iteraciones (D.4 y P-8) |
+| Precondicionador M = D sin efecto en Jacobi, GS y SOR | Es un hecho matemático, no un fallo; contradice la diapositiva 19 de S9-05/10 | Demostración en D.7; la aplicación compara T de forma exacta y muestra el efecto real (κ y Richardson) |
+| Richardson y la sugerencia de reordenamiento | Son extras | Richardson solo se usa en la pestaña del precondicionador. El reordenamiento se sugiere y no se aplica |
 | Gráficas sin pruebas automáticas de su contenido | Se revisaron como imagen | Las pruebas comprueban que se generan sin errores; el contenido se revisó manualmente |
 | Instalación probada solo en un equipo | — | Cada integrante debe probarla en el suyo antes de la defensa |
 

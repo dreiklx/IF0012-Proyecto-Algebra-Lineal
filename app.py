@@ -40,7 +40,7 @@ en Python, sin bibliotecas de álgebra lineal.
 | **I · Sistemas lineales** | Gauss y Gauss-Jordan paso a paso, clasificación (única / infinitas / inconsistente), interpretación geométrica |
 | **II · Condicionamiento** | κ∞(A) con inversa propia, perturbación de b, errores relativos e interpretación |
 | **III · Mínimos cuadrados** | Ecuaciones normales AᵀA x̂ = Aᵀb, residuo, ‖r‖₂ y ajuste lineal con gráfica |
-| **IV · Métodos iterativos** | Jacobi, Gauss-Seidel y SOR con criterios de parada configurables, comparación, dominancia diagonal y radio espectral |
+| **IV · Métodos iterativos** | Jacobi, Gauss-Seidel y SOR con criterios de parada configurables, comparación, dominancia diagonal (con sugerencia de reordenamiento), radio espectral y precondicionador diagonal |
 
 **Cómo introducir datos:** una fila de la matriz por línea, con los números separados por
 espacios. Se aceptan enteros, decimales (`2.5` o `2,5`), fracciones (`1/3`) y notación

@@ -84,6 +84,27 @@ def mostrar_minimos(r, nombres=None):
     st.caption("Comprobación: Aᵀr = (" + ", ".join(formatear_numero(v) for v in r.ortogonalidad)
                + ") — el residuo es ortogonal a las columnas de A, propiedad que caracteriza "
                  "a la solución de mínimos cuadrados.")
+    with st.expander("Verificación con el procedimiento de clase (S8-30/09 pp. 6-7)"):
+        if r.det_aumentada is not None:
+            st.markdown(
+                f"1. det([A | b]) = **{formatear_numero(r.det_aumentada)}** "
+                + ("≠ 0: b no es combinación lineal de las columnas de A (no hay solución exacta)."
+                   if r.det_aumentada != 0 else
+                   "= 0: b es combinación lineal de las columnas de A (hay solución exacta)."))
+        else:
+            st.markdown("1. det([A | b]) solo aplica cuando m = n + 1; la consistencia se "
+                        "decidió con el rango (Gauss).")
+        st.markdown("2. Ecuaciones normales AᵀA x̂ = Aᵀb (arriba).")
+        if r.cramer is not None:
+            detalle = ", ".join(f"det(M_{j + 1}) = {formatear_numero(d)}"
+                                for j, d in enumerate(r.cramer["dets"]))
+            coincide = r.cramer["solucion"] == r.solucion
+            st.markdown(
+                f"3. Regla de Cramer: det(AᵀA) = {formatear_numero(r.cramer['det'])}, {detalle} → "
+                f"x̂ = (" + ", ".join(formatear_numero(v) for v in r.cramer["solucion"]) + ")"
+                + (" — **coincide exactamente** con Gauss." if coincide else " — ⚠️ no coincide."))
+        else:
+            st.markdown("3. Cramer se muestra como verificación para n ≤ 3 incógnitas.")
     st.info("💡 ‖r‖₂ mide la distancia entre b y el vector A x̂ más cercano del espacio "
             "columna de A: cuanto menor, mejor se aproximan los datos. ‖r‖₂ = 0 solo si el "
             "sistema tiene solución exacta.")

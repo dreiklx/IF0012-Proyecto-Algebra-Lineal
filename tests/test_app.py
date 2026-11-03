@@ -127,6 +127,41 @@ class TestAplicacion(unittest.TestCase):
         self.assertIn("Formato CSR: nnz = 9", textos(at.info))
         self.assertIn("Criterio satisfecho: d_7", textos(at.success))
 
+    def test_modulo_IV_precondicionamiento(self):
+        at = self.abrir("IV · Métodos iterativos")
+        at.button(key="it_prec").click()
+        at.run()
+        self.assertFalse(at.exception, at.exception)
+        texto = textos(at.info)
+        self.assertIn("EXACTAMENTE los mismos", texto)
+        self.assertIn("Richardson", texto)
+
+    def test_modulo_IV_reordenamiento_y_sarrus(self):
+        at = self.abrir("IV · Métodos iterativos")
+        at.text_area(key=f"it_A_{at.selectbox(key='it_ejemplo').value}").input(
+            "-1 4 -1\n0 -1 3\n4 -1 0")
+        at.text_area(key=f"it_b_{at.selectbox(key='it_ejemplo').value}").input("10\n10\n15")
+        at.button(key="it_conv").click()
+        at.run()
+        self.assertFalse(at.exception, at.exception)
+        # a_33 = 0: no hay matriz de iteración, pero sí la sugerencia de reordenar.
+        self.assertIn("Reordenando las ecuaciones", textos(at.info))
+        self.assertIn("diagonal nulo", textos(at.error))
+        # Con el ejemplo por defecto (3x3) se muestra el desarrollo de Sarrus.
+        at = self.abrir("IV · Métodos iterativos")
+        at.button(key="it_conv").click()
+        at.run()
+        self.assertIn("coincide con el polinomio calculado", textos(at.caption))
+
+    def test_modulo_III_verificacion_cramer(self):
+        at = self.abrir("III · Mínimos cuadrados")
+        at.button(key="mc_resolver").click()
+        at.run()
+        self.assertFalse(at.exception, at.exception)
+        texto = " | ".join(str(m.value) for m in at.markdown)
+        self.assertIn("det([A | b]) = **-11**", texto)
+        self.assertIn("coincide exactamente", texto)
+
     def test_modulo_IV_jacobi_no_converge(self):
         at = self.abrir("IV · Métodos iterativos")
         at.selectbox(key="it_ejemplo").set_value("S9-07/10 — Jacobi no converge (ρ ≈ 1.174)")

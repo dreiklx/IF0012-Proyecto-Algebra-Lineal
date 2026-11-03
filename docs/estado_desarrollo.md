@@ -1,6 +1,6 @@
 # Estado del desarrollo
 
-**Última actualización:** 02-nov-2026, revisión completa del estado real. El historial completo está en `git log`.
+**Última actualización:** 03-nov-2026, comparación con los PDF de la docente y auditoría de las dos rúbricas. El historial completo está en `git log`.
 
 ## Datos del proyecto
 
@@ -10,7 +10,48 @@
 | Integrantes | Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Arias, Samir Sandoval Ramírez |
 | Entrega | **11 de noviembre de 2026** |
 | Defensa individual | Semana del **16 de noviembre de 2026** |
-| Número de grupo (01 o 02) | **Sin confirmar.** El ZIP usa 01 de forma **provisional** |
+| Número de grupo (01 o 02) | **01, con evidencia fuerte:** el horario del escritorio coincide con el del grupo 01 en el programa (PROG p. 9). Falta que los demás integrantes lo confirmen |
+
+## Revisión del 03-nov-2026: comparación con los PDF y rúbricas
+
+1. **Inventario y lectura de los PDF.** Se usó el inventario de la auditoría documental (19 archivos). Se releyeron en imagen las páginas clave:
+   - mínimos cuadrados: S8-30/09 pp. 6-7;
+   - condicionamiento: S7-21/09 pp. 17-18;
+   - comparación y SOR: S9-05/10 pp. 16-17;
+   - precondicionamiento: S9-05/10 pp. 21-24;
+   - matrices de iteración y ρ: S9-07/10 pp. 4 y 6.
+
+   También se releyeron el enunciado oficial completo (texto) y PROG p. 9. **No inspeccionados visualmente:** las semanas 1, 2 y 4 y el Quiz (Tema 1, sin procedimientos del proyecto). Resultado en [comparacion_procedimientos.md](comparacion_procedimientos.md).
+2. **Hallazgos:**
+   - **«Error final» = ‖x⁽ᵏ⁾ − x‖∞** según la lámina S9-05/10 p. 17. Coincide con nuestro e. P-4 resuelto.
+   - **Grupo 01** por el horario. P-1 casi resuelto.
+   - **Precondicionamiento:** la lámina indica qué comparar (κ y ρ de A frente a B = D⁻¹A).
+   - **Procedimientos de clase no visibles en la aplicación:** det([A|b]) y Cramer en mínimos cuadrados; Sarrus en det(T − λI); reordenamiento de ecuaciones para lograr la dominancia.
+3. **Implementado:**
+   - `algebra/precondicionamiento.py`, con la pestaña «Precondicionamiento diagonal», y `paso_richardson`;
+   - `minimos.cramer` y `det_aumentada`, con el desplegable de verificación del procedimiento de clase;
+   - `espectral.desarrollo_sarrus`, mostrado para T 3×3;
+   - `espectral.analizar_matriz`, una refactorización sin cambio de resultados: los 300 casos aleatorios y los ejemplos precargados dan lo mismo que el 02-nov;
+   - `iterativos.reordenamiento_dominante`, mostrado en «Convergencia»;
+   - e_k como primera métrica de la gráfica comparativa;
+   - la gráfica del precondicionador recorta las curvas divergentes.
+4. **Defecto corregido:** con un aᵢᵢ = 0, la pestaña «Convergencia» no mostraba ni la dominancia ni el reordenamiento, porque fallaba al construir T. Ahora los muestra junto con el error (prueba `test_modulo_IV_reordenamiento_y_sarrus`).
+5. **Pruebas nuevas (17):**
+   - `tests/test_precondicionamiento.py` (14), con oráculos de la lámina, a mano y de la teoría de la tridiagonal;
+   - 3 pruebas de interfaz.
+   - Auditoría nueva: `auditoria/auditoria_precondicionamiento.py`, 150 casos y 0 fallos.
+6. **Revisión visual (Chrome, 03-nov):**
+   - pestaña «Precondicionamiento diagonal» de la aplicación real con el ejemplo S: matrices, κ, autovalores, tabla y gráfica;
+   - HTML de la guía: portada, índice, tablas, fórmulas y listas, sin restos de Markdown. Se corrigieron una tabla duplicada y asteriscos y guiones bajos mal interpretados.
+7. **Documentación actualizada:**
+   - matriz de cumplimiento con las dos rúbricas (`auditoria_requisitos.md`);
+   - manual;
+   - guía de defensa (34 preguntas) y resumen;
+   - guía matemática §10;
+   - decisiones técnicas #25 y #28-31;
+   - casos III-6 e IV-23 a IV-26;
+   - pendientes con la docente.
+8. **HTML para compartir:** `C:\Users\dfarl\Desktop\Guia_Defensa_IF0012.html`, un solo archivo sin dependencias externas. Contiene la guía completa y el resumen.
 
 ## Revisión del 02-nov-2026: qué se hizo
 
@@ -35,11 +76,11 @@
    - [resumen_logica_por_modulo.md](resumen_logica_por_modulo.md): resumen de estudio;
    - [pendientes_docente.md](pendientes_docente.md): pendientes con la docente, con su interpretación provisional y la pregunta exacta.
 
-## Pruebas: resultados reales (02-nov-2026)
+## Pruebas: resultados reales (03-nov-2026)
 
 ```
 .venv\Scripts\python -m unittest
-Ran 185 tests ... OK            (0 fallos, 0 omitidas)
+Ran 202 tests ... OK            (0 fallos, 0 omitidas; 03-nov-2026)
 ```
 
 | Archivo | Pruebas | Qué cubre | Tipo de oráculo |
@@ -52,7 +93,8 @@ Ran 185 tests ... OK            (0 fallos, 0 omitidas)
 | test_iterativos | 31 | Jacobi, GS y SOR, criterios A/B/C, motivos, comparación | Programa independiente, manuscritos y el ZIP de la Tarea II |
 | test_espectral | 25 | T, polinomio, autovalores, ρ, regresiones | Sarrus a mano, formas cerradas, bisección, teoría tridiagonal, determinante a mano (IV-22) |
 | test_dispersas | 8 | Formato CSR | Construcción a mano; igualdad con la versión densa |
-| test_app | 12 | La interfaz con AppTest (sin navegador) y el CSV | **Superficiales:** comprueban que no hay excepciones y que aparecen los mensajes, **no** el contenido visual de las gráficas |
+| test_precondicionamiento | 14 | Precondicionador M = D, Richardson, reordenamiento, Sarrus, Cramer | Lámina S9-05/10 diap. 18; inversas 2×2 a mano; autovalores teóricos de la tridiagonal; manuscrito S8-30/09 |
+| test_app | 15 | La interfaz con AppTest (sin navegador) y el CSV | **Superficiales:** comprueban que no hay excepciones y que aparecen los mensajes, **no** el contenido visual de las gráficas |
 
 **Auditoría independiente** (`auditoria/`, semilla fija) — **0 fallos**:
 
@@ -81,30 +123,29 @@ Los que dependen de la docente están detallados en [pendientes_docente.md](pend
 
 | # | Pendiente | Impacto | Quién |
 |---|---|---|---|
-| P-1 | **Número de grupo** (01 o 02) | Nombre del ZIP; regenerarlo tarda segundos (`python empaquetar.py 02`) | Grupo |
+| P-1 | **Número de grupo**: evidencia fuerte de que es el 01 | Falta que los demás integrantes lo confirmen | Grupo |
 | P-2 | **Autorización expresa del uso de IA** (PROG p. 7 §6.2) | Integridad académica: **prioridad máxima** | Grupo → docente |
 | P-3 | **Caso de validación obligatorio** | C-07 (3 %) | Docente |
-| P-4 | Significado oficial de «error final» | M4-07 (riesgo bajo: se muestran d, r y e) | Docente |
+| P-4 | Significado de «error final» | **Resuelto** con la lámina S9-05/10 p. 17 | — |
 | P-5 | Alcance del radio espectral (métodos que no se vieron en clase) | M4-05 | Docente |
 | P-6 | NumPy como dependencia interna | Resuelto por el enunciado; confirmación opcional | — |
 | P-7 | Perturbación porcentual | Resuelto: ‖Δb‖/‖b‖ = p/100 en ambas lecturas; confirmación opcional | — |
-| P-8 | Comparación esperada en el precondicionamiento | Incentivo I-02 (opcional) | Docente |
+| P-8 | Precondicionamiento | **Implementado** con la comparación de la lámina; confirmación opcional | — |
 | G-1 | Una persona ajena sigue el manual en **otro** equipo | C-06, lista de verificación | Grupo |
 | G-2 | Cada integrante instala, ensaya la demostración y estudia la guía | Defensa (35 %) | Los 4 integrantes |
 | G-3 | Mirar dentro del navegador la figura 3D y las fracciones | C-05 (estético) | Grupo |
 
 ## Verificación del ZIP
 
-ZIP generado el 02-nov-2026 con `python empaquetar.py 01`: `dist/Grupo01-IF0012-Proyecto-IIC.zip`. El número 01 es **provisional**.
+ZIP generado el 03-nov-2026 con `python empaquetar.py 01`: `dist/Grupo01-IF0012-Proyecto-IIC.zip`. El número 01 tiene evidencia fuerte, pero falta la confirmación del grupo.
 
-- **Contenido:** 59 archivos, una sola carpeta raíz (`Grupo01-IF0012-Proyecto-IIC/`) y `testzip` sin errores.
+- **Contenido:** 63 archivos, una sola carpeta raíz (`Grupo01-IF0012-Proyecto-IIC/`) y `testzip` sin errores. Incluye `algebra/precondicionamiento.py`, `tests/test_precondicionamiento.py`, `auditoria/auditoria_precondicionamiento.py` y `docs/comparacion_procedimientos.md`.
 - **Exclusiones:** sin `.venv`, `__pycache__`, `.pyc`, `.git`, `dist`, imágenes ni `secrets.toml`.
-- **Fines de línea:** `ejecutar.bat` tiene fin de línea CRLF.
-- **Prueba en una copia limpia:**
-  - El ZIP se extrajo en una carpeta nueva.
-  - `ejecutar.bat` creó `.venv` (Python 3.14.1) e instaló Streamlit 1.66.1 y Matplotlib 3.11.2 (más NumPy 2.5.4 como dependencia interna).
-  - El servidor respondió `ok` a los ~60 s. Se usó el puerto 8502 (`STREAMLIT_SERVER_PORT`) porque el 8501 estaba ocupado por la sesión de trabajo.
-  - En esa copia: **185 pruebas OK** y auditoría independiente con **0 fallos**.
-- **Candidato anterior:** el del 27-oct (SHA-256 `54f76588…6946c`) se conservó, sin sobrescribirlo, en `dist/anteriores/`.
-- **Después de la verificación** solo se añadió esta sección a `estado_desarrollo.md` y se regeneró el ZIP. El SHA-256 final está en `dist/SHA256.txt`.
-- **Si el grupo resulta ser el 02:** `python empaquetar.py 02`.
+- **Prueba en una copia limpia** (03-nov):
+  - el ZIP se extrajo en una carpeta nueva;
+  - `ejecutar.bat` creó `.venv` (Python 3.14.1) e instaló las dependencias;
+  - el servidor respondió `ok` a los ~58 s (puerto 8502);
+  - en esa copia: **202 pruebas OK** y las 3 auditorías con **0 fallos**.
+- **Candidatos anteriores** (27-oct y 02-nov): se conservaron, sin sobrescribirlos, en `dist/anteriores/`.
+- **Después de la verificación** solo se modificó esta sección y se regeneró el ZIP. El SHA-256 final está en `dist/SHA256.txt`.
+- **Si el grupo resultara ser el 02:** `python empaquetar.py 02`.

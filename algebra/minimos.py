@@ -17,6 +17,16 @@ Propiedad de comprobación: Aᵀ r = 0 (el residuo es ortogonal a las columnas d
 Si las columnas de A son linealmente dependientes, AᵀA es singular y la
 solución de mínimos cuadrados no es única: se informa y no se devuelve un x̂.
 
+Procedimiento de clase (S8-30/09 pp. 6-7), que la aplicación muestra como
+verificación además del procedimiento exigido por el enunciado:
+  1. si m = n + 1, det([A | b]) ≠ 0 demuestra que b no es combinación lineal de
+     las columnas de A (la docente lo calcula con Sarrus para 3x2);
+  2. ecuaciones normales AᵀA x = Aᵀb;
+  3. resolución por la regla de Cramer: x_j = det((AᵀA)_j) / det(AᵀA), donde
+     (AᵀA)_j es AᵀA con la columna j reemplazada por Aᵀb (aquí se usa para n <= 3).
+La solución presentada es la de Gauss (OFICIAL p. 2: «con un método directo ya
+implementado»); Cramer se calcula aparte y debe coincidir exactamente.
+
 Ajuste lineal y = m x + c a partir de puntos (x_i, y_i): es el caso particular
 con A = [[x_1, 1], ..., [x_k, 1]] (matriz de diseño) y b = (y_1, ..., y_k).
 """
@@ -24,7 +34,14 @@ con A = [[x_1, 1], ..., [x_k, 1]] (matriz de diseño) y b = (y_1, ..., y_k).
 import math
 from dataclasses import dataclass, field
 
-from algebra.directos import INCONSISTENTE, INFINITAS, UNICA, a_fraccion, resolver_gauss
+from algebra.directos import (
+    INCONSISTENTE,
+    INFINITAS,
+    UNICA,
+    a_fraccion,
+    determinante,
+    resolver_gauss,
+)
 from algebra.matriz import (
     multiplicar_matrices,
     multiplicar_matriz_vector,
@@ -59,6 +76,8 @@ class ResultadoMinimos:
     ortogonalidad: list = None   # Aᵀ r (debe ser el vector cero)
     mensaje: str = ""
     advertencias: list = field(default_factory=list)
+    det_aumentada: object = None     # det([A | b]) si m = n + 1 (procedimiento de clase)
+    cramer: dict = None              # {"det": det(AᵀA), "dets": [det((AᵀA)_j)], "solucion": x}
 
 
 @dataclass
@@ -107,6 +126,8 @@ def minimos_cuadrados(A, b):
     resultado = ResultadoMinimos(
         tipo=tipo, mensaje_tipo=mensaje_tipo, b_en_espacio_columna=consistente,
         At=At, AtA=AtA, Atb=Atb, ecuaciones_normales=normales)
+    if m == n + 1:
+        resultado.det_aumentada = determinante([A_exacta[i] + [b_exacto[i]] for i in range(m)])
 
     if normales.clasificacion != UNICA:
         # Las ecuaciones normales siempre son consistentes; si no hay solución
@@ -122,6 +143,8 @@ def minimos_cuadrados(A, b):
         return resultado
 
     x = normales.solucion
+    if n <= 3:
+        resultado.cramer = cramer(AtA, Atb)
     estimados = multiplicar_matriz_vector(A_exacta, x)
     r = restar_vectores(b_exacto, estimados)
     resultado.solucion = x
@@ -140,6 +163,20 @@ def minimos_cuadrados(A, b):
             "b no pertenece al espacio columna de A (el sistema es inconsistente); "
             "x̂ es la mejor aproximación en el sentido de mínimos cuadrados.")
     return resultado
+
+
+def cramer(M, v):
+    """Regla de Cramer (S8-30/09 p. 7) para M x = v con M cuadrada invertible.
+
+    Devuelve {"det": det(M), "dets": [det(M_j)], "solucion": [det(M_j)/det(M)]};
+    M_j es M con la columna j reemplazada por v."""
+    n = len(M)
+    d = determinante(M)
+    if d == 0:
+        return None
+    dets = [determinante([[v[i] if j == k else M[i][j] for j in range(n)] for i in range(n)])
+            for k in range(n)]
+    return {"det": d, "dets": dets, "solucion": [dk / d for dk in dets]}
 
 
 def ajuste_lineal(xs, ys):

@@ -281,8 +281,40 @@ En el caso de Jacobi de S9-07/10, la hoja omite el término 4/3 y concluye ρ = 
 
 **Ejemplo:** la tridiagonal 5×5 tiene nnz = 5 + 4 + 4 = 13 (S9-05/10 p. 8).
 
-## 10. Precondicionamiento diagonal (no implementado como mejora; ver decisiones_tecnicas.md)
+## 10. Precondicionamiento diagonal (`algebra/precondicionamiento.py`) [Incentivo]
 
-Con M = D, el sistema D⁻¹Ax = D⁻¹b produce **exactamente las mismas iteraciones** de Jacobi, Gauss-Seidel y SOR que el original, porque D̃ = I, L̃ = D⁻¹L y Ũ = D⁻¹U, de modo que T̃ = T y c̃ = c. Lo que sí cambia es el residuo (r̃ = D⁻¹r) y, en general, κ.
+**Procedimiento de clase** (S9-05/10, diapositivas 16-18):
 
-Por eso el incentivo «precondicionador diagonal» queda pendiente de que la docente aclare qué comparación espera.
+- M = D = diag(a₁₁, …, aₙₙ);
+- sistema equivalente M⁻¹Ax = M⁻¹b, es decir, B x = b̃ con B = D⁻¹A y b̃ = D⁻¹b (misma solución);
+- la lámina propone comparar κ(B) con κ(A), y ρ y los valores propios de A con los de B.
+
+**Qué hace la aplicación** (`analizar_precondicionador`):
+
+1. Construye M, M⁻¹, B y b̃ con fracciones exactas (`precondicionar_diagonal`).
+2. Calcula κ∞(A) y κ∞(B) con la inversa del Módulo II.
+3. Calcula los autovalores de A y de B (`analizar_matriz`).
+4. Ejecuta Jacobi, GS, SOR y Richardson sobre los dos sistemas con la misma configuración.
+5. Compara **exactamente** la matriz de iteración T y el vector c de cada método.
+
+**Resultado 1: Jacobi, GS y SOR no cambian.** En B la diagonal es I, L̃ = D⁻¹L y Ũ = D⁻¹U. Entonces:
+
+- T̃_J = −(L̃ + Ũ) = −D⁻¹(L + U) = T_J;
+- T̃_GS = −(I + D⁻¹L)⁻¹D⁻¹U = −(D(I + D⁻¹L))⁻¹U = −(D + L)⁻¹U = T_GS;
+- T̃_ω = (I + ωD⁻¹L)⁻¹[(1 − ω)I − ωD⁻¹U] = (D + ωL)⁻¹[(1 − ω)D − ωU] = T_ω;
+- los vectores c coinciden por el mismo razonamiento.
+
+Las iteraciones son, por tanto, las mismas. La aplicación lo verifica con fracciones en cada caso.
+
+**Resultado 2: lo que sí cambia.**
+
+- **κ:** con una diagonal uniforme (aᵢᵢ = a), B = A/a y κ(B) = κ(A). Con una diagonal no uniforme κ cambia y puede bajar mucho: en [[100, 1], [1, 1/50]] pasa de κ∞ = 10201 a 5202. También puede subir.
+- **Residuo:** r̃ = D⁻¹r, así que el criterio B puede parar en otra iteración.
+- **Richardson**, x ← x + (b − Ax), con T_R = I − A. Precondicionado se convierte en x ← x + D⁻¹(b − Ax), que **es Jacobi** (T̃_R = I − D⁻¹A = T_J).
+  - Ejemplo con la tridiagonal [−1, 4, −1]: ρ(I − A) = 3 + 2cos(π/5) ≈ 4.618, de modo que no converge.
+  - Con M = D: ρ(T_J) = cos(π/5)/2 ≈ 0.405, de modo que converge.
+  - Richardson no se vio en clase; cabe en el «Jacobi, Gauss-Seidel, SOR, etc.» de la lámina p. 21.
+
+**Valores propios.** Como T_J = I − D⁻¹A, los autovalores de B son μ = 1 − λ(T_J). Están cerca de 1 exactamente cuando ρ(T_J) es pequeño: es el «agrupados cerca de 1» de la lámina.
+
+**Discrepancia con la lámina.** La diapositiva 19 (S9-05/10 p. 23) muestra para Jacobi «con precondicionamiento» un error que se reduce más rápido. Por el resultado 1 eso no puede ocurrir: la aplicación muestra las mismas iteraciones con y sin M = D. Además, la columna «sin precondicionamiento» de esa tabla no corresponde a Jacobi: el x⁽²⁾ real es (0.25, 0.0625, 0.0625, 0.25).
