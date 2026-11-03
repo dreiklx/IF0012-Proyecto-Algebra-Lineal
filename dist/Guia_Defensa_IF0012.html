@@ -129,7 +129,7 @@ tr,pre,blockquote{break-inside:avoid}}
   <h1>Guía de defensa del equipo — Proyecto final IF0012</h1>
   <p>Álgebra Lineal para Informática Empresarial · Universidad de Costa Rica, Sede del Caribe (Siquirres) · II Ciclo 2026</p>
   <p>Elmer López Hernández · Derek Farley Noguera · Daniel Córdoba Arias · Samir Sandoval Ramírez</p>
-  <div class="insignias"><span>Versión 03-nov-2026</span><span>217 pruebas automáticas OK</span>
+  <div class="insignias"><span>Versión 03-nov-2026</span><span>228 pruebas automáticas OK</span>
   <span>Auditoría independiente: 0 fallos</span><span>Entrega: 11-nov-2026</span><span>Defensa: semana del 16-nov-2026</span></div>
 </header>
 <section class="parte" id="parte-1"><h1 class="titulo-parte">Parte 1 · Guía completa</h1>
@@ -227,7 +227,7 @@ Para repasar rápido está <a href="#parte-2">resumen_logica_por_modulo.md</a>.<
 ├── visualizacion/             ← Matplotlib: solo dibuja
 │   ├── graficos.py            ← recta de ajuste, convergencia, comparación, autovalores
 │   └── geometria_3d.py        ← rectas y planos del Módulo I
-├── tests/                     ← 217 pruebas automáticas (unittest)
+├── tests/                     ← 228 pruebas automáticas (unittest)
 ├── auditoria/                 ← comparación aleatoria contra oráculos independientes
 ├── casos_prueba/              ← casos documentados por módulo (entrada, esperado, obtenido)
 └── docs/                      ← manual, guías, decisiones, matriz de cumplimiento
@@ -1017,14 +1017,14 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 <p><strong>¿Cómo está organizado el código y por qué así?</strong></p>
 <ul>
 <li>Hay tres capas: <code>algebra/</code> (cálculos), <code>interfaz/</code> (pantallas) y <code>visualizacion/</code> (dibujos).</li>
-<li>El núcleo no depende de la interfaz. Por eso se prueba solo (217 pruebas) y la interfaz no repite cálculos.</li>
+<li>El núcleo no depende de la interfaz. Por eso se prueba solo (228 pruebas) y la interfaz no repite cálculos.</li>
 <li>En los iterativos, cada método es una función <code>paso_*</code> y el bucle de parada es uno solo (<code>_ejecutar</code>), para no triplicar la lógica.</li>
 </ul>
 </li>
 <li>
 <p><strong>¿Cómo saben que los resultados son correctos?</strong></p>
 <ul>
-<li>Hay 217 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.</li>
+<li>Hay 228 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.</li>
 <li>La auditoría aleatoria (<code>auditoria/</code>) compara miles de casos con oráculos escritos aparte (Leibniz, adjunta, Cramer, una implementación separada de las iteraciones, Gelfand) y da 0 fallos.</li>
 <li>La aplicación además se autoverifica:<ul>
 <li>b − Ax = 0 en el Módulo I;</li>
@@ -1265,7 +1265,7 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 .venv\Scripts\python -m streamlit run app.py
 </code></pre>
 <ol start="5">
-<li>Pruebas: <code>ejecutar_pruebas.bat</code> o <code>.venv\Scripts\python -m unittest</code>. Deben salir <strong>217 pruebas OK</strong>.</li>
+<li>Pruebas: <code>ejecutar_pruebas.bat</code> o <code>.venv\Scripts\python -m unittest</code>. Deben salir <strong>228 pruebas OK</strong>.</li>
 <li>Auditoría (opcional, unos 20 s): <code>.venv\Scripts\python auditoria\auditoria_directos.py .</code> y <code>.venv\Scripts\python auditoria\auditoria_iterativos.py .</code> (y <code>auditoria_precondicionamiento.py</code>). Deben dar «fallos 0».</li>
 </ol>
 <blockquote>
@@ -1294,7 +1294,7 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 </li>
 <li>Ejemplo «Infinitas soluciones» → rango(A) = rango([A|b]) = 2 &lt; 3. x = (1/2, 1/2, 0) + t₁(−1/2, −1/2, 1).</li>
 <li>Ejemplo «Sistema inconsistente» → la fila queda como [0 0 0 | c], con rango(A) = 2 &lt; rango([A|b]) = 3.</li>
-<li>Abrir «Interpretación geométrica»: planos que se cortan en un punto, en una recta o sin punto común.</li>
+<li>Abrir «Interpretación geométrica»: planos que se cortan en un punto, en una recta o sin punto común. <strong>Rotar la figura con el ratón</strong> y pasar el cursor sobre la solución para ver sus coordenadas.</li>
 <li>
 <p>Otros resultados esperados:</p>
 <div class="tabla"><table>
@@ -1354,7 +1354,7 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 </li>
 <li>Pestaña «Comparar métodos» → «Experimento homogéneo».<ul>
 <li>Jacobi: 7 iteraciones; Gauss-Seidel: 4; SOR (ω = 1.2): 6. ρ = 0.268, 0.043 y 0.217.</li>
-<li>Mostrar la gráfica: por defecto e_k, el «error final» de la lámina.</li>
+<li>Mostrar la gráfica: por defecto e_k, el «error final» de la lámina. Pasar el cursor por una iteración para ver los tres valores a la vez, arrastrar para ampliar una zona y doble clic para volver.</li>
 </ul>
 </li>
 <li>Pestaña «Convergencia» con el mismo ejemplo → la matriz es dominante (10 &gt; 3, 11 &gt; 2, 10 &gt; 3). Se ven T, el polinomio con su desarrollo por Sarrus y ρ_J ≈ 0.2679 &lt; 1.</li>
@@ -1575,7 +1575,7 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 </table></div>
 </li>
 <li>
-<p><strong>Evidencia.</strong> 217 pruebas OK y la auditoría aleatoria con 0 fallos. Los valores esperados son independientes: <strong>no</strong> salen de las láminas, varias de las cuales tienen errores.</p>
+<p><strong>Evidencia.</strong> 228 pruebas OK y la auditoría aleatoria con 0 fallos. Los valores esperados son independientes: <strong>no</strong> salen de las láminas, varias de las cuales tienen errores.</p>
 </li>
 </ol>
 <hr />

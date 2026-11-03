@@ -93,3 +93,39 @@ def mostrar_pasos(pasos, separador):
     for numero, paso in enumerate(pasos):
         st.markdown(f"**Paso {numero}.** {paso.descripcion}")
         st.latex(latex_matriz(paso.matriz, separador=separador))
+
+
+# ---------------------------------------------------------------------------
+# Gráficas interactivas (Plotly)
+# ---------------------------------------------------------------------------
+
+CONTROLES_2D = ("Controles: arrastre para ampliar una región · rueda para acercar o alejar · "
+                "botones ＋/－ de zoom, «Desplazar», «Autoescala» y «Restablecer» en la barra vertical "
+                "de la derecha · pase el cursor para ver los valores · clic en la leyenda para ocultar o "
+                "mostrar una serie (doble clic: solo esa serie).")
+CONTROLES_3D = ("Controles: arrastre para rotar · rueda para acercar o alejar · botones «Órbita», "
+                "«Girar», «Desplazar» y «Restablecer vista» en la barra vertical de la derecha · pase el "
+                "cursor sobre un plano o la solución para ver sus coordenadas · clic en la leyenda "
+                "para ocultar un plano.")
+
+
+def mostrar_interactiva(fig, clave, tres_d=False, mostrar_ayuda=True):
+    """Muestra una figura de Plotly con la barra de herramientas siempre visible.
+
+    Solo presentación: la figura ya contiene los datos calculados por el núcleo."""
+    botones = (["orbitRotation", "tableRotation", "pan3d", "zoom3d", "resetCameraDefault3d",
+                "resetCameraLastSave3d", "toImage"] if tres_d else
+               ["zoom2d", "pan2d", "zoomIn2d", "zoomOut2d", "autoScale2d", "resetScale2d", "toImage"])
+    todos = {"zoom2d", "pan2d", "select2d", "lasso2d", "zoomIn2d", "zoomOut2d", "autoScale2d",
+             "resetScale2d", "hoverClosestCartesian", "hoverCompareCartesian", "toggleSpikelines",
+             "orbitRotation", "tableRotation", "pan3d", "zoom3d", "resetCameraDefault3d",
+             "resetCameraLastSave3d", "hoverClosest3d", "toImage"}
+    config = {
+        "displayModeBar": True, "displaylogo": False, "scrollZoom": True, "responsive": True,
+        "modeBarButtonsToRemove": sorted(todos - set(botones)),
+        "toImageButtonOptions": {"format": "png", "filename": f"IF0012_{clave}", "scale": 2},
+        "doubleClick": "reset+autosize",
+    }
+    st.plotly_chart(fig, key=f"graf_{clave}", config=config, theme=None, width="stretch")
+    if mostrar_ayuda:
+        st.caption("🖱️ " + (CONTROLES_3D if tres_d else CONTROLES_2D))

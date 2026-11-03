@@ -1,4 +1,5 @@
 # Dependencias directas del proyecto IF0012 (versiones fijadas y probadas).
 # El núcleo matemático (algebra/) solo usa la biblioteca estándar de Python.
 streamlit==1.66.1   # interfaz web local
-matplotlib==3.11.2  # gráficas
+matplotlib==3.11.2  # gráficas estáticas (respaldo e imágenes)
+plotly==6.3.0       # gráficas interactivas (rotar, zoom, desplazar, valores al pasar el cursor)

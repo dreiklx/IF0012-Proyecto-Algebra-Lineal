@@ -77,7 +77,7 @@ proyecto-algebra/
 ├── visualizacion/             ← Matplotlib: solo dibuja
 │   ├── graficos.py            ← recta de ajuste, convergencia, comparación, autovalores
 │   └── geometria_3d.py        ← rectas y planos del Módulo I
-├── tests/                     ← 217 pruebas automáticas (unittest)
+├── tests/                     ← 228 pruebas automáticas (unittest)
 ├── auditoria/                 ← comparación aleatoria contra oráculos independientes
 ├── casos_prueba/              ← casos documentados por módulo (entrada, esperado, obtenido)
 └── docs/                      ← manual, guías, decisiones, matriz de cumplimiento
@@ -663,11 +663,11 @@ Cada respuesta se puede comprobar en el código (se indica dónde) o con la apli
 
 3. **¿Cómo está organizado el código y por qué así?**
    - Hay tres capas: `algebra/` (cálculos), `interfaz/` (pantallas) y `visualizacion/` (dibujos).
-   - El núcleo no depende de la interfaz. Por eso se prueba solo (217 pruebas) y la interfaz no repite cálculos.
+   - El núcleo no depende de la interfaz. Por eso se prueba solo (228 pruebas) y la interfaz no repite cálculos.
    - En los iterativos, cada método es una función `paso_*` y el bucle de parada es uno solo (`_ejecutar`), para no triplicar la lógica.
 
 4. **¿Cómo saben que los resultados son correctos?**
-   - Hay 217 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.
+   - Hay 228 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.
    - La auditoría aleatoria (`auditoria/`) compara miles de casos con oráculos escritos aparte (Leibniz, adjunta, Cramer, una implementación separada de las iteraciones, Gelfand) y da 0 fallos.
    - La aplicación además se autoverifica:
      - b − Ax = 0 en el Módulo I;
@@ -861,7 +861,7 @@ python -m venv .venv
 .venv\Scripts\python -m streamlit run app.py
 ```
 
-5. Pruebas: `ejecutar_pruebas.bat` o `.venv\Scripts\python -m unittest`. Deben salir **217 pruebas OK**.
+5. Pruebas: `ejecutar_pruebas.bat` o `.venv\Scripts\python -m unittest`. Deben salir **228 pruebas OK**.
 6. Auditoría (opcional, unos 20 s): `.venv\Scripts\python auditoria\auditoria_directos.py .` y `.venv\Scripts\python auditoria\auditoria_iterativos.py .` (y `auditoria_precondicionamiento.py`). Deben dar «fallos 0».
 
 > **Antes de la defensa:** cada integrante debe hacer la instalación **en su propia computadora** al menos una vez. La primera instalación necesita internet; no la dejen para el aula.
@@ -891,7 +891,7 @@ Los parámetros por defecto del Módulo IV son: x⁽⁰⁾ = vector cero, criter
    - La verificación b − Ax es (0, 0, 0).
 2. Ejemplo «Infinitas soluciones» → rango(A) = rango([A|b]) = 2 < 3. x = (1/2, 1/2, 0) + t₁(−1/2, −1/2, 1).
 3. Ejemplo «Sistema inconsistente» → la fila queda como [0 0 0 | c], con rango(A) = 2 < rango([A|b]) = 3.
-4. Abrir «Interpretación geométrica»: planos que se cortan en un punto, en una recta o sin punto común.
+4. Abrir «Interpretación geométrica»: planos que se cortan en un punto, en una recta o sin punto común. **Rotar la figura con el ratón** y pasar el cursor sobre la solución para ver sus coordenadas.
 5. Otros resultados esperados:
 
    | Ejemplo | Resultado |
@@ -924,7 +924,7 @@ Los parámetros por defecto del Módulo IV son: x⁽⁰⁾ = vector cero, criter
    - Cambiar al criterio B con SOR → termina en k = 7 con r_7 ≈ 8.79·10⁻⁴.
 2. Pestaña «Comparar métodos» → «Experimento homogéneo».
    - Jacobi: 7 iteraciones; Gauss-Seidel: 4; SOR (ω = 1.2): 6. ρ = 0.268, 0.043 y 0.217.
-   - Mostrar la gráfica: por defecto e_k, el «error final» de la lámina.
+   - Mostrar la gráfica: por defecto e_k, el «error final» de la lámina. Pasar el cursor por una iteración para ver los tres valores a la vez, arrastrar para ampliar una zona y doble clic para volver.
 3. Pestaña «Convergencia» con el mismo ejemplo → la matriz es dominante (10 > 3, 11 > 2, 10 > 3). Se ven T, el polinomio con su desarrollo por Sarrus y ρ_J ≈ 0.2679 < 1.
 4. Ejemplo «S9-07/10 — Jacobi no converge»:
    - Convergencia con Jacobi → polinomio −λ³ − 4/9λ + 4/3, par complejo y ρ ≈ 1.174 > 1: **no converge**.

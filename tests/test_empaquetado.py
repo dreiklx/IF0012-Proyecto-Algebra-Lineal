@@ -58,5 +58,17 @@ class TestEmpaquetado(unittest.TestCase):
         self.assertFalse(any("claude" in n.lower() or ".env" in n for n in nombres))
 
 
+class TestGitignore(unittest.TestCase):
+    """El repositorio de GitHub no debe poder rastrear credenciales por accidente."""
+
+    def test_excluye_credenciales_y_archivos_internos(self):
+        ruta = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".gitignore")
+        with open(ruta, encoding="utf-8") as f:
+            reglas = {linea.strip() for linea in f if linea.strip() and not linea.startswith("#")}
+        for regla in (".env", ".env.*", "*.pem", "*.key", ".streamlit/secrets.toml",
+                      "CLAUDE.md", ".claude/", ".venv/", "__pycache__/"):
+            self.assertIn(regla, reglas)
+
+
 if __name__ == "__main__":
     unittest.main()

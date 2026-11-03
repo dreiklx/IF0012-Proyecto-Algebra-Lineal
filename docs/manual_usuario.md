@@ -51,7 +51,22 @@ Si un dato no es válido, la aplicación lo indica en rojo con la posición exac
 
 Cada módulo tiene un selector **«Cargar un ejemplo»** con ejemplos del curso. Al elegir uno se rellenan los campos, que luego se pueden modificar.
 
-## 3. Navegación
+## 3. Gráficas interactivas
+
+Todas las gráficas se pueden explorar con el ratón:
+
+- **3D** (Módulo I, interpretación geométrica): arrastre para **rotar** y la rueda para **acercar o alejar**. En la barra vertical de la derecha están «Órbita», «Girar», «Desplazar», «Restablecer vista» (perspectiva inicial) y «Vista guardada».
+- **2D** (Módulos I, III y IV):
+  - arrastre para **ampliar una región**; rueda para acercar o alejar;
+  - en la barra: ＋/－ de zoom, «Desplazar», «Autoescala» (ajustar a la vista) y «Restablecer» (escala original);
+  - doble clic: vuelve a la vista inicial.
+- **Valores:** al pasar el cursor se ven los valores de cada punto, con los tres métodos a la vez en la comparación.
+- **Series:** un clic en la leyenda oculta o muestra una serie; un doble clic deja solo esa.
+- **Imagen:** el icono de la cámara descarga una imagen PNG.
+
+La interacción solo cambia la vista: los datos son los calculados por el núcleo.
+
+## 3b. Navegación
 
 La aplicación usa un tema oscuro propio. En la **portada** hay una tarjeta por módulo y otra por cada incentivo; sus botones abren directamente la pantalla donde está la funcionalidad. Dentro de cada módulo las etapas están numeradas (1 Datos, 2 Método o parámetros, 3 Resultado) y el resultado principal aparece en una tarjeta destacada con etiquetas de estado.
 

@@ -16,16 +16,18 @@ from algebra.validacion import formatear_numero
 from interfaz import ejemplos
 from interfaz.editor import MATRIZ, VECTOR, analizar, aviso_dimensiones, editor, problema_dimensiones, restaurar
 from interfaz.componentes import (
+    CONTROLES_2D,
+    CONTROLES_3D,
     latex_matriz,
     latex_vector,
     leer_matriz_ui,
     leer_vector_ui,
+    mostrar_interactiva,
     mostrar_pasos,
     tabla_vector,
 )
 from interfaz.estilo import encabezado_modulo, insignias, marca_incentivo, seccion, tarjeta_resultado
-from visualizacion.geometria_3d import grafica_planos, grafica_rectas
-from visualizacion.graficos import cerrar
+from visualizacion.interactivas import planos_3d, rectas_2d
 
 
 def mostrar():
@@ -145,9 +147,11 @@ def mostrar_resultado(A, b, r):
             marca_incentivo("Experiencia de usuario", "0,5 %")
             grafica, texto = st.columns([3, 2])
             with grafica:
-                fig = grafica_rectas(A, b, r) if n == 2 else grafica_planos(A, b, r)
-                st.pyplot(fig)
-                cerrar(fig)
+                if n == 2:
+                    mostrar_interactiva(rectas_2d(A, b, r), "rectas", mostrar_ayuda=False)
+                else:
+                    mostrar_interactiva(planos_3d(A, b, r), "planos", tres_d=True, mostrar_ayuda=False)
+            texto.caption("🖱️ " + (CONTROLES_2D if n == 2 else CONTROLES_3D))
             texto.caption("Cada ecuación es una recta (2 incógnitas) o un plano (3 incógnitas). "
                        "Solución única: se cortan en un punto; infinitas: comparten una recta "
                        "o un plano; inconsistente: no hay punto común a todos.")

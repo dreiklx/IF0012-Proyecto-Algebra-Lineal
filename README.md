@@ -47,7 +47,7 @@ python -m venv .venv
 .venv\Scripts\python -m unittest
 ```
 
-También se puede usar `ejecutar_pruebas.bat`. Son **217 pruebas**: el núcleo matemático, la validación, la interfaz (con `streamlit.testing`) y el empaquetado.
+También se puede usar `ejecutar_pruebas.bat`. Son **228 pruebas**: el núcleo matemático, la validación, la interfaz (con `streamlit.testing`) y el empaquetado.
 
 Auditoría matemática independiente: compara el núcleo con oráculos escritos aparte, con semilla fija, y tarda unos 20 s. Debe decir «fallos 0».
 
@@ -82,6 +82,7 @@ El detalle está en [docs/arquitectura.md](docs/arquitectura.md).
 | [docs/guia_defensa_equipo.md](docs/guia_defensa_equipo.md) | **Guía de defensa del equipo**: el código real función por función, la matemática, 34 preguntas con respuesta y el guion de demostración |
 | [dist/Guia_Defensa_IF0012.html](dist/Guia_Defensa_IF0012.html) | La misma guía, más el resumen, en un HTML autónomo que funciona sin internet. Descárguelo y ábralo en el navegador |
 | [docs/resumen_logica_por_modulo.md](docs/resumen_logica_por_modulo.md) | Resumen de estudio rápido por módulo |
+| [docs/propuesta_navegacion.md](docs/propuesta_navegacion.md) | Propuesta (no implementada) de navegación superior y animaciones |
 | [docs/diseno_visual.md](docs/diseno_visual.md) | Rediseño visual, rúbrica e incentivos en la interfaz, con capturas en `docs/capturas/` |
 | [docs/manual_usuario.md](docs/manual_usuario.md) | Manual de usuario: entradas, pasos y un ejemplo por módulo |
 | [docs/guia_matematica.md](docs/guia_matematica.md) | Fórmulas, procedimientos y ejemplos verificados |

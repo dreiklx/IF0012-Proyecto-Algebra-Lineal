@@ -41,7 +41,7 @@ from algebra.validacion import (
 )
 from interfaz import ejemplos
 from interfaz.editor import MATRIZ, VECTOR, analizar, aviso_dimensiones, editor, normalizar, problema_dimensiones, restaurar
-from interfaz.componentes import latex_matriz, latex_vector, leer_matriz_ui, leer_vector_ui
+from interfaz.componentes import mostrar_interactiva, latex_matriz, latex_vector, leer_matriz_ui, leer_vector_ui
 from interfaz.estilo import (
     encabezado_modulo,
     insignias,
@@ -50,13 +50,7 @@ from interfaz.estilo import (
     tarjeta_resultado,
     valor_destacado,
 )
-from visualizacion.graficos import (
-    cerrar,
-    grafica_autovalores,
-    grafica_comparacion,
-    grafica_convergencia,
-    grafica_precondicionador,
-)
+from visualizacion import interactivas
 
 ETIQUETAS_CRITERIO = {
     CRITERIO_CAMBIO: "A · Cambio entre iteraciones  ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞ < ε",
@@ -273,11 +267,10 @@ def mostrar_ejecucion(r):
     st.download_button("⬇️ Descargar tabla de iteraciones (CSV)", csv_historial(r),
                        file_name=f"iteraciones_{r.configuracion.metodo}.csv", mime="text/csv",
                        key=f"csv_{r.configuracion.metodo}")
-    fig = grafica_convergencia(r.historial, r.configuracion.criterio,
+    fig = interactivas.convergencia(r.historial, r.configuracion.criterio,
                                r.configuracion.tolerancia
                                if r.configuracion.criterio != CRITERIO_ITERACIONES else None)
-    st.pyplot(fig)
-    cerrar(fig)
+    mostrar_interactiva(fig, "convergencia")
 
 
 # ---------------------------------------------------------------------------
@@ -350,9 +343,8 @@ def comparar(leer_todo, bloqueado=False):
     if metrica == "e" and comp.referencia is None:
         st.info("No hay solución de referencia para graficar e_k.")
     else:
-        fig = grafica_comparacion(comp.resultados, metrica, comp.errores_historial)
-        st.pyplot(fig)
-        cerrar(fig)
+        mostrar_interactiva(interactivas.comparacion(comp.resultados, metrica, comp.errores_historial),
+                            "comparacion")
 
     with st.expander("Influencia de ω en SOR (barrido)"):
         texto = st.text_input("Valores de ω a probar", "0.8 1 1.1 1.2 1.5 1.8", key="it_barrido")
@@ -493,9 +485,8 @@ def convergencia(texto_A, texto_b, texto_omega, bloqueado=False):
                f"máx |p(λ)| relativo = {v['max |p(λ)| relativo']:.2e}.")
     grafica, texto = st.columns([3, 2])
     with grafica:
-        fig = grafica_autovalores(esp.autovalores, esp.rho)
-        st.pyplot(fig)
-        cerrar(fig)
+        mostrar_interactiva(interactivas.autovalores(esp.autovalores, esp.rho), "autovalores",
+                            mostrar_ayuda=False)
     with texto:
         st.markdown("**Cómo leer el diagrama**")
         st.markdown("- Cada punto es un autovalor λ de T en el plano complejo.\n"
@@ -583,6 +574,4 @@ def precondicionamiento(leer_todo, bloqueado=False):
                "Richardson precondicionado con M = D es exactamente Jacobi. La lámina de la "
                "diapositiva 19 muestra una mejora para Jacobi que no se puede reproducir, porque "
                "Jacobi, Gauss-Seidel y SOR ya están normalizados por la diagonal.")
-    fig = grafica_precondicionador(r.comparaciones)
-    st.pyplot(fig)
-    cerrar(fig)
+    mostrar_interactiva(interactivas.precondicionador(r.comparaciones), "precondicionador")

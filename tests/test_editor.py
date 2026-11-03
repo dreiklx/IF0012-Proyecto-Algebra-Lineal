@@ -10,6 +10,7 @@
 
 import os
 import unittest
+from fractions import Fraction as F
 
 try:
     from streamlit.testing.v1 import AppTest
@@ -77,6 +78,47 @@ class TestConversion(unittest.TestCase):
         # una matriz rectangular es válida si el método lo permite (Módulos I y III)
         self.assertIsNone(problema_dimensiones([[1, 2]] * 3, [1, 2, 3]))
         self.assertIn("x⁽⁰⁾", problema_dimensiones(A3, [1, 2, 3], cuadrada=True, x0=[0, 0]))
+
+
+class TestEditorNoAlteraLosDatos(unittest.TestCase):
+    """Auditoría del editor: para TODOS los ejemplos precargados, pasar por la rejilla
+    (texto -> celdas -> texto) produce exactamente la misma matriz o vector que leer el
+    texto original: mismos valores exactos, dimensiones, orden, decimales y signos."""
+
+    def misma_lectura(self, texto, vector=False):
+        from algebra.validacion import leer_matriz, leer_vector
+        leer = leer_vector if vector else leer_matriz
+        original = leer(texto)
+        por_editor = leer(normalizar(texto_de_celdas(celdas_de_texto(texto))))
+        self.assertEqual(por_editor, original)
+        return original
+
+    def test_todos_los_ejemplos(self):
+        from interfaz import ejemplos
+        for A, b in ejemplos.DIRECTOS.values():
+            self.misma_lectura(A)
+            self.misma_lectura(b.replace(" ", "\n"), vector=True)
+        for A, b, _ in ejemplos.CONDICION.values():
+            self.misma_lectura(A)
+            self.misma_lectura(b.replace(" ", "\n"), vector=True)
+        for A, b in ejemplos.MINIMOS.values():
+            M = self.misma_lectura(A)
+            self.assertGreater(len(M), len(M[0]))                   # rectangulares se conservan
+        for x, y in ejemplos.AJUSTE.values():
+            pares = "\n".join(f"{a} {c}" for a, c in zip(x.split(), y.split()))
+            P = self.misma_lectura(pares)
+            self.assertEqual([p[0] for p in P], [F(v) for v in x.split()])
+            self.assertEqual([p[1] for p in P], [F(v) for v in y.split()])
+        for A, b in ejemplos.ITERATIVOS.values():
+            self.misma_lectura(A)
+            self.misma_lectura(b.replace(" ", "\n"), vector=True)
+
+    def test_decimales_signos_y_formatos(self):
+        M = self.misma_lectura("-2.5 0 1/3\n1e-3 -0,25 7")
+        self.assertEqual(M, [[F(-5, 2), F(0), F(1, 3)], [F(1, 1000), F(-1, 4), F(7)]])
+        # pegar con comas o tabulaciones da la misma matriz que con espacios
+        from algebra.validacion import leer_matriz
+        self.assertEqual(leer_matriz(normalizar("4, -1, 1\n-2,\t6, 1")), [[4, -1, 1], [-2, 6, 1]])
 
 
 @unittest.skipIf(AppTest is None, "Streamlit no está instalado en este intérprete")

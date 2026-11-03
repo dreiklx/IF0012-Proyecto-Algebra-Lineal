@@ -12,6 +12,14 @@
 | Defensa individual | Semana del **16 de noviembre de 2026** |
 | Número de grupo | **01, confirmado por el equipo (03-nov-2026)**. Integrantes, exclusivamente los cuatro de arriba |
 
+## Gráficas interactivas y reauditoría (03-nov-2026, rama `feature/graficas-interactivas`)
+
+- **Gráficas:** Plotly 6.3.0 (única dependencia nueva) en `visualizacion/interactivas.py`. La 3D se puede rotar, ampliar y restablecer, y muestra valores al pasar el cursor; las 2D tienen zoom ＋/－ y por región, desplazamiento, autoescala, restablecer, valores y series activables. Los datos son exactamente los del núcleo (`tests/test_graficas_interactivas.py`, 8 pruebas).
+- **Seguridad:** se restauraron `.env` y `.env.*` en `.gitignore` (el commit 59dd149 los había quitado) y una prueba lo vigila. No hay credenciales en los archivos rastreados ni en el historial (búsqueda de nombres y patrones; ningún valor se imprimió).
+- **Reauditoría contra los PDF:** los archivos son los originales (huellas, tamaños y fechas); hay una sola versión de la rúbrica; los métodos que no están en los PDF siguen marcados como extensión. Detalle en `comparacion_procedimientos.md`. El editor no altera ningún ejemplo (prueba nueva).
+- **Propuesta de navegación** (no implementada): `propuesta_navegacion.md`.
+- **Pruebas:** 228 OK; la auditoría sigue con 0 fallos; los ejemplos precargados dan resultados idénticos; sin cambios en `algebra/` ni `auditoria/`.
+
 ## Editor interactivo de datos (03-nov-2026, rama `feature/editor-interactivo`)
 
 - **Componente nuevo:** `interfaz/editor.py`, con tres tipos (MATRIZ, VECTOR y PUNTOS), integrado en los cuatro módulos.
@@ -123,7 +131,7 @@
 
 ```
 .venv\Scripts\python -m unittest
-Ran 217 tests ... OK            (0 fallos, 0 omitidas; 03-nov-2026)
+Ran 228 tests ... OK            (0 fallos, 0 omitidas; 03-nov-2026)
 ```
 
 | Archivo | Pruebas | Qué cubre | Tipo de oráculo |
@@ -139,6 +147,7 @@ Ran 217 tests ... OK            (0 fallos, 0 omitidas; 03-nov-2026)
 | test_precondicionamiento | 14 | Precondicionador M = D, Richardson, reordenamiento, Sarrus, Cramer | Lámina S9-05/10 diap. 18; inversas 2×2 a mano; autovalores teóricos de la tridiagonal; manuscrito S8-30/09 |
 | test_empaquetado | 2 | El ZIP excluye los archivos internos de IA, las credenciales y las cachés; una sola carpeta raíz | Proyecto temporal con archivos trampa |
 | test_editor | 13 | Editor interactivo: separadores, celdas, botones, pegado, bloqueo por dimensiones, x⁽⁰⁾, tabla de puntos | Construcción a mano; recta de 3 puntos calculada a mano |
+| test_graficas_interactivas | 8 | Datos de las gráficas Plotly = núcleo = Matplotlib; planos en su ecuación; vista acotada sin perder datos | Resultados del núcleo y líneas de Matplotlib |
 | test_app | 15 | La interfaz con AppTest (sin navegador) y el CSV | **Superficiales:** comprueban que no hay excepciones y que aparecen los mensajes, **no** el contenido visual de las gráficas |
 
 **Auditoría independiente** (`auditoria/`, semilla fija) — **0 fallos**:

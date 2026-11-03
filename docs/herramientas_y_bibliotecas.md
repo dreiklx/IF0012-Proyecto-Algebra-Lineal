@@ -30,10 +30,13 @@ Queda **[pendiente de confirmar con la docente]** si `math.sqrt` y `cmath.sqrt` 
 | Biblioteca | Versión | Uso exclusivo |
 |---|---|---|
 | Streamlit | 1.66.1 | Interfaz web local (formularios, tablas, pestañas, descarga de CSV) |
-| Matplotlib | 3.11.2 | Gráficas: datos y recta de ajuste; d_k y r_k; comparación; autovalores; rectas y planos |
+| Plotly | 6.3.0 | **Gráficas interactivas de la interfaz** (desde el 03-nov-2026): rotar la figura 3D, acercar y alejar, zoom por región, desplazar, autoescala y restablecer, valores al pasar el cursor, ocultar y mostrar series. Solo dibuja datos calculados por `algebra/` (`visualizacion/interactivas.py`) |
+| Matplotlib | 3.11.2 | Figuras estáticas equivalentes (`visualizacion/graficos.py`, `geometria_3d.py`): se conservan como respaldo y para las pruebas que comparan que ambas dibujan los mismos datos |
 | `csv`, `io` (estándar) | — | Exportar la tabla de iteraciones |
 
-**Dependencias transitivas.** Streamlit y Matplotlib instalan internamente NumPy 2.5.4, pandas 3.1.0, pyarrow y altair; la lista completa está en `requirements-bloqueado.txt`.
+**Por qué Plotly.** Altair, que ya instalaba Streamlit, no hace gráficas 3D; Plotly cubre la 3D y la 2D con una misma barra de herramientas. Es la única dependencia nueva y funciona sin internet, porque plotly.js viene dentro del paquete.
+
+**Dependencias transitivas.** Streamlit, Matplotlib y Plotly instalan internamente NumPy 2.5.4, pandas 3.1.0, pyarrow y altair; la lista completa está en `requirements-bloqueado.txt`.
 
 - **Nuestro código no importa NumPy ni pandas.**
 - Estas bibliotecas las usan Streamlit y Matplotlib por dentro, para dibujar y para mostrar tablas.

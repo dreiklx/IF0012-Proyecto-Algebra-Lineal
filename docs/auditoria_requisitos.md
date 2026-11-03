@@ -11,6 +11,8 @@
 - [comparacion_procedimientos.md](comparacion_procedimientos.md): procedimientos de clase frente al código;
 - [pendientes_docente.md](pendientes_docente.md): lo que depende de la docente.
 
+> **03-nov-2026, gráficas interactivas:** las matrices vigentes de la rúbrica y de los incentivos, con la presentación de cada criterio, están en [diseno_visual.md §7](diseno_visual.md). Pruebas: **228 OK**; auditoría: 0 fallos.
+>
 > **03-nov-2026, rediseño visual:** la presentación de cada criterio y de los cinco incentivos en la interfaz se documenta en [diseno_visual.md](diseno_visual.md), con capturas. La lógica y los estados de esta matriz no cambiaron.
 
 ## Estados
@@ -27,7 +29,7 @@
 
 | Evidencia | Resultado |
 |---|---|
-| `.venv\Scripts\python -m unittest` | **204 pruebas, 204 OK** (las 202 del 03-nov más 2 del empaquetado) |
+| `.venv\Scripts\python -m unittest` | **228 pruebas, 228 OK** (03-nov-2026, tras el editor y las gráficas interactivas) |
 | Auditoría independiente (`auditoria/*.py`) | **0 fallos** en todas: 4500 sistemas; 400 inversas, determinantes y κ; 200 perturbaciones; 300 mínimos cuadrados; 600 ejecuciones iterativas; 300 análisis espectrales; **150 análisis del precondicionador (nuevo)**; los casos difíciles se comportan como se espera |
 | Imports de `algebra/` | Solo `fractions`, `math`, `cmath`, `dataclasses` y módulos propios. Ningún `.py` del proyecto importa NumPy, SciPy ni SymPy |
 

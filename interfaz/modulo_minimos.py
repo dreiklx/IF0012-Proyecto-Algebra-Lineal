@@ -12,10 +12,11 @@ from interfaz.componentes import (
     latex_vector,
     leer_matriz_ui,
     leer_vector_ui,
+    mostrar_interactiva,
     tabla_vector,
 )
 from interfaz.estilo import encabezado_modulo, insignias, seccion, tarjeta_resultado, valor_destacado
-from visualizacion.graficos import cerrar, grafica_ajuste
+from visualizacion.interactivas import ajuste as grafica_ajuste_interactiva
 
 
 def mostrar():
@@ -175,9 +176,8 @@ def ajuste():
         valor_destacado("Ecuación", r.ecuacion,
                         f"m ≈ {float(r.pendiente):.8g} · c ≈ {float(r.intercepto):.8g} · "
                         f"‖r‖₂ ≈ {r.minimos.norma_residuo_2:.6g}")
-        fig = grafica_ajuste(r.xs, r.ys, r.pendiente, r.intercepto, r.minimos.estimados)
-        st.pyplot(fig)
-        cerrar(fig)
+        mostrar_interactiva(grafica_ajuste_interactiva(r.xs, r.ys, r.pendiente, r.intercepto,
+                                                       r.minimos.estimados), "ajuste")
     st.latex(r"A=\begin{bmatrix} x_1 & 1\\ \vdots & \vdots\\ x_k & 1\end{bmatrix},\quad "
              r"b=\begin{bmatrix} y_1\\ \vdots\\ y_k\end{bmatrix},\quad "
              r"A^TA\begin{bmatrix} m\\ c\end{bmatrix}=A^Tb")

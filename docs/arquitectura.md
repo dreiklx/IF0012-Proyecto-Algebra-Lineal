@@ -21,6 +21,7 @@ proyecto-algebra/
 │   └── modulo_*.py         Una página por módulo
 ├── visualizacion/          GRÁFICAS: Matplotlib; solo dibujan resultados del núcleo
 │   ├── tema.py             Tema común de las gráficas (colores por método, leyendas)
+│   ├── interactivas.py     Gráficas interactivas (Plotly) que muestra la interfaz
 │   ├── graficos.py         Ajuste, convergencia, comparación, autovalores
 │   └── geometria_3d.py     Rectas (2D) y planos (3D) de un sistema
 ├── tests/                  Pruebas unittest del núcleo y de la interfaz (AppTest)

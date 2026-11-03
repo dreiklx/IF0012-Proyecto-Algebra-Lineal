@@ -138,3 +138,55 @@ Capturas reales de la aplicación en ejecución (Edge sin interfaz controlado po
 **No capturado:** el mensaje de error por una entrada no numérica. La escritura simulada no llega al área de texto en el modo sin interfaz. Su aparición, con la posición de la celda, la comprueba la prueba automática `test_modulo_I_entrada_invalida`.
 
 **Nota de desarrollo:** el servidor de Streamlit no recarga `interfaz/estilo.py` al modificarlo; tras cambiar el estilo hay que reiniciar la aplicación.
+
+## 7. Gráficas interactivas y matrices vigentes (03-nov-2026, rama `feature/graficas-interactivas`)
+
+**Tecnología:** Plotly 6.3.0 (`visualizacion/interactivas.py`); es la única dependencia nueva, porque Altair, que ya traía Streamlit, no hace 3D. Las figuras se muestran con `interfaz/componentes.py::mostrar_interactiva`:
+
+- barra de herramientas vertical, siempre visible, con los colores de Ax;
+- zoom con la rueda;
+- doble clic para restablecer;
+- exportación a PNG.
+
+**Las interacciones solo cambian la vista.** Los datos se toman de los mismos resultados del núcleo, y `tests/test_graficas_interactivas.py` (8 pruebas) comprueba que coinciden exactamente con los historiales, los autovalores y la solución, y con las líneas de las figuras de Matplotlib.
+
+| Gráfica | Controles |
+|---|---|
+| Planos 3D (Módulo I) | Rotar arrastrando (órbita o giro), rueda para el zoom, desplazar, **restablecer vista** y vista guardada; valor de x, y, z y la ecuación al pasar sobre un plano; coordenadas de la solución; ocultar planos desde la leyenda. Escala cúbica y los mismos rangos de ejes que la figura estática |
+| Rectas 2D, ajuste, convergencia, comparación, autovalores, precondicionador | Zoom ＋/－, **zoom por región** (arrastrar), desplazar, **autoescala** y **restablecer**; valor de cada punto al pasar el cursor (en la comparación, los tres métodos a la vez); activar y desactivar series en la leyenda; un color y un marcador fijos por método en todas las gráficas |
+
+**Revisado con eventos de ratón reales** (Chromium sin interfaz, el mismo motor que Brave; capturas en `capturas/graf_*.png`):
+
+- la 3D rota al arrastrar;
+- el cursor sobre la solución muestra (0.333333, 4, 1.66667);
+- en la comparación, el cursor en k = 3 muestra los tres e_k;
+- arrastrar sobre una región la amplía;
+- a 1024 px la barra vertical no tapa los títulos (se corrigió una superposición).
+
+### 7.1 Rúbrica normal (65 %): versión vigente
+
+| Criterio | Puntaje | Implementación | Presentación | Evidencia | Estado |
+|---|---:|---|---|---|---|
+| Módulo I: sistemas lineales | 8 % | `directos._escalonar`, `_resolver`, `inversa_gauss_jordan` | Editor de A y b; tarjeta con la clasificación, la solución, el rango y det; pasos; **3D y 2D interactivas** | `test_directos`, `test_app`, `test_editor`, `test_graficas_interactivas`; auditoría (4500 casos) | COMPLETADO |
+| Módulo II: condicionamiento | 8 % | `numero_condicion_infinito`, `construir_delta_b`, `analizar_perturbacion` | Editor (A cuadrada); κ con la barra de la escala; tarjeta de perturbación | `test_condicion`, `test_app`; auditoría (400 + 200 casos) | COMPLETADO |
+| Módulo III: mínimos cuadrados | 8 % | `minimos_cuadrados`, `ajuste_lineal`, `cramer` | Editor de A rectangular; **tabla editable de puntos**; ecuación destacada; **gráfica interactiva** con el residuo de cada dato al pasar el cursor | `test_minimos`, `test_editor`, `test_graficas_interactivas`; auditoría (300 casos) | COMPLETADO |
+| Módulo IV: métodos iterativos | 8 % | `paso_*`, `_ejecutar`, `comparar_metodos`, `radio_espectral` | Editor de A, b y x⁽⁰⁾; tabla de iteraciones; **convergencia y comparación interactivas** (error frente a iteración, con zoom y valores) | P1–P21, `test_espectral`, `test_app`, `test_graficas_interactivas`; auditoría (600 + 300 casos) | COMPLETADO |
+| Procedimiento matemático | 7 % | `Paso`, D/L/U/T, `desarrollo_sarrus`, `cramer` | Pasos numerados en LaTeX | `test_app` | COMPLETADO |
+| Análisis e interpretación | 6 % | `_interpretar`, mensajes del núcleo | Mensajes por color, recomendaciones, «cómo leer el diagrama» | `test_app` | COMPLETADO (juicio de la docente) |
+| Diseño del código | 5 % | Capas `algebra/`, `interfaz/` y `visualizacion/`; el editor y las gráficas, en módulos propios | — | `docs/arquitectura.md` | COMPLETADO |
+| Validaciones y errores | 4 % | `validacion.py`, `validar_configuracion` | Validación previa en el editor y bloqueo por dimensiones incompatibles | `test_validacion`, `test_editor` | COMPLETADO |
+| Interfaz y usabilidad | 5 % | — | Identidad Ax, editor interactivo, **gráficas interactivas**, probado a 1440 y 1024 px | Capturas en `docs/capturas/` | COMPLETADO (juicio de la docente) |
+| Manual de usuario | 3 % | `docs/manual_usuario.md` (editor y gráficas documentados) | — | Probado en otra computadora (equipo) | COMPLETADO |
+| Casos de prueba | 3 % | `casos_prueba/`, 228 pruebas | — | — | Propios: COMPLETADO. **Caso obligatorio: PENDIENTE (externo, no recibido)** |
+
+### 7.2 Incentivos (hasta 5 %): versión vigente
+
+| Incentivo | Valor | Qué exige (OFICIAL p. 5) | Implementación y funciones | En la interfaz y cómo se demuestra | Pruebas | ¿Cumple? |
+|---|---:|---|---|---|---|---|
+| Visualización avanzada | 1 % | «Gráficas comparativas adicionales, historial de convergencia o reportes exportables con utilidad real» | `interactivas.comparacion`, `convergencia`, `autovalores`, `precondicionador`; `csv_historial`; barrido de ω | IV → «Comparar métodos»: e/d/r de los 3 métodos superpuestos, cursor con los 3 valores, zoom por región y series activables. «Ejecutar» → historial y descarga CSV | `test_graficas_interactivas`, `test_csv_exportado_contiene_historial_completo` | **Sí:** cubre las tres evidencias citadas. La interactividad **refuerza** la «utilidad real» (comparar iteraciones concretas, ampliar la zona final), pero no es por sí sola el criterio; lo es el contenido comparativo y exportable |
+| Precondicionamiento | 1,5 % | «Implementación correcta de un precondicionador diagonal y comparación documentada de su efecto» | `precondicionamiento.py` | IV → pestaña «Precondicionamiento diagonal» → «Analizar»: κ(A) frente a κ(D⁻¹A), T idénticas (exacto), Richardson; gráfica interactiva | `test_precondicionamiento`, auditoría (150 casos) | **Sí.** Riesgo: la docente esperaba quizá ver acelerar a Jacobi, lo que es matemáticamente imposible con M = D (se demuestra en vivo) |
+| Matrices dispersas | 1 % | «Representación o tratamiento eficiente… con explicación de la estrategia» | `dispersas.py` (`a_csr`, `paso_*_csr`) | IV → casilla CSR: nnz, densidad y memoria; mismas iteraciones | `test_dispersas`, `test_modulo_IV_formato_csr` | **Sí** |
+| Experiencia de usuario | 0,5 % | «Mejoras sustantivas de accesibilidad, ayuda contextual o interacción, no solo decoración» | `editor.py`, recomendaciones, `reordenamiento_dominante`, gráficas interactivas | Editor de matrices con validación previa; 3D manipulable; ayudas en cada campo | `test_editor` (15), `test_app` | **Sí:** la interacción es funcional, no decorativa |
+| Extensión matemática | 1 % | «Funcionalidad adicional pertinente, correctamente implementada y defendida» | `espectral.py` (Faddeev-LeVerrier, Durand-Kerner, Schur-Cohn, p(±1)), T de SOR, Richardson | IV → «Convergencia» | `test_espectral`, auditoría (300 casos) | **Sí**, siempre que la defensa la justifique: no está en los PDF |
+
+**Nada queda pendiente de implementar en los incentivos.** El puntaje lo asigna la docente; el riesgo principal es la defensa de las extensiones.

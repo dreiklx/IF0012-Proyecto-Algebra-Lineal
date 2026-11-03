@@ -113,3 +113,44 @@ Procedimiento de la docente (S9-05/10 pp. 21-23, diap. 17-19, releídas el 03-no
    - Defecto corregido: con un aᵢᵢ = 0 la pestaña no mostraba ni la dominancia ni el reordenamiento, porque fallaba al construir T. Ahora los muestra y explica por qué no hay T.
 4. **Comparación:** e_k = ‖x⁽ᵏ⁾ − x*‖∞ («error final» de la lámina) pasa a ser la primera métrica de la gráfica comparativa.
 5. **Precondicionamiento:** implementado con la comparación que propone la lámina y con la evidencia exacta de lo que cambia y lo que no.
+
+
+---
+
+## Reauditoría del 03-nov-2026 (gráficas interactivas)
+
+**Documentos.**
+
+- Carpeta `%USERPROFILE%\Desktop\ALGEBRA LINEAL`, que es la misma que «algebra lineal», porque Windows no distingue mayúsculas: 18 PDF y 1 ZIP.
+- Ninguno cambió desde la auditoría documental del 26-oct:
+  - 17 coinciden en la huella MD5 con el inventario;
+  - en los 2 restantes (S1-10/08 y S9-05/10), la huella del inventario difiere solo en los últimos caracteres, pero el tamaño en bytes coincide y la fecha de modificación (08-sep y 06-oct) es anterior a ese inventario. Es un error de transcripción del inventario, no un archivo distinto.
+- **Hay una sola versión del enunciado y de la rúbrica** (`INTRUCCIONES-PROYECTO FINAL-…pdf`, MD5 2fe4e44d). Se buscaron otras en el escritorio, en Descargas y en Documentos y no hay ninguna. La rúbrica utilizada (p. 4), los incentivos (p. 5) y la lista de verificación son los de ese archivo.
+
+**Búsqueda en todo el texto extraíble de los 18 PDF.** La mayoría de las láminas son imágenes, así que la búsqueda se complementa con la lectura visual de hoy:
+
+| Término | Resultado |
+|---|---|
+| «Richardson», «Faddeev», «Durand», «método de la potencia», «CSR» | 0 apariciones en el texto. CSR sí aparece en imagen (S9-05/10 p. 9) |
+| «Sarrus», «Cramer», «precondicion», «radio espectral», «dominan», «error final» | Presentes |
+
+**Conclusión.** Se mantienen los métodos marcados como **[Extensión]**, que no aparecen en los PDF:
+
+- Richardson;
+- Faddeev-LeVerrier;
+- Durand-Kerner;
+- Schur-Cohn;
+- T de SOR.
+
+El enunciado los permite (exige implementar desde cero y no prohíbe procedimientos adicionales) y **deben justificarse en la defensa** (guía, D.5 y D.7). Ninguno reemplaza un procedimiento del curso: en 3×3 se muestra también el de clase (Sarrus), y en mínimos cuadrados, Cramer.
+
+**Representaciones gráficas.** La lámina S9-05/10 p. 17 (diap. 13) muestra «Evolución del error» en escala logarítmica frente a k para los tres métodos. La gráfica comparativa de la aplicación es esa misma representación (e_k, escala log., un color por método), ahora interactiva. La interpretación geométrica 3D (planos que se cortan) corresponde a S6-14/09 p. 26.
+
+**Editor de datos.** `tests/test_editor.py::TestEditorNoAlteraLosDatos` comprueba, para **todos** los ejemplos precargados de los cuatro módulos, que pasar por el editor (texto → celdas → texto) da exactamente la misma matriz o vector que leer el texto original:
+
+- mismos valores exactos;
+- mismas dimensiones;
+- mismo orden;
+- mismos decimales con punto o coma, fracciones y notación científica;
+- mismos signos negativos;
+- las matrices rectangulares se conservan.
