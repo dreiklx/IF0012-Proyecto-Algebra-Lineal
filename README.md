@@ -47,7 +47,7 @@ python -m venv .venv
 .venv\Scripts\python -m unittest
 ```
 
-También se puede usar `ejecutar_pruebas.bat`. Son **204 pruebas**: el núcleo matemático, la validación, la interfaz (con `streamlit.testing`) y el empaquetado.
+También se puede usar `ejecutar_pruebas.bat`. Son **217 pruebas**: el núcleo matemático, la validación, la interfaz (con `streamlit.testing`) y el empaquetado.
 
 Auditoría matemática independiente: compara el núcleo con oráculos escritos aparte, con semilla fija, y tarda unos 20 s. Debe decir «fallos 0».
 

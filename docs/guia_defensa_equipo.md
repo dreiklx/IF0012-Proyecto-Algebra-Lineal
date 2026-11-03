@@ -77,7 +77,7 @@ proyecto-algebra/
 ├── visualizacion/             ← Matplotlib: solo dibuja
 │   ├── graficos.py            ← recta de ajuste, convergencia, comparación, autovalores
 │   └── geometria_3d.py        ← rectas y planos del Módulo I
-├── tests/                     ← 204 pruebas automáticas (unittest)
+├── tests/                     ← 217 pruebas automáticas (unittest)
 ├── auditoria/                 ← comparación aleatoria contra oráculos independientes
 ├── casos_prueba/              ← casos documentados por módulo (entrada, esperado, obtenido)
 └── docs/                      ← manual, guías, decisiones, matriz de cumplimiento
@@ -663,11 +663,11 @@ Cada respuesta se puede comprobar en el código (se indica dónde) o con la apli
 
 3. **¿Cómo está organizado el código y por qué así?**
    - Hay tres capas: `algebra/` (cálculos), `interfaz/` (pantallas) y `visualizacion/` (dibujos).
-   - El núcleo no depende de la interfaz. Por eso se prueba solo (204 pruebas) y la interfaz no repite cálculos.
+   - El núcleo no depende de la interfaz. Por eso se prueba solo (217 pruebas) y la interfaz no repite cálculos.
    - En los iterativos, cada método es una función `paso_*` y el bucle de parada es uno solo (`_ejecutar`), para no triplicar la lógica.
 
 4. **¿Cómo saben que los resultados son correctos?**
-   - Hay 204 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.
+   - Hay 217 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.
    - La auditoría aleatoria (`auditoria/`) compara miles de casos con oráculos escritos aparte (Leibniz, adjunta, Cramer, una implementación separada de las iteraciones, Gelfand) y da 0 fallos.
    - La aplicación además se autoverifica:
      - b − Ax = 0 en el Módulo I;
@@ -861,12 +861,20 @@ python -m venv .venv
 .venv\Scripts\python -m streamlit run app.py
 ```
 
-5. Pruebas: `ejecutar_pruebas.bat` o `.venv\Scripts\python -m unittest`. Deben salir **204 pruebas OK**.
+5. Pruebas: `ejecutar_pruebas.bat` o `.venv\Scripts\python -m unittest`. Deben salir **217 pruebas OK**.
 6. Auditoría (opcional, unos 20 s): `.venv\Scripts\python auditoria\auditoria_directos.py .` y `.venv\Scripts\python auditoria\auditoria_iterativos.py .` (y `auditoria_precondicionamiento.py`). Deben dar «fallos 0».
 
 > **Antes de la defensa:** cada integrante debe hacer la instalación **en su propia computadora** al menos una vez. La primera instalación necesita internet; no la dejen para el aula.
 
 ### Formato de entrada
+
+Cada matriz y cada vector tiene un **editor interactivo** con dos pestañas:
+
+- **Editor:** rejilla de celdas con «＋/－ Fila» y «＋/－ Columna», selectores de dimensión y, en «⋯ Más», las opciones Identidad, Ceros, Limpiar y Restaurar el ejemplo.
+- **Pegar:** se escribe o pega el texto; se aceptan espacios, tabulaciones, «;» o «, » como separadores.
+
+Debajo de cada editor una etiqueta indica si los datos están listos, si faltan valores o en qué celda hay un error. Si las dimensiones no son compatibles (por ejemplo, b con otra longitud o una A no cuadrada en el Módulo IV), el botón de cálculo queda bloqueado y se explica por qué.
+
 
 - Una fila por línea, con los números separados por espacios.
 - Se aceptan `3`, `-2.5`, `2,5`, `1/3` y `1e-3`.

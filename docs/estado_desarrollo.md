@@ -12,6 +12,16 @@
 | Defensa individual | Semana del **16 de noviembre de 2026** |
 | Número de grupo | **01, confirmado por el equipo (03-nov-2026)**. Integrantes, exclusivamente los cuatro de arriba |
 
+## Editor interactivo de datos (03-nov-2026, rama `feature/editor-interactivo`)
+
+- **Componente nuevo:** `interfaz/editor.py`, con tres tipos (MATRIZ, VECTOR y PUNTOS), integrado en los cuatro módulos.
+  - Pestañas «Editor» (rejilla, ＋/－ filas y columnas, identidad, ceros, limpiar, restaurar) y «Pegar» (espacios, tabulaciones, «;» o «, », con vista previa).
+  - Botón «⟲ Cargar ejemplo».
+  - Tabla de puntos en el Módulo III y editor de x⁽⁰⁾ en el Módulo IV.
+- **Validación previa visual:** faltan valores, formato inválido con su posición, y dimensiones incompatibles que bloquean el botón. Las validaciones del núcleo no se tocaron.
+- **Sin cambios** en `algebra/` ni `auditoria/`; ninguna prueba existente se modificó.
+- **Pruebas:** 217, todas OK (las 204 anteriores más las 13 de `tests/test_editor.py`). La auditoría sigue con 0 fallos y los ejemplos precargados dan resultados idénticos.
+
 ## Rediseño visual (03-nov-2026, rama `feature/rediseño-visual`)
 
 - **Identidad propia:** tema oscuro de software científico, portada con tarjetas de los cuatro módulos y de los cinco incentivos (con accesos directos), etapas numeradas, tarjetas de resultado, etiquetas de estado, barra de la escala de κ, recomendaciones contextuales y gráficas con un tema común.
@@ -113,7 +123,7 @@
 
 ```
 .venv\Scripts\python -m unittest
-Ran 204 tests ... OK            (0 fallos, 0 omitidas; 03-nov-2026)
+Ran 217 tests ... OK            (0 fallos, 0 omitidas; 03-nov-2026)
 ```
 
 | Archivo | Pruebas | Qué cubre | Tipo de oráculo |
@@ -128,6 +138,7 @@ Ran 204 tests ... OK            (0 fallos, 0 omitidas; 03-nov-2026)
 | test_dispersas | 8 | Formato CSR | Construcción a mano; igualdad con la versión densa |
 | test_precondicionamiento | 14 | Precondicionador M = D, Richardson, reordenamiento, Sarrus, Cramer | Lámina S9-05/10 diap. 18; inversas 2×2 a mano; autovalores teóricos de la tridiagonal; manuscrito S8-30/09 |
 | test_empaquetado | 2 | El ZIP excluye los archivos internos de IA, las credenciales y las cachés; una sola carpeta raíz | Proyecto temporal con archivos trampa |
+| test_editor | 13 | Editor interactivo: separadores, celdas, botones, pegado, bloqueo por dimensiones, x⁽⁰⁾, tabla de puntos | Construcción a mano; recta de 3 puntos calculada a mano |
 | test_app | 15 | La interfaz con AppTest (sin navegador) y el CSV | **Superficiales:** comprueban que no hay excepciones y que aparecen los mensajes, **no** el contenido visual de las gráficas |
 
 **Auditoría independiente** (`auditoria/`, semilla fija) — **0 fallos**:

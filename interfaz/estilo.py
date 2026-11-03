@@ -160,6 +160,22 @@ textarea{font-family:'Cascadia Code','Consolas',monospace !important;font-size:.
   box-shadow:0 0 0 3px rgba(11,16,32,.85)}
 .escala-rotulos{display:flex;justify-content:space-between;color:var(--suave);font-size:.75rem;margin-top:.35rem}
 
+/* Editor interactivo de matrices (interfaz/editor.py) */
+div[class*="st-key-editor_"]{border:1px solid var(--borde);border-radius:14px;padding:.55rem .7rem .85rem;
+  background:linear-gradient(180deg,rgba(24,34,58,.85),rgba(16,23,41,.85))}
+.ed-titulo{font-weight:700;font-size:.95rem;color:var(--texto);margin:.1rem 0 .1rem}
+.ed-col{text-align:center;color:var(--cian);font-size:.75rem;font-weight:700;letter-spacing:.06em}
+.ed-fila{text-align:right;color:var(--suave);font-size:.78rem;font-weight:700;padding-right:.15rem;
+  transform:translateY(-.5rem)}
+div[class*="st-key-editor_"] [data-testid="stTextInput"] input{text-align:center;
+  font-family:'Cascadia Code','Consolas',monospace;font-size:1.02rem;font-weight:600;padding:.45rem .2rem;
+  min-height:2.45rem;color:#F1F5FF;background:#0E1528}
+div[class*="st-key-editor_"] [data-testid="stTextInput"] input:focus{background:#13203A}
+div[class*="st-key-editor_"] [data-testid="stHorizontalBlock"]{gap:.35rem !important}
+div[class*="st-key-editor_"] .stButton>button{padding:.2rem .4rem;min-height:2.1rem;font-size:.85rem}
+div[class*="st-key-editor_"] [data-baseweb="tab"]{padding:.3rem .7rem !important}
+div[class*="st-key-editor_"] [data-baseweb="tab"] p{font-size:.85rem !important}
+
 @media (max-width: 900px){
   .hero{padding:1.2rem}.hero h1{font-size:1.6rem}
   .cabecera{flex-direction:column;gap:.6rem}.cabecera h1{font-size:1.3rem}

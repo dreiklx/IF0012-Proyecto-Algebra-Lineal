@@ -93,6 +93,27 @@ Revisado sobre capturas reales de la aplicación (`docs/capturas/antes_modulo_I.
 
 Las marcas violetas «Incentivo · …» aparecen **junto a la funcionalidad real** que lo implementa: son señales para la demostración y no sustituyen ninguna funcionalidad. Ningún incentivo se simula con elementos visuales: los cinco existían y estaban probados antes del rediseño.
 
+## 4b. Editor interactivo de datos (03-nov-2026, rama `feature/editor-interactivo`)
+
+**Componente:** `interfaz/editor.py`, función `editor(...)`, con tres tipos (MATRIZ, VECTOR y PUNTOS), reutilizado en los cuatro módulos.
+
+- **Fuente de verdad:** el texto de siempre, con las mismas claves. Por eso las funciones del núcleo reciben exactamente el mismo formato y los mismos valores. La rejilla de celdas está sincronizada con ese texto en los dos sentidos.
+- **Formas de entrada:**
+  - pestaña «Editor»: celdas, «＋/－ Fila/Columna», selectores de dimensión y, en «⋯ Más», Identidad, Ceros, Limpiar y Restaurar;
+  - pestaña «Pegar»: separadores espacio, tabulación, «;» y «, », con la vista previa de lo interpretado;
+  - botón «⟲ Cargar ejemplo» junto al selector de ejemplos del curso.
+- **Por módulo:**
+  - I: A rectangular y b;
+  - II: A (debe ser cuadrada) y b;
+  - III: A rectangular y b, más la **tabla editable de puntos (x, y)**;
+  - IV: A (cuadrada), b y un **editor de x⁽⁰⁾** cuando es personalizado. Se conservan todos los parámetros.
+- **Validación previa** (solo interfaz):
+  - etiqueta de estado por editor: lista, faltan valores en (i, j), o formato inválido con la posición que da `leer_matriz`/`leer_vector`;
+  - bloqueo del botón de cálculo con un mensaje cuando las dimensiones son incompatibles (`problema_dimensiones`): b con otra longitud, A no cuadrada donde el método lo exige o x⁽⁰⁾ con otra dimensión.
+  - Las matrices rectangulares se aceptan donde el procedimiento lo permite (Módulos I y III). Las validaciones existentes del núcleo no se reemplazan.
+- **Pruebas:** `tests/test_editor.py`, 13 pruebas con funciones puras e interacción real con AppTest: edición de celdas, botones, identidad, restaurar, pegado con comas, bloqueo por dimensiones, x⁽⁰⁾ y tabla de puntos (con la recta esperada calculada a mano).
+- **Capturas:** `capturas/editor_*.png`.
+
 ## 5. Verificación visual
 
 Capturas reales de la aplicación en ejecución (Edge sin interfaz controlado por CDP, a 1440×900 y 1024×768).

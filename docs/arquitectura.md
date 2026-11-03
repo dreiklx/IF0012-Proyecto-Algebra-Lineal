@@ -15,6 +15,7 @@ proyecto-algebra/
 │   └── precondicionamiento.py  Precondicionador diagonal M = D (incentivo)
 ├── interfaz/               PRESENTACIÓN: Streamlit; no contiene cálculos
 │   ├── componentes.py      LaTeX, tablas, lectura con mensajes de error
+│   ├── editor.py           Editor interactivo de matrices, vectores y puntos (rejilla + texto)
 │   ├── estilo.py           Identidad visual: hoja de estilos y componentes (tarjetas, etiquetas)
 │   ├── ejemplos.py         Ejemplos del curso (resultados verificados)
 │   └── modulo_*.py         Una página por módulo

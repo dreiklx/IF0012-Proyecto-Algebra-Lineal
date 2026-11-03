@@ -20,7 +20,7 @@
    | III | Aᵀr = 0 |
    | IV | r_k pequeño; Σλ = traza(T) |
 
-5. **Evidencia.** 204 pruebas OK y la auditoría aleatoria con 0 fallos. Los valores esperados son independientes: **no** salen de las láminas, varias de las cuales tienen errores.
+5. **Evidencia.** 217 pruebas OK y la auditoría aleatoria con 0 fallos. Los valores esperados son independientes: **no** salen de las láminas, varias de las cuales tienen errores.
 
 ---
 

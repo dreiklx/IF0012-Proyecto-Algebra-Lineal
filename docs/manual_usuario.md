@@ -30,6 +30,17 @@ Ejecute `ejecutar_pruebas.bat` o `.venv\Scripts\python -m unittest -v`.
 
 ## 2. Formato de las entradas
 
+**Editor interactivo.** Cada matriz o vector se puede construir de tres formas:
+
+1. **Editor:** escriba en cada celda. Use «＋/－ Fila», «＋/－ Columna» y los selectores de dimensión. En «⋯ Más» están Matriz identidad, Matriz de ceros, Limpiar y Restaurar el ejemplo.
+2. **Pegar:** pegue o escriba el texto (una fila por línea). Se aceptan como separadores los espacios, las tabulaciones, «;» y la coma seguida de espacio («4, -1, 1»). La aplicación muestra la matriz interpretada.
+3. **Ejemplo del curso:** elíjalo en el selector y pulse «⟲ Cargar ejemplo» para recuperarlo después de editarlo.
+
+En el Módulo III los puntos del ajuste se introducen en una **tabla editable de dos columnas** (x, y), con «＋/－ Punto». En el Módulo IV, x⁽⁰⁾ «Personalizado» tiene su propio editor de vector.
+
+Bajo cada editor se indica si los datos están listos, qué celdas faltan o dónde hay un error de formato. Si las dimensiones son incompatibles, el botón de cálculo se bloquea y se explica el motivo.
+
+
 | Dato | Formato | Ejemplo |
 |---|---|---|
 | Matriz | Una fila por línea; números separados por espacios | `2 1 -1`<br>`1 -3 2`<br>`3 2 1` |

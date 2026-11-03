@@ -16,8 +16,8 @@ from algebra.directos import ErrorSistema
 from algebra.matriz import ErrorMatriz
 from algebra.validacion import ErrorEntrada, formatear_numero, leer_vector
 from interfaz import ejemplos
+from interfaz.editor import MATRIZ, VECTOR, analizar, aviso_dimensiones, editor, problema_dimensiones, restaurar
 from interfaz.componentes import (
-    ayuda_formato,
     latex_matriz,
     latex_numero,
     leer_matriz_ui,
@@ -44,16 +44,22 @@ def mostrar():
         "y compara la solución de A x = b con la del sistema perturbado A x̃ = b + Δb.",
         [("Inversa propia [A | I] → [I | A⁻¹]", "info"), ("Norma ∞", ""), ("Escala 10 / 100", "")])
 
-    seccion("1", "Matriz y vector", "A debe ser cuadrada")
-    nombre = st.selectbox("Cargar un ejemplo", list(ejemplos.CONDICION), key="cond_ejemplo")
+    seccion("1", "Matriz y vector", "A debe ser cuadrada (n × n) y b tener n componentes")
+    sel, boton = st.columns([4, 1], vertical_alignment="bottom")
+    nombre = sel.selectbox("Ejemplo del curso", list(ejemplos.CONDICION), key="cond_ejemplo")
     A_txt, b_txt, db_txt = ejemplos.CONDICION[nombre]
-    col1, col2 = st.columns([3, 1])
+    boton.button("⟲ Cargar ejemplo", key="cond_cargar", width="stretch", on_click=restaurar,
+                 args=(f"cond_A_{nombre}", f"cond_b_{nombre}"))
+    col1, col2 = st.columns([3, 1.1])
     with col1:
-        texto_A = st.text_area("Matriz A (n × n)", A_txt, height=120, key=f"cond_A_{nombre}",
-                               help="Una fila por línea. A debe ser cuadrada e invertible para calcular κ.")
+        texto_A = editor(f"cond_A_{nombre}", "Matriz A (n × n)", A_txt, MATRIZ, nombre="matriz A",
+                         css="cond_A", ayuda="Una fila por línea. A debe ser cuadrada e invertible para calcular κ.")
     with col2:
-        texto_b = st.text_area("Vector b", b_txt.replace(" ", "\n"), height=120, key=f"cond_b_{nombre}")
-    ayuda_formato()
+        texto_b = editor(f"cond_b_{nombre}", "Vector b", b_txt.replace(" ", "\n"), VECTOR,
+                         nombre="vector b", css="cond_b", encabezados=["b"], etiqueta_fila="")
+    bloqueado = aviso_dimensiones(problema_dimensiones(analizar(texto_A, MATRIZ, "matriz A")[0],
+                                                      analizar(texto_b, VECTOR, "vector b")[0],
+                                                      cuadrada=True))
 
     seccion("2", "Perturbación de b")
     modo = st.radio("Tipo de perturbación",
@@ -69,7 +75,7 @@ def mostrar():
             "Porcentaje p (Δbᵢ = p/100 · bᵢ): un número o un vector de n porcentajes",
             "1", key=f"cond_pct_{nombre}")
 
-    if st.button("Calcular", type="primary", key="cond_calcular"):
+    if st.button("Calcular", type="primary", key="cond_calcular", disabled=bloqueado):
         st.session_state.pop("cond_resultado", None)
         A = leer_matriz_ui(texto_A, "matriz A")
         b = leer_vector_ui(texto_b, "vector b")

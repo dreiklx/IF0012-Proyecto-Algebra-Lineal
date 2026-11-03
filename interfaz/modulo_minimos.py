@@ -6,8 +6,8 @@ from algebra.matriz import ErrorMatriz
 from algebra.minimos import SOBREDETERMINADO, ErrorAjuste, ajuste_lineal, minimos_cuadrados
 from algebra.validacion import formatear_numero
 from interfaz import ejemplos
+from interfaz.editor import MATRIZ, PUNTOS, VECTOR, analizar, aviso_dimensiones, editor, problema_dimensiones, restaurar
 from interfaz.componentes import (
-    ayuda_formato,
     latex_matriz,
     latex_vector,
     leer_matriz_ui,
@@ -35,16 +35,22 @@ def mostrar():
 
 def sistema():
     seccion("1", "Sistema A x ≈ b", "m ecuaciones y n incógnitas, con m > n")
-    nombre = st.selectbox("Cargar un ejemplo", list(ejemplos.MINIMOS), key="mc_ejemplo")
+    sel, boton = st.columns([4, 1], vertical_alignment="bottom")
+    nombre = sel.selectbox("Ejemplo del curso", list(ejemplos.MINIMOS), key="mc_ejemplo")
     A_txt, b_txt = ejemplos.MINIMOS[nombre]
-    col1, col2 = st.columns([3, 1])
+    boton.button("⟲ Cargar ejemplo", key="mc_cargar", width="stretch", on_click=restaurar,
+                 args=(f"mc_A_{nombre}", f"mc_b_{nombre}"))
+    col1, col2 = st.columns([3, 1.1])
     with col1:
-        texto_A = st.text_area("Matriz A (m × n)", A_txt, height=120, key=f"mc_A_{nombre}",
-                               help="Más filas (ecuaciones) que columnas (incógnitas).")
+        texto_A = editor(f"mc_A_{nombre}", "Matriz A (m × n)", A_txt, MATRIZ, nombre="matriz A",
+                         css="mc_A", ayuda="Más filas (ecuaciones) que columnas (incógnitas).")
     with col2:
-        texto_b = st.text_area("Vector b (m)", b_txt.replace(" ", "\n"), height=120, key=f"mc_b_{nombre}")
-    ayuda_formato()
-    if st.button("Resolver por mínimos cuadrados", type="primary", key="mc_resolver"):
+        texto_b = editor(f"mc_b_{nombre}", "Vector b (m)", b_txt.replace(" ", "\n"), VECTOR,
+                         nombre="vector b", css="mc_b", encabezados=["b"], etiqueta_fila="")
+    # A puede ser rectangular: solo se exige que b tenga m componentes.
+    bloqueado = aviso_dimensiones(problema_dimensiones(analizar(texto_A, MATRIZ, "matriz A")[0],
+                                                      analizar(texto_b, VECTOR, "vector b")[0]))
+    if st.button("Resolver por mínimos cuadrados", type="primary", key="mc_resolver", disabled=bloqueado):
         st.session_state.pop("mc_resultado", None)
         A = leer_matriz_ui(texto_A, "matriz A")
         b = leer_vector_ui(texto_b, "vector b")
@@ -131,18 +137,29 @@ def mostrar_minimos(r, nombres=None):
 
 def ajuste():
     seccion("1", "Datos (xᵢ, yᵢ)", "al menos 2 puntos con x distintos")
-    nombre = st.selectbox("Cargar un ejemplo", list(ejemplos.AJUSTE), key="aj_ejemplo")
+    sel, boton = st.columns([4, 1], vertical_alignment="bottom")
+    nombre = sel.selectbox("Ejemplo del curso", list(ejemplos.AJUSTE), key="aj_ejemplo")
     x_txt, y_txt = ejemplos.AJUSTE[nombre]
-    col1, col2 = st.columns(2)
-    with col1:
-        texto_x = st.text_area("Valores de x", x_txt.replace(" ", "\n"), height=140, key=f"aj_x_{nombre}")
-    with col2:
-        texto_y = st.text_area("Valores de y", y_txt.replace(" ", "\n"), height=140, key=f"aj_y_{nombre}")
-    st.caption("Un valor por línea (o separados por espacios). El punto i es (xᵢ, yᵢ).")
+    pares = "\n".join(f"{x} {y}" for x, y in zip(x_txt.split(), y_txt.split()))
+    boton.button("⟲ Cargar ejemplo", key="aj_cargar", width="stretch", on_click=restaurar,
+                 args=(f"aj_xy_{nombre}",))
+    izquierda, derecha = st.columns([2, 1.3])
+    with izquierda:
+        texto_xy = editor(f"aj_xy_{nombre}", "Tabla de puntos (xᵢ, yᵢ)", pares, PUNTOS,
+                          nombre="tabla de puntos", css="aj_xy", encabezados=["x", "y"],
+                          ayuda="Un punto por línea: x y (por ejemplo «2 2.5»).")
+    with derecha:
+        st.caption("Cada fila es un punto (xᵢ, yᵢ). Use «＋ Punto» para agregar datos o pegue "
+                   "dos columnas copiadas de una hoja de cálculo en la pestaña «Pegar».")
     if st.button("Calcular recta de ajuste", type="primary", key="aj_calcular"):
         st.session_state.pop("aj_resultado", None)
-        xs = leer_vector_ui(texto_x, "vector x")
-        ys = leer_vector_ui(texto_y, "vector y")
+        puntos = leer_matriz_ui(texto_xy, "tabla de puntos")
+        xs = ys = None
+        if puntos is not None:
+            if len(puntos[0]) != 2:
+                st.error("❌ Cada punto debe tener exactamente 2 valores (x e y).")
+            else:
+                xs, ys = [p[0] for p in puntos], [p[1] for p in puntos]
         if xs is not None and ys is not None:
             try:
                 st.session_state["aj_resultado"] = ajuste_lineal(xs, ys)

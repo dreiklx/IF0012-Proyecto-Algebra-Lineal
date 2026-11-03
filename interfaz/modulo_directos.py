@@ -14,8 +14,8 @@ from algebra.directos import (
 from algebra.matriz import ErrorMatriz, residuo
 from algebra.validacion import formatear_numero
 from interfaz import ejemplos
+from interfaz.editor import MATRIZ, VECTOR, analizar, aviso_dimensiones, editor, problema_dimensiones, restaurar
 from interfaz.componentes import (
-    ayuda_formato,
     latex_matriz,
     latex_vector,
     leer_matriz_ui,
@@ -37,17 +37,22 @@ def mostrar():
         [("Gauss", "info"), ("Gauss-Jordan", "info"), ("Fracciones exactas", "ok"),
          ("Paso a paso", "")])
 
-    seccion("1", "Datos del sistema", "Cargue un ejemplo del curso o escriba A y b")
-    nombre = st.selectbox("Cargar un ejemplo", list(ejemplos.DIRECTOS), key="dir_ejemplo")
+    seccion("1", "Datos del sistema", "Construya A y b en el editor, péguelos o cargue un ejemplo del curso")
+    sel, boton = st.columns([4, 1], vertical_alignment="bottom")
+    nombre = sel.selectbox("Ejemplo del curso", list(ejemplos.DIRECTOS), key="dir_ejemplo")
     A_txt, b_txt = ejemplos.DIRECTOS[nombre]
-    col1, col2 = st.columns([3, 1])
+    boton.button("⟲ Cargar ejemplo", key="dir_cargar", width="stretch", on_click=restaurar,
+                 args=(f"dir_A_{nombre}", f"dir_b_{nombre}"),
+                 help="Vuelve a cargar el ejemplo seleccionado (descarta los cambios).")
+    col1, col2 = st.columns([3, 1.1])
     with col1:
-        texto_A = st.text_area("Matriz A (m × n)", A_txt, height=140, key=f"dir_A_{nombre}",
-                               help="Una fila por línea. Ejemplo: «2 1 -1» en la primera línea.")
+        texto_A = editor(f"dir_A_{nombre}", "Matriz A (m × n)", A_txt, MATRIZ, nombre="matriz A",
+                         css="dir_A", ayuda="Una fila por línea. Ejemplo: «2 1 -1» en la primera línea.")
     with col2:
-        texto_b = st.text_area("Vector b (m)", b_txt.replace(" ", "\n"), height=140, key=f"dir_b_{nombre}",
-                               help="Un número por línea (o separados por espacios).")
-    ayuda_formato()
+        texto_b = editor(f"dir_b_{nombre}", "Vector b (m)", b_txt.replace(" ", "\n"), VECTOR,
+                         nombre="vector b", css="dir_b", encabezados=["b"], etiqueta_fila="")
+    bloqueado = aviso_dimensiones(problema_dimensiones(analizar(texto_A, MATRIZ, "matriz A")[0],
+                                                      analizar(texto_b, VECTOR, "vector b")[0]))
 
     seccion("2", "Método")
     col3, col4 = st.columns(2)
@@ -63,7 +68,7 @@ def mostrar():
             help="Con aritmética exacta ambos dan la misma solución; el pivoteo parcial "
                  "es la estrategia recomendada cuando se trabaja en punto flotante.")
 
-    if st.button("Resolver", type="primary", key="dir_resolver"):
+    if st.button("Resolver", type="primary", key="dir_resolver", disabled=bloqueado):
         st.session_state.pop("dir_resultado", None)
         A = leer_matriz_ui(texto_A, "matriz A")
         b = leer_vector_ui(texto_b, "vector b")

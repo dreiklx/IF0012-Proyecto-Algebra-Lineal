@@ -40,7 +40,8 @@ from algebra.validacion import (
     leer_vector,
 )
 from interfaz import ejemplos
-from interfaz.componentes import ayuda_formato, latex_matriz, latex_vector, leer_matriz_ui, leer_vector_ui
+from interfaz.editor import MATRIZ, VECTOR, analizar, aviso_dimensiones, editor, normalizar, problema_dimensiones, restaurar
+from interfaz.componentes import latex_matriz, latex_vector, leer_matriz_ui, leer_vector_ui
 from interfaz.estilo import (
     encabezado_modulo,
     insignias,
@@ -76,16 +77,19 @@ def mostrar():
          ("CSR", "incentivo"), ("Precondicionador M = D", "incentivo")])
 
     seccion("1", "Sistema A x = b", "A cuadrada, con diagonal no nula")
-    nombre = st.selectbox("Cargar un ejemplo", list(ejemplos.ITERATIVOS), key="it_ejemplo")
+    sel, boton = st.columns([4, 1], vertical_alignment="bottom")
+    nombre = sel.selectbox("Ejemplo del curso", list(ejemplos.ITERATIVOS), key="it_ejemplo")
     A_txt, b_txt = ejemplos.ITERATIVOS[nombre]
-    col1, col2 = st.columns([3, 1])
+    boton.button("⟲ Cargar ejemplo", key="it_cargar", width="stretch", on_click=restaurar,
+                 args=(f"it_A_{nombre}", f"it_b_{nombre}", f"it_x0_{nombre}"))
+    col1, col2 = st.columns([3, 1.1])
     with col1:
-        texto_A = st.text_area("Matriz A (n × n)", A_txt, height=130, key=f"it_A_{nombre}",
-                               help="Una fila por línea. Los métodos dividen entre cada aᵢᵢ: "
-                                    "ningún elemento de la diagonal puede ser 0.")
+        texto_A = editor(f"it_A_{nombre}", "Matriz A (n × n)", A_txt, MATRIZ, nombre="matriz A",
+                         css="it_A", ayuda="Una fila por línea. Los métodos dividen entre cada aᵢᵢ: "
+                                           "ningún elemento de la diagonal puede ser 0.")
     with col2:
-        texto_b = st.text_area("Vector b", b_txt.replace(" ", "\n"), height=130, key=f"it_b_{nombre}")
-    ayuda_formato()
+        texto_b = editor(f"it_b_{nombre}", "Vector b", b_txt.replace(" ", "\n"), VECTOR,
+                         nombre="vector b", css="it_b", encabezados=["b"], etiqueta_fila="")
 
     seccion("2", "Parámetros y criterio de parada", "comunes a las cuatro pestañas")
     criterio = st.radio("Criterio de parada", list(ETIQUETAS_CRITERIO),
@@ -104,8 +108,18 @@ def mostrar():
                                      "por sí solo la convergencia.")
     tipo_x0 = st.radio("Vector inicial x⁽⁰⁾", ["Vector cero", "xᵢ⁽⁰⁾ = bᵢ / aᵢᵢ", "Personalizado"],
                        horizontal=True, key="it_x0_tipo")
-    texto_x0 = st.text_input("x⁽⁰⁾ personalizado (n números)", "0 0 0", key="it_x0") \
-        if tipo_x0 == "Personalizado" else None
+    A_previo = analizar(texto_A, MATRIZ, "matriz A")[0]
+    texto_x0 = None
+    if tipo_x0 == "Personalizado":
+        dimension = len(A_previo[0]) if A_previo else len(A_txt.splitlines())
+        x0_col, _ = st.columns([1.1, 3])
+        with x0_col:
+            texto_x0 = editor(f"it_x0_{nombre}", "x⁽⁰⁾ personalizado", "\n".join(["0"] * dimension),
+                              VECTOR, nombre="vector inicial x⁽⁰⁾", css="it_x0", encabezados=["x⁽⁰⁾"],
+                              etiqueta_fila="")
+    bloqueado = aviso_dimensiones(problema_dimensiones(
+        A_previo, analizar(texto_b, VECTOR, "vector b")[0], cuadrada=True,
+        x0=analizar(texto_x0, VECTOR, "vector inicial x⁽⁰⁾")[0] if texto_x0 is not None else None))
 
     seccion("3", "Análisis", "elija una pestaña")
     pestana_uno, pestana_comparar, pestana_conv, pestana_prec = st.tabs(
@@ -129,7 +143,7 @@ def mostrar():
             if tipo_x0 == "Vector cero":
                 datos["x0"] = None
             elif tipo_x0 == "Personalizado":
-                datos["x0"] = leer_vector(texto_x0, "vector inicial x⁽⁰⁾")
+                datos["x0"] = leer_vector(normalizar(texto_x0), "vector inicial x⁽⁰⁾")
             else:
                 datos["x0"] = vector_diagonal(A, b)
             return datos
@@ -145,7 +159,7 @@ def mostrar():
             help="Guarda solo los elementos no nulos y cada iteración recorre únicamente "
                  "esos elementos (O(nnz) en lugar de O(n²)). Produce exactamente las "
                  "mismas iteraciones que el almacenamiento denso.")
-        if st.button("Ejecutar", type="primary", key="it_ejecutar"):
+        if st.button("Ejecutar", type="primary", key="it_ejecutar", disabled=bloqueado):
             st.session_state.pop("it_resultado", None)
             datos = leer_todo(metodo == SOR)
             if datos:
@@ -166,13 +180,13 @@ def mostrar():
             mostrar_ejecucion(st.session_state["it_resultado"])
 
     with pestana_comparar:
-        comparar(leer_todo)
+        comparar(leer_todo, bloqueado)
 
     with pestana_conv:
-        convergencia(texto_A, texto_b, texto_omega)
+        convergencia(texto_A, texto_b, texto_omega, bloqueado)
 
     with pestana_prec:
-        precondicionamiento(leer_todo)
+        precondicionamiento(leer_todo, bloqueado)
 
 
 # ---------------------------------------------------------------------------
@@ -270,11 +284,12 @@ def mostrar_ejecucion(r):
 # Comparación
 # ---------------------------------------------------------------------------
 
-def comparar(leer_todo):
+def comparar(leer_todo, bloqueado=False):
     marca_incentivo("Visualización avanzada: gráficas comparativas", "1 %")
     st.markdown("Los tres métodos se ejecutan con **el mismo sistema, vector inicial, criterio, "
                 "tolerancia y máximo de iteraciones**; SOR usa además su propio ω.")
-    if st.button("Comparar Jacobi, Gauss-Seidel y SOR", type="primary", key="it_comparar"):
+    if st.button("Comparar Jacobi, Gauss-Seidel y SOR", type="primary", key="it_comparar",
+                 disabled=bloqueado):
         st.session_state.pop("it_comparacion", None)
         datos = leer_todo(True)
         if datos:
@@ -374,9 +389,9 @@ def comparar(leer_todo):
 # Convergencia: dominancia diagonal y radio espectral
 # ---------------------------------------------------------------------------
 
-def convergencia(texto_A, texto_b, texto_omega):
+def convergencia(texto_A, texto_b, texto_omega, bloqueado=False):
     metodo = st.selectbox("Método a analizar", METODOS, key="it_conv_metodo")
-    if st.button("Analizar convergencia", type="primary", key="it_conv"):
+    if st.button("Analizar convergencia", type="primary", key="it_conv", disabled=bloqueado):
         st.session_state.pop("it_convergencia", None)
         st.session_state.pop("it_reorden", None)
         A = leer_matriz_ui(texto_A, "matriz A")
@@ -496,14 +511,15 @@ def convergencia(texto_A, texto_b, texto_omega):
 # Precondicionamiento diagonal (incentivo, OFICIAL p. 5)
 # ---------------------------------------------------------------------------
 
-def precondicionamiento(leer_todo):
+def precondicionamiento(leer_todo, bloqueado=False):
     marca_incentivo("Precondicionamiento", "1,5 %")
     st.markdown(
         "Precondicionador diagonal de clase (S9-05/10, diapositivas 16-18): "
         r"$M = D = \mathrm{diag}(a_{11},\dots,a_{nn})$ y sistema equivalente "
         r"$M^{-1}Ax = M^{-1}b$. Se comparan κ∞, los autovalores y las iteraciones del sistema "
         "original y del precondicionado con **la misma** configuración (criterio, ε, k_max, x⁽⁰⁾ y ω).")
-    if st.button("Analizar el precondicionador M = D", type="primary", key="it_prec"):
+    if st.button("Analizar el precondicionador M = D", type="primary", key="it_prec",
+                 disabled=bloqueado):
         st.session_state.pop("it_precondicionado", None)
         datos = leer_todo(True)
         if datos:
