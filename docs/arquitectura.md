@@ -24,6 +24,8 @@ proyecto-algebra/
 ├── auditoria/              Comparación aleatoria del núcleo con oráculos independientes
 ├── casos_prueba/           Casos documentados: entrada, esperado, obtenido
 ├── docs/                   Documentación
+├── herramientas/           Solo desarrollo: generar_guia_html.py (no se entrega en el ZIP)
+├── dist/                   Entrega estable: ZIP, SHA256.txt y la guía en HTML
 ├── .streamlit/config.toml  Solo localhost, sin telemetría, sin preguntas al arrancar
 ├── requirements.txt        Dependencias directas fijadas
 ├── ejecutar.bat            Instala la primera vez y ejecuta (Windows)

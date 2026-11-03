@@ -2,7 +2,7 @@
 
 **Fecha:** 03-nov-2026.
 
-**Fuentes.** Los PDF originales de `C:\Users\dfarl\Desktop\algebra lineal` (no se modificaron). Citas:
+**Fuentes.** Los PDF originales de `%USERPROFILE%\Desktop\algebra lineal` (no se modificaron). Citas:
 
 - **OFICIAL p. N:** enunciado del proyecto (5 págs.).
 - **PROG p. N:** programa del curso.

@@ -25,7 +25,7 @@
 
 | Evidencia | Resultado |
 |---|---|
-| `.venv\Scripts\python -m unittest` | **202 pruebas, 202 OK** |
+| `.venv\Scripts\python -m unittest` | **204 pruebas, 204 OK** (las 202 del 03-nov más 2 del empaquetado) |
 | Auditoría independiente (`auditoria/*.py`) | **0 fallos** en todas: 4500 sistemas; 400 inversas, determinantes y κ; 200 perturbaciones; 300 mínimos cuadrados; 600 ejecuciones iterativas; 300 análisis espectrales; **150 análisis del precondicionador (nuevo)**; los casos difíciles se comportan como se espera |
 | Imports de `algebra/` | Solo `fractions`, `math`, `cmath`, `dataclasses` y módulos propios. Ningún `.py` del proyecto importa NumPy, SciPy ni SymPy |
 
@@ -144,7 +144,7 @@
 
 | ID | Entregable | Dónde | Estado |
 |---|---|---|---|
-| E-01 | ZIP `Grupo(01-02)-IF0012-Proyecto-IIC.zip` | `empaquetar.py`, `dist/` | PENDIENTE DE CONFIRMACIÓN: el número de grupo. **Hay evidencia fuerte de que es el 01** (P-1) |
+| E-01 | ZIP `Grupo(01-02)-IF0012-Proyecto-IIC.zip` | `empaquetar.py`, `dist/` | COMPLETADO: grupo 01, confirmado por el equipo el 03-nov-2026 (`Grupo01-IF0012-Proyecto-IIC.zip`) |
 | E-02 | Mecanismo de ejecución | `ejecutar.bat` | COMPLETADO (probado desde una copia limpia del ZIP en este equipo) |
 | E-03/E-04 | Manual e instrucciones | `docs/manual_usuario.md`, `README.md` | INCOMPLETO (ver la fila «Manual de usuario») |
 | E-05 | Código fuente comentado | Todo el proyecto | COMPLETADO |
@@ -160,7 +160,7 @@
 | Las entradas inválidas generan mensajes claros y no cierran la aplicación | COMPLETADO |
 | Hay casos de prueba y se verificó el caso obligatorio | Casos: COMPLETADO. Caso obligatorio: PENDIENTE DE CONFIRMACIÓN |
 | El manual permite instalar, ejecutar y usar el programa sin ayuda del equipo | INCOMPLETO (falta la prueba con un tercero en otra computadora) |
-| El ZIP tiene el nombre solicitado y todos los elementos | PENDIENTE DE CONFIRMACIÓN (número de grupo); contenido verificado |
+| El ZIP tiene el nombre solicitado y todos los elementos | COMPLETADO (grupo 01 confirmado; contenido verificado). El caso obligatorio se añadirá cuando llegue |
 | Cada integrante está preparado para defender el trabajo | NO VERIFICABLE (material listo: guía, HTML y resumen) |
 
 ## Limitaciones reales (no son fallos, pero hay que saber defenderlas)

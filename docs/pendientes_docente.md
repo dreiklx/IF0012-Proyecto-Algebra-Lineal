@@ -10,9 +10,9 @@ Se usó un solo criterio: si el enunciado oficial (OFICIAL) basta para decidir, 
 
 | # | Pendiente | ¿Lo resuelve el enunciado? | Qué parte afecta | Riesgo si no se aclara |
 |---|---|---|---|---|
-| P-1 | Número de grupo (01 o 02) | **Casi.** El horario del escritorio coincide con el grupo 01 del programa (ver abajo) | Nombre del ZIP | Bajo: falta la confirmación de los demás integrantes |
+| P-1 | Número de grupo | **Resuelto:** grupo 01, confirmado por el equipo | Nombre del ZIP | Ninguno |
 | P-2 | Autorización del uso de IA | No | Integridad académica (PROG p. 7, §6.2) | **Muy alto** |
-| P-3 | Caso de validación obligatorio | No: la docente lo debe entregar (OFICIAL p. 3) | C-07 (3 %) | Medio |
+| P-3 | Caso de validación obligatorio | No: la docente lo debe entregar (OFICIAL p. 3); no está en ningún PDF | Rúbrica «Casos de prueba» (3 %) | Medio |
 | P-4 | Significado de «error final» | **Sí: la lámina S9-05/10 p. 17 lo define** | M4-07 | **Resuelto** |
 | P-5 | Alcance del radio espectral | En parte | M4-05 e incentivo I-05 | Medio |
 | P-6 | NumPy como dependencia interna de Streamlit y Matplotlib | **Sí**, en lo esencial | R-02, R-03 | Bajo |
@@ -21,16 +21,11 @@ Se usó un solo criterio: si el enunciado oficial (OFICIAL) basta para decidir, 
 
 ---
 
-## P-1. Número definitivo del grupo
+## P-1. Número definitivo del grupo — RESUELTO
 
-- **Por qué estaba pendiente:** OFICIAL p. 1 pide el nombre `Grupo(01-02)-IF0012-Proyecto-IIC.zip`, y el número no estaba en el repositorio.
-- **Evidencia encontrada el 03-nov-2026:**
-  - El archivo del escritorio `Horario II Semestre II Año Informática Empresarial Recinto Siquirres Grupo I.png` ubica Álgebra Lineal el **lunes de 16:00 a 17:50** y el **miércoles de 13:00 a 15:50**.
-  - El programa del curso (PROG p. 9, «Sede del Caribe, Aula de Siquirres») asigna exactamente ese horario al **grupo 01**, de la profesora Imelda Sáenz Pineda: «L 16:00 a 17:50, M 13:00 a 15:50».
-  - El grupo 02, del profesor Giovanni Buckcanan Aguilar, tiene otro horario: K 13:00 a 14:50 y J 13:00 a 15:50.
-- **Conclusión provisional:** el grupo es el **01**, que es el número que ya usa el ZIP.
-- **Qué falta:** que los demás integrantes confirmen que están matriculados en ese mismo grupo. Si alguien estuviera en el 02, hay que preguntarle a la docente.
-- **Pregunta, solo si hay integrantes de ambos grupos:** «Profesora, nuestro grupo de proyecto tiene estudiantes de los grupos 01 y 02. ¿Qué número debemos usar en el nombre del ZIP?»
+- **Confirmado por el equipo el 03-nov-2026:** el proyecto es del **grupo 01**, integrado exclusivamente por Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Arias y Samir Sandoval Ramírez.
+- **Evidencia documental coincidente:** el horario del grupo (L 16:00-17:50 y M 13:00-15:50) corresponde en el programa (PROG p. 9, Sede del Caribe, Aula de Siquirres) al grupo 01, de la profesora Imelda Sáenz Pineda.
+- **Nombre de entrega:** `Grupo01-IF0012-Proyecto-IIC.zip`, generado con `python empaquetar.py 01`.
 
 ## P-2. Autorización del uso de inteligencia artificial
 
@@ -43,11 +38,35 @@ Se usó un solo criterio: si el enunciado oficial (OFICIAL) basta para decidir, 
 
 ## P-3. Caso de validación obligatorio
 
-- **Por qué está pendiente:** OFICIAL p. 3 dice: «La docente proporcionará al menos un caso de validación obligatorio antes de la entrega». A 02-nov no está en la carpeta del curso ni en el repositorio.
-- **Qué afecta:** criterio C-07 (3 %) y la lista de verificación de la p. 5.
-- **Interpretación provisional:** ninguna. No se considera recibido.
-- **Qué hacer al recibirlo:** seguir `casos_prueba/README.md`. Es decir: crear `caso_obligatorio.md` con la entrada exacta, calcular la salida esperada de forma independiente, ejecutarlo en la aplicación, añadir una prueba automática y regenerar el ZIP.
-- **Pregunta exacta:** «Profesora, ¿cuándo y por qué medio publicará el caso de validación obligatorio del proyecto final? ¿Debemos incluir en el ZIP alguna salida en un formato particular?»
+**Qué dice exactamente el enunciado** (releído el 03-nov-2026; no hay otro documento que lo trate):
+
+| Página | Texto (literal) | Qué implica |
+|---|---|---|
+| OFICIAL p. 1, entregables | «Carpeta de casos de prueba, incluyendo los casos obligatorios indicados por la docente» | El caso o los casos deben ir **dentro de la carpeta de casos de prueba del ZIP** |
+| OFICIAL p. 3, §4 | «La docente proporcionará al menos un caso de validación obligatorio antes de la entrega» | Lo **proporciona la docente**: no lo diseña el grupo. Puede ser más de uno («al menos») |
+| OFICIAL p. 3, §4 | «la aplicación deberá superar casos de prueba comunes para verificar que los algoritmos no estén construidos para un único conjunto de datos» | El propósito es comprobar que la aplicación resuelve **datos que el grupo no eligió** |
+| OFICIAL p. 3, §4 | «Las diferencias numéricas deberán justificarse mediante la tolerancia utilizada y no mediante redondeos arbitrarios» | Si nuestro resultado difiere del de la docente en los decimales, hay que explicarlo con ε (iterativos) o mostrar que el nuestro es exacto (directos) |
+| OFICIAL p. 4, rúbrica «Casos de prueba» (3 %) | Excelente: «Casos documentados y aplicación supera el caso obligatorio». Insuficiente: «No presenta pruebas o falla el caso obligatorio» | Es el criterio que acredita: **3 % de la nota del proyecto** |
+| OFICIAL p. 5, lista final | «Se incluyeron casos de prueba y se verificó el caso obligatorio» | Debe quedar **evidencia de la verificación** en la entrega |
+
+**Lo que el enunciado NO dice** (y por eso no se puede suponer):
+
+- qué módulo o módulos cubre;
+- en qué formato llegan los datos;
+- si la docente da también la salida esperada;
+- la fecha y el medio de entrega.
+
+**Búsqueda realizada:** el texto de los 18 PDF de la carpeta del curso (`pdftotext`) y la auditoría visual de las láminas. **No contienen ningún caso obligatorio.** Al 03-nov-2026 se considera **no recibido**.
+
+**Qué hay que hacer cuando llegue** (ya está preparado):
+
+1. Copiar la entrada exacta en `casos_prueba/caso_obligatorio.md`, con la fecha y el medio por el que llegó.
+2. Si la docente da la salida esperada, anotarla tal cual. Si no la da, calcularla de forma independiente (a mano, con Cramer o con la adjunta, como en los demás casos).
+3. Ejecutarla en la aplicación y registrar el resultado obtenido en la misma tabla: entrada, salida esperada, resultado obtenido y si coincide.
+4. Crear la prueba automática `tests/test_caso_obligatorio.py`, que reproduzca exactamente los datos y compare con la salida esperada (con la tolerancia indicada si es iterativo).
+5. Ejecutar todas las pruebas y la auditoría, regenerar el ZIP y subir los cambios a GitHub.
+
+**Pregunta exacta para la docente:** «Profesora, el enunciado indica que usted proporcionará al menos un caso de validación obligatorio antes de la entrega. ¿Podría indicarnos cuándo y por qué medio lo publicará, a qué módulo o módulos corresponde, y si incluye la salida esperada y la tolerancia que debemos usar? ¿Debemos entregar en el ZIP alguna evidencia en un formato particular?»
 
 ## P-4. Significado de «error final» — RESUELTO con el material de la docente
 

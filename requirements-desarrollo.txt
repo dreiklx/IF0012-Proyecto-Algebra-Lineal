@@ -1,0 +1,3 @@
+# Dependencias SOLO de desarrollo (no las necesita la aplicación ni la entrega).
+-r requirements.txt
+markdown==3.7   # herramientas/generar_guia_html.py

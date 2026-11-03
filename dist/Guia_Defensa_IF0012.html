@@ -1,0 +1,2024 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía de defensa IF0012</title>
+<style>
+:root{--fondo:#f6f7fb;--papel:#ffffff;--texto:#1d2433;--suave:#5b6478;--borde:#dfe3ec;
+--primario:#1f4e9c;--primario2:#e8eefb;--acento:#b4232c;--codigo:#f1f3f8;--zebra:#f8f9fc}
+@media (prefers-color-scheme:dark){:root:not([data-tema=claro]){--fondo:#11151d;--papel:#171c26;--texto:#e6e9f0;
+--suave:#a3acbf;--borde:#2c3443;--primario:#8fb2ff;--primario2:#1e2a44;--acento:#ff8a8f;--codigo:#202736;--zebra:#1b212c}}
+:root[data-tema=oscuro]{--fondo:#11151d;--papel:#171c26;--texto:#e6e9f0;--suave:#a3acbf;--borde:#2c3443;
+--primario:#8fb2ff;--primario2:#1e2a44;--acento:#ff8a8f;--codigo:#202736;--zebra:#1b212c}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{margin:0;background:var(--fondo);color:var(--texto);font:16px/1.62 "Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif}
+.marco{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100vh}
+nav{position:sticky;top:0;height:100vh;overflow:auto;background:var(--papel);border-right:1px solid var(--borde);padding:18px 16px 40px}
+nav .marca{font-weight:700;color:var(--primario);font-size:15px;margin-bottom:4px}
+nav .sub{font-size:12px;color:var(--suave);margin-bottom:12px}
+nav input{width:100%;padding:7px 10px;border:1px solid var(--borde);border-radius:8px;background:var(--fondo);color:var(--texto);font-size:13px;margin-bottom:12px}
+nav h4{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--suave);margin:16px 0 6px}
+nav ul{list-style:none;margin:0;padding:0}
+nav li{margin:1px 0}
+nav li ul{padding-left:12px;border-left:2px solid var(--borde);margin:2px 0 6px 4px}
+nav a{color:var(--texto);text-decoration:none;font-size:13.5px;display:block;padding:3px 6px;border-radius:6px}
+nav li.n3 a{font-size:12.5px;color:var(--suave)}
+nav a:hover,nav a.activo{background:var(--primario2);color:var(--primario)}
+main{padding:28px 40px 80px;max-width:1080px;width:100%}
+.portada{background:linear-gradient(135deg,#1f4e9c,#3b6fd1);color:#fff;border-radius:16px;padding:28px 30px;margin-bottom:26px}
+.portada h1{margin:0 0 6px;font-size:30px;line-height:1.2}
+.portada p{margin:4px 0;opacity:.95}
+.insignias{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.insignias span{background:rgba(255,255,255,.17);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:3px 12px;font-size:13px}
+.parte{background:var(--papel);border:1px solid var(--borde);border-radius:14px;padding:6px 34px 30px;margin-bottom:28px}
+.parte>h1.titulo-parte{font-size:24px;color:var(--primario);border-bottom:3px solid var(--primario);padding-bottom:8px;margin-top:26px}
+h2{font-size:22px;color:var(--primario);margin:40px 0 12px;padding-top:12px;border-top:1px solid var(--borde)}
+h3{font-size:18px;margin:28px 0 8px}
+h4{font-size:16px;margin:20px 0 6px}
+p{margin:8px 0}
+a{color:var(--primario)}
+strong{color:inherit}
+blockquote{margin:14px 0;padding:10px 16px;background:var(--primario2);border-left:4px solid var(--primario);border-radius:0 10px 10px 0}
+code{font-family:Consolas,"Cascadia Mono","SFMono-Regular",Menlo,monospace;font-size:.88em;background:var(--codigo);padding:1px 5px;border-radius:5px}
+pre{background:var(--codigo);border:1px solid var(--borde);border-radius:10px;padding:12px 14px;overflow:auto;line-height:1.4}
+pre code{background:none;padding:0;font-size:13px}
+ul,ol{padding-left:26px}
+li{margin:3px 0}
+.tabla{overflow-x:auto;margin:12px 0;border:1px solid var(--borde);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{background:var(--primario2);color:var(--primario);text-align:left;font-weight:600}
+th,td{padding:7px 10px;border-bottom:1px solid var(--borde);vertical-align:top}
+tr:nth-child(even) td{background:var(--zebra)}
+.ref{font-style:italic}
+.arriba{position:fixed;right:20px;bottom:20px;background:var(--primario);color:#fff;border:none;border-radius:999px;width:42px;height:42px;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.tema{position:fixed;right:70px;bottom:20px;background:var(--papel);color:var(--texto);border:1px solid var(--borde);border-radius:999px;height:42px;padding:0 14px;cursor:pointer;font-size:13px}
+.pie{color:var(--suave);font-size:13px;text-align:center;margin-top:30px}
+@media (max-width:900px){.marco{grid-template-columns:1fr}nav{position:static;height:auto;max-height:50vh;border-right:none;border-bottom:1px solid var(--borde)}
+main{padding:16px}.parte{padding:4px 16px 20px}.portada h1{font-size:24px}}
+@media print{nav,.arriba,.tema{display:none}.marco{display:block}main{max-width:none;padding:0}
+.parte{border:none;padding:0}h2{break-before:page}.portada{background:#1f4e9c;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+tr,pre,blockquote{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="marco">
+<nav aria-label="Índice">
+  <div class="marca">Guía de defensa · IF0012</div>
+  <div class="sub">Álgebra Lineal · II Ciclo 2026</div>
+  <input id="filtro" type="search" placeholder="Buscar en el índice…" aria-label="Buscar en el índice">
+  <h4><a href="#parte-1">Parte 1 · Guía completa</a></h4>
+  <ul><li><a href="#g-a-vision-general-del-proyecto">A. Visión general del proyecto</a><ul>
+<li class="n3"><a href="#g-que-hace-la-aplicacion">Qué hace la aplicación</a></li>
+<li class="n3"><a href="#g-principio-de-diseno">Principio de diseño</a></li>
+<li class="n3"><a href="#g-dos-tipos-de-aritmetica-decision-clave">Dos tipos de aritmética (decisión clave)</a></li>
+</ul></li>
+<li><a href="#g-b-arquitectura-del-codigo">B. Arquitectura del código</a><ul>
+<li class="n3"><a href="#g-carpetas">Carpetas</a></li>
+<li class="n3"><a href="#g-reglas-de-dependencia">Reglas de dependencia</a></li>
+<li class="n3"><a href="#g-representacion-de-los-datos">Representación de los datos</a></li>
+<li class="n3"><a href="#g-flujo-de-la-informacion-igual-en-los-cuatro-modulos">Flujo de la información (igual en los cuatro módulos)</a></li>
+<li class="n3"><a href="#g-indice-de-funciones-importantes-archivo-linea">Índice de funciones importantes (archivo:línea)</a></li>
+</ul></li>
+<li><a href="#g-c-los-cuatro-modulos-funcion-por-funcion">C. Los cuatro módulos, función por función</a><ul>
+<li class="n3"><a href="#g-modulo-i-sistemas-lineales-y-metodos-directos">Módulo I — Sistemas lineales y métodos directos</a></li>
+<li class="n3"><a href="#g-modulo-ii-condicionamiento-y-sensibilidad">Módulo II — Condicionamiento y sensibilidad</a></li>
+<li class="n3"><a href="#g-modulo-iii-minimos-cuadrados-y-ajuste-lineal">Módulo III — Mínimos cuadrados y ajuste lineal</a></li>
+<li class="n3"><a href="#g-modulo-iv-metodos-iterativos-y-convergencia">Módulo IV — Métodos iterativos y convergencia</a></li>
+</ul></li>
+<li><a href="#g-d-explicacion-matematica-con-ejemplos-pequenos">D. Explicación matemática, con ejemplos pequeños</a><ul>
+<li class="n3"><a href="#g-d-1-gauss-por-que-funciona-y-como-clasifica">D.1 Gauss: por qué funciona y cómo clasifica</a></li>
+<li class="n3"><a href="#g-d-2-condicionamiento-de-donde-sale-la-cota">D.2 Condicionamiento: de dónde sale la cota</a></li>
+<li class="n3"><a href="#g-d-3-minimos-cuadrados-por-que-las-ecuaciones-normales">D.3 Mínimos cuadrados: por qué las ecuaciones normales</a></li>
+<li class="n3"><a href="#g-d-4-metodos-iterativos-de-donde-salen-las-formulas">D.4 Métodos iterativos: de dónde salen las fórmulas</a></li>
+<li class="n3"><a href="#g-d-5-radio-espectral-el-procedimiento-implementado">D.5 Radio espectral: el procedimiento implementado</a></li>
+<li class="n3"><a href="#g-d-5b-lo-que-ensena-la-docente-y-como-lo-seguimos-en-el-radio-espectral">D.5b Lo que enseña la docente y cómo lo seguimos en el radio espectral</a></li>
+<li class="n3"><a href="#g-d-6-csr-incentivo-de-matrices-dispersas">D.6 CSR (incentivo de matrices dispersas)</a></li>
+<li class="n3"><a href="#g-d-7-precondicionamiento-diagonal-que-cambia-y-que-no">D.7 Precondicionamiento diagonal: qué cambia y qué no</a></li>
+</ul></li>
+<li><a href="#g-e-preguntas-de-defensa-con-respuestas">E. Preguntas de defensa, con respuestas</a><ul>
+</ul></li>
+<li><a href="#g-f-como-ejecutar-y-demostrar-el-proyecto">F. Cómo ejecutar y demostrar el proyecto</a><ul>
+<li class="n3"><a href="#g-instalacion-windows">Instalación (Windows)</a></li>
+<li class="n3"><a href="#g-formato-de-entrada">Formato de entrada</a></li>
+<li class="n3"><a href="#g-guion-de-demostracion-con-los-resultados-que-deben-aparecer">Guion de demostración (con los resultados que deben aparecer)</a></li>
+<li class="n3"><a href="#g-caso-no-preparado-como-actuar">Caso no preparado: cómo actuar</a></li>
+<li class="n3"><a href="#g-propuesta-de-reparto-para-profundizar">Propuesta de reparto para profundizar</a></li>
+</ul></li>
+<li><a href="#g-g-limitaciones-y-decisiones-tecnicas">G. Limitaciones y decisiones técnicas</a><ul>
+</ul></li></ul>
+  <h4><a href="#parte-2">Parte 2 · Resumen por módulo</a></h4>
+  <ul><li><a href="#r-lo-que-hay-que-saber-de-memoria-en-cualquier-modulo">Lo que hay que saber de memoria en cualquier módulo</a><ul>
+</ul></li>
+<li><a href="#r-modulo-i-sistemas-lineales-algebra-directos-py">Módulo I — Sistemas lineales (algebra/directos.py)</a><ul>
+</ul></li>
+<li><a href="#r-modulo-ii-condicionamiento-algebra-condicion-py">Módulo II — Condicionamiento (algebra/condicion.py)</a><ul>
+</ul></li>
+<li><a href="#r-modulo-iii-minimos-cuadrados-algebra-minimos-py">Módulo III — Mínimos cuadrados (algebra/minimos.py)</a><ul>
+</ul></li>
+<li><a href="#r-modulo-iv-metodos-iterativos-y-convergencia-algebra-iterativos-py-algebra-espectral-py-algebra-dispersas-py">Módulo IV — Métodos iterativos y convergencia (algebra/iterativos.py, algebra/espectral.py, algebra/dispersas.py)</a><ul>
+</ul></li>
+<li><a href="#r-limitaciones-que-hay-que-defender-sin-ocultarlas">Limitaciones que hay que defender (sin ocultarlas)</a><ul>
+</ul></li>
+<li><a href="#r-lista-de-comprobacion-personal-antes-de-la-defensa">Lista de comprobación personal antes de la defensa</a><ul>
+</ul></li></ul>
+</nav>
+<main>
+<header class="portada">
+  <h1>Guía de defensa del equipo — Proyecto final IF0012</h1>
+  <p>Álgebra Lineal para Informática Empresarial · Universidad de Costa Rica, Sede del Caribe (Siquirres) · II Ciclo 2026</p>
+  <p>Elmer López Hernández · Derek Farley Noguera · Daniel Córdoba Arias · Samir Sandoval Ramírez</p>
+  <div class="insignias"><span>Versión 03-nov-2026</span><span>204 pruebas automáticas OK</span>
+  <span>Auditoría independiente: 0 fallos</span><span>Entrega: 11-nov-2026</span><span>Defensa: semana del 16-nov-2026</span></div>
+</header>
+<section class="parte" id="parte-1"><h1 class="titulo-parte">Parte 1 · Guía completa</h1>
+<p><strong>Para:</strong> Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Arias y Samir Sandoval Ramírez.<br />
+<strong>Defensa:</strong> semana del 16-nov-2026, individual, de 6 a 8 minutos por persona.<br />
+<strong>Versión:</strong> 03-nov-2026 (revisada tras compararla con los PDF de la docente; ver <code>docs/comparacion_procedimientos.md</code>). Explica el código <strong>real</strong> del repositorio. Todos los números de los ejemplos se obtuvieron ejecutando la aplicación y se contrastaron con un cálculo independiente.</p>
+<blockquote>
+<p><strong>Cómo usar esta guía.</strong> La docente elige <strong>al menos dos módulos</strong> y puede pedir un caso no preparado (OFICIAL p. 3). Por eso <strong>cada integrante debe dominar los cuatro</strong>. Primero lean las partes A y B, luego el módulo de la parte C junto con su teoría en la parte D, y al final practiquen las preguntas de la parte E con la aplicación abierta (parte F).<br />
+Para repasar rápido está <a href="#parte-2">resumen_logica_por_modulo.md</a>.</p>
+</blockquote>
+<hr />
+<h2 id="g-a-vision-general-del-proyecto">A. Visión general del proyecto</h2>
+<h3 id="g-que-hace-la-aplicacion">Qué hace la aplicación</h3>
+<p>Es <strong>una sola aplicación web local</strong>, hecha con Streamlit, que integra los cuatro módulos que pide el enunciado:</p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>Problema</th>
+<th>Métodos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>I · Sistemas lineales</td>
+<td>Resolver Ax = b y decir si tiene solución única, infinitas o ninguna</td>
+<td>Gauss y Gauss-Jordan con pasos visibles; inversa y determinante</td>
+</tr>
+<tr>
+<td>II · Condicionamiento</td>
+<td>Medir cuánto cambia la solución si cambian los datos</td>
+<td>κ∞(A) = ‖A‖∞‖A⁻¹‖∞ con nuestra inversa; perturbación de b</td>
+</tr>
+<tr>
+<td>III · Mínimos cuadrados</td>
+<td>«Resolver» un sistema con más ecuaciones que incógnitas, que en general no tiene solución</td>
+<td>Ecuaciones normales AᵀA x̂ = Aᵀb con nuestro Gauss; ajuste de una recta</td>
+</tr>
+<tr>
+<td>IV · Métodos iterativos</td>
+<td>Aproximar la solución de Ax = b paso a paso y saber si el proceso converge</td>
+<td>Jacobi, Gauss-Seidel, SOR; dominancia diagonal; matriz de iteración y radio espectral</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="g-principio-de-diseno">Principio de diseño</h3>
+<p><strong>Toda la matemática está en la carpeta <code>algebra/</code></strong>, escrita desde cero en Python, solo con la biblioteca estándar.</p>
+<ul>
+<li>Lo único que se importa en el núcleo es <code>fractions</code>, <code>math</code>, <code>cmath</code> y <code>dataclasses</code>.</li>
+<li>La interfaz (<code>interfaz/</code>) solo lee lo que escribe el usuario y muestra resultados.</li>
+<li>Las gráficas (<code>visualizacion/</code>) solo dibujan resultados ya calculados.</li>
+</ul>
+<p>Ningún archivo del proyecto importa NumPy, SciPy ni SymPy.</p>
+<h3 id="g-dos-tipos-de-aritmetica-decision-clave">Dos tipos de aritmética (decisión clave)</h3>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Dónde</th>
+<th>Aritmética</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Módulos I, II y III y la matriz T del Módulo IV</td>
+<td><strong>Exacta</strong>, con <code>fractions.Fraction</code></td>
+<td>1/3 se guarda como 1/3. Un pivote es cero solo si es exactamente 0, así que la clasificación (única, infinitas o inconsistente) y la detección de singularidad no dependen de redondeos</td>
+</tr>
+<tr>
+<td>Iteraciones de Jacobi, GS y SOR; raíces del polinomio característico</td>
+<td><strong>Punto flotante</strong> (<code>float</code>)</td>
+<td>Las iteraciones son aproximaciones que se cortan por tolerancia; con fracciones los denominadores crecerían sin control. Las raíces de un polinomio de grado ≥ 3 en general no son racionales</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="g-b-arquitectura-del-codigo">B. Arquitectura del código</h2>
+<h3 id="g-carpetas">Carpetas</h3>
+<pre><code>proyecto-algebra/
+├── app.py                     ← punto de entrada: navegación entre los 4 módulos
+├── algebra/                   ← NÚCLEO MATEMÁTICO (Python puro)
+│   ├── matriz.py              ← validación, producto, transpuesta, normas, residuo
+│   ├── validacion.py          ← texto del usuario → Fraction; ε, k_max y ω
+│   ├── directos.py            ← Módulo I: Gauss, Gauss-Jordan, inversa, determinante
+│   ├── condicion.py           ← Módulo II: κ∞, perturbación, errores relativos
+│   ├── minimos.py             ← Módulo III: ecuaciones normales, residuo, recta
+│   ├── iterativos.py          ← Módulo IV: Jacobi, GS, SOR, parada, dominancia, comparación
+│   ├── espectral.py           ← Módulo IV: D, L, U, T, polinomio, autovalores, ρ(T)
+│   ├── dispersas.py           ← Incentivo: formato CSR
+│   └── precondicionamiento.py ← Incentivo: precondicionador diagonal M = D
+├── interfaz/                  ← Streamlit: una pantalla por módulo
+│   ├── componentes.py         ← LaTeX, tablas y lectura de datos con mensajes de error
+│   ├── ejemplos.py            ← ejemplos precargados del curso
+│   └── modulo_directos.py, modulo_condicionamiento.py, modulo_minimos.py, modulo_iterativos.py
+├── visualizacion/             ← Matplotlib: solo dibuja
+│   ├── graficos.py            ← recta de ajuste, convergencia, comparación, autovalores
+│   └── geometria_3d.py        ← rectas y planos del Módulo I
+├── tests/                     ← 204 pruebas automáticas (unittest)
+├── auditoria/                 ← comparación aleatoria contra oráculos independientes
+├── casos_prueba/              ← casos documentados por módulo (entrada, esperado, obtenido)
+└── docs/                      ← manual, guías, decisiones, matriz de cumplimiento
+</code></pre>
+<h3 id="g-reglas-de-dependencia">Reglas de dependencia</h3>
+<ul>
+<li><code>interfaz/</code> puede usar <code>algebra/</code> y <code>visualizacion/</code>.</li>
+<li><code>visualizacion/</code> solo recibe resultados.</li>
+<li><code>algebra/</code> <strong>no</strong> importa nada de la interfaz.</li>
+</ul>
+<p>Por eso el núcleo se puede probar sin abrir la aplicación, y eso es exactamente lo que hacen <code>tests/</code> y <code>auditoria/</code>.</p>
+<h3 id="g-representacion-de-los-datos">Representación de los datos</h3>
+<ul>
+<li><strong>Matriz:</strong> lista de filas. Por ejemplo, <code>[[1, 2], [3, 4]]</code>.</li>
+<li><strong>Vector:</strong> lista plana, por ejemplo <code>[1, 2, 3]</code>.</li>
+<li><strong>Resultados:</strong> se devuelven como <code>dataclass</code>, con todos los datos que la interfaz necesita mostrar:<ul>
+<li><code>ResultadoSistema</code> e <code>ResultadoInversa</code> (<code>directos.py</code>);</li>
+<li><code>ResultadoCondicion</code> y <code>ResultadoPerturbacion</code> (<code>condicion.py</code>);</li>
+<li><code>ResultadoMinimos</code> y <code>ResultadoAjuste</code> (<code>minimos.py</code>);</li>
+<li><code>ResultadoIterativo</code> y <code>ResultadoComparacion</code> (<code>iterativos.py</code>);</li>
+<li><code>ResultadoEspectral</code> (<code>espectral.py</code>).</li>
+</ul>
+</li>
+<li><strong>Errores:</strong> son excepciones propias.<ul>
+<li><code>ErrorMatriz</code> y su subclase <code>ErrorDimension</code>, en <code>matriz.py</code>;</li>
+<li><code>ErrorEntrada</code>, en <code>validacion.py</code>;</li>
+<li><code>ErrorSistema</code>, en <code>directos.py</code>, cuando un módulo exige solución única y no la hay;</li>
+<li><code>ErrorAjuste</code>, en <code>minimos.py</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="g-flujo-de-la-informacion-igual-en-los-cuatro-modulos">Flujo de la información (igual en los cuatro módulos)</h3>
+<pre><code>Usuario escribe texto
+   │   p. ej. &quot;1 1 1\n2 1 -1\n-1 1 2&quot;
+   ▼
+interfaz/modulo_X.py  ──►  componentes.leer_matriz_ui / leer_vector_ui
+   │                         └─► validacion.leer_matriz → leer_numero (Fraction exacta)
+   │                             si hay error: st.error(&quot;… elemento (2, 2) …&quot;) y se detiene
+   ▼
+algebra/&lt;módulo&gt;.py   ──►  función principal (p. ej. resolver_gauss)
+   │                         valida dimensiones (matriz.validar_*), calcula y
+   │                         devuelve un dataclass Resultado…
+   ▼
+st.session_state       ──►  el resultado se guarda para que no desaparezca al interactuar
+   ▼
+interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
+   └─► visualizacion/*.py (figura de Matplotlib) ──► st.pyplot
+</code></pre>
+<p><code>app.py</code> contiene el diccionario <code>PAGINAS</code>, que asocia cada opción de la barra lateral (<code>st.sidebar.radio(..., key="navegacion")</code>) con el módulo de interfaz cuyo <code>mostrar()</code> se ejecuta.</p>
+<h3 id="g-indice-de-funciones-importantes-archivo-linea">Índice de funciones importantes (archivo:línea)</h3>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Función</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>algebra/validacion.py:26</code> <code>leer_numero</code></td>
+<td>Texto → <code>Fraction</code>. Acepta <code>3</code>, <code>-2.5</code>, <code>2,5</code>, <code>1/3</code> y <code>1e-3</code></td>
+</tr>
+<tr>
+<td><code>algebra/validacion.py:55</code> <code>leer_matriz</code></td>
+<td>Una fila por línea; exige que todas las filas tengan la misma longitud</td>
+</tr>
+<tr>
+<td><code>algebra/validacion.py:89</code> <code>leer_tolerancia</code> / <code>:97</code> <code>leer_entero_positivo</code> / <code>:108</code> <code>leer_omega</code></td>
+<td>ε &gt; 0; k_max y N enteros; 0 &lt; ω &lt; 2</td>
+</tr>
+<tr>
+<td><code>algebra/matriz.py:69</code> <code>validar_matriz</code> / <code>:122</code> <code>validar_sistema</code></td>
+<td>Comprueba la forma rectangular, los números válidos y que b tenga m componentes</td>
+</tr>
+<tr>
+<td><code>algebra/matriz.py:240</code> <code>norma_infinito_vector</code> / <code>:255</code> <code>norma_infinito_matriz</code></td>
+<td>máx|vᵢ| y máxima suma de fila</td>
+</tr>
+<tr>
+<td><code>algebra/matriz.py:335</code> <code>residuo</code></td>
+<td>r = b − Ax</td>
+</tr>
+<tr>
+<td><code>algebra/directos.py:152</code> <code>_escalonar</code></td>
+<td><strong>Corazón del Módulo I</strong>: pivotes, intercambios, eliminación, determinante</td>
+</tr>
+<tr>
+<td><code>algebra/directos.py:244</code> <code>_resolver</code></td>
+<td>Clasificación por rangos y solución (única o paramétrica)</td>
+</tr>
+<tr>
+<td><code>algebra/directos.py:331</code> <code>inversa_gauss_jordan</code></td>
+<td>[A | I] → [I | A⁻¹] y verificación A·A⁻¹ = I</td>
+</tr>
+<tr>
+<td><code>algebra/directos.py:363</code> <code>determinante</code></td>
+<td>(−1)^intercambios · Π pivotes</td>
+</tr>
+<tr>
+<td><code>algebra/condicion.py:104</code> <code>numero_condicion_infinito</code></td>
+<td>κ∞ e interpretación</td>
+</tr>
+<tr>
+<td><code>algebra/condicion.py:133</code> <code>construir_delta_b</code> / <code>:157</code> <code>analizar_perturbacion</code></td>
+<td>Δb absoluta o porcentual; x frente a x̃</td>
+</tr>
+<tr>
+<td><code>algebra/minimos.py:111</code> <code>minimos_cuadrados</code> / <code>:182</code> <code>ajuste_lineal</code></td>
+<td>Ecuaciones normales, residuo, recta; det([A|b]) si m = n + 1</td>
+</tr>
+<tr>
+<td><code>algebra/minimos.py:168</code> <code>cramer</code></td>
+<td>Regla de Cramer (procedimiento de clase), usada como verificación</td>
+</tr>
+<tr>
+<td><code>algebra/iterativos.py:154</code> <code>paso_jacobi</code> / <code>:167</code> <code>paso_gauss_seidel</code> / <code>:180</code> <code>paso_sor</code></td>
+<td>Una iteración de cada método</td>
+</tr>
+<tr>
+<td><code>algebra/iterativos.py:194</code> <code>paso_richardson</code></td>
+<td>Richardson x ← x + (b − Ax): solo para el análisis del precondicionador</td>
+</tr>
+<tr>
+<td><code>algebra/iterativos.py:277</code> <code>validar_configuracion</code></td>
+<td>Valida A, b, x⁽⁰⁾, ε, k_max, N y ω</td>
+</tr>
+<tr>
+<td><code>algebra/iterativos.py:331</code> <code>ejecutar</code> / <code>:346</code> <code>_ejecutar</code></td>
+<td>Bucle común, métricas d_k y r_k, criterios A, B y C, motivos de parada</td>
+</tr>
+<tr>
+<td><code>algebra/iterativos.py:435</code> <code>dominancia_diagonal</code></td>
+<td>|aᵢᵢ| &gt; Σ_{j≠i}|aᵢⱼ| fila por fila</td>
+</tr>
+<tr>
+<td><code>algebra/iterativos.py:460</code> <code>reordenamiento_dominante</code></td>
+<td>Orden de las ecuaciones que logra la dominancia (como en la Tarea II)</td>
+</tr>
+<tr>
+<td><code>algebra/iterativos.py:512</code> <code>comparar_metodos</code></td>
+<td>Los 3 métodos con las mismas condiciones; error final e = ‖x⁽ᵏ⁾ − x*‖∞</td>
+</tr>
+<tr>
+<td><code>algebra/espectral.py:114</code> <code>matriz_iteracion</code></td>
+<td>T y c exactas para Jacobi, GS y SOR</td>
+</tr>
+<tr>
+<td><code>algebra/espectral.py:153</code> <code>polinomio_caracteristico</code></td>
+<td>Faddeev-LeVerrier (exacto)</td>
+</tr>
+<tr>
+<td><code>algebra/espectral.py:328</code> <code>desarrollo_sarrus</code></td>
+<td>Procedimiento de clase en 3×3: tr(T), Σ menores, det(T) por Sarrus</td>
+</tr>
+<tr>
+<td><code>algebra/espectral.py:205</code> <code>durand_kerner</code> / <code>:257</code> <code>raices</code></td>
+<td>Raíces: λ = 0 exactas, grado ≤ 2 por fórmula, grado ≥ 3 por Durand-Kerner</td>
+</tr>
+<tr>
+<td><code>algebra/espectral.py:360</code> <code>analizar_matriz</code></td>
+<td>Autovalores, ρ, verificaciones y p(±1) = 0 de cualquier matriz</td>
+</tr>
+<tr>
+<td><code>algebra/espectral.py:313</code> <code>concluir</code> / <code>:399</code> <code>radio_espectral</code></td>
+<td>ρ(T), verificaciones y conclusión</td>
+</tr>
+<tr>
+<td><code>algebra/dispersas.py:61</code> <code>a_csr</code></td>
+<td>Densa → CSR (<code>valores</code>, <code>columnas</code>, <code>inicio</code>)</td>
+</tr>
+<tr>
+<td><code>algebra/precondicionamiento.py:82</code> <code>precondicionar_diagonal</code> / <code>:125</code> <code>analizar_precondicionador</code></td>
+<td>M = D, B = D⁻¹A, b̃; comparación original frente a precondicionado</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="g-c-los-cuatro-modulos-funcion-por-funcion">C. Los cuatro módulos, función por función</h2>
+<h3 id="g-modulo-i-sistemas-lineales-y-metodos-directos">Módulo I — Sistemas lineales y métodos directos</h3>
+<p><strong>Archivos:</strong> <code>algebra/directos.py</code> (núcleo) e <code>interfaz/modulo_directos.py</code> (pantalla).</p>
+<ol>
+<li><strong>Problema.</strong> Resolver Ax = b con A de m×n (no tiene que ser cuadrada) y clasificar el sistema.</li>
+<li><strong>Entrada.</strong> A y b como texto. En la pantalla también se eligen el método («Gauss» o «Gauss-Jordan») y la estrategia de pivote («primer no nulo», como en clase, o «pivoteo parcial»).</li>
+<li><strong>Operaciones.</strong> Solo las operaciones elementales de fila: Fᵢ ↔ Fⱼ, Fᵢ → Fᵢ/p y Fᵢ → Fᵢ − m·Fᵣ.</li>
+<li><strong>Fórmulas.</strong> El multiplicador es m = aᵢc / a_rc. La sustitución hacia atrás es x_c = (b'_r − Σ_{j&gt;c} u_rj x_j) / u_rc. El determinante es det A = (−1)^(intercambios) · Π pivotes.</li>
+<li><strong>Algoritmo.</strong> <code>resolver_gauss</code> y <code>resolver_gauss_jordan</code> llaman a <code>_resolver(A, b, metodo, estrategia)</code>.</li>
+<li><strong>Paso a paso:</strong><ol>
+<li><code>validar_sistema(A, b)</code> devuelve (m, n) o lanza <code>ErrorDimension</code>.</li>
+<li>Todo se convierte a <code>Fraction</code> con <code>a_fraccion</code>. Un <code>float</code> 0.1 pasa a 1/10 mediante <code>repr</code>.</li>
+<li>Se arma la matriz aumentada <code>M = [A | b]</code> y se registra el primer <code>Paso</code>.</li>
+<li><code>_escalonar(M, n, estrategia, reducida, pasos, advertencias, referencia)</code> recorre las columnas c = 0…n−1 con un puntero <code>fila</code>:<br />
+        - <code>_buscar_pivote</code> busca, desde <code>fila</code> hacia abajo, la primera fila con elemento ≠ 0 (o la de mayor |elemento| con pivoteo parcial).<br />
+        - Si no hay ninguna, <strong>la columna no tiene pivote</strong>: su variable será libre y se pasa a la siguiente columna (<code>continue</code>).<br />
+        - Si el pivote está en otra fila, se <strong>intercambian filas</strong>: el paso se registra con su motivo («el elemento (1, 1) es 0») y <code>signo = −signo</code>.<br />
+        - <code>producto *= pivote</code> acumula el producto de pivotes para el determinante.<br />
+        - Si |pivote| &lt; 10⁻¹⁰ · máx|aᵢⱼ| (<code>UMBRAL_PIVOTE_PEQUENO</code>), se agrega un aviso de «pivote numéricamente problemático».<br />
+        - En <strong>Gauss-Jordan</strong> (<code>reducida=True</code>), la fila se divide entre el pivote y se anulan los elementos de <strong>todas</strong> las demás filas. En <strong>Gauss</strong>, solo los de abajo.<br />
+        - Cada operación guarda un <code>Paso(descripcion, copia de la matriz)</code>.</li>
+<li><code>rango_A = len(pivotes)</code>. <code>_rango_aumentada</code> busca una fila [0 … 0 | c] con c ≠ 0; si la hay, rango([A|b]) = rango(A) + 1.</li>
+<li>Clasificación:<br />
+        - rango(A) &lt; rango([A|b]) → <strong>INCONSISTENTE</strong>;<br />
+        - no hay variables libres → <strong>UNICA</strong>;<br />
+        - hay libres → <strong>INFINITAS</strong>.</li>
+<li><code>_sustitucion_atras</code> despeja de abajo hacia arriba.<br />
+        - Con las libres iguales a 0 se obtiene la solución única o la <strong>solución particular</strong> xₚ.<br />
+        - Cada <strong>dirección</strong> vⱼ se obtiene resolviendo el sistema homogéneo con la libre j igual a 1 y las demás iguales a 0.<br />
+        - La solución general es x = xₚ + t₁v₁ + ….</li>
+</ol>
+</li>
+<li><strong>Resultados (<code>ResultadoSistema</code>):</strong> <code>clasificacion</code>, <code>mensaje</code>, <code>rango_A</code>, <code>rango_aumentada</code>, <code>solucion</code> o <code>solucion_particular</code> con <code>direcciones</code>, <code>variables_libres</code>, <code>pasos</code>, <code>sustitucion</code>, <code>advertencias</code>, <code>matriz_final</code> y <code>determinante</code> (solo si A es cuadrada).<ul>
+<li>La pantalla además verifica b − Ax con <code>matriz.residuo</code> (debe dar 0) y dibuja rectas o planos si n = 2 o 3 (<code>geometria_3d.py</code>).</li>
+</ul>
+</li>
+<li><strong>Validaciones:</strong><ul>
+<li>texto vacío o no numérico, con la posición exacta;</li>
+<li>filas de distinta longitud;</li>
+<li>b con un número de componentes distinto de m;</li>
+<li>pivote nulo, que se resuelve con un intercambio;</li>
+<li>pivote pequeño, que genera un aviso.</li>
+</ul>
+</li>
+<li><strong>Errores posibles:</strong> <code>ErrorEntrada</code> (texto) y <code>ErrorMatriz</code>/<code>ErrorDimension</code> (forma). La interfaz los muestra en rojo y no se cierra.</li>
+<li><strong>Funciones relacionadas:</strong><br />
+        - <code>inversa_gauss_jordan(A)</code> aplica <code>_escalonar</code> sobre [A | I]. Si faltan pivotes, A es singular y devuelve <code>invertible=False</code> con det = 0. Si no, toma la parte derecha y comprueba <code>multiplicar_matrices(A, inversa) == I</code> (<code>verificacion_identidad</code>).<br />
+        - <code>determinante(A)</code> calcula (−1)^intercambios · Π pivotes.<br />
+        - <code>solucion_unica(A, b)</code> es la puerta de entrada que usan los Módulos II, III y IV: devuelve x o lanza <code>ErrorSistema</code>.</li>
+</ol>
+<h3 id="g-modulo-ii-condicionamiento-y-sensibilidad">Módulo II — Condicionamiento y sensibilidad</h3>
+<p><strong>Archivos:</strong> <code>algebra/condicion.py</code> e <code>interfaz/modulo_condicionamiento.py</code>.</p>
+<ol>
+<li><strong>Problema.</strong> ¿Cuánto puede cambiar la solución x si los datos b cambian un poco?</li>
+<li><strong>Entrada.</strong> A cuadrada, b y una perturbación: absoluta (un número o un vector Δb) o porcentual (un p o un vector de pᵢ).</li>
+<li><strong>Operaciones.</strong> Norma ∞ de matriz y de vector, inversa por Gauss-Jordan y dos resoluciones por Gauss.</li>
+<li><strong>Fórmulas:</strong><ul>
+<li>κ∞(A) = ‖A‖∞·‖A⁻¹‖∞;</li>
+<li>errores relativos ‖Δb‖∞/‖b‖∞ y ‖Δx‖∞/‖x‖∞;</li>
+<li>cota ‖Δx‖/‖x‖ ≤ κ·‖Δb‖/‖b‖;</li>
+<li>en modo porcentual, Δbᵢ = (pᵢ/100)·bᵢ.</li>
+</ul>
+</li>
+<li><strong>Algoritmo:</strong><ul>
+<li><code>numero_condicion_infinito(A)</code>:<ol>
+<li>calcula <code>norma_infinito_matriz(A)</code>;</li>
+<li>calcula <code>inversa_gauss_jordan(A)</code>. Si A no es invertible, devuelve <code>MATRIZ_SINGULAR</code> y κ no está definido;</li>
+<li>calcula <code>norma_infinito_matriz(A⁻¹)</code> y κ = producto;</li>
+<li>asigna la sensibilidad con <code>clasificar_kappa</code>: κ &lt; 10 baja, 10 ≤ κ &lt; 100 moderada, κ ≥ 100 alta.</li>
+</ol>
+</li>
+<li><code>construir_delta_b(b, modo, valor)</code> construye Δb.</li>
+<li><code>analizar_perturbacion(A, b, Δb)</code>:<ol>
+<li>x = <code>solucion_unica(A, b)</code> y x̃ = <code>solucion_unica(A, b + Δb)</code>, ambas con Gauss exacto;</li>
+<li>Δx = x̃ − x y las cuatro normas;</li>
+<li>los errores relativos, o <code>None</code> y un aviso si el denominador es 0;</li>
+<li>la cota κ·rel_b, <code>cumple_cota</code> y la amplificación rel_x/rel_b;</li>
+<li>el texto de <code>_interpretar</code>.</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>Resultados:</strong> <code>ResultadoCondicion</code> (<code>norma_A</code>, <code>inversa</code>, <code>norma_inversa</code>, <code>kappa</code>, <code>clasificacion</code>, <code>interpretacion</code>) y <code>ResultadoPerturbacion</code> (x, x̃, Δb, Δx, normas, errores relativos, cota, <code>cumple_cota</code>, amplificación e interpretación).</li>
+<li><strong>Validaciones:</strong><ul>
+<li>A cuadrada;</li>
+<li>b y Δb con n componentes;</li>
+<li>singularidad, que se informa <strong>aparte</strong> y nunca como «κ grande»;</li>
+<li>denominadores cero.</li>
+</ul>
+</li>
+<li><strong>Errores posibles:</strong> <code>ErrorDimension</code>, <code>ErrorEntrada</code> (texto de la perturbación) y <code>ErrorSistema</code> (se atrapan en la interfaz).</li>
+</ol>
+<h3 id="g-modulo-iii-minimos-cuadrados-y-ajuste-lineal">Módulo III — Mínimos cuadrados y ajuste lineal</h3>
+<p><strong>Archivos:</strong> <code>algebra/minimos.py</code> e <code>interfaz/modulo_minimos.py</code>.</p>
+<ol>
+<li><strong>Problema.</strong> Si A es m×n con m &gt; n, Ax = b en general no tiene solución. Se busca x̂ que haga ‖b − Ax‖₂ lo más pequeño posible.</li>
+<li><strong>Entrada.</strong> A y b (pestaña «Sistema sobredeterminado»), o listas de puntos xᵢ, yᵢ (pestaña «Ajuste lineal»).</li>
+<li><strong>Operaciones.</strong> Transpuesta, productos AᵀA y Aᵀb y Gauss sobre las ecuaciones normales.</li>
+<li><strong>Fórmulas:</strong> AᵀA x̂ = Aᵀb; r = b − Ax̂; ‖r‖₂ = √(Σ rᵢ²). Como control, Aᵀr = 0.</li>
+<li><strong>Algoritmo</strong> (<code>minimos_cuadrados(A, b)</code>):<ol>
+<li><code>validar_sistema</code> y conversión a <code>Fraction</code>.</li>
+<li><code>clasificar_forma(m, n)</code> → SOBREDETERMINADO, CUADRADO o SUBDETERMINADO.</li>
+<li>Comprueba si b pertenece a Col(A): <code>resolver_gauss(A, b)</code> no debe dar INCONSISTENTE.</li>
+<li><code>transpuesta</code>, <code>multiplicar_matrices(Aᵀ, A)</code> y <code>multiplicar_matriz_vector(Aᵀ, b)</code>.</li>
+<li><code>resolver_gauss(AᵀA, Aᵀb)</code>, el método directo del Módulo I. Si no da solución única, AᵀA es singular (columnas dependientes): se informa y no se presenta x̂.</li>
+<li>Calcula A x̂, r = b − A x̂, ‖r‖₂² <strong>exacta</strong>, ‖r‖₂ con <code>math.sqrt</code> (lo único inexacto), ‖r‖∞ y Aᵀr.</li>
+<li><strong>Procedimiento de clase como verificación</strong> (S8-30/09 pp. 6-7):<br />
+        - si m = n + 1, <code>det_aumentada</code> = det([A | b]): si es ≠ 0, b ∉ Col(A);<br />
+        - si n ≤ 3, <code>cramer(AtA, Atb)</code> resuelve con la regla de Cramer, x_j = det(M_j)/det(AᵀA).<br />
+        - La pantalla muestra los tres pasos de la docente en «Verificación con el procedimiento de clase», y Cramer <strong>coincide exactamente</strong> con Gauss.<br />
+        - Ejemplo del manuscrito: det([A|b]) = −11, |AᵀA| = 363, |Aₓ| = 715, |A_y| = −319, x̂ = (65/33, −29/33).<br />
+  - <code>ajuste_lineal(xs, ys)</code>:<ol>
+<li>exige listas de la misma longitud, al menos 2 puntos y que no todos los x sean iguales;</li>
+<li>arma la matriz de diseño <code>[[xᵢ, 1]]</code> y llama a <code>minimos_cuadrados</code>;</li>
+<li>de x̂ = (m, c) sale la ecuación «y = m x + c».</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><strong>Resultados:</strong> <code>ResultadoMinimos</code> (<code>tipo</code>, <code>AtA</code>, <code>Atb</code>, <code>solucion</code>, <code>estimados</code>, <code>residuo</code>, <code>norma_residuo_2</code>, <code>norma_residuo_2_cuadrado</code>, <code>norma_residuo_inf</code>, <code>ortogonalidad</code> = Aᵀr y <code>mensaje</code>) y <code>ResultadoAjuste</code> (pendiente, intercepto, ecuación). <code>grafica_ajuste</code> dibuja los puntos, la recta y los residuos.</li>
+<li><strong>Validaciones y errores:</strong><ul>
+<li>dimensiones;</li>
+<li>AᵀA singular;</li>
+<li>menos de 2 puntos;</li>
+<li>x todos iguales (recta vertical, <code>ErrorAjuste</code>);</li>
+<li>número distinto de x y de y.</li>
+</ul>
+</li>
+</ol>
+<h3 id="g-modulo-iv-metodos-iterativos-y-convergencia">Módulo IV — Métodos iterativos y convergencia</h3>
+<p><strong>Archivos:</strong> <code>algebra/iterativos.py</code>, <code>algebra/espectral.py</code>, <code>algebra/dispersas.py</code>, <code>algebra/precondicionamiento.py</code> e <code>interfaz/modulo_iterativos.py</code>. La pantalla tiene cuatro pestañas: «Ejecutar un método», «Comparar métodos», «Convergencia» y «Precondicionamiento diagonal».</p>
+<ol>
+<li><strong>Problema.</strong> Aproximar la solución de Ax = b (A n×n) con iteraciones x⁽ᵏ⁾, y saber si convergen.</li>
+<li><strong>Entrada:</strong><ul>
+<li>A y b;</li>
+<li>el criterio de parada: A (cambio), B (residuo) o C (N fijas);</li>
+<li>ε y k_max (criterios A y B) o N (criterio C);</li>
+<li>ω (solo SOR);</li>
+<li>x⁽⁰⁾: cero, bᵢ/aᵢᵢ (<code>vector_diagonal</code>) o personalizado;</li>
+<li>la opción de almacenamiento CSR.</li>
+</ul>
+</li>
+<li><strong>Fórmulas por componentes</strong> (i = 1…n):<ul>
+<li><strong>Jacobi</strong> (<code>paso_jacobi</code>): xᵢ⁽ᵏ⁾ = (bᵢ − Σ_{j≠i} aᵢⱼ xⱼ⁽ᵏ⁻¹⁾) / aᵢᵢ. Usa solo el vector anterior y crea un vector nuevo.</li>
+<li><strong>Gauss-Seidel</strong> (<code>paso_gauss_seidel</code>): igual, pero actualiza <strong>sobre la misma lista</strong> <code>x</code>. Así, para j &lt; i ya usa xⱼ⁽ᵏ⁾.</li>
+<li><strong>SOR</strong> (<code>paso_sor</code>): xᵢ⁽ᵏ⁾ = (1 − ω)xᵢ⁽ᵏ⁻¹⁾ + ω·[valor de Gauss-Seidel]. Con ω = 1 es Gauss-Seidel (prueba P15).</li>
+</ul>
+</li>
+<li><strong>Métricas en cada iteración</strong> (<code>FilaIteracion</code>):<ul>
+<li>d_k = ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞ (no existe para k = 0);</li>
+<li>r_k = ‖b − Ax⁽ᵏ⁾‖∞, con la A y la b <strong>originales</strong>;</li>
+<li>en la comparación, además, e_k = ‖x⁽ᵏ⁾ − x*‖∞, con x* la solución exacta de Gauss.</li>
+</ul>
+</li>
+<li><strong>Algoritmo común</strong> (<code>ejecutar</code> → <code>_ejecutar</code>):<ol>
+<li><code>validar_configuracion</code> comprueba el método, el criterio, A cuadrada, las longitudes, ε &gt; 0 (y que no se anule en <code>float</code>), k_max o N entero en [1, 100 000] y 0 &lt; ω &lt; 2. Convierte todo a <code>float</code>.</li>
+<li>Si algún aᵢᵢ = 0 → <code>DIAGONAL_CERO</code>: no se itera.</li>
+<li>Elige el paso del método (<code>PASOS</code> o <code>PASOS_CSR</code>) y calcula r₀. Con el criterio B, si r₀ &lt; ε se detiene en k = 0.</li>
+<li>Para k = 1…límite:<br />
+        - calcula <code>x_nuevo = paso(...)</code>;<br />
+        - si hay inf o nan → <code>ERROR_NO_FINITO</code>;<br />
+        - calcula d y r y guarda la fila;<br />
+        - criterio A: si d &lt; ε → <code>TOLERANCIA_CAMBIO</code>. Criterio B: si r &lt; ε → <code>TOLERANCIA_RESIDUO</code>. La desigualdad es <strong>estricta</strong>.</li>
+<li>Al acabar el bucle: con el criterio C → <code>N_COMPLETADAS</code> («no demuestra convergencia»); si no → <code>MAXIMO_ITERACIONES</code> («sin satisfacer el criterio», <strong>sin</strong> afirmar divergencia).<br />
+  - <code>ejecutar</code> <strong>nunca lanza excepciones</strong>: una entrada inválida da <code>ENTRADA_INVALIDA</code> y un fallo inesperado da <code>ERROR_INTERNO</code>.</li>
+</ol>
+</li>
+<li><strong>Comparación</strong> (<code>comparar_metodos</code>):<ul>
+<li>Ejecuta las configuraciones de <code>configuraciones_homogeneas</code>: mismo criterio, ε, k_max, N y x⁽⁰⁾; SOR usa además su ω.</li>
+<li>Comprueba la homogeneidad campo por campo (<code>CAMPOS_HOMOGENEOS</code>).</li>
+<li>Calcula x* con <code>solucion_unica</code> y el error e_k de cada iteración. El <strong>error final</strong> e = ‖x⁽ᵏ⁾ − x*‖∞ es la misma columna «Error final (‖x⁽ᵏ⁾ − x‖∞)» de la tabla de la lámina S9-05/10 p. 17. Por eso e_k es la primera métrica de la gráfica comparativa.</li>
+<li>La pantalla agrega ρ(T) de cada método.</li>
+</ul>
+</li>
+<li><strong>Convergencia:</strong><ul>
+<li><code>dominancia_diagonal(A)</code> comprueba fila por fila |aᵢᵢ| &gt; Σ_{j≠i}|aᵢⱼ|.</li>
+<li><code>reordenamiento_dominante(A, b)</code> busca el orden de las ecuaciones que hace la matriz dominante, como hace la docente en la Tarea II #2-3.<ul>
+<li>Idea: si la fila i es dominante con su elemento de la columna j, entonces 2|aᵢⱼ| &gt; Σₖ|aᵢₖ|, y solo una columna puede cumplirlo. Se asigna cada fila a esa columna y se comprueba que sea una permutación.</li>
+<li>La pantalla lo <strong>sugiere</strong> (no cambia los datos), aunque algún aᵢᵢ sea 0.</li>
+</ul>
+</li>
+<li><code>radio_espectral(A, b, método, ω)</code>:<ol>
+<li><code>matriz_iteracion</code> construye D, L, U, T y c <strong>exactas</strong>.</li>
+<li>Si n &gt; 8 → <code>NO_CALCULADO</code>.</li>
+<li><code>polinomio_caracteristico(T)</code> aplica Faddeev-LeVerrier y da [1, c₁, …, cₙ] de det(λI − T). Si T es 3×3, la pantalla muestra además el <strong>desarrollo de clase por Sarrus</strong> (<code>desarrollo_sarrus</code>: tr(T), Σ menores 2×2, det(T)) y comprueba que da el mismo polinomio.</li>
+<li><code>raices</code> obtiene los autovalores, si son fiables y, si es posible, una decisión exacta.</li>
+<li>ρ = máx|λ|.</li>
+<li>Verificaciones: |p(λ)| relativo &lt; 10⁻⁸ y Σλ = traza(T).</li>
+<li>Comprobación exacta de p(1) = 0 o p(−1) = 0.</li>
+<li><code>concluir</code> → CONVERGE, NO_CONVERGE o INDETERMINADO.</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>Resultados:</strong><ul>
+<li><code>ResultadoIterativo</code>: <code>codigo</code>, <code>mensaje</code>, <code>criterio_cumplido</code>, <code>historial</code>, <code>advertencias</code>, <code>k_final</code>, <code>x_final</code>, <code>d_final</code> y <code>r_final</code>.</li>
+<li>La tabla (<code>filas_tabla</code>) rotula la columna que actúa como criterio. Hay gráfica (<code>grafica_convergencia</code>) y CSV (<code>csv_historial</code>).</li>
+<li><code>ResultadoComparacion</code> y <code>ResultadoEspectral</code> (T, polinomio, autovalores, ρ, <code>fiable</code>, <code>decision_exacta</code>, verificaciones y avisos).</li>
+</ul>
+</li>
+<li>
+<p><strong>Códigos de terminación:</strong></p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TOLERANCIA_CAMBIO</code></td>
+<td>d_k &lt; ε</td>
+</tr>
+<tr>
+<td><code>TOLERANCIA_RESIDUO</code></td>
+<td>r_k &lt; ε</td>
+</tr>
+<tr>
+<td><code>N_COMPLETADAS</code></td>
+<td>Se hicieron las N iteraciones pedidas</td>
+</tr>
+<tr>
+<td><code>MAXIMO_ITERACIONES</code></td>
+<td>Se llegó a k_max sin cumplir el criterio</td>
+</tr>
+<tr>
+<td><code>ERROR_NO_FINITO</code></td>
+<td>Desbordamiento numérico</td>
+</tr>
+<tr>
+<td><code>DIAGONAL_CERO</code></td>
+<td>Algún aᵢᵢ = 0</td>
+</tr>
+<tr>
+<td><code>ENTRADA_INVALIDA</code></td>
+<td>Dato inválido</td>
+</tr>
+<tr>
+<td><code>ERROR_INTERNO</code></td>
+<td>Fallo inesperado</td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li>
+<p><strong>CSR</strong> (<code>dispersas.py</code>):<br />
+        - <code>a_csr</code> guarda solo los no nulos en <code>valores</code>, <code>columnas</code> e <code>inicio</code>.<br />
+        - <code>paso_*_csr</code> recorre solo esos elementos, de modo que cada iteración cuesta O(nnz) en lugar de O(n²).<br />
+        - Las iteraciones son <strong>idénticas</strong> a las densas: se suman los mismos productos en el mismo orden.</p>
+</li>
+<li><strong>Precondicionamiento diagonal</strong> (<code>algebra/precondicionamiento.py</code>, pestaña «Precondicionamiento diagonal»):<br />
+        - <code>precondicionar_diagonal(A, b)</code> construye M = D, M⁻¹, B = D⁻¹A y b̃ = D⁻¹b, de forma exacta. Exige que no haya ningún aᵢᵢ = 0.<br />
+        - <code>analizar_precondicionador(A, b, config, ω)</code> calcula:<br />
+            - κ∞(A) y κ∞(B), con <code>numero_condicion_infinito</code>;<br />
+            - los autovalores de A y de B, con <code>analizar_matriz</code>;<br />
+            - la ejecución de Jacobi, GS, SOR y <strong>Richardson</strong> (<code>paso_richardson</code>) sobre los dos sistemas, con la misma configuración;<br />
+            - ρ de cada matriz de iteración;<br />
+            - la comparación <strong>exacta</strong> de T y c (<code>T_identicas</code>) y si las iteraciones coinciden (<code>mismas_iteraciones</code>).<br />
+        - Devuelve <code>ResultadoPrecondicionamiento</code> con la lista <code>comparaciones</code> (de tipo <code>ComparacionMetodo</code>) y las <code>conclusiones</code> en texto. La gráfica es <code>grafica_precondicionador</code>.</li>
+</ol>
+<hr />
+<h2 id="g-d-explicacion-matematica-con-ejemplos-pequenos">D. Explicación matemática, con ejemplos pequeños</h2>
+<h3 id="g-d-1-gauss-por-que-funciona-y-como-clasifica">D.1 Gauss: por qué funciona y cómo clasifica</h3>
+<p><strong>Por qué funciona.</strong> Las operaciones elementales de fila se pueden deshacer y no cambian el conjunto de soluciones. Si [A|b] se transforma en [U|b'] escalonada, los dos sistemas tienen exactamente las mismas soluciones, y el escalonado se resuelve de abajo hacia arriba.</p>
+<p><strong>Ejemplo real de la aplicación</strong> («2 incógnitas: 2x + y = 5, x − y = 1»):</p>
+<pre><code>[ 2   1 | 5 ]   F2 → F2 − (1/2)·F1   [ 2    1   |  5   ]
+[ 1  −1 | 1 ]  ───────────────────►  [ 0  −3/2  | −3/2 ]
+x2 = (−3/2 − 0) / (−3/2) = 1;     x1 = (5 − 1·1) / 2 = 2
+det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
+</code></pre>
+<p>Son exactamente los pasos que imprime <code>_escalonar</code> y los textos que genera <code>_sustitucion_atras</code>.</p>
+<p><strong>Clasificación (Rouché-Frobenius).</strong> El rango es el número de pivotes.</p>
+<ul>
+<li>Si queda una fila [0 0 … 0 | c] con c ≠ 0, esa fila dice «0 = c»: es imposible, y el sistema es inconsistente.</li>
+<li>Si no queda ninguna, el sistema es consistente:<ul>
+<li>cada columna con pivote fija una variable;</li>
+<li>las columnas sin pivote son variables libres (n − rango de ellas).</li>
+<li>Con 0 libres la solución es única; con ≥ 1, hay infinitas.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Forma paramétrica</strong> (ejemplo precargado «Infinitas soluciones»: x + y + z = 1, 2x + 2y + 2z = 2, x − y = 0).</p>
+<ul>
+<li>El rango es 2 y z es libre.</li>
+<li>La aplicación da x = (1/2, 1/2, 0) + t·(−1/2, −1/2, 1).</li>
+<li>Comprobación: A·(−1/2, −1/2, 1) = 0, porque v resuelve el sistema homogéneo.</li>
+</ul>
+<p><strong>Por qué se intercambian filas.</strong> Si el pivote es 0, dividir entre él es imposible. Se busca abajo un elemento ≠ 0. Intercambiar filas solo reordena ecuaciones, pero <strong>cambia el signo del determinante</strong>; por eso <code>signo = −signo</code>.</p>
+<p><strong>Pivoteo parcial.</strong> Elegir el mayor |aᵢc| hace que |m| ≤ 1 y reduce la propagación del redondeo <strong>en punto flotante</strong>. Con fracciones exactas no cambia la solución; se ofrece porque es la práctica numérica estándar.</p>
+<p><strong>Inversa.</strong></p>
+<ul>
+<li>Aplicar Gauss-Jordan a [A | I] equivale a multiplicar por la izquierda por un producto E de matrices elementales tal que EA = I. Entonces E = A⁻¹, y la parte derecha (EI) es A⁻¹.</li>
+<li>Si alguna columna no tiene pivote, rango(A) &lt; n y A no es invertible.</li>
+<li>Ejemplo: [[2, 1], [1, 1]]⁻¹ = [[1, −1], [−1, 2]].</li>
+</ul>
+<h3 id="g-d-2-condicionamiento-de-donde-sale-la-cota">D.2 Condicionamiento: de dónde sale la cota</h3>
+<p><strong>Demostración</strong> (en 3 líneas, que conviene saber):</p>
+<ol>
+<li>Ax = b y A(x + Δx) = b + Δb, de modo que AΔx = Δb y Δx = A⁻¹Δb. Por eso ‖Δx‖ ≤ ‖A⁻¹‖‖Δb‖.</li>
+<li>b = Ax, de modo que ‖b‖ ≤ ‖A‖‖x‖, es decir, 1/‖x‖ ≤ ‖A‖/‖b‖.</li>
+<li>Multiplicando: ‖Δx‖/‖x‖ ≤ ‖A‖‖A⁻¹‖ · ‖Δb‖/‖b‖ = κ(A)·‖Δb‖/‖b‖.</li>
+</ol>
+<p><strong>Qué significa:</strong> κ es el <strong>factor máximo</strong> de amplificación del error relativo. Es un peor caso; la amplificación observada puede ser menor (depende de la dirección de Δb). También se cumple κ ≥ 1, porque 1 = ‖I‖ = ‖AA⁻¹‖ ≤ ‖A‖‖A⁻¹‖.</p>
+<p><strong>Ejemplo pequeño</strong> (precargado «κ∞ = 16/5»): A = [[1, 2], [3, 1]].</p>
+<ul>
+<li>‖A‖∞ = máx(1 + 2, 3 + 1) = 4.</li>
+<li>det = 1 − 6 = −5, de modo que A⁻¹ = (1/−5)[[1, −2], [−3, 1]] = [[−1/5, 2/5], [3/5, −1/5]].</li>
+<li>‖A⁻¹‖∞ = máx(3/5, 4/5) = 4/5.</li>
+<li>κ∞ = 4 · 4/5 = 16/5 = 3.2, sensibilidad <strong>baja</strong>.</li>
+<li>Con b = (3, 4) y Δb = (0.1, 0.1): x = (1, 1) y x̃ = (51/50, 26/25).<ul>
+<li>‖Δb‖/‖b‖ = 0.1/4 = 0.025 y ‖Δx‖/‖x‖ = 0.04.</li>
+<li>Cota: 3.2 · 0.025 = 0.08 ≥ 0.04 ✓.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Matriz mal condicionada</strong> («S7-21/09 p. 15»): A = [[1, 1], [1, 1.0001]].</p>
+<ul>
+<li>κ∞ = 400040001/10000 ≈ 40004.</li>
+<li>Un cambio de 0.0001 en b₂ (error relativo ≈ 5·10⁻⁵) lleva x de (1, 1) a (0, 2): error relativo del <strong>100 %</strong>.</li>
+</ul>
+<p><strong>Singular no es lo mismo que mal condicionada:</strong></p>
+<ul>
+<li>Si A es singular, no existe A⁻¹, κ no está definido (se toma como infinito) y no hay solución única.</li>
+<li>Si A es invertible con κ grande, la solución existe y es única, pero es muy sensible a los datos.</li>
+</ul>
+<p>La aplicación los distingue (<code>MATRIZ_SINGULAR</code>).</p>
+<p><strong>Por qué funciona la perturbación porcentual.</strong> Si Δb = (p/100)·b, entonces ‖Δb‖∞/‖b‖∞ = |p|/100 exactamente.</p>
+<h3 id="g-d-3-minimos-cuadrados-por-que-las-ecuaciones-normales">D.3 Mínimos cuadrados: por qué las ecuaciones normales</h3>
+<p><strong>Planteamiento.</strong> Se busca minimizar f(x) = ‖b − Ax‖₂² = (b − Ax)ᵀ(b − Ax).</p>
+<p><strong>Por cálculo.</strong> ∇f = −2Aᵀ(b − Ax). Igualarlo a 0 da <strong>AᵀA x = Aᵀb</strong>.</p>
+<p><strong>Por geometría.</strong></p>
+<ul>
+<li>Ax recorre el espacio columna Col(A).</li>
+<li>El punto de Col(A) más cercano a b es la proyección ortogonal de b.</li>
+<li>En ese punto el residuo r = b − Ax̂ es perpendicular a cada columna de A, es decir, <strong>Aᵀr = 0</strong>.</li>
+<li>Esa es la comprobación que muestra la aplicación.</li>
+</ul>
+<p><strong>Unicidad.</strong> Si las columnas de A son independientes, AᵀA es invertible: si AᵀAx = 0, entonces xᵀAᵀAx = ‖Ax‖² = 0, de modo que Ax = 0 y x = 0. Si las columnas son dependientes, hay infinitos x̂ y la aplicación no presenta ninguno (ejemplo «Columnas dependientes», donde la columna 2 es el doble de la 1).</p>
+<p><strong>Ejemplo real</strong> («y = 0.75x + 1.2»): puntos (1, 2), (2, 2.5), (3, 3.7), (4, 4.1).</p>
+<ul>
+<li>A = [[1, 1], [2, 1], [3, 1], [4, 1]].</li>
+<li>AᵀA = [[Σx², Σx], [Σx, k]] = [[30, 10], [10, 4]].</li>
+<li>Aᵀb = [Σxy, Σy] = [34.5, 12.3].</li>
+<li>Resolviendo: 30m + 10c = 34.5 y 10m + 4c = 12.3. Restando a la segunda, multiplicada por 3, la primera: 2c = 2.4, así que <strong>c = 6/5</strong> y <strong>m = 3/4</strong>. La aplicación muestra «y = 3/4 x + 6/5».</li>
+<li>‖r‖₂ ≈ 0.339116.</li>
+</ul>
+<p><strong>Sistema</strong> («S8-30/09 pp. 6-7»): A = [[1, 3], [3, −2], [−2, 5]] y b = (−1, 8, −8).</p>
+<ul>
+<li>x̂ = (65/33, −29/33) y r = (−1/3, 1/3, 1/3).</li>
+<li>‖r‖₂ = √(1/3) ≈ 0.57735.</li>
+<li>Aᵀr = (0, 0).</li>
+</ul>
+<h3 id="g-d-4-metodos-iterativos-de-donde-salen-las-formulas">D.4 Métodos iterativos: de dónde salen las fórmulas</h3>
+<p><strong>Descomposición.</strong> Se escribe A = D + L + U, con D diagonal y L y U estrictamente inferior y superior, <strong>con los signos de A</strong> (<code>descomponer</code>).</p>
+<p><strong>Jacobi.</strong></p>
+<ul>
+<li>Ax = b ⇔ Dx = b − (L + U)x ⇔ x = −D⁻¹(L + U)x + D⁻¹b.</li>
+<li>La iteración es x⁽ᵏ⁾ = T_J x⁽ᵏ⁻¹⁾ + c, con <strong>T_J = −D⁻¹(L + U)</strong> y c = D⁻¹b.</li>
+<li>Por componentes, es la fórmula de <code>paso_jacobi</code>.</li>
+</ul>
+<p><strong>Gauss-Seidel.</strong></p>
+<ul>
+<li>(D + L)x = b − Ux, de modo que <strong>T_GS = −(D + L)⁻¹U</strong> y c = (D + L)⁻¹b.</li>
+<li>Por componentes: al calcular xᵢ ya se conocen x₁⁽ᵏ⁾…xᵢ₋₁⁽ᵏ⁾, y se usan.</li>
+</ul>
+<p><strong>SOR.</strong></p>
+<ul>
+<li>Se parte de la fórmula por componentes, xᵢ_nuevo = (1 − ω)xᵢ_viejo + (ω/aᵢᵢ)(bᵢ − Σ_{j&lt;i} aᵢⱼxⱼ_nuevo − Σ_{j&gt;i} aᵢⱼxⱼ_viejo).</li>
+<li>Se multiplica por aᵢᵢ y se pasan los términos nuevos a la izquierda: (D + ωL)x_nuevo = [(1 − ω)D − ωU]x_viejo + ωb.</li>
+<li>Por tanto, <strong>T_ω = (D + ωL)⁻¹[(1 − ω)D − ωU]</strong> y c = ω(D + ωL)⁻¹b.</li>
+<li>Con ω = 1 se obtiene T_GS. Es la fórmula estándar (Burden &amp; Faires); no está en los PDF del curso.</li>
+</ul>
+<p><strong>Ejemplo real: primeras iteraciones del sistema S</strong> (10x − y + 2z = 6, −x + 11y − z = 25, 2x − y + 10z = −11), con x⁽⁰⁾ = 0:</p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Método</th>
+<th>x⁽¹⁾</th>
+<th>d₁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jacobi</td>
+<td>(6/10, 25/11, −11/10) = (0.6, 2.272727, −1.1)</td>
+<td>2.272727</td>
+</tr>
+<tr>
+<td>Gauss-Seidel</td>
+<td>x = 0.6; y = (25 + 0.6)/11 = 2.327273; z = (−11 − 2·0.6 + 2.327273)/10 = −0.987273</td>
+<td>2.327273</td>
+</tr>
+<tr>
+<td>SOR (ω = 1.2)</td>
+<td>x = 1.2·0.6 = 0.72; y = 1.2·(25 + 0.72)/11 = 2.805818; z = 1.2·(−11 − 1.44 + 2.805818)/10 = −1.156102</td>
+<td>2.805818</td>
+</tr>
+</tbody>
+</table></div>
+<p>Son los mismos valores que muestra la tabla de la aplicación. Con ε = 10⁻³ (criterio A):</p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Iteraciones</th>
+<th>ρ(T)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jacobi</td>
+<td>7</td>
+<td>0.2679</td>
+</tr>
+<tr>
+<td>Gauss-Seidel</td>
+<td>4</td>
+<td>0.0426</td>
+</tr>
+<tr>
+<td>SOR (ω = 1.2)</td>
+<td>6</td>
+<td>0.2165</td>
+</tr>
+</tbody>
+</table></div>
+<p>La solución exacta es x* = (217/208, 59/26, −225/208) ≈ (1.043269, 2.269231, −1.081731).</p>
+<p><strong>Teorema de convergencia.</strong></p>
+<ul>
+<li>Sea e⁽ᵏ⁾ = x⁽ᵏ⁾ − x*. Como x* = Tx* + c, se cumple e⁽ᵏ⁾ = Te⁽ᵏ⁻¹⁾ = Tᵏe⁽⁰⁾.</li>
+<li>El error tiende a 0 <strong>para todo</strong> x⁽⁰⁾ si y solo si Tᵏ → 0, y eso ocurre si y solo si <strong>ρ(T) = máx|λᵢ| &lt; 1</strong>.</li>
+<li>Cuanto menor es ρ, más rápido converge: el error se multiplica aproximadamente por ρ en cada iteración.<ul>
+<li>Gauss-Seidel en S: ρ ≈ 0.043, 4 iteraciones.</li>
+<li>Jacobi en S: ρ ≈ 0.268, 7 iteraciones.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Dominancia diagonal</strong> (<code>dominancia_diagonal</code>).</p>
+<ul>
+<li>Si |aᵢᵢ| &gt; Σ_{j≠i}|aᵢⱼ| en todas las filas, entonces ‖T_J‖∞ = máxᵢ Σ_{j≠i}|aᵢⱼ|/|aᵢᵢ| &lt; 1.</li>
+<li>Como ρ(T) ≤ ‖T‖ para cualquier norma inducida, ρ(T_J) &lt; 1 y Jacobi converge. Gauss-Seidel también, por un teorema del curso.</li>
+<li>Es una condición <strong>suficiente, no necesaria</strong>: Gauss-Seidel en S9-07/10 converge (ρ ≈ 0.935) sin dominancia.</li>
+<li>En S, las filas dan 10 &gt; 3, 11 &gt; 2 y 10 &gt; 3: S es dominante.</li>
+</ul>
+<p><strong>Las tres métricas no son lo mismo.</strong></p>
+<ul>
+<li>d_k pequeño no garantiza un error pequeño. Si ‖T‖ &lt; 1, ‖x* − x⁽ᵏ⁾‖ ≤ ‖T‖/(1 − ‖T‖)·d_k, y con ‖T‖ cercano a 1 ese factor es enorme.</li>
+<li>r_k pequeño tampoco: ‖e‖/‖x*‖ ≤ κ(A)·‖r‖/‖b‖.</li>
+<li>Por eso la aplicación las muestra por separado y calcula e_k solo cuando hay una solución exacta de referencia.</li>
+</ul>
+<h3 id="g-d-5-radio-espectral-el-procedimiento-implementado">D.5 Radio espectral: el procedimiento implementado</h3>
+<p><strong>Paso 1: T exacta</strong> (<code>matriz_iteracion</code>). Las inversas de D + L y D + ωL se calculan con <strong>nuestro</strong> Gauss-Jordan, con fracciones.</p>
+<p><strong>Paso 2: polinomio característico</strong> con Faddeev-LeVerrier (<code>polinomio_caracteristico</code>). Se calcula p(λ) = det(λI − T) = λⁿ + c₁λⁿ⁻¹ + … + cₙ con:</p>
+<ul>
+<li>M₀ = 0;</li>
+<li>para k = 1…n: Mₖ = T·Mₖ₋₁ + cₖ₋₁·I y cₖ = −tr(T·Mₖ)/k.</li>
+</ul>
+<p>Usa solo productos, sumas y trazas, y con fracciones es <strong>exacto</strong>.</p>
+<p><em>Ejemplo 2×2 real:</em> A = [[4, 1], [2, 5]] con Jacobi.</p>
+<ul>
+<li>T_J = [[0, −1/4], [−2/5, 0]].</li>
+<li>k = 1: M₁ = I y c₁ = −tr(T) = 0.</li>
+<li>k = 2: M₂ = T·I + 0·I = T. Como T² = [[1/10, 0], [0, 1/10]], c₂ = −tr(T²)/2 = −1/10.</li>
+<li>Por tanto, p(λ) = λ² − 1/10 y ρ = √(1/10) ≈ 0.3162. Es lo que muestra la aplicación: «det(T − λI) = λ² − 1/10».</li>
+</ul>
+<p><em>Relación con la clase:</em> en 3×3 da lo mismo que Sarrus, det(T − λI) = −λ³ + tr(T)λ² − (Σ menores 2×2)λ + det(T). Lo verifica <code>test_faddeev_coincide_con_sarrus_3x3</code>. La pantalla escribe el polinomio con el signo de clase (<code>texto_polinomio_curso</code>), por ejemplo «−λ³ + 1/6λ + 1/40» para la Tarea II #4.</p>
+<p><strong>Paso 3: raíces</strong> (<code>raices</code>):</p>
+<ul>
+<li>Las <strong>λ = 0</strong> se extraen de forma exacta. Si cₙ = 0, λ divide a p.</li>
+<li><strong>Grado 1 o 2:</strong> fórmula directa, con discriminante exacto (las raíces complejas aparecen si es negativo). Además, la decisión «todas |λ| &lt; 1» se toma <strong>exactamente</strong> con Schur-Cohn: |c₂| &lt; 1 y |c₁| &lt; 1 + c₂.<ul>
+<li>En el ejemplo 2×2: |−1/10| &lt; 1 y |0| &lt; 9/10, así que converge con decisión exacta.</li>
+</ul>
+</li>
+<li><strong>Grado ≥ 3:</strong> Durand-Kerner (<code>durand_kerner</code>), que aproxima <strong>todas</strong> las raíces complejas a la vez:<ul>
+<li>zᵢ ← zᵢ − p(zᵢ) / Π_{j≠i}(zᵢ − zⱼ);</li>
+<li>empieza en puntos distintos dentro del círculo |z| ≤ 1 + máx|cᵢ|, donde están todas las raíces;</li>
+<li>se detiene cuando la corrección es &lt; 10⁻¹² (relativa).</li>
+<li>Es como Newton aplicado a cada raíz, «separándola» de las demás.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Paso 4: verificaciones.</strong></p>
+<ul>
+<li>|p(λ)| debe ser ≈ 0 (relativo &lt; 10⁻⁸).</li>
+<li>Σλ debe ser igual a la traza de T: el coeficiente c₁ = −Σλ.</li>
+<li>Se avisa si hay raíces casi repetidas o si Durand-Kerner no convergió.</li>
+</ul>
+<p><strong>Paso 5: conclusión</strong> (<code>concluir</code>):</p>
+<ul>
+<li>Si p(1) = 0 o p(−1) = 0 <strong>exactamente</strong>, ρ ≥ 1 y la respuesta es «no converge», con decisión exacta.</li>
+<li>Si hay una decisión exacta de Schur-Cohn, se usa esa.</li>
+<li>Si el cálculo no es fiable o |ρ − 1| &lt; 10⁻⁹ (10⁻⁶ con raíces casi repetidas) → INDETERMINADO.</li>
+<li>En otro caso, se compara ρ con 1.</li>
+</ul>
+<p><strong>Ejemplo real con raíces complejas</strong> (S9-07/10, Jacobi): A = [[3, 3, 3], [3, 3, 2], [−3, −2, 3]].</p>
+<ul>
+<li>T_J = [[0, −1, −1], [−1, 0, −2/3], [1, 2/3, 0]].</li>
+<li>det(T − λI) = −λ³ − (4/9)λ + 4/3.</li>
+<li>Raíces: 0.9668 y −0.4834 ± 1.0703i. El par complejo tiene módulo 1.1744.</li>
+<li>ρ ≈ 1.174 &gt; 1: <strong>no converge</strong>. La hoja de clase concluye ρ = 0 porque omite el término 4/3.</li>
+<li>El método de la potencia fallaría aquí, porque el autovalor dominante es un par complejo.</li>
+</ul>
+<p><strong>Ejemplo con decisión exacta</strong> (S9-07/10, SOR con ω = 6/5, el ω por defecto).</p>
+<ul>
+<li>Polinomio: λ³ + (11/125)λ² − (113/125)λ + 1/125. Se comprueba que p(−1) = −1 + 11/125 + 113/125 + 1/125 = 0.</li>
+<li>Por tanto λ = −1 es autovalor, ρ ≥ 1 y el método no converge.</li>
+<li>La aplicación lo informa: «λ = -1 es autovalor exacto de T: ρ(T) ≥ 1».</li>
+</ul>
+<h3 id="g-d-5b-lo-que-ensena-la-docente-y-como-lo-seguimos-en-el-radio-espectral">D.5b Lo que enseña la docente y cómo lo seguimos en el radio espectral</h3>
+<p>En S9-07/10 p. 4 la docente calcula det(T − λI) por Sarrus para T_J = [[0, −1, −1], [−1, 0, −2/3], [1, 2/3, 0]]. Nuestro <code>desarrollo_sarrus</code> hace el mismo desarrollo:</p>
+<ul>
+<li>tr(T) = 0;</li>
+<li>Σ menores 2×2 = (0 − 1) + (0 + 1) + (0 + 4/9) = 4/9;</li>
+<li>det(T) por Sarrus = 4/3.</li>
+</ul>
+<p>Por tanto, det(T − λI) = −λ³ + 0·λ² − (4/9)λ + 4/3.</p>
+<p>La hoja de clase escribe −λ³ − (4/9)λ: <strong>omite el término 4/3</strong>, porque los productos +2/3 y +2/3 de la regla de Sarrus se tacharon como si se cancelaran. Así concluye ρ = 0. La aplicación muestra el desarrollo completo, y ρ ≈ 1.174 &gt; 1.</p>
+<p>Si la docente pregunta, se enseñan en la pantalla los tres números (tr, Σ menores, det), que se pueden comprobar a mano.</p>
+<h3 id="g-d-6-csr-incentivo-de-matrices-dispersas">D.6 CSR (incentivo de matrices dispersas)</h3>
+<p>La tridiagonal 3×3 [[4, −1, 0], [−1, 4, −1], [0, −1, 4]] se guarda así:</p>
+<ul>
+<li><code>valores = [4, −1, −1, 4, −1, −1, 4]</code>;</li>
+<li><code>columnas = [0, 1, 0, 1, 2, 1, 2]</code>;</li>
+<li><code>inicio = [0, 2, 5, 7]</code>: la fila i ocupa las posiciones inicio[i]…inicio[i+1]−1.</li>
+</ul>
+<p>La memoria es 2·nnz + n + 1 números en lugar de n², y cada iteración cuesta O(nnz) en lugar de O(n²).</p>
+<hr />
+<h3 id="g-d-7-precondicionamiento-diagonal-que-cambia-y-que-no">D.7 Precondicionamiento diagonal: qué cambia y qué no</h3>
+<p><strong>Lo que dice la lámina</strong> (S9-05/10 pp. 21-22, diapositivas 17-18):</p>
+<ul>
+<li>M = D = diag(aᵢᵢ) y se resuelve M⁻¹Ax = M⁻¹b, que tiene la misma solución;</li>
+<li>un buen precondicionador busca κ(B) &lt; κ(A) y ρ(B) &lt; ρ(A).</li>
+</ul>
+<p><strong>Demostración de que Jacobi no cambia.</strong></p>
+<ul>
+<li>En B = D⁻¹A la diagonal es 1 y la parte fuera de la diagonal es D⁻¹(L + U).</li>
+<li>Entonces T̃_J = −I⁻¹·D⁻¹(L + U) = T_J y c̃ = I⁻¹·D⁻¹b = D⁻¹b = c.</li>
+<li>Para GS: (I + D⁻¹L)⁻¹ = (D⁻¹(D + L))⁻¹ = (D + L)⁻¹D, así que T̃_GS = −(D + L)⁻¹D·D⁻¹U = −(D + L)⁻¹U = T_GS.</li>
+<li>SOR es análogo.</li>
+<li>Intuición: Jacobi, GS y SOR ya dividen cada ecuación entre su aᵢᵢ, así que dividirla antes no cambia nada.</li>
+</ul>
+<p><strong>Ejemplo real de la aplicación</strong> (tridiagonal [−1, 4, −1] de la lámina):</p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th></th>
+<th>Original</th>
+<th>Con M = D</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>κ∞</td>
+<td>30/11</td>
+<td>30/11 (B = A/4)</td>
+</tr>
+<tr>
+<td>Jacobi</td>
+<td>7 iteraciones</td>
+<td>7 (idénticas)</td>
+</tr>
+<tr>
+<td>GS</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr>
+<td>SOR (ω = 1.2)</td>
+<td>7</td>
+<td>7</td>
+</tr>
+<tr>
+<td>Richardson</td>
+<td>no converge (ρ(I − A) ≈ 4.618)</td>
+<td>converge (ρ = ρ(T_J) ≈ 0.405)</td>
+</tr>
+</tbody>
+</table></div>
+<p>(Iteraciones con ε = 10⁻³ y x⁽⁰⁾ = 0.)</p>
+<p><strong>Dónde sí hay efecto:</strong></p>
+<ul>
+<li>κ cuando la diagonal no es uniforme. Por ejemplo, [[100, 1], [1, 1/50]] pasa de κ∞ = 10201 a 5202.</li>
+<li>El residuo r̃ = D⁻¹r.</li>
+<li><strong>Richardson</strong>, x ← x + (b − Ax): precondicionado se convierte en x ← x + D⁻¹(b − Ax), que es exactamente Jacobi.</li>
+</ul>
+<p><strong>Valores propios.</strong> μ(B) = 1 − λ(T_J), así que «agrupados cerca de 1» significa ρ(T_J) pequeño.</p>
+<p><strong>Discrepancia con la lámina.</strong> La diapositiva 19 muestra que Jacobi mejora con M = D. Eso no puede pasar: la aplicación lo demuestra en vivo con la columna «¿T y c idénticas? Sí (exacto)».</p>
+<h2 id="g-e-preguntas-de-defensa-con-respuestas">E. Preguntas de defensa, con respuestas</h2>
+<p>Cada respuesta se puede comprobar en el código (se indica dónde) o con la aplicación.</p>
+<p><strong>Generales y de diseño</strong></p>
+<ol>
+<li>
+<p><strong>¿Qué bibliotecas usaron y para qué? ¿Usaron alguna que resuelva los métodos?</strong></p>
+<ul>
+<li>El núcleo (<code>algebra/</code>) solo usa la biblioteca estándar: <code>fractions</code>, <code>math</code>, <code>cmath</code> y <code>dataclasses</code>.</li>
+<li>Streamlit sirve para la interfaz y Matplotlib para las gráficas, como lo permite OFICIAL p. 1, y están documentadas en <code>docs/herramientas_y_bibliotecas.md</code>.</li>
+<li>Ningún archivo importa NumPy, SciPy ni SymPy. NumPy solo se instala porque lo necesitan internamente Streamlit y Matplotlib.</li>
+</ul>
+</li>
+<li>
+<p><strong>¿Por qué usaron fracciones en unos módulos y <code>float</code> en otros?</strong></p>
+<ul>
+<li>Con <code>Fraction</code>, Gauss, la inversa, κ y los mínimos cuadrados son exactos. Un pivote es 0 solo si es realmente 0, así que la clasificación y la detección de singularidad no dependen de redondeos.</li>
+<li>Los iterativos son aproximaciones que se detienen por tolerancia. Con fracciones, los denominadores crecerían en cada iteración. Las raíces de un polinomio de grado ≥ 3 en general no son racionales.</li>
+<li>La lectura usa <code>Fraction(texto)</code>, de modo que «0.1» es exactamente 1/10 (<code>leer_numero</code>).</li>
+</ul>
+</li>
+<li>
+<p><strong>¿Cómo está organizado el código y por qué así?</strong></p>
+<ul>
+<li>Hay tres capas: <code>algebra/</code> (cálculos), <code>interfaz/</code> (pantallas) y <code>visualizacion/</code> (dibujos).</li>
+<li>El núcleo no depende de la interfaz. Por eso se prueba solo (204 pruebas) y la interfaz no repite cálculos.</li>
+<li>En los iterativos, cada método es una función <code>paso_*</code> y el bucle de parada es uno solo (<code>_ejecutar</code>), para no triplicar la lógica.</li>
+</ul>
+</li>
+<li>
+<p><strong>¿Cómo saben que los resultados son correctos?</strong></p>
+<ul>
+<li>Hay 204 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.</li>
+<li>La auditoría aleatoria (<code>auditoria/</code>) compara miles de casos con oráculos escritos aparte (Leibniz, adjunta, Cramer, una implementación separada de las iteraciones, Gelfand) y da 0 fallos.</li>
+<li>La aplicación además se autoverifica:<ul>
+<li>b − Ax = 0 en el Módulo I;</li>
+<li>A·A⁻¹ = I en el Módulo II;</li>
+<li>Aᵀr = 0 en el Módulo III;</li>
+<li>Σλ = traza(T) en el radio espectral.</li>
+</ul>
+</li>
+<li><strong>No</strong> se usaron los resultados de las láminas como referencia, porque varios son incorrectos.</li>
+</ul>
+</li>
+<li>
+<p><strong>¿Qué pasa si el usuario escribe algo inválido?</strong></p>
+<ul>
+<li><code>leer_numero</code> lanza <code>ErrorEntrada</code> con la posición, por ejemplo «el elemento (2, 2) de la matriz A "x" no es un número válido».</li>
+<li>La interfaz lo muestra con <code>st.error</code>.</li>
+<li>En el Módulo IV, <code>ejecutar</code> nunca lanza excepciones: devuelve <code>ENTRADA_INVALIDA</code> con su mensaje.</li>
+<li>La aplicación no se cierra en ningún caso (validaciones de OFICIAL p. 3).</li>
+</ul>
+</li>
+</ol>
+<p><strong>Módulo I</strong></p>
+<ol start="6">
+<li>
+<p><strong>¿Cómo decide el programa si hay solución única, infinitas o ninguna?</strong></p>
+<ul>
+<li>Por rangos. <code>rango_A</code> es el número de pivotes encontrados por <code>_escalonar</code>. <code>_rango_aumentada</code> suma 1 si existe una fila [0 … 0 | c] con c ≠ 0.</li>
+<li>rango(A) &lt; rango([A|b]) → inconsistente.</li>
+<li>Iguales y = n → única.</li>
+<li>Iguales y &lt; n → infinitas, con n − rango variables libres.</li>
+</ul>
+</li>
+<li>
+<p><strong>¿Qué hace el programa cuando un pivote es cero?</strong></p>
+<ul>
+<li><code>_buscar_pivote</code> busca debajo una fila con elemento ≠ 0 y la intercambia. El paso queda registrado con el motivo, y el signo del determinante cambia.</li>
+<li>Si toda la columna (desde la fila actual) es 0, esa columna no tiene pivote y su variable es libre.</li>
+<li>Ejemplo precargado: «Pivote nulo», con F1 ↔ F2.</li>
+</ul>
+</li>
+<li>
+<p><strong>¿Qué es un pivote «numéricamente problemático» si usan fracciones exactas?</strong></p>
+<ul>
+<li>Es un aviso técnico: |pivote| &lt; 10⁻¹⁰·máx|aᵢⱼ| (<code>UMBRAL_PIVOTE_PEQUENO</code>).</li>
+<li>Con fracciones el resultado sigue siendo exacto, pero en punto flotante ese pivote amplificaría los errores de redondeo.</li>
+<li>Se avisa porque el enunciado pide detectar esos pivotes, y no se altera el resultado.</li>
+</ul>
+</li>
+<li>
+<p><strong>¿Cómo se obtiene la solución general cuando hay infinitas soluciones?</strong></p>
+<ul>
+<li>La solución particular xₚ se obtiene con <code>_sustitucion_atras</code>, dando el valor 0 a las variables libres.</li>
+<li>Para cada libre j se resuelve el sistema <strong>homogéneo</strong> (lado derecho 0) con esa libre igual a 1 y las demás iguales a 0. Esa es la dirección vⱼ.</li>
+<li>Entonces x = xₚ + Σ tⱼvⱼ. Funciona porque A(xₚ + Σtⱼvⱼ) = b + 0.</li>
+</ul>
+</li>
+<li>
+<p><strong>¿Cómo calculan el determinante y por qué es correcto?</strong><br />
+        - det = (−1)^(número de intercambios) · Π pivotes.<br />
+        - Sumar a una fila un múltiplo de otra no cambia el determinante; cada intercambio lo cambia de signo; y el determinante de una triangular es el producto de su diagonal.<br />
+        - En Gauss-Jordan el pivote se guarda <strong>antes</strong> de normalizar la fila.<br />
+        - Si falta un pivote, det = 0.</p>
+</li>
+</ol>
+<p><strong>Módulo II</strong></p>
+<ol start="11">
+<li>
+<p><strong>¿Qué es κ∞(A) y qué indica?</strong><br />
+        - κ∞ = ‖A‖∞‖A⁻¹‖∞, donde ‖A‖∞ es la mayor suma de valores absolutos por fila.<br />
+        - Es el factor máximo por el que se puede amplificar el error relativo de b en la solución: ‖Δx‖/‖x‖ ≤ κ‖Δb‖/‖b‖ (demostración en D.2).<br />
+        - La escala del proyecto (&lt; 10, &lt; 100, ≥ 100) es la orientativa del enunciado, no una frontera universal.</p>
+</li>
+<li>
+<p><strong>En un ejemplo la amplificación observada fue menor que κ. ¿Está mal?</strong><br />
+        - No: κ es el <strong>peor caso</strong> sobre todas las direcciones de Δb.<br />
+        - En «S7-21/09 p. 19» la amplificación es 0.04/0.025 = 1.6, menor que κ = 3.2.<br />
+        - En «A = I + 10J» con Δb = (1, −1, 1) se alcanza exactamente κ = 41, porque esa Δb es la dirección más desfavorable.</p>
+</li>
+<li>
+<p><strong>¿Qué diferencia hay entre una matriz singular y una mal condicionada?</strong><br />
+        - Una singular (det = 0) no tiene inversa: κ no está definido y el sistema no tiene solución única. La aplicación devuelve <code>MATRIZ_SINGULAR</code>.<br />
+        - Una mal condicionada es invertible, con solución única, pero muy sensible. Ejemplo: [[1, 1], [1, 1.0001]], con κ ≈ 40004.</p>
+</li>
+<li>
+<p><strong>¿Cómo interpretan la perturbación porcentual?</strong><br />
+        - Δbᵢ = (p/100)·bᵢ en cada componente (<code>construir_delta_b</code>). Con un solo p, ‖Δb‖∞/‖b‖∞ = |p|/100 exactamente.<br />
+        - Límite: una componente bᵢ = 0 no se perturba. Para eso está el modo absoluto.</p>
+</li>
+</ol>
+<p><strong>Módulo III</strong></p>
+<ol start="15">
+<li>
+<p><strong>¿Por qué se resuelven las ecuaciones normales y no Ax = b directamente?</strong><br />
+        - Con m &gt; n, Ax = b en general es inconsistente.<br />
+        - Minimizar ‖b − Ax‖² lleva a AᵀAx = Aᵀb (gradiente igual a 0) o, geométricamente, a r ⟂ Col(A).<br />
+        - AᵀA es n×n y se resuelve con <strong>nuestro</strong> <code>resolver_gauss</code>, como pide el enunciado.</p>
+</li>
+<li>
+<p><strong>¿Qué significa la comprobación Aᵀr = 0?</strong><br />
+        - Que el residuo es perpendicular a todas las columnas de A, de modo que Ax̂ es la proyección ortogonal de b sobre Col(A).<br />
+        - Es la propiedad que <strong>caracteriza</strong> a la solución de mínimos cuadrados.<br />
+        - Como el cálculo es exacto, sale (0, 0) exactamente.</p>
+</li>
+<li>
+<p><strong>¿Cuándo falla el ajuste y qué hace la aplicación?</strong><br />
+        - Si las columnas de A son dependientes, AᵀA es singular y x̂ no es único: se informa y no se presenta ninguno.<br />
+        - En el ajuste de una recta: con menos de 2 puntos, con todos los x iguales (recta vertical) o con un número distinto de x y de y, se lanza <code>ErrorAjuste</code> con su mensaje.</p>
+</li>
+</ol>
+<p><strong>Módulo IV</strong></p>
+<ol start="18">
+<li>
+<p><strong>¿Cuál es la diferencia entre Jacobi, Gauss-Seidel y SOR en el código?</strong><br />
+        - <code>paso_jacobi</code> escribe en un vector nuevo y usa solo x⁽ᵏ⁻¹⁾.<br />
+        - <code>paso_gauss_seidel</code> escribe sobre la misma lista, así que para j &lt; i ya usa los valores nuevos.<br />
+        - <code>paso_sor</code> calcula el valor de Gauss-Seidel y lo mezcla: (1 − ω)·anterior + ω·GS. Con ω = 1 es idéntico a Gauss-Seidel (prueba P15).</p>
+</li>
+<li>
+<p><strong>¿Qué criterio de parada usan y qué error muestra la tabla?</strong><br />
+        - El usuario elige:<br />
+            - A: d_k = ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞ &lt; ε (por defecto, el que más usa la docente);<br />
+            - B: r_k = ‖b − Ax⁽ᵏ⁾‖∞ &lt; ε;<br />
+            - C: N iteraciones fijas.<br />
+        - La desigualdad es estricta. La tabla muestra d_k y r_k y rotula cuál es el «(criterio de parada)».<br />
+        - La norma ∞ es el <strong>máximo</strong>. Algunos manuscritos suman las diferencias (eso es la norma 1).</p>
+</li>
+<li>
+<p><strong>Si se alcanza el máximo de iteraciones, ¿el método diverge?</strong><br />
+        - No necesariamente: solo significa que no se cumplió el criterio en k_max iteraciones. Puede converger lentamente.<br />
+        - Ejemplo: Gauss-Seidel en S9-07/10 tiene ρ ≈ 0.935 &lt; 1 (converge), pero no llega a ε = 10⁻³ en 50 iteraciones.<br />
+        - Por eso el mensaje es «máximo de iteraciones sin satisfacer el criterio».<br />
+        - Tampoco un desbordamiento (<code>ERROR_NO_FINITO</code>) se presenta como demostración de divergencia.<br />
+        - La convergencia se decide con ρ(T).</p>
+</li>
+<li>
+<p><strong>¿Por qué el criterio C «no demuestra convergencia»?</strong><br />
+        - Porque hacer N iteraciones no dice nada de si x⁽ᴺ⁾ está cerca de la solución.<br />
+        - La aplicación las hace, registra d y r y lo advierte (<code>N_COMPLETADAS</code>).</p>
+</li>
+<li>
+<p><strong>¿La dominancia diagonal garantiza convergencia? ¿Y si no se cumple?</strong><br />
+        - Si A es estrictamente dominante por filas, ‖T_J‖∞ &lt; 1, de modo que ρ &lt; 1 y Jacobi converge. Gauss-Seidel también.<br />
+        - Es suficiente, no necesaria. Si no se cumple, no se concluye nada y hay que mirar ρ(T): por ejemplo, Gauss-Seidel en S9-07/10 converge sin dominancia.<br />
+        - Como la docente en la Tarea II, se puede <strong>reordenar las ecuaciones</strong>. La aplicación busca ese orden (<code>reordenamiento_dominante</code>) y lo sugiere, pero no lo aplica sola: cambiaría el sistema que dio el usuario.</p>
+</li>
+<li>
+<p><strong>¿Cómo calculan el radio espectral sin bibliotecas?</strong><br />
+        1. T exacta con nuestro Gauss-Jordan.<br />
+        2. Polinomio det(λI − T) con Faddeev-LeVerrier (Mₖ = TMₖ₋₁ + cₖ₋₁I, cₖ = −tr(TMₖ)/k), que es exacto y coincide con Sarrus en 3×3.<br />
+        3. Raíces: λ = 0 exactas, fórmula cuadrática para grado ≤ 2 y Durand-Kerner para grado ≥ 3.<br />
+        4. ρ = máx|λ|, verificado con |p(λ)| ≈ 0 y Σλ = traza.<br />
+        - Archivo: <code>algebra/espectral.py</code>.</p>
+</li>
+<li>
+<p><strong>¿Por qué no usaron el método de la potencia?</strong><br />
+        - Porque falla cuando el autovalor de mayor módulo es un par complejo, o hay dos de igual módulo y signo opuesto (±μ).<br />
+        - Eso ocurre en los ejemplos del curso. En S9-07/10 Jacobi, ρ = 1.174 viene de un par complejo.<br />
+        - Durand-Kerner encuentra todas las raíces, también las complejas.</p>
+</li>
+<li>
+<p><strong>¿Qué pasa si ρ está muy cerca de 1 o hay autovalores repetidos?</strong><br />
+        - Con raíces múltiples, Durand-Kerner pierde precisión (≈10⁻⁸ en una doble, ≈10⁻⁵ en una triple).<br />
+            - Si aun así converge (lo habitual con una doble), la aplicación avisa y amplía la banda de duda a 10⁻⁶.<br />
+            - Si no converge (lo habitual con una triple), marca el resultado como no fiable y concluye «indeterminado».<br />
+        - Si |ρ − 1| &lt; 10⁻⁹ (10⁻⁶ con raíces casi repetidas), también da «indeterminado».<br />
+        - Nunca da una conclusión falsa. Cuando puede decidir de forma exacta, decide: grado ≤ 2 con Schur-Cohn, o p(±1) = 0.</p>
+</li>
+<li>
+<p><strong>¿Por qué A singular implica que ningún método converge?</strong><br />
+        - T = I − M⁻¹A, con M = D (Jacobi), D + L (GS) o (D + ωL)/ω (SOR).<br />
+        - Si Av = 0 con v ≠ 0, entonces Tv = v: λ = 1 es autovalor y ρ ≥ 1.<br />
+        - La aplicación lo detecta exactamente con p(1) = 0 (<code>radio_espectral</code>).</p>
+</li>
+<li>
+<p><strong>¿Qué es la comparación «homogénea»?</strong><br />
+        - Que los tres métodos usan el mismo sistema, el mismo x⁽⁰⁾, el mismo criterio, la misma ε y el mismo k_max (o N). Solo cambia el método, y SOR añade su ω.<br />
+        - <code>comparar_metodos</code> lo comprueba campo por campo y avisa si algo difiere.<br />
+        - El número de iteraciones solo es comparable entre métodos que terminaron por el mismo motivo.</p>
+</li>
+<li>
+<p><strong>¿Qué es «e final» en la tabla de comparación?</strong><br />
+        - e = ‖x⁽ᵏ⁾ − x*‖∞, donde x* es la solución <strong>exacta</strong> obtenida con nuestro Gauss.<br />
+        - Es el error verdadero; no es d ni r.<br />
+        - Es exactamente la definición de la lámina S9-05/10 p. 17: columna «Error final (‖x⁽ᵏ⁾ − x‖∞)». La tabla muestra además d y r.</p>
+</li>
+<li>
+<p><strong>¿Qué ventaja tiene el formato CSR y cómo saben que da lo mismo?</strong><br />
+        - Guarda solo los nnz no nulos (<code>valores</code>, <code>columnas</code>, <code>inicio</code>). Memoria O(nnz), y cada iteración O(nnz) en lugar de O(n²).<br />
+        - Los pasos CSR recorren los no nulos en el mismo orden de columnas que los densos. Sumar productos por cero no cambia nada en punto flotante, así que las iteraciones son idénticas bit a bit (prueba en <code>test_dispersas</code>).</p>
+</li>
+<li>
+<p><strong>¿Qué es el precondicionamiento diagonal y qué efecto tiene en su aplicación?</strong><br />
+        - Se resuelve D⁻¹Ax = D⁻¹b, con M = D, como en la lámina. Archivo: <code>algebra/precondicionamiento.py</code>.<br />
+        - Para Jacobi, GS y SOR <strong>no cambia nada</strong>: T̃ = T y c̃ = c (demostración en D.7). La aplicación lo comprueba con fracciones y lo muestra en la tabla.<br />
+        - Sí cambia κ (si la diagonal no es uniforme), el residuo y Richardson, que precondicionado se convierte en Jacobi.<br />
+        - Si la docente pregunta por qué no coincide con la diapositiva 19, se muestra la demostración y la tabla en vivo.</p>
+</li>
+<li>
+<p><strong>En mínimos cuadrados, la docente usó Cramer. ¿Por qué ustedes usan Gauss?</strong><br />
+        - El enunciado exige resolver las ecuaciones normales «con un método directo ya implementado», que es nuestro <code>resolver_gauss</code>.<br />
+        - Aun así, la aplicación muestra el procedimiento de clase completo: det([A|b]) ≠ 0 y Cramer (<code>cramer</code>), y comprueba que da exactamente lo mismo.<br />
+        - Ejemplo del manuscrito: 715/363 = 65/33 y −319/363 = −29/33.</p>
+</li>
+<li>
+<p><strong>¿Cómo comprueban que b no está en el espacio columna de A?</strong><br />
+        - En general, con el rango: <code>resolver_gauss(A, b)</code> da INCONSISTENTE.<br />
+        - Si m = n + 1, también como en clase: det([A|b]) ≠ 0 implica que [A|b] tiene rango n + 1, así que b no es combinación lineal de las columnas.</p>
+</li>
+<li>
+<p><strong>¿Su polinomio característico es el mismo que el de Sarrus?</strong><br />
+        - Sí, en 3×3 son idénticos.<br />
+        - La aplicación muestra tr(T), la suma de los menores principales 2×2 y det(T) (Sarrus), arma −λ³ + tr·λ² − Σmen·λ + det y comprueba que coincide con Faddeev-LeVerrier.<br />
+        - Faddeev-LeVerrier se usa porque también vale para n &gt; 3.</p>
+</li>
+<li>
+<p><strong>¿Qué es Richardson y por qué aparece en la pestaña de precondicionamiento?</strong><br />
+        - Es la iteración x⁽ᵏ⁾ = x⁽ᵏ⁻¹⁾ + (b − Ax⁽ᵏ⁻¹⁾), con T_R = I − A.<br />
+        - No es uno de los métodos del enunciado ni se vio en clase. Se incluye porque es el método más simple sobre el que M = D tiene efecto: con M = D se convierte en Jacobi.<br />
+        - Así se documenta un efecto real del precondicionador, en vez de inventar uno.</p>
+</li>
+</ol>
+<hr />
+<h2 id="g-f-como-ejecutar-y-demostrar-el-proyecto">F. Cómo ejecutar y demostrar el proyecto</h2>
+<h3 id="g-instalacion-windows">Instalación (Windows)</h3>
+<ol>
+<li>Instalar <strong>Python 3.11 o superior</strong> desde python.org, marcando «Add python.exe to PATH».</li>
+<li>Descomprimir el ZIP. Contiene una sola carpeta, <code>Grupo01-IF0012-Proyecto-IIC</code>.</li>
+<li>Doble clic en <strong><code>ejecutar.bat</code></strong>.<ul>
+<li>La primera vez crea <code>.venv</code> e instala Streamlit 1.66.1 y Matplotlib 3.11.2 (requiere internet y tarda unos minutos).</li>
+<li>Después abre <code>http://localhost:8501</code>.</li>
+<li>Para cerrar: cerrar la ventana negra.</li>
+</ul>
+</li>
+<li>Alternativa desde la terminal:</li>
+</ol>
+<pre><code>python -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.txt
+.venv\Scripts\python -m streamlit run app.py
+</code></pre>
+<ol start="5">
+<li>Pruebas: <code>ejecutar_pruebas.bat</code> o <code>.venv\Scripts\python -m unittest</code>. Deben salir <strong>204 pruebas OK</strong>.</li>
+<li>Auditoría (opcional, unos 20 s): <code>.venv\Scripts\python auditoria\auditoria_directos.py .</code> y <code>.venv\Scripts\python auditoria\auditoria_iterativos.py .</code> (y <code>auditoria_precondicionamiento.py</code>). Deben dar «fallos 0».</li>
+</ol>
+<blockquote>
+<p><strong>Antes de la defensa:</strong> cada integrante debe hacer la instalación <strong>en su propia computadora</strong> al menos una vez. La primera instalación necesita internet; no la dejen para el aula.</p>
+</blockquote>
+<h3 id="g-formato-de-entrada">Formato de entrada</h3>
+<ul>
+<li>Una fila por línea, con los números separados por espacios.</li>
+<li>Se aceptan <code>3</code>, <code>-2.5</code>, <code>2,5</code>, <code>1/3</code> y <code>1e-3</code>.</li>
+<li>Cada módulo tiene «Cargar un ejemplo».</li>
+</ul>
+<h3 id="g-guion-de-demostracion-con-los-resultados-que-deben-aparecer">Guion de demostración (con los resultados que deben aparecer)</h3>
+<p>Los parámetros por defecto del Módulo IV son: x⁽⁰⁾ = vector cero, criterio A, ε = 1e-3, k_max = 50 y ω = 1.2.</p>
+<p><strong>Módulo I</strong> (unos 2 minutos)</p>
+<ol>
+<li>Ejemplo «Pivote nulo: requiere intercambio de filas», método Gauss → <strong>Solución única</strong> x = (1, 1, 1), det = −1.<ul>
+<li>En «Procedimiento paso a paso» se ve F1 ↔ F2 con el motivo «el elemento (1, 1) es 0».</li>
+<li>La verificación b − Ax es (0, 0, 0).</li>
+</ul>
+</li>
+<li>Ejemplo «Infinitas soluciones» → rango(A) = rango([A|b]) = 2 &lt; 3. x = (1/2, 1/2, 0) + t₁(−1/2, −1/2, 1).</li>
+<li>Ejemplo «Sistema inconsistente» → la fila queda como [0 0 0 | c], con rango(A) = 2 &lt; rango([A|b]) = 3.</li>
+<li>Abrir «Interpretación geométrica»: planos que se cortan en un punto, en una recta o sin punto común.</li>
+<li>
+<p>Otros resultados esperados:</p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Ejemplo</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S6-16/09 p. 29</td>
+<td>(1/3, 4, 5/3), det = 3</td>
+</tr>
+<tr>
+<td>S6-14/09 p. 29</td>
+<td>(19/20, −5/4, −7/20), det = −20. La lámina da (1/2, −1, −1), que no cumple la 2.ª ecuación</td>
+</tr>
+<tr>
+<td>LU de clase S6-16/09 p. 35</td>
+<td>(1, 1, 2), det = −16</td>
+</tr>
+<tr>
+<td>2 incógnitas</td>
+<td>(2, 1), det = −3</td>
+</tr>
+</tbody>
+</table></div>
+</li>
+</ol>
+<p><strong>Módulo II</strong> (unos 2 minutos)</p>
+<ol>
+<li>«S7-21/09 p. 20 — bien condicionada» → κ∞ = 25/11 ≈ 2.27, sensibilidad <strong>baja</strong>. Con Δb = (0.01, −0.01): x = (1/11, 7/11) y x̃ = (26/275, 139/220).<ul>
+<li>‖Δb‖/‖b‖ = 0.005, ‖Δx‖/‖x‖ ≈ 0.00714 y cota ≈ 0.01136: la cota se cumple.</li>
+</ul>
+</li>
+<li>«S7-21/09 p. 15 — mal condicionada» → κ∞ ≈ 40004, sensibilidad <strong>alta</strong>. x = (1, 1) pasa a x̃ = (0, 2): error relativo del 100 % con un cambio de 5·10⁻⁵ en b.</li>
+<li>«A = I + 10J» → κ∞ = 41, sensibilidad <strong>moderada</strong>. La amplificación es exactamente 41, el peor caso.</li>
+<li>Matriz singular: escribir <code>1 2</code> / <code>2 4</code> → mensaje de A singular, sin κ.</li>
+</ol>
+<p><strong>Módulo III</strong> (unos 2 minutos)</p>
+<ol>
+<li>Pestaña «Sistema sobredeterminado», «S8-30/09 pp. 6-7» → sistema sobredeterminado 3×2.<ul>
+<li>x̂ = (65/33, −29/33), r = (−1/3, 1/3, 1/3), ‖r‖₂ ≈ 0.57735 y Aᵀr = (0, 0).</li>
+<li>Abrir «Verificación con el procedimiento de clase»: det([A|b]) = −11, Cramer 363, 715 y −319, que coincide exactamente. Son los mismos números del manuscrito de la docente.</li>
+</ul>
+</li>
+<li>Pestaña «Ajuste lineal», «y = 0.75x + 1.2» → <strong>y = 3/4 x + 6/5</strong>, ‖r‖₂ ≈ 0.339. La gráfica muestra los puntos, la recta y los residuos.</li>
+<li>«Columnas dependientes» → AᵀA singular; no se presenta ningún x̂.</li>
+</ol>
+<p><strong>Módulo IV</strong> (unos 3 minutos)</p>
+<ol>
+<li>Ejemplo «10x−y+2z=6», pestaña «Ejecutar un método», Jacobi → «Criterio satisfecho: d_7 = 0.000378139 &lt; ε = 0.001».<ul>
+<li>x ≈ (1.043187, 2.269277, −1.081786).</li>
+<li>Cambiar al criterio B con SOR → termina en k = 7 con r_7 ≈ 8.79·10⁻⁴.</li>
+</ul>
+</li>
+<li>Pestaña «Comparar métodos» → «Experimento homogéneo».<ul>
+<li>Jacobi: 7 iteraciones; Gauss-Seidel: 4; SOR (ω = 1.2): 6. ρ = 0.268, 0.043 y 0.217.</li>
+<li>Mostrar la gráfica: por defecto e_k, el «error final» de la lámina.</li>
+</ul>
+</li>
+<li>Pestaña «Convergencia» con el mismo ejemplo → la matriz es dominante (10 &gt; 3, 11 &gt; 2, 10 &gt; 3). Se ven T, el polinomio con su desarrollo por Sarrus y ρ_J ≈ 0.2679 &lt; 1.</li>
+<li>Ejemplo «S9-07/10 — Jacobi no converge»:<ul>
+<li>Convergencia con Jacobi → polinomio −λ³ − 4/9λ + 4/3, par complejo y ρ ≈ 1.174 &gt; 1: <strong>no converge</strong>.</li>
+<li>Ejecutar Jacobi → «máximo de iteraciones sin satisfacer el criterio».</li>
+<li>Gauss-Seidel en el mismo ejemplo → ρ ≈ 0.935 &lt; 1: converge, pero lentamente (no llega en 50 iteraciones).</li>
+</ul>
+</li>
+<li>Pestaña «Precondicionamiento diagonal» con el ejemplo «Tridiagonal dispersa» → B = A/4, κ igual, Jacobi, GS y SOR «Sí (exacto)» e iteraciones idénticas; Richardson no converge sin precondicionar y converge con M = D.</li>
+<li>Reordenamiento: escribir A = <code>-1 4 -1</code> / <code>0 -1 3</code> / <code>4 -1 0</code> y b = <code>10 10 15</code>, y pulsar «Analizar convergencia». La aplicación avisa del a₃₃ = 0 y propone el orden E3, E1, E2, que es dominante.</li>
+<li>
+<p>Otros radios esperados (Jacobi / GS / SOR ω = 1.2):</p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Ejemplo</th>
+<th>ρ_J</th>
+<th>ρ_GS</th>
+<th>ρ_SOR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarea II #4/#5</td>
+<td>0.4690</td>
+<td>0.2210</td>
+<td>0.2316</td>
+</tr>
+<tr>
+<td>Tridiagonal</td>
+<td>0.4045</td>
+<td>0.1636</td>
+<td>0.2000</td>
+</tr>
+<tr>
+<td>S8-30/09 p. 19</td>
+<td>0.3025</td>
+<td>0.1179</td>
+<td>0.3437</td>
+</tr>
+</tbody>
+</table></div>
+</li>
+</ol>
+<h3 id="g-caso-no-preparado-como-actuar">Caso no preparado: cómo actuar</h3>
+<ol>
+<li>Escribir los datos tal como los dicte la docente. Si hay un error de formato, la aplicación indica la celda.</li>
+<li>Elegir el módulo según la pregunta: ¿resolver o clasificar?, ¿sensibilidad?, ¿más ecuaciones que incógnitas?, ¿iterar?</li>
+<li><strong>Verificar en voz alta</strong> con lo que muestra la aplicación:<ul>
+<li>b − Ax = 0 (I);</li>
+<li>A·A⁻¹ = I (II);</li>
+<li>Aᵀr = 0 (III);</li>
+<li>en el IV, r_k pequeño y la verificación Σλ = traza.</li>
+</ul>
+</li>
+<li>En el Módulo IV, mirar primero la pestaña «Convergencia».<ul>
+<li>Si ρ ≥ 1 o hay un aᵢᵢ = 0, explicar por qué no conviene iterar (o reordenar las filas a mano).</li>
+<li>Si la matriz no es dominante, recordar que eso no implica divergencia.</li>
+</ul>
+</li>
+<li>Si un resultado no coincide con el que espera la docente: la diferencia en los últimos decimales de los iterativos se explica por la tolerancia ε, no por redondeos. En los Módulos I a III los resultados son exactos y se pueden comprobar sustituyendo.</li>
+</ol>
+<h3 id="g-propuesta-de-reparto-para-profundizar">Propuesta de reparto para profundizar</h3>
+<p>Esta propuesta la debe decidir el grupo. Cada uno <strong>igual debe dominar los cuatro módulos</strong>: la docente elige. El reparto es solo para que alguien prepare cada parte a fondo y se la explique a los demás.</p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Integrante</th>
+<th>Profundiza en</th>
+<th>Lo mínimo que debe enseñar al resto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Elmer López Hernández</td>
+<td>Módulo I</td>
+<td><code>_escalonar</code>, rangos, forma paramétrica, determinante e inversa</td>
+</tr>
+<tr>
+<td>Derek Farley Noguera</td>
+<td>Módulo II y la arquitectura</td>
+<td>Demostración de la cota de κ, singular frente a mal condicionada, flujo de datos y validaciones</td>
+</tr>
+<tr>
+<td>Daniel Córdoba Arias</td>
+<td>Módulo III</td>
+<td>Deducción de las ecuaciones normales, Aᵀr = 0, matriz de diseño, ajuste</td>
+</tr>
+<tr>
+<td>Samir Sandoval Ramírez</td>
+<td>Módulo IV</td>
+<td>Los tres pasos, criterios y códigos, deducción de T, teorema de ρ, Faddeev-LeVerrier, Durand-Kerner y el precondicionador M = D</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="g-g-limitaciones-y-decisiones-tecnicas">G. Limitaciones y decisiones técnicas</h2>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Limitación o decisión</th>
+<th>Qué pasa</th>
+<th>Cómo defenderla</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Autovalores <strong>múltiples</strong></td>
+<td>Durand-Kerner pierde precisión: ≈10⁻⁸ en una raíz doble (medido: 5·10⁻⁹ en 0.9 doble) y ≈10⁻⁵ en una triple (medido: 4·10⁻⁶ en 1/2 triple). <strong>Raíz doble:</strong> suele converger; la aplicación avisa «autovalores casi repetidos» y decide con una banda ampliada de 10⁻⁶. <strong>Raíz triple o mayor:</strong> normalmente no alcanza la precisión; se marca «no fiable» y la conclusión es <strong>indeterminado</strong>, aunque ρ esté lejos de 1 (por ejemplo, el 1/2 triple)</td>
+<td>Es preferible no decidir a dar una conclusión falsa. Con raíces múltiples, hallar las raíces es un problema mal condicionado (error ≈ ε_máquina^(1/m))</td>
+</tr>
+<tr>
+<td>ρ muy cerca de 1</td>
+<td>Con |ρ − 1| &lt; 10⁻⁹ (10⁻⁶ con raíces casi repetidas) → indeterminado</td>
+<td>El error de redondeo de ρ es de ese orden; comparar ρ con 1 en <code>float</code> podría invertir la conclusión. Si hay decisión exacta (grado ≤ 2, p(±1) = 0), se usa</td>
+</tr>
+<tr>
+<td>n &gt; 8 en el radio espectral</td>
+<td>No se calcula ρ (<code>N_MAX_ESPECTRAL</code>)</td>
+<td>OFICIAL p. 2: «cuando el procedimiento estudiado lo permita». Para n grande quedan la dominancia y las iteraciones</td>
+</tr>
+<tr>
+<td>Durand-Kerner y Faddeev-LeVerrier <strong>no se vieron en clase</strong></td>
+<td>Son una extensión</td>
+<td>El polinomio coincide con Sarrus en 3×3, y las raíces se verifican con |p(λ)| y la traza. El alcance está pendiente con la docente (P-5)</td>
+</tr>
+<tr>
+<td>Iterativos en <code>float</code></td>
+<td>Aproximaciones</td>
+<td>Se detienen por tolerancia; las diferencias se justifican por ε (OFICIAL p. 3)</td>
+</tr>
+<tr>
+<td>Criterio A predeterminado y norma ∞</td>
+<td>Distinto de algunos manuscritos que suman las diferencias</td>
+<td>La norma ∞ es el máximo por definición; con la suma se calcula la norma 1</td>
+</tr>
+<tr>
+<td>No hay reordenamiento automático de filas</td>
+<td>Una matriz no dominante se informa tal cual</td>
+<td>Reordenar cambiaría el sistema que dio el usuario; se puede reordenar a mano</td>
+</tr>
+<tr>
+<td>Perturbación porcentual por componente</td>
+<td>bᵢ = 0 no se perturba</td>
+<td>Con un único p, ‖Δb‖/‖b‖ = p/100 exactamente. Para bᵢ = 0 está el modo absoluto</td>
+</tr>
+<tr>
+<td>Aviso de pivote pequeño (10⁻¹⁰)</td>
+<td>Solo advierte</td>
+<td>Es un umbral técnico: con fracciones el resultado es exacto</td>
+</tr>
+<tr>
+<td>Precondicionador M = D sin efecto en Jacobi, GS y SOR</td>
+<td>Es un hecho matemático, no un fallo; contradice la diapositiva 19 de S9-05/10</td>
+<td>Demostración en D.7; la aplicación compara T de forma exacta y muestra el efecto real (κ y Richardson)</td>
+</tr>
+<tr>
+<td>Richardson y la sugerencia de reordenamiento</td>
+<td>Son extras</td>
+<td>Richardson solo se usa en la pestaña del precondicionador. El reordenamiento se sugiere y no se aplica</td>
+</tr>
+<tr>
+<td>Gráficas sin pruebas automáticas de su contenido</td>
+<td>Se revisaron como imagen</td>
+<td>Las pruebas comprueban que se generan sin errores; el contenido se revisó manualmente</td>
+</tr>
+<tr>
+<td>Instalación probada solo en un equipo</td>
+<td>—</td>
+<td>Cada integrante debe probarla en el suyo antes de la defensa</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Errores de las láminas que la aplicación corrige</strong> (detalle en <code>docs/guia_defensa.md</code> §6). Si la docente pregunta por qué la aplicación no coincide con una lámina, sustituyan la solución en el sistema y muestren el residuo. Por ejemplo, en S6-14/09 p. 29 la lámina da (1/2, −1, −1), y la 2.ª ecuación da 0.5 + 3 − 2 = 1.5 ≠ 4.</p>
+<p><strong>Uso de IA:</strong> está declarado en <code>docs/herramientas_y_bibliotecas.md</code> §4. <strong>La autorización de la docente está pendiente</strong> (P-2). No afirmen que está autorizado hasta tener su respuesta.</p>
+</section>
+<section class="parte" id="parte-2"><h1 class="titulo-parte">Parte 2 · Resumen de la lógica por módulo</h1>
+<p><strong>Versión:</strong> 03-nov-2026. Es la versión condensada de <a href="#parte-1">guia_defensa_equipo.md</a>; allí están las demostraciones y las 34 preguntas con su respuesta completa.<br />
+<strong>Regla de oro:</strong> la docente elige al menos dos módulos y puede pedir un caso no preparado. <strong>Estudien los cuatro.</strong></p>
+<h2 id="r-lo-que-hay-que-saber-de-memoria-en-cualquier-modulo">Lo que hay que saber de memoria en cualquier módulo</h2>
+<ol>
+<li><strong>Arquitectura.</strong> <code>algebra/</code> (matemática en Python puro, sin NumPy) → <code>interfaz/</code> (Streamlit: lee el texto y muestra los resultados) → <code>visualizacion/</code> (Matplotlib: solo dibuja).</li>
+<li><strong>Aritmética.</strong><ul>
+<li>Exacta (<code>Fraction</code>) en los Módulos I, II y III y en la matriz T.</li>
+<li><code>float</code> en las iteraciones y en las raíces del polinomio.</li>
+<li>El porqué: la clasificación sin redondeos; los iterativos son aproximaciones.</li>
+</ul>
+</li>
+<li><strong>Validación.</strong> <code>leer_numero</code> convierte texto en <code>Fraction</code> y señala la celda errónea. <code>validar_sistema</code> y <code>validar_cuadrada</code> comprueban las dimensiones. Nunca se cierra la aplicación.</li>
+<li>
+<p><strong>Autoverificación que se puede mostrar en vivo:</strong></p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>Comprobación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>I</td>
+<td>b − Ax = 0</td>
+</tr>
+<tr>
+<td>II</td>
+<td>A·A⁻¹ = I</td>
+</tr>
+<tr>
+<td>III</td>
+<td>Aᵀr = 0</td>
+</tr>
+<tr>
+<td>IV</td>
+<td>r_k pequeño; Σλ = traza(T)</td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li>
+<p><strong>Evidencia.</strong> 204 pruebas OK y la auditoría aleatoria con 0 fallos. Los valores esperados son independientes: <strong>no</strong> salen de las láminas, varias de las cuales tienen errores.</p>
+</li>
+</ol>
+<hr />
+<h2 id="r-modulo-i-sistemas-lineales-algebra-directos-py">Módulo I — Sistemas lineales (<code>algebra/directos.py</code>)</h2>
+<p><strong>Qué hace.</strong> Resuelve Ax = b (m×n cualquiera) con Gauss o Gauss-Jordan, muestra cada operación y clasifica el sistema.</p>
+<p><strong>Funciones que hay que identificar:</strong></p>
+<ul>
+<li><code>resolver_gauss</code> y <code>resolver_gauss_jordan</code> llaman a <code>_resolver</code>, que usa <code>_escalonar</code>, <code>_rango_aumentada</code> y <code>_sustitucion_atras</code>;</li>
+<li><code>inversa_gauss_jordan</code>, <code>determinante</code> y <code>solucion_unica</code> (esta la usan los otros módulos).</li>
+</ul>
+<p><strong>Lógica de <code>_escalonar</code></strong> (hay que poder explicarla línea por línea):</p>
+<ol>
+<li>Para cada columna, <code>_buscar_pivote</code> busca, desde la fila actual hacia abajo, un elemento ≠ 0 (o el mayor con pivoteo parcial).</li>
+<li>Si no lo encuentra, la columna no tiene pivote y su variable es <strong>libre</strong>.</li>
+<li>Si el pivote está en otra fila, intercambia las filas: el <code>Paso</code> registra el motivo y <code>signo = −signo</code>.</li>
+<li><code>producto *= pivote</code>, para el determinante.</li>
+<li>Aviso si |pivote| &lt; 10⁻¹⁰·máx|aᵢⱼ|.</li>
+<li>Gauss anula debajo con Fᵢ → Fᵢ − (aᵢc/a_rc)·F_r. Gauss-Jordan además divide la fila entre el pivote y anula arriba.</li>
+</ol>
+<p><strong>Fórmulas:</strong></p>
+<ul>
+<li>multiplicador m = aᵢc / a_rc;</li>
+<li>x_c = (b'_r − Σ_{j&gt;c} u_rj x_j) / u_rc;</li>
+<li>det = (−1)^intercambios · Π pivotes;</li>
+<li>[A | I] → [I | A⁻¹].</li>
+</ul>
+<p><strong>Clasificación (rangos = número de pivotes):</strong></p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Condición</th>
+<th>Resultado</th>
+<th>Señal en la matriz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rango(A) &lt; rango([A|b])</td>
+<td>INCONSISTENTE</td>
+<td>fila [0 … 0 | c], c ≠ 0</td>
+</tr>
+<tr>
+<td>rango(A) = rango([A|b]) = n</td>
+<td>UNICA</td>
+<td>—</td>
+</tr>
+<tr>
+<td>rango(A) = rango([A|b]) &lt; n</td>
+<td>INFINITAS</td>
+<td>x = xₚ + Σ tⱼvⱼ; xₚ con libres = 0; vⱼ resuelve Av = 0 con la libre j = 1</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Ejemplos para practicar:</strong></p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Ejemplo</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>«Pivote nulo»</td>
+<td>F1 ↔ F2; x = (1, 1, 1); det = −1</td>
+</tr>
+<tr>
+<td>«Infinitas»</td>
+<td>x = (1/2, 1/2, 0) + t(−1/2, −1/2, 1)</td>
+</tr>
+<tr>
+<td>«Inconsistente»</td>
+<td>rangos 2 &lt; 3</td>
+</tr>
+<tr>
+<td>2x + y = 5, x − y = 1</td>
+<td>F2 → F2 − ½F1; x = (2, 1); det = −3</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Preguntas clave:</strong></p>
+<ul>
+<li>¿Qué pasa con un pivote 0? → Se intercambian filas; si no hay ninguna fila disponible, la variable es libre.</li>
+<li>¿Por qué cambia el signo del determinante al intercambiar filas?</li>
+<li>¿Qué aporta el pivoteo parcial? → Estabilidad en punto flotante; con fracciones, la misma solución.</li>
+<li>¿Cómo se obtiene la forma paramétrica?</li>
+<li>¿Por qué A singular ⇔ falta un pivote ⇔ det = 0?</li>
+</ul>
+<hr />
+<h2 id="r-modulo-ii-condicionamiento-algebra-condicion-py">Módulo II — Condicionamiento (<code>algebra/condicion.py</code>)</h2>
+<p><strong>Qué hace.</strong> Calcula κ∞(A), lo interpreta y compara x con x̃ cuando b se perturba.</p>
+<p><strong>Funciones:</strong></p>
+<ul>
+<li><code>numero_condicion_infinito</code>, que usa <code>norma_infinito_matriz</code>, <code>inversa_gauss_jordan</code> y <code>clasificar_kappa</code>;</li>
+<li><code>construir_delta_b</code>;</li>
+<li><code>analizar_perturbacion</code>, que resuelve con <code>solucion_unica</code> dos veces y llama a <code>_interpretar</code>.</li>
+</ul>
+<p><strong>Fórmulas:</strong></p>
+<ul>
+<li>‖A‖∞ = máxᵢ Σⱼ|aᵢⱼ| (mayor suma de fila) y ‖v‖∞ = máx|vᵢ|;</li>
+<li><strong>κ∞ = ‖A‖∞‖A⁻¹‖∞</strong>, con κ ≥ 1;</li>
+<li>escala del proyecto: κ &lt; 10 baja, 10 ≤ κ &lt; 100 moderada, κ ≥ 100 alta;</li>
+<li><strong>‖Δx‖/‖x‖ ≤ κ·‖Δb‖/‖b‖</strong>;</li>
+<li>porcentual: Δbᵢ = p/100·bᵢ, de modo que ‖Δb‖/‖b‖ = p/100.</li>
+</ul>
+<p><strong>Demostración de la cota</strong> (hay que saberla):</p>
+<ol>
+<li>Δx = A⁻¹Δb, de modo que ‖Δx‖ ≤ ‖A⁻¹‖‖Δb‖.</li>
+<li>‖b‖ ≤ ‖A‖‖x‖.</li>
+<li>Se multiplican ambas desigualdades.</li>
+</ol>
+<p><strong>Casos especiales:</strong></p>
+<ul>
+<li>A singular → <code>MATRIZ_SINGULAR</code>: κ no está definido y no es lo mismo que κ grande.</li>
+<li>‖b‖ = 0 o ‖x‖ = 0 → el error relativo no está definido y se avisa.</li>
+</ul>
+<p><strong>Ejemplos:</strong></p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Ejemplo</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[[1, 2], [3, 1]]</td>
+<td>‖A‖ = 4, A⁻¹ = [[−1/5, 2/5], [3/5, −1/5]], ‖A⁻¹‖ = 4/5, κ = 16/5 (baja)</td>
+</tr>
+<tr>
+<td>[[4, 1], [1, 3]]</td>
+<td>κ = 25/11 ≈ 2.27</td>
+</tr>
+<tr>
+<td>[[1, 1], [1, 1.0001]]</td>
+<td>κ ≈ 40004; x pasa de (1, 1) a (0, 2) con Δb₂ = 0.0001</td>
+</tr>
+<tr>
+<td>I + 10J</td>
+<td>κ = 41; con Δb = (1, −1, 1) la amplificación es exactamente 41 (peor caso)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Preguntas clave:</strong></p>
+<ul>
+<li>¿Qué indica κ?</li>
+<li>¿Por qué la amplificación observada puede ser menor que κ?</li>
+<li>¿Singular o mal condicionada?</li>
+<li>¿Por qué κ ≥ 1?</li>
+<li>¿Cómo se calcula la inversa? → Con nuestro Gauss-Jordan, verificando A·A⁻¹ = I.</li>
+</ul>
+<hr />
+<h2 id="r-modulo-iii-minimos-cuadrados-algebra-minimos-py">Módulo III — Mínimos cuadrados (<code>algebra/minimos.py</code>)</h2>
+<p><strong>Qué hace.</strong> Para m &gt; n busca x̂ que minimiza ‖b − Ax‖₂, y ajusta rectas y = mx + c.</p>
+<p><strong>Funciones:</strong></p>
+<ul>
+<li><code>clasificar_forma</code>;</li>
+<li><code>minimos_cuadrados</code>, que usa <code>transpuesta</code>, <code>multiplicar_matrices</code>, <code>resolver_gauss</code> y <code>norma_2_cuadrado_vector</code>;</li>
+<li><code>ajuste_lineal</code>, que construye la matriz de diseño <code>[[xᵢ, 1]]</code>;</li>
+<li><code>cramer</code> y el campo <code>det_aumentada</code>: el <strong>procedimiento de clase</strong> (S8-30/09 pp. 6-7), mostrado como verificación;</li>
+<li>la gráfica, <code>grafica_ajuste</code>.</li>
+</ul>
+<p><strong>Fórmulas:</strong></p>
+<ul>
+<li><strong>AᵀA x̂ = Aᵀb</strong>;</li>
+<li>r = b − Ax̂; ‖r‖₂ = √Σrᵢ² (‖r‖₂² es exacta, solo la raíz es <code>float</code>);</li>
+<li><strong>Aᵀr = 0</strong>;</li>
+<li>para la recta: AᵀA = [[Σx², Σx], [Σx, k]] y Aᵀb = [Σxy, Σy].</li>
+</ul>
+<p><strong>Por qué (hay que saberlo):</strong></p>
+<ul>
+<li>∇‖b − Ax‖² = −2Aᵀ(b − Ax) = 0.</li>
+<li>Geométricamente, Ax̂ es la proyección de b sobre Col(A), de modo que r ⟂ columnas.</li>
+<li>La solución es única ⇔ las columnas son independientes ⇔ AᵀA es invertible.</li>
+</ul>
+<p><strong>Casos especiales:</strong></p>
+<ul>
+<li>AᵀA singular → no se presenta x̂.</li>
+<li>Menos de 2 puntos, todos los x iguales o listas de distinto largo → <code>ErrorAjuste</code>.</li>
+<li>Si b ∈ Col(A), el residuo es 0 y x̂ es la solución exacta.</li>
+</ul>
+<p><strong>Ejemplos:</strong></p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Ejemplo</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A = [[1, 3], [3, −2], [−2, 5]], b = (−1, 8, −8)</td>
+<td>x̂ = (65/33, −29/33), r = (−1/3, 1/3, 1/3), ‖r‖₂ ≈ 0.577</td>
+</tr>
+<tr>
+<td>Puntos (1, 2), (2, 2.5), (3, 3.7), (4, 4.1)</td>
+<td>[[30, 10], [10, 4]]·(m, c) = (34.5, 12.3), de modo que <strong>y = 3/4 x + 6/5</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Preguntas clave:</strong></p>
+<ul>
+<li>¿Por qué las ecuaciones normales?</li>
+<li>¿Qué significa Aᵀr = 0?</li>
+<li>¿Qué indica ‖r‖₂?</li>
+<li>¿Cuándo no hay x̂ único?</li>
+<li>¿Con qué método se resuelven? → El Gauss propio del Módulo I, porque lo exige el enunciado. Cramer, que usa la docente, se muestra como verificación y coincide: det([A|b]) = −11; 363, 715 y −319.</li>
+</ul>
+<hr />
+<h2 id="r-modulo-iv-metodos-iterativos-y-convergencia-algebra-iterativos-py-algebra-espectral-py-algebra-dispersas-py">Módulo IV — Métodos iterativos y convergencia (<code>algebra/iterativos.py</code>, <code>algebra/espectral.py</code>, <code>algebra/dispersas.py</code>)</h2>
+<p><strong>Qué hace.</strong> Jacobi, Gauss-Seidel y SOR con criterios configurables; comparación homogénea; dominancia diagonal; matriz de iteración y ρ(T).</p>
+<p><strong>Funciones:</strong></p>
+<ul>
+<li>pasos: <code>paso_jacobi</code>, <code>paso_gauss_seidel</code>, <code>paso_sor</code>;</li>
+<li><code>validar_configuracion</code> y <code>ejecutar</code>/<code>_ejecutar</code>, el bucle común;</li>
+<li><code>dominancia_diagonal</code>, <code>reordenamiento_dominante</code> (sugiere el orden de las ecuaciones, como en la Tarea II), y <code>comparar_metodos</code> con <code>configuraciones_homogeneas</code>;</li>
+<li><code>matriz_iteracion</code>, <code>polinomio_caracteristico</code>, <code>desarrollo_sarrus</code> (procedimiento de clase en 3×3), <code>raices</code>/<code>durand_kerner</code>, <code>analizar_matriz</code>, <code>concluir</code> y <code>radio_espectral</code>;</li>
+<li><code>a_csr</code> y <code>paso_*_csr</code>;</li>
+<li>incentivo: <code>precondicionar_diagonal</code>, <code>analizar_precondicionador</code> y <code>paso_richardson</code>.</li>
+</ul>
+<p><strong>Fórmulas por componentes:</strong></p>
+<ul>
+<li>Jacobi: xᵢ⁽ᵏ⁾ = (bᵢ − Σ_{j≠i} aᵢⱼxⱼ⁽ᵏ⁻¹⁾)/aᵢᵢ.</li>
+<li>Gauss-Seidel: lo mismo, pero con xⱼ⁽ᵏ⁾ para j &lt; i (en el código: actualiza sobre la misma lista).</li>
+<li>SOR: xᵢ⁽ᵏ⁾ = (1 − ω)xᵢ⁽ᵏ⁻¹⁾ + ω·[valor de GS]. Con ω = 1 es GS.</li>
+</ul>
+<p><strong>Matrices de iteración</strong> (A = D + L + U con los signos de A; x⁽ᵏ⁾ = Tx⁽ᵏ⁻¹⁾ + c):</p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Método</th>
+<th>T</th>
+<th>c</th>
+<th>De dónde sale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jacobi</td>
+<td>−D⁻¹(L + U)</td>
+<td>D⁻¹b</td>
+<td>Dx = b − (L + U)x</td>
+</tr>
+<tr>
+<td>Gauss-Seidel</td>
+<td>−(D + L)⁻¹U</td>
+<td>(D + L)⁻¹b</td>
+<td>(D + L)x = b − Ux</td>
+</tr>
+<tr>
+<td>SOR</td>
+<td>(D + ωL)⁻¹[(1 − ω)D − ωU]</td>
+<td>ω(D + ωL)⁻¹b</td>
+<td>La fórmula por componentes multiplicada por aᵢᵢ</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Métricas</strong> (no son lo mismo):</p>
+<ul>
+<li>d_k = ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞;</li>
+<li>r_k = ‖b − Ax⁽ᵏ⁾‖∞ (sistema original);</li>
+<li>e_k = ‖x⁽ᵏ⁾ − x*‖∞ (x* del Gauss exacto; solo en la comparación). Es el <strong>«Error final (‖x⁽ᵏ⁾ − x‖∞)»</strong> de la tabla de la lámina S9-05/10 p. 17.</li>
+</ul>
+<p><strong>Criterios de parada</strong> (desigualdad estricta):</p>
+<ul>
+<li>A: d_k &lt; ε (predeterminado);</li>
+<li>B: r_k &lt; ε (puede parar en k = 0);</li>
+<li>C: N fijas, que <strong>no</strong> demuestran convergencia.</li>
+</ul>
+<p>La norma ∞ es el <strong>máximo</strong>, no la suma.</p>
+<p><strong>Códigos:</strong></p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TOLERANCIA_CAMBIO</code> / <code>TOLERANCIA_RESIDUO</code></td>
+<td>Se cumplió el criterio</td>
+</tr>
+<tr>
+<td><code>N_COMPLETADAS</code></td>
+<td>Se hicieron las N iteraciones</td>
+</tr>
+<tr>
+<td><code>MAXIMO_ITERACIONES</code></td>
+<td><strong>No</strong> significa que diverja</td>
+</tr>
+<tr>
+<td><code>ERROR_NO_FINITO</code></td>
+<td>Desbordamiento; <strong>no</strong> es una prueba de divergencia</td>
+</tr>
+<tr>
+<td><code>DIAGONAL_CERO</code></td>
+<td>Algún aᵢᵢ = 0</td>
+</tr>
+<tr>
+<td><code>ENTRADA_INVALIDA</code> / <code>ERROR_INTERNO</code></td>
+<td><code>ejecutar</code> nunca lanza excepciones</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Convergencia:</strong></p>
+<ul>
+<li><strong>Teorema:</strong> e⁽ᵏ⁾ = Tᵏe⁽⁰⁾; el método converge para todo x⁽⁰⁾ ⇔ <strong>ρ(T) = máx|λ| &lt; 1</strong>. Cuanto menor es ρ, más rápido.</li>
+<li><strong>Dominancia diagonal estricta</strong> (|aᵢᵢ| &gt; Σ_{j≠i}|aᵢⱼ|) ⇒ ‖T_J‖∞ &lt; 1 ⇒ converge. Es <strong>suficiente, no necesaria</strong>.</li>
+<li><strong>A singular</strong> ⇒ Av = 0 ⇒ Tv = v (porque T = I − M⁻¹A) ⇒ λ = 1 ⇒ no converge.</li>
+</ul>
+<p><strong>Cálculo de ρ(T)</strong> (paso a paso):</p>
+<ol>
+<li>T exacta con fracciones (inversas con nuestro Gauss-Jordan).</li>
+<li><strong>Faddeev-LeVerrier:</strong> M₀ = 0; Mₖ = TMₖ₋₁ + cₖ₋₁I; cₖ = −tr(TMₖ)/k. Da p(λ) = det(λI − T) exacto, igual que Sarrus en 3×3.</li>
+<li>Raíces:<ul>
+<li>λ = 0, exactas;</li>
+<li>grado ≤ 2: fórmula cuadrática y <strong>Schur-Cohn</strong> exacto (|c₂| &lt; 1 y |c₁| &lt; 1 + c₂);</li>
+<li>grado ≥ 3: <strong>Durand-Kerner</strong>, zᵢ ← zᵢ − p(zᵢ)/Π_{j≠i}(zᵢ − zⱼ), que encuentra también las raíces complejas.</li>
+</ul>
+</li>
+<li>Verificar: |p(λ)| ≈ 0 y Σλ = traza(T).</li>
+<li><code>concluir</code>:<ul>
+<li>p(±1) = 0 exacto → no converge;</li>
+<li>si hay decisión exacta, se usa esa;</li>
+<li>si el cálculo no es fiable o |ρ − 1| &lt; 10⁻⁹ (10⁻⁶ con raíces casi repetidas) → INDETERMINADO;</li>
+<li>si n &gt; 8, no se calcula.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Ejemplos</strong> (ε = 10⁻³, x⁽⁰⁾ = 0, ω = 1.2):</p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Ejemplo</th>
+<th>Iteraciones J / GS / SOR</th>
+<th>ρ_J / ρ_GS / ρ_SOR</th>
+<th>Nota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S: 10x − y + 2z = 6, …</td>
+<td>7 / 4 / 6</td>
+<td>0.268 / 0.043 / 0.217</td>
+<td>Dominante; x* = (217/208, 59/26, −225/208)</td>
+</tr>
+<tr>
+<td>S9-07/10 [[3, 3, 3], [3, 3, 2], [−3, −2, 3]]</td>
+<td>50 / 50 / 50 (k_max)</td>
+<td>1.174 / 0.935 / ≥ 1</td>
+<td>J: par complejo, polinomio −λ³ − 4/9λ + 4/3. GS converge lento. SOR (ω = 6/5): λ = −1 exacto</td>
+</tr>
+<tr>
+<td>2×2 [[4, 1], [2, 5]]</td>
+<td>—</td>
+<td>√0.1 ≈ 0.316 / 0.1</td>
+<td>Faddeev: c₁ = 0, c₂ = −1/10; Schur-Cohn exacto</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Preguntas clave:</strong></p>
+<ul>
+<li>Diferencias entre los tres pasos en el código.</li>
+<li>¿Qué criterio y qué norma se usan?</li>
+<li>¿Llegar a k_max significa divergencia? → No.</li>
+<li>¿La dominancia garantiza convergencia? ¿Y si no se cumple?</li>
+<li>¿Cómo se calcula ρ sin bibliotecas?</li>
+<li>¿Por qué no el método de la potencia? → Falla con pares complejos y con ±μ.</li>
+<li>¿Qué pasa con raíces múltiples o con ρ ≈ 1? → Indeterminado en lugar de una conclusión falsa.</li>
+<li>¿Qué es «error final»? → ‖x⁽ᵏ⁾ − x*‖∞, igual que en la lámina S9-05/10 p. 17; también se muestran d y r.</li>
+<li>¿Cómo sigue la aplicación el procedimiento de clase del radio espectral? → En 3×3 muestra tr(T), Σ menores y det(T) por Sarrus, y comprueba que el polinomio coincide.</li>
+<li>¿Qué hace ω y por qué 0 &lt; ω &lt; 2 no basta?</li>
+<li>¿Qué aporta CSR? → O(nnz) por iteración, con las mismas iteraciones.</li>
+<li>¿Por qué el precondicionador M = D no cambia las iteraciones? → En D⁻¹A la diagonal es I, así que T̃_J = −D⁻¹(L + U) = T_J, y lo mismo pasa con GS y SOR. Sí cambian κ (si la diagonal no es uniforme), el residuo y Richardson (que se convierte en Jacobi).</li>
+</ul>
+<p><strong>Precondicionamiento</strong> (pestaña «Precondicionamiento diagonal»), ejemplo con la tridiagonal [−1, 4, −1]:</p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th></th>
+<th>Original</th>
+<th>Con M = D</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>κ∞</td>
+<td>30/11</td>
+<td>30/11 (B = A/4)</td>
+</tr>
+<tr>
+<td>Jacobi / GS / SOR</td>
+<td>7 / 5 / 7</td>
+<td>7 / 5 / 7, idénticas (T y c iguales, exacto)</td>
+</tr>
+<tr>
+<td>Richardson</td>
+<td>no converge (ρ(I − A) ≈ 4.618)</td>
+<td>converge (ρ = ρ(T_J) ≈ 0.405)</td>
+</tr>
+</tbody>
+</table></div>
+<p>La diapositiva 19 de S9-05/10 afirma que Jacobi mejora: no es reproducible y hay que saber explicar por qué.</p>
+<hr />
+<h2 id="r-limitaciones-que-hay-que-defender-sin-ocultarlas">Limitaciones que hay que defender (sin ocultarlas)</h2>
+<ol>
+<li><strong>Autovalores múltiples:</strong><ul>
+<li>raíz doble: precisión ≈10⁻⁸; se avisa y se decide con la banda de 10⁻⁶;</li>
+<li>raíz triple o mayor: Durand-Kerner no suele converger, así que es «no fiable» → <strong>indeterminado</strong>.</li>
+</ul>
+</li>
+<li><strong>ρ ≈ 1</strong> → indeterminado dentro de la banda, salvo con una decisión exacta.</li>
+<li><strong>n &gt; 8</strong> → no se calcula ρ.</li>
+<li><strong>Durand-Kerner y Faddeev-LeVerrier no se vieron en clase.</strong> Son una extensión verificada; el alcance está pendiente con la docente (P-5 en <span class="ref">pendientes_docente.md</span>).</li>
+<li><strong>Iterativos en <code>float</code>:</strong> las diferencias se justifican por ε.</li>
+<li><strong>Precondicionador M = D:</strong> no acelera Jacobi, GS ni SOR. Es un teorema y no una falla.</li>
+<li><strong>Uso de IA:</strong> está declarado; <strong>la autorización está pendiente</strong> (P-2). No digan que está autorizado.</li>
+</ol>
+<h2 id="r-lista-de-comprobacion-personal-antes-de-la-defensa">Lista de comprobación personal antes de la defensa</h2>
+<ul>
+<li>[ ] Instalé y abrí la aplicación en mi computadora con <code>ejecutar.bat</code>.</li>
+<li>[ ] Ejecuté las pruebas (204 OK).</li>
+<li>[ ] Hice la demostración de los cuatro módulos (guion en la guía, parte F) y obtuve los resultados esperados.</li>
+<li>[ ] Sé explicar <code>_escalonar</code>, <code>analizar_perturbacion</code>, <code>minimos_cuadrados</code>, <code>_ejecutar</code> y <code>radio_espectral</code> sin leer.</li>
+<li>[ ] Sé deducir la cota de κ, las ecuaciones normales y las tres matrices T, y enunciar el teorema de ρ.</li>
+<li>[ ] Practiqué un caso no preparado: escribir los datos, interpretar y verificar.</li>
+</ul>
+</section>
+<p class="pie">Generado a partir de <code>docs/guia_defensa_equipo.md</code> y <code>docs/resumen_logica_por_modulo.md</code>.
+Funciona sin conexión a internet: no usa archivos externos.</p>
+</main>
+</div>
+<button class="tema" id="tema" title="Cambiar tema">Claro / oscuro</button>
+<button class="arriba" id="arriba" title="Volver arriba" aria-label="Volver arriba">↑</button>
+<script>
+const filtro=document.getElementById('filtro');
+filtro.addEventListener('input',()=>{const q=filtro.value.toLowerCase();
+document.querySelectorAll('nav li').forEach(li=>{li.style.display=li.textContent.toLowerCase().includes(q)?'':'none';});});
+const enlaces=[...document.querySelectorAll('nav a')];
+const mapa=new Map(enlaces.map(a=>[a.getAttribute('href').slice(1),a]));
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){enlaces.forEach(a=>a.classList.remove('activo'));
+const a=mapa.get(e.target.id);if(a)a.classList.add('activo');}});},{rootMargin:'0px 0px -75% 0px'});
+document.querySelectorAll('main h2[id],main h3[id]').forEach(h=>obs.observe(h));
+document.getElementById('arriba').onclick=()=>window.scrollTo({top:0});
+const raiz=document.documentElement;
+try{const t=localStorage.getItem('tema-guia');if(t)raiz.dataset.tema=t;}catch(e){}
+document.getElementById('tema').onclick=()=>{const oscuro=raiz.dataset.tema==='oscuro'||(!raiz.dataset.tema&&matchMedia('(prefers-color-scheme: dark)').matches);
+raiz.dataset.tema=oscuro?'claro':'oscuro';try{localStorage.setItem('tema-guia',raiz.dataset.tema);}catch(e){}};
+</script>
+</body>
+</html>

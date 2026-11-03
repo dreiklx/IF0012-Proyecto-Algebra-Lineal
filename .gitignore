@@ -12,9 +12,31 @@ __pycache__/
 Thumbs.db
 .DS_Store
 
-# Entregables generados
-dist/
+# Entregables generados: solo se versiona la entrega estable vigente
+# (ZIP, su SHA-256 y la guía en HTML); las copias y versiones anteriores quedan locales.
 *.zip
+dist/*
+!dist/Grupo01-IF0012-Proyecto-IIC.zip
+!dist/SHA256.txt
+!dist/Guia_Defensa_IF0012.html
 
 # Imágenes generadas por el prototipo opcional
 prototipos/*.png
+
+# Archivos internos del asistente de IA (Claude Code): solo para el desarrollo local.
+# El uso de IA está declarado en docs/herramientas_y_bibliotecas.md §4, que SÍ se entrega.
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+.mcp.json
+
+# Credenciales y configuración local (nunca se versionan)
+.env
+.env.*
+*.pem
+*.key
+.streamlit/secrets.toml
+
+# Temporales
+*.tmp
+*.log

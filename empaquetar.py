@@ -29,9 +29,13 @@ OBLIGATORIOS = [
     "app.py", "README.md", "requirements.txt", "ejecutar.bat",
     os.path.join("docs", "manual_usuario.md"), "casos_prueba",
 ]
-EXCLUIR_DIRECTORIOS = {"__pycache__", ".venv", "venv", ".git", "dist", ".pytest_cache"}
-EXCLUIR_EXTENSIONES = {".pyc", ".pyo", ".zip", ".png"}
-EXCLUIR_ARCHIVOS = {"secrets.toml"}
+EXCLUIR_DIRECTORIOS = {"__pycache__", ".venv", "venv", ".git", "dist", ".pytest_cache",
+                       ".claude", ".vscode", ".idea"}
+EXCLUIR_EXTENSIONES = {".pyc", ".pyo", ".zip", ".png", ".log", ".tmp", ".pem", ".key"}
+# Archivos internos del asistente de IA (Claude Code) y credenciales: nunca se entregan.
+# El uso de IA se declara en docs/herramientas_y_bibliotecas.md, que sí se incluye.
+EXCLUIR_ARCHIVOS = {"secrets.toml", "CLAUDE.md", "CLAUDE.local.md", ".mcp.json", ".env"}
+PROHIBIDOS_EN_ZIP = ("claude.md", "/.claude/", ".env", "secrets.toml", ".mcp.json")
 
 
 def archivos_a_incluir():
@@ -43,7 +47,8 @@ def archivos_a_incluir():
             for carpeta, subcarpetas, archivos in os.walk(ruta):
                 subcarpetas[:] = [d for d in subcarpetas if d not in EXCLUIR_DIRECTORIOS]
                 for nombre in sorted(archivos):
-                    if os.path.splitext(nombre)[1] in EXCLUIR_EXTENSIONES or nombre in EXCLUIR_ARCHIVOS:
+                    if (os.path.splitext(nombre)[1] in EXCLUIR_EXTENSIONES or nombre in EXCLUIR_ARCHIVOS
+                            or nombre.startswith(".env")):
                         continue
                     yield os.path.relpath(os.path.join(carpeta, nombre), RAIZ)
 
@@ -60,9 +65,15 @@ def main():
     destino = os.path.join(RAIZ, "dist", nombre_zip)
     os.makedirs(os.path.dirname(destino), exist_ok=True)
     carpeta_interna = nombre_zip[:-4]
+    relativos = list(archivos_a_incluir())
+    prohibidos = [r for r in relativos
+                  if any(m in "/" + r.replace(os.sep, "/").lower() for m in PROHIBIDOS_EN_ZIP)]
+    if prohibidos:
+        print("No se crea el ZIP: contendría archivos internos o credenciales:", ", ".join(prohibidos))
+        return 1
     cantidad = 0
     with zipfile.ZipFile(destino, "w", zipfile.ZIP_DEFLATED) as zf:
-        for relativo in archivos_a_incluir():
+        for relativo in relativos:
             zf.write(os.path.join(RAIZ, relativo), os.path.join(carpeta_interna, relativo))
             cantidad += 1
     print(f"Creado {destino} con {cantidad} archivos.")

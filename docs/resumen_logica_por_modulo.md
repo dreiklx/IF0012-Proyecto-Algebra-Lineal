@@ -20,7 +20,7 @@
    | III | Aᵀr = 0 |
    | IV | r_k pequeño; Σλ = traza(T) |
 
-5. **Evidencia.** 202 pruebas OK y la auditoría aleatoria con 0 fallos. Los valores esperados son independientes: **no** salen de las láminas, varias de las cuales tienen errores.
+5. **Evidencia.** 204 pruebas OK y la auditoría aleatoria con 0 fallos. Los valores esperados son independientes: **no** salen de las láminas, varias de las cuales tienen errores.
 
 ---
 
@@ -295,7 +295,7 @@ La diapositiva 19 de S9-05/10 afirma que Jacobi mejora: no es reproducible y hay
 ## Lista de comprobación personal antes de la defensa
 
 - [ ] Instalé y abrí la aplicación en mi computadora con `ejecutar.bat`.
-- [ ] Ejecuté las pruebas (202 OK).
+- [ ] Ejecuté las pruebas (204 OK).
 - [ ] Hice la demostración de los cuatro módulos (guion en la guía, parte F) y obtuve los resultados esperados.
 - [ ] Sé explicar `_escalonar`, `analizar_perturbacion`, `minimos_cuadrados`, `_ejecutar` y `radio_espectral` sin leer.
 - [ ] Sé deducir la cota de κ, las ecuaciones normales y las tres matrices T, y enunciar el teorema de ρ.

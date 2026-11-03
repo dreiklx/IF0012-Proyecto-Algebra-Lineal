@@ -10,7 +10,24 @@
 | Integrantes | Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Arias, Samir Sandoval Ramírez |
 | Entrega | **11 de noviembre de 2026** |
 | Defensa individual | Semana del **16 de noviembre de 2026** |
-| Número de grupo (01 o 02) | **01, con evidencia fuerte:** el horario del escritorio coincide con el del grupo 01 en el programa (PROG p. 9). Falta que los demás integrantes lo confirmen |
+| Número de grupo | **01, confirmado por el equipo (03-nov-2026)**. Integrantes, exclusivamente los cuatro de arriba |
+
+## Revisión del 03-nov-2026 (segunda parte): grupo, GitHub y separación de archivos
+
+1. **Grupo 01 confirmado por el equipo.** Integrantes, exclusivamente: Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Arias y Samir Sandoval Ramírez. Se actualizaron los pendientes, la matriz de cumplimiento, las decisiones técnicas y el README. Los números de carné **no** se incluyen en el repositorio, porque son datos personales que ningún requisito del enunciado pide.
+2. **Caso obligatorio (P-3).** Se releyó el enunciado y se revisó el texto de todos los PDF del curso. El caso **no está en ningún documento**. Se detalló qué dice cada página, qué acredita (rúbrica «Casos de prueba», 3 %), cómo incorporarlo y la pregunta exacta para la docente (`pendientes_docente.md`, P-3; `casos_prueba/README.md`).
+3. **Archivos internos de IA y credenciales fuera de la entrega y del repositorio:**
+   - `.gitignore` excluye `CLAUDE.md`, `CLAUDE.local.md`, `.claude/`, `.mcp.json`, `.env*`, claves y archivos temporales.
+   - `empaquetar.py` los excluye y, además, se niega a crear el ZIP si encontrara alguno (prueba `tests/test_empaquetado.py`).
+   - Se comprobó que **ninguno** existe en el proyecto ni en el historial de Git.
+   - La declaración del uso de IA (`docs/herramientas_y_bibliotecas.md` §4) **se conserva** y se entrega.
+   - Se quitó de dos documentos la ruta local que contenía el nombre de usuario del equipo.
+4. **Generador del HTML en el repositorio:** `herramientas/generar_guia_html.py` (solo de desarrollo, fuera del ZIP; requiere `requirements-desarrollo.txt`). Reproduce byte a byte el HTML ya compartido. Ahora escribe a la vez `dist/Guia_Defensa_IF0012.html` y la copia del escritorio, y toma de la guía la versión y el número de pruebas.
+5. **Pruebas:** 204 (las 202 anteriores más 2 del empaquetado), todas OK. Auditorías: 0 fallos.
+6. **ZIP regenerado:** 64 archivos, verificado en una copia extraída (pruebas OK y auditorías con 0 fallos). El anterior quedó en `dist/anteriores/`.
+7. **Repositorio central en GitHub (privado):** `https://github.com/dreiklx/IF0012-Proyecto-Algebra-Lineal`, rama `main`. Reglas de trabajo en el README.
+   - Se versiona: el código, las pruebas, la auditoría, la documentación y la entrega estable de `dist/` (ZIP, SHA256.txt y la guía HTML).
+   - No se versiona: `.venv`, las cachés, `dist/anteriores/` ni las copias de documentos de `dist/`.
 
 ## Revisión del 03-nov-2026: comparación con los PDF y rúbricas
 
@@ -24,7 +41,7 @@
    También se releyeron el enunciado oficial completo (texto) y PROG p. 9. **No inspeccionados visualmente:** las semanas 1, 2 y 4 y el Quiz (Tema 1, sin procedimientos del proyecto). Resultado en [comparacion_procedimientos.md](comparacion_procedimientos.md).
 2. **Hallazgos:**
    - **«Error final» = ‖x⁽ᵏ⁾ − x‖∞** según la lámina S9-05/10 p. 17. Coincide con nuestro e. P-4 resuelto.
-   - **Grupo 01** por el horario. P-1 casi resuelto.
+   - **Grupo 01:** el horario coincide con el programa; después lo confirmó el equipo (P-1 resuelto).
    - **Precondicionamiento:** la lámina indica qué comparar (κ y ρ de A frente a B = D⁻¹A).
    - **Procedimientos de clase no visibles en la aplicación:** det([A|b]) y Cramer en mínimos cuadrados; Sarrus en det(T − λI); reordenamiento de ecuaciones para lograr la dominancia.
 3. **Implementado:**
@@ -51,7 +68,7 @@
    - decisiones técnicas #25 y #28-31;
    - casos III-6 e IV-23 a IV-26;
    - pendientes con la docente.
-8. **HTML para compartir:** `C:\Users\dfarl\Desktop\Guia_Defensa_IF0012.html`, un solo archivo sin dependencias externas. Contiene la guía completa y el resumen.
+8. **HTML para compartir:** `%USERPROFILE%\Desktop\Guia_Defensa_IF0012.html` (copia versionada en `dist/Guia_Defensa_IF0012.html`), un solo archivo sin dependencias externas. Contiene la guía completa y el resumen.
 
 ## Revisión del 02-nov-2026: qué se hizo
 
@@ -80,7 +97,7 @@
 
 ```
 .venv\Scripts\python -m unittest
-Ran 202 tests ... OK            (0 fallos, 0 omitidas; 03-nov-2026)
+Ran 204 tests ... OK            (0 fallos, 0 omitidas; 03-nov-2026)
 ```
 
 | Archivo | Pruebas | Qué cubre | Tipo de oráculo |
@@ -94,6 +111,7 @@ Ran 202 tests ... OK            (0 fallos, 0 omitidas; 03-nov-2026)
 | test_espectral | 25 | T, polinomio, autovalores, ρ, regresiones | Sarrus a mano, formas cerradas, bisección, teoría tridiagonal, determinante a mano (IV-22) |
 | test_dispersas | 8 | Formato CSR | Construcción a mano; igualdad con la versión densa |
 | test_precondicionamiento | 14 | Precondicionador M = D, Richardson, reordenamiento, Sarrus, Cramer | Lámina S9-05/10 diap. 18; inversas 2×2 a mano; autovalores teóricos de la tridiagonal; manuscrito S8-30/09 |
+| test_empaquetado | 2 | El ZIP excluye los archivos internos de IA, las credenciales y las cachés; una sola carpeta raíz | Proyecto temporal con archivos trampa |
 | test_app | 15 | La interfaz con AppTest (sin navegador) y el CSV | **Superficiales:** comprueban que no hay excepciones y que aparecen los mensajes, **no** el contenido visual de las gráficas |
 
 **Auditoría independiente** (`auditoria/`, semilla fija) — **0 fallos**:
@@ -123,7 +141,7 @@ Los que dependen de la docente están detallados en [pendientes_docente.md](pend
 
 | # | Pendiente | Impacto | Quién |
 |---|---|---|---|
-| P-1 | **Número de grupo**: evidencia fuerte de que es el 01 | Falta que los demás integrantes lo confirmen | Grupo |
+| P-1 | ~~Número de grupo~~ | **Resuelto:** grupo 01, confirmado por el equipo | — |
 | P-2 | **Autorización expresa del uso de IA** (PROG p. 7 §6.2) | Integridad académica: **prioridad máxima** | Grupo → docente |
 | P-3 | **Caso de validación obligatorio** | C-07 (3 %) | Docente |
 | P-4 | Significado de «error final» | **Resuelto** con la lámina S9-05/10 p. 17 | — |
@@ -137,9 +155,9 @@ Los que dependen de la docente están detallados en [pendientes_docente.md](pend
 
 ## Verificación del ZIP
 
-ZIP generado el 03-nov-2026 con `python empaquetar.py 01`: `dist/Grupo01-IF0012-Proyecto-IIC.zip`. El número 01 tiene evidencia fuerte, pero falta la confirmación del grupo.
+ZIP generado el 03-nov-2026 con `python empaquetar.py 01`: `dist/Grupo01-IF0012-Proyecto-IIC.zip`. Grupo 01, confirmado por el equipo.
 
-- **Contenido:** 63 archivos, una sola carpeta raíz (`Grupo01-IF0012-Proyecto-IIC/`) y `testzip` sin errores. Incluye `algebra/precondicionamiento.py`, `tests/test_precondicionamiento.py`, `auditoria/auditoria_precondicionamiento.py` y `docs/comparacion_procedimientos.md`.
+- **Contenido:** 64 archivos (regenerado tras la segunda parte del 03-nov), una sola carpeta raíz (`Grupo01-IF0012-Proyecto-IIC/`) y `testzip` sin errores. Incluye `algebra/precondicionamiento.py`, `tests/test_precondicionamiento.py`, `auditoria/auditoria_precondicionamiento.py` y `docs/comparacion_procedimientos.md`.
 - **Exclusiones:** sin `.venv`, `__pycache__`, `.pyc`, `.git`, `dist`, imágenes ni `secrets.toml`.
 - **Prueba en una copia limpia** (03-nov):
   - el ZIP se extrajo en una carpeta nueva;
@@ -148,4 +166,3 @@ ZIP generado el 03-nov-2026 con `python empaquetar.py 01`: `dist/Grupo01-IF0012-
   - en esa copia: **202 pruebas OK** y las 3 auditorías con **0 fallos**.
 - **Candidatos anteriores** (27-oct y 02-nov): se conservaron, sin sobrescribirlos, en `dist/anteriores/`.
 - **Después de la verificación** solo se modificó esta sección y se regeneró el ZIP. El SHA-256 final está en `dist/SHA256.txt`.
-- **Si el grupo resultara ser el 02:** `python empaquetar.py 02`.
