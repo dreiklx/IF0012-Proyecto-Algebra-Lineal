@@ -11,6 +11,8 @@
 - [comparacion_procedimientos.md](comparacion_procedimientos.md): procedimientos de clase frente al código;
 - [pendientes_docente.md](pendientes_docente.md): lo que depende de la docente.
 
+> **03-nov-2026, rediseño visual:** la presentación de cada criterio y de los cinco incentivos en la interfaz se documenta en [diseno_visual.md](diseno_visual.md), con capturas. La lógica y los estados de esta matriz no cambiaron.
+
 ## Estados
 
 | Estado | Significado |

@@ -12,6 +12,13 @@
 | Defensa individual | Semana del **16 de noviembre de 2026** |
 | Número de grupo | **01, confirmado por el equipo (03-nov-2026)**. Integrantes, exclusivamente los cuatro de arriba |
 
+## Rediseño visual (03-nov-2026, rama `feature/rediseño-visual`)
+
+- **Identidad propia:** tema oscuro de software científico, portada con tarjetas de los cuatro módulos y de los cinco incentivos (con accesos directos), etapas numeradas, tarjetas de resultado, etiquetas de estado, barra de la escala de κ, recomendaciones contextuales y gráficas con un tema común.
+- **Archivos nuevos:** `interfaz/estilo.py` y `visualizacion/tema.py`. Archivos modificados: `app.py`, las cuatro pantallas de `interfaz/`, `visualizacion/graficos.py`, `visualizacion/geometria_3d.py` y `.streamlit/config.toml`.
+- **Sin cambios** en `algebra/`, `tests/` ni `auditoria/`. Los resultados de los 25 ejemplos precargados son idénticos byte a byte; 204 pruebas OK y la auditoría con 0 fallos.
+- **Documentación:** `docs/diseno_visual.md` (matrices de la rúbrica y de los incentivos con su presentación) y capturas en `docs/capturas/`.
+
 ## Actualización del 03-nov-2026 (tercera parte): organización del grupo
 
 - **Grupo 01 confirmado:** Derek, Elmer, Samir y Daniel.

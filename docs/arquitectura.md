@@ -15,9 +15,11 @@ proyecto-algebra/
 │   └── precondicionamiento.py  Precondicionador diagonal M = D (incentivo)
 ├── interfaz/               PRESENTACIÓN: Streamlit; no contiene cálculos
 │   ├── componentes.py      LaTeX, tablas, lectura con mensajes de error
+│   ├── estilo.py           Identidad visual: hoja de estilos y componentes (tarjetas, etiquetas)
 │   ├── ejemplos.py         Ejemplos del curso (resultados verificados)
 │   └── modulo_*.py         Una página por módulo
 ├── visualizacion/          GRÁFICAS: Matplotlib; solo dibujan resultados del núcleo
+│   ├── tema.py             Tema común de las gráficas (colores por método, leyendas)
 │   ├── graficos.py         Ajuste, convergencia, comparación, autovalores
 │   └── geometria_3d.py     Rectas (2D) y planos (3D) de un sistema
 ├── tests/                  Pruebas unittest del núcleo y de la interfaz (AppTest)

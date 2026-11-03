@@ -41,6 +41,14 @@ from algebra.validacion import (
 )
 from interfaz import ejemplos
 from interfaz.componentes import ayuda_formato, latex_matriz, latex_vector, leer_matriz_ui, leer_vector_ui
+from interfaz.estilo import (
+    encabezado_modulo,
+    insignias,
+    marca_incentivo,
+    seccion,
+    tarjeta_resultado,
+    valor_destacado,
+)
 from visualizacion.graficos import (
     cerrar,
     grafica_autovalores,
@@ -58,23 +66,28 @@ CIFRAS = 8
 
 
 def mostrar():
-    st.header("Módulo IV · Métodos iterativos y convergencia")
-    st.markdown(
-        "Jacobi, Gauss-Seidel y SOR implementados desde cero, con criterio de parada, "
-        "tolerancia, vector inicial, máximo de iteraciones y factor de relajación "
-        "configurables. En cada iteración se registran **d_k** (cambio entre iteraciones) "
-        "y **r_k** (residuo del sistema original).")
+    encabezado_modulo(
+        "IV", "Métodos iterativos y convergencia",
+        "Jacobi, Gauss-Seidel y SOR implementados desde cero, con criterio de parada, tolerancia, "
+        "vector inicial, máximo de iteraciones y factor de relajación configurables. En cada "
+        "iteración se registran <b>d_k</b> (cambio entre iteraciones) y <b>r_k</b> (residuo del "
+        "sistema original).",
+        [("Jacobi", "info"), ("Gauss-Seidel", "info"), ("SOR", "info"), ("Radio espectral", ""),
+         ("CSR", "incentivo"), ("Precondicionador M = D", "incentivo")])
 
+    seccion("1", "Sistema A x = b", "A cuadrada, con diagonal no nula")
     nombre = st.selectbox("Cargar un ejemplo", list(ejemplos.ITERATIVOS), key="it_ejemplo")
     A_txt, b_txt = ejemplos.ITERATIVOS[nombre]
     col1, col2 = st.columns([3, 1])
     with col1:
-        texto_A = st.text_area("Matriz A (n × n)", A_txt, height=130, key=f"it_A_{nombre}")
+        texto_A = st.text_area("Matriz A (n × n)", A_txt, height=130, key=f"it_A_{nombre}",
+                               help="Una fila por línea. Los métodos dividen entre cada aᵢᵢ: "
+                                    "ningún elemento de la diagonal puede ser 0.")
     with col2:
         texto_b = st.text_area("Vector b", b_txt.replace(" ", "\n"), height=130, key=f"it_b_{nombre}")
     ayuda_formato()
 
-    st.subheader("Parámetros de ejecución y criterio de parada")
+    seccion("2", "Parámetros y criterio de parada", "comunes a las cuatro pestañas")
     criterio = st.radio("Criterio de parada", list(ETIQUETAS_CRITERIO),
                         format_func=ETIQUETAS_CRITERIO.get, key="it_criterio")
     c1, c2, c3 = st.columns(3)
@@ -94,6 +107,7 @@ def mostrar():
     texto_x0 = st.text_input("x⁽⁰⁾ personalizado (n números)", "0 0 0", key="it_x0") \
         if tipo_x0 == "Personalizado" else None
 
+    seccion("3", "Análisis", "elija una pestaña")
     pestana_uno, pestana_comparar, pestana_conv, pestana_prec = st.tabs(
         ["Ejecutar un método", "Comparar métodos", "Convergencia: dominancia y radio espectral",
          "Precondicionamiento diagonal"])
@@ -125,6 +139,7 @@ def mostrar():
 
     with pestana_uno:
         metodo = st.selectbox("Método", METODOS, key="it_metodo")
+        marca_incentivo("Matrices dispersas", "1 %")
         disperso = st.checkbox(
             "Usar almacenamiento disperso (CSR)", key="it_csr",
             help="Guarda solo los elementos no nulos y cada iteración recorre únicamente "
@@ -210,22 +225,37 @@ def mostrar_ejecucion(r):
         st.error("❌ " + r.mensaje)
         return
     st.info("⚙️ " + r.configuracion.resumen())
-    mostrar_motivo(r)
-    for aviso in r.advertencias:
-        st.warning("⚠️ " + aviso)
-    if not r.historial:
-        return
-    cumplido = {True: "Sí", False: "No", None: "No aplica"}[r.criterio_cumplido]
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Iteraciones realizadas", r.k_final)
-    c2.metric("Diferencia final d_k", "—" if r.d_final is None else formatear_numero(r.d_final, 6))
-    c3.metric("Residuo final r_k", formatear_numero(r.r_final, 6))
-    c4.metric("¿Se cumplió el criterio?", cumplido)
+    with tarjeta_resultado("ejecucion"):
+        mostrar_motivo(r)
+        tipo = {True: "ok", False: "error", None: "info"}[r.criterio_cumplido]
+        insignias([(r.configuracion.metodo, "info"), (r.codigo, tipo),
+                   ("Almacenamiento CSR" if r.configuracion.formato == "csr" else "Almacenamiento denso", "")])
+        for aviso in r.advertencias:
+            st.warning("⚠️ " + aviso)
+        if not r.historial:
+            if r.codigo == DIAGONAL_CERO:
+                st.info("💡 Recomendación: reordene las ecuaciones para que ningún aᵢᵢ sea 0; la "
+                        "pestaña «Convergencia» propone un orden si existe uno diagonalmente dominante.")
+            return
+        valor_destacado("Aproximación final x⁽ᵏ⁾",
+                        "(" + ", ".join(formatear_numero(v, 8) for v in r.x_final) + ")",
+                        f"tras {r.k_final} iteraciones")
+        cumplido = {True: "Sí", False: "No", None: "No aplica"}[r.criterio_cumplido]
+        c1, c2, c3, c4 = st.columns(4)
+        c1.metric("Iteraciones realizadas", r.k_final)
+        c2.metric("Diferencia final d_k", "—" if r.d_final is None else formatear_numero(r.d_final, 6))
+        c3.metric("Residuo final r_k", formatear_numero(r.r_final, 6))
+        c4.metric("¿Se cumplió el criterio?", cumplido)
+    if r.codigo in (MAXIMO_ITERACIONES, ERROR_NO_FINITO):
+        st.info("💡 Recomendación: revise la pestaña «Convergencia» (dominancia diagonal y ρ(T)). "
+                "Si ρ(T) < 1 el método converge y basta con más iteraciones; si ρ(T) ≥ 1, cambie de "
+                "método, de ω o reordene las ecuaciones.")
     st.markdown("**Aproximación final** x⁽ᵏ⁾ = (" +
                 ", ".join(formatear_numero(v, 10) for v in r.x_final) + ")")
     st.caption("d_k mide cuánto cambió la aproximación; r_k mide cuánto falla la ecuación "
                "A x = b. Ninguno de los dos es el error respecto a la solución exacta.")
     st.dataframe(filas_tabla(r), hide_index=True, width="stretch")
+    marca_incentivo("Visualización avanzada: reporte exportable", "1 %")
     st.download_button("⬇️ Descargar tabla de iteraciones (CSV)", csv_historial(r),
                        file_name=f"iteraciones_{r.configuracion.metodo}.csv", mime="text/csv",
                        key=f"csv_{r.configuracion.metodo}")
@@ -241,6 +271,7 @@ def mostrar_ejecucion(r):
 # ---------------------------------------------------------------------------
 
 def comparar(leer_todo):
+    marca_incentivo("Visualización avanzada: gráficas comparativas", "1 %")
     st.markdown("Los tres métodos se ejecutan con **el mismo sistema, vector inicial, criterio, "
                 "tolerancia y máximo de iteraciones**; SOR usa además su propio ω.")
     if st.button("Comparar Jacobi, Gauss-Seidel y SOR", type="primary", key="it_comparar"):
@@ -369,6 +400,7 @@ def convergencia(texto_A, texto_b, texto_omega):
         return
     dom, esp, error_T = st.session_state["it_convergencia"]
 
+    marca_incentivo("Extensión matemática: radio espectral con autovalores complejos", "1 %")
     st.subheader("1. Dominancia diagonal estricta por filas")
     st.table([{"Fila": f[0] + 1, "|aᵢᵢ|": formatear_numero(f[1]),
                "Σ_{j≠i} |aᵢⱼ|": formatear_numero(f[2]), "¿|aᵢᵢ| > Σ?": "✔" if f[3] else "✘"}
@@ -420,21 +452,42 @@ def convergencia(texto_A, texto_b, texto_omega):
     st.table([{"λ": formatear_numero(z, 8), "Parte real": f"{z.real:.8g}",
                "Parte imaginaria": f"{z.imag:.8g}", "|λ|": f"{abs(z):.8g}"}
               for z in esp.autovalores])
-    if esp.conclusion == CONVERGE:
-        st.success("✅ " + esp.mensaje)
-    elif esp.conclusion == NO_CONVERGE:
-        st.error("🚫 " + esp.mensaje)
-    else:
-        st.warning("⚠️ " + esp.mensaje)
+    with tarjeta_resultado("espectral"):
+        izquierda, derecha = st.columns([2, 3])
+        with izquierda:
+            valor_destacado(f"ρ(T) de {it.metodo}", formatear_numero(esp.rho, 8), "máx |λᵢ| de T")
+        with derecha:
+            insignias([{CONVERGE: ("Converge para todo x⁽⁰⁾", "ok"),
+                        NO_CONVERGE: ("No converge para todo x⁽⁰⁾", "error")}.get(
+                           esp.conclusion, ("Indeterminado", "aviso")),
+                       ("Decisión exacta" if esp.decision_exacta else
+                        ("Cálculo fiable" if esp.fiable else "Cálculo no fiable"),
+                        "ok" if esp.decision_exacta or esp.fiable else "aviso"),
+                       ("Dominante" if dom.estricta else "No dominante", "ok" if dom.estricta else "")])
+            if esp.conclusion == CONVERGE:
+                st.success("✅ " + esp.mensaje)
+            elif esp.conclusion == NO_CONVERGE:
+                st.error("🚫 " + esp.mensaje)
+            else:
+                st.warning("⚠️ " + esp.mensaje)
     for aviso in esp.advertencias:
         st.warning("⚠️ " + aviso)
     v = esp.verificaciones
     st.caption(f"Verificación: suma de autovalores = {formatear_numero(v['suma de autovalores'], 8)}, "
                f"traza(T) = {formatear_numero(v['traza de T'], 8)}; "
                f"máx |p(λ)| relativo = {v['max |p(λ)| relativo']:.2e}.")
-    fig = grafica_autovalores(esp.autovalores, esp.rho)
-    st.pyplot(fig)
-    cerrar(fig)
+    grafica, texto = st.columns([3, 2])
+    with grafica:
+        fig = grafica_autovalores(esp.autovalores, esp.rho)
+        st.pyplot(fig)
+        cerrar(fig)
+    with texto:
+        st.markdown("**Cómo leer el diagrama**")
+        st.markdown("- Cada punto es un autovalor λ de T en el plano complejo.\n"
+                    "- El círculo verde es |λ| = 1: la frontera de convergencia.\n"
+                    "- El círculo discontinuo tiene radio ρ(T) = máx |λ|.\n"
+                    "- Si todos los autovalores quedan dentro del círculo verde, el método "
+                    "converge para cualquier x⁽⁰⁾; cuanto menor es ρ(T), más rápido.")
     st.info("💡 Teorema: x⁽ᵏ⁺¹⁾ = T x⁽ᵏ⁾ + c converge para todo x⁽⁰⁾ si y solo si ρ(T) < 1. "
             "La dominancia diagonal es solo una condición suficiente.")
 
@@ -444,6 +497,7 @@ def convergencia(texto_A, texto_b, texto_omega):
 # ---------------------------------------------------------------------------
 
 def precondicionamiento(leer_todo):
+    marca_incentivo("Precondicionamiento", "1,5 %")
     st.markdown(
         "Precondicionador diagonal de clase (S9-05/10, diapositivas 16-18): "
         r"$M = D = \mathrm{diag}(a_{11},\dots,a_{nn})$ y sistema equivalente "
@@ -467,9 +521,23 @@ def precondicionamiento(leer_todo):
     r = st.session_state["it_precondicionado"]
     st.latex(r"M = " + latex_matriz(r.M) + r",\quad B = M^{-1}A = " + latex_matriz(r.B)
              + r",\quad \tilde b = M^{-1}b = " + latex_vector(r.b_tilde))
-    c1, c2 = st.columns(2)
-    c1.metric("κ∞(A)", "singular" if r.kappa_A is None else formatear_numero(r.kappa_A))
-    c2.metric("κ∞(D⁻¹A)", "singular" if r.kappa_B is None else formatear_numero(r.kappa_B))
+    clasicos = [f for f in r.comparaciones if f.metodo in METODOS]
+    richardson = [f for f in r.comparaciones if f.metodo not in METODOS]
+    with tarjeta_resultado("precondicionador"):
+        identicas = all(f.T_identicas for f in clasicos)
+        chips = [("Jacobi, GS y SOR: T y c idénticas (exacto)" if identicas else
+                  "Jacobi, GS y SOR: T cambia", "info" if identicas else "aviso")]
+        if r.kappa_A is not None and r.kappa_B is not None:
+            chips.append(("κ disminuye" if r.kappa_B < r.kappa_A else
+                          ("κ aumenta" if r.kappa_B > r.kappa_A else "κ no cambia"),
+                          "ok" if r.kappa_B < r.kappa_A else ("aviso" if r.kappa_B > r.kappa_A else "")))
+        for f in richardson:
+            chips.append((f"Richardson: {f.original.codigo} → {f.precondicionado.codigo}",
+                          "ok" if f.precondicionado.criterio_cumplido else "aviso"))
+        insignias(chips)
+        c1, c2 = st.columns(2)
+        c1.metric("κ∞(A)", "singular" if r.kappa_A is None else formatear_numero(r.kappa_A))
+        c2.metric("κ∞(D⁻¹A)", "singular" if r.kappa_B is None else formatear_numero(r.kappa_B))
     if r.analisis_A is not None:
         st.table([{"Matriz": nombre,
                    "Autovalores": ", ".join(formatear_numero(z.real if z.imag == 0 else z, 6)

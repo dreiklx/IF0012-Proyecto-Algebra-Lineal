@@ -14,15 +14,18 @@ from interfaz.componentes import (
     leer_vector_ui,
     tabla_vector,
 )
+from interfaz.estilo import encabezado_modulo, insignias, seccion, tarjeta_resultado, valor_destacado
 from visualizacion.graficos import cerrar, grafica_ajuste
 
 
 def mostrar():
-    st.header("Módulo III · Mínimos cuadrados y ajuste lineal")
-    st.markdown(
-        r"Para un sistema sobredeterminado se resuelven las **ecuaciones normales** "
-        r"$A^TA\,\hat x = A^Tb$ con nuestro método de Gauss y se calcula el residuo "
-        r"$r=b-A\hat x$ con su norma $\|r\|_2$.")
+    encabezado_modulo(
+        "III", "Mínimos cuadrados y ajuste lineal",
+        "Para un sistema sobredeterminado se resuelven las <b>ecuaciones normales</b> "
+        "AᵀA x̂ = Aᵀb con nuestro método de Gauss y se calcula el residuo r = b − A x̂ con su "
+        "norma ‖r‖₂. El ajuste lineal es el caso particular de la matriz de diseño [xᵢ 1].",
+        [("Ecuaciones normales", "info"), ("Resueltas con Gauss", "info"), ("Fracciones exactas", "ok"),
+         ("Verificación por Cramer", "")])
     pestana_sistema, pestana_ajuste = st.tabs(["Sistema sobredeterminado", "Ajuste lineal de datos"])
     with pestana_sistema:
         sistema()
@@ -31,11 +34,13 @@ def mostrar():
 
 
 def sistema():
+    seccion("1", "Sistema A x ≈ b", "m ecuaciones y n incógnitas, con m > n")
     nombre = st.selectbox("Cargar un ejemplo", list(ejemplos.MINIMOS), key="mc_ejemplo")
     A_txt, b_txt = ejemplos.MINIMOS[nombre]
     col1, col2 = st.columns([3, 1])
     with col1:
-        texto_A = st.text_area("Matriz A (m × n)", A_txt, height=120, key=f"mc_A_{nombre}")
+        texto_A = st.text_area("Matriz A (m × n)", A_txt, height=120, key=f"mc_A_{nombre}",
+                               help="Más filas (ecuaciones) que columnas (incógnitas).")
     with col2:
         texto_b = st.text_area("Vector b (m)", b_txt.replace(" ", "\n"), height=120, key=f"mc_b_{nombre}")
     ayuda_formato()
@@ -53,6 +58,7 @@ def sistema():
 
 
 def mostrar_minimos(r, nombres=None):
+    seccion("2" if nombres is None else "3", "Ecuaciones normales y solución")
     if r.tipo == SOBREDETERMINADO:
         st.info("🔎 " + r.mensaje_tipo)
     else:
@@ -62,9 +68,22 @@ def mostrar_minimos(r, nombres=None):
     if r.solucion is None:
         for aviso in r.advertencias:
             st.error("🚫 " + aviso)
+        st.info("💡 Recomendación: elimine las columnas que sean combinación de otras (o agregue "
+                "datos que las distingan) para que AᵀA sea invertible.")
         return
-    st.success("✅ " + r.mensaje)
-    st.latex(r"\hat x = " + latex_vector(r.solucion))
+    with tarjeta_resultado("minimos" if nombres is None else "minimos_ajuste"):
+        st.success("✅ " + r.mensaje)
+        insignias([("Sobredeterminado" if r.tipo == SOBREDETERMINADO else r.tipo.capitalize(), "info"),
+                   ("b ∈ Col(A): solución exacta" if r.b_en_espacio_columna else "b ∉ Col(A): aproximación",
+                    "ok" if r.b_en_espacio_columna else "aviso"),
+                   ("Aᵀr = 0 verificado" if all(v == 0 for v in r.ortogonalidad) else "Aᵀr ≠ 0",
+                    "ok" if all(v == 0 for v in r.ortogonalidad) else "error")])
+        izquierda, derecha = st.columns([3, 2])
+        with izquierda:
+            st.latex(r"\hat x = " + latex_vector(r.solucion))
+        with derecha:
+            valor_destacado("‖r‖₂ (error de ajuste)", f"{r.norma_residuo_2:.8g}",
+                            f"‖r‖₂² = {formatear_numero(r.norma_residuo_2_cuadrado)} (exacto)")
     if nombres is None:
         st.table(tabla_vector(r.solucion, nombre="x̂"))
     else:
@@ -111,6 +130,7 @@ def mostrar_minimos(r, nombres=None):
 
 
 def ajuste():
+    seccion("1", "Datos (xᵢ, yᵢ)", "al menos 2 puntos con x distintos")
     nombre = st.selectbox("Cargar un ejemplo", list(ejemplos.AJUSTE), key="aj_ejemplo")
     x_txt, y_txt = ejemplos.AJUSTE[nombre]
     col1, col2 = st.columns(2)
@@ -131,12 +151,17 @@ def ajuste():
     if "aj_resultado" not in st.session_state:
         return
     r = st.session_state["aj_resultado"]
-    st.success(f"✅ Recta de mejor ajuste: **{r.ecuacion}**  "
-               f"(m ≈ {float(r.pendiente):.8g}, c ≈ {float(r.intercepto):.8g})")
+    seccion("2", "Recta de mejor ajuste")
+    with tarjeta_resultado("ajuste"):
+        st.success(f"✅ Recta de mejor ajuste: **{r.ecuacion}**  "
+                   f"(m ≈ {float(r.pendiente):.8g}, c ≈ {float(r.intercepto):.8g})")
+        valor_destacado("Ecuación", r.ecuacion,
+                        f"m ≈ {float(r.pendiente):.8g} · c ≈ {float(r.intercepto):.8g} · "
+                        f"‖r‖₂ ≈ {r.minimos.norma_residuo_2:.6g}")
+        fig = grafica_ajuste(r.xs, r.ys, r.pendiente, r.intercepto, r.minimos.estimados)
+        st.pyplot(fig)
+        cerrar(fig)
     st.latex(r"A=\begin{bmatrix} x_1 & 1\\ \vdots & \vdots\\ x_k & 1\end{bmatrix},\quad "
              r"b=\begin{bmatrix} y_1\\ \vdots\\ y_k\end{bmatrix},\quad "
              r"A^TA\begin{bmatrix} m\\ c\end{bmatrix}=A^Tb")
-    fig = grafica_ajuste(r.xs, r.ys, r.pendiente, r.intercepto, r.minimos.estimados)
-    st.pyplot(fig)
-    cerrar(fig)
     mostrar_minimos(r.minimos, nombres=["m (pendiente)", "c (intercepto)"])

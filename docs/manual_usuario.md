@@ -42,6 +42,9 @@ Cada módulo tiene un selector **«Cargar un ejemplo»** con ejemplos del curso.
 
 ## 3. Navegación
 
+La aplicación usa un tema oscuro propio. En la **portada** hay una tarjeta por módulo y otra por cada incentivo; sus botones abren directamente la pantalla donde está la funcionalidad. Dentro de cada módulo las etapas están numeradas (1 Datos, 2 Método o parámetros, 3 Resultado) y el resultado principal aparece en una tarjeta destacada con etiquetas de estado.
+
+
 La barra lateral izquierda tiene cinco opciones: Inicio y los módulos I a IV. Es una sola aplicación integrada.
 
 ## 4. Módulo I — Sistemas lineales

@@ -7,18 +7,29 @@ de Matplotlib que la interfaz muestra con st.pyplot.
 
 import math
 
-import matplotlib
+import matplotlib.pyplot as plt
 
-matplotlib.use("Agg")  # backend sin ventanas (servidor web)
-import matplotlib.pyplot as plt  # noqa: E402
+from visualizacion.tema import (
+    COLOR_DATOS,
+    COLOR_EPSILON,
+    COLOR_RECTA,
+    COLOR_RESIDUO,
+    COLORES_METODOS,
+    SUAVE,
+)
 
-COLORES = {"Jacobi": "#1f77b4", "Gauss-Seidel": "#d62728", "SOR": "#2ca02c"}
+COLORES = COLORES_METODOS
+MARCADORES = {"Jacobi": "o", "Gauss-Seidel": "s", "SOR": "^", "Richardson": "D"}
 
 
-def _figura(ancho=7.0, alto=4.2):
-    fig, ax = plt.subplots(figsize=(ancho, alto), dpi=110)
-    ax.grid(True, alpha=0.3)
+def _figura(ancho=7.6, alto=4.3):
+    fig, ax = plt.subplots(figsize=(ancho, alto), dpi=120)
     return fig, ax
+
+
+def _leyenda(ax, columnas=2):
+    """Leyenda debajo de los ejes: no tapa ninguna curva."""
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.17), ncol=columnas, frameon=False)
 
 
 def grafica_ajuste(xs, ys, pendiente, intercepto, estimados):
@@ -30,14 +41,16 @@ def grafica_ajuste(xs, ys, pendiente, intercepto, estimados):
     margen = (max(xs_f) - min(xs_f)) * 0.08 or 1.0
     x0, x1 = min(xs_f) - margen, max(xs_f) + margen
     for x, y, y_est in zip(xs_f, ys_f, estimados):
-        ax.plot([x, x], [y, float(y_est)], color="#999999", linestyle=":", linewidth=1)
-    ax.scatter(xs_f, ys_f, color="#d62728", zorder=3, label="Datos (xᵢ, yᵢ)")
-    ax.plot([x0, x1], [m * x0 + c, m * x1 + c], color="#1f77b4", linewidth=2,
+        ax.plot([x, x], [y, float(y_est)], color=COLOR_RESIDUO, linestyle=":", linewidth=1.3)
+    ax.plot([], [], color=COLOR_RESIDUO, linestyle=":", linewidth=1.3, label="Residuos rᵢ")
+    ax.scatter(xs_f, ys_f, color=COLOR_DATOS, edgecolor="#0B1020", linewidth=0.8, s=46, zorder=3,
+               label="Datos (xᵢ, yᵢ)")
+    ax.plot([x0, x1], [m * x0 + c, m * x1 + c], color=COLOR_RECTA, linewidth=2.4,
             label=f"Recta de mínimos cuadrados: y = {m:.6g}x {'+' if c >= 0 else '−'} {abs(c):.6g}")
     ax.set_xlabel("x")
     ax.set_ylabel("y")
-    ax.set_title("Ajuste lineal por mínimos cuadrados (líneas punteadas: residuos)")
-    ax.legend(loc="best", fontsize=8)
+    ax.set_title("Ajuste lineal por mínimos cuadrados")
+    _leyenda(ax, 3)
     fig.tight_layout()
     return fig
 
@@ -54,8 +67,8 @@ def grafica_convergencia(historial, criterio, tolerancia=None):
     que actúa como criterio de parada."""
     fig, ax = _figura()
     ks = [f.k for f in historial]
-    series = [("d_k = ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞", [f.d for f in historial], "o-", "#1f77b4", "A"),
-              ("r_k = ‖b − Ax⁽ᵏ⁾‖∞", [f.r for f in historial], "s--", "#ff7f0e", "B")]
+    series = [("d_k = ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞", [f.d for f in historial], "o-", COLOR_RECTA, "A"),
+              ("r_k = ‖b − Ax⁽ᵏ⁾‖∞", [f.r for f in historial], "s--", COLOR_RESIDUO, "B")]
     hay_datos = False
     for nombre, valores, estilo, color, letra in series:
         puntos, ceros = _positivos(ks, valores)
@@ -69,14 +82,14 @@ def grafica_convergencia(historial, criterio, tolerancia=None):
                        label=f"{nombre.split(' =')[0]} = 0 exactamente")
             hay_datos = True
     if tolerancia is not None and criterio in ("A", "B"):
-        ax.axhline(float(tolerancia), color="#2ca02c", linestyle="-.", linewidth=1.2,
+        ax.axhline(float(tolerancia), color=COLOR_EPSILON, linestyle="-.", linewidth=1.3,
                    label=f"ε = {float(tolerancia):.3g}")
     if hay_datos:
         ax.set_yscale("log")
     ax.set_xlabel("Iteración k")
     ax.set_ylabel("Valor (escala logarítmica)")
     ax.set_title("Evolución del cambio entre iteraciones y del residuo")
-    ax.legend(loc="best", fontsize=8)
+    _leyenda(ax, 3)
     fig.tight_layout()
     return fig
 
@@ -107,38 +120,40 @@ def grafica_comparacion(resultados, metrica, errores_historial=None):
         nombre = r.configuracion.metodo
         if nombre == "SOR":
             nombre += f" (ω = {float(r.configuracion.omega):.3g})"
-        ax.plot([p[0] for p in puntos], [p[1] for p in puntos], "o-", markersize=3,
+        ax.plot([p[0] for p in puntos], [p[1] for p in puntos], "-",
+                marker=MARCADORES.get(r.configuracion.metodo, "o"), markersize=4,
                 color=COLORES.get(r.configuracion.metodo), label=nombre)
     if hay_datos:
         ax.set_yscale("log")
     ax.set_xlabel("Iteración k")
-    ax.set_ylabel(titulos[metrica] + " (escala log.)")
+    ax.set_ylabel({"d": "d_k", "r": "r_k", "e": "e_k = ‖x⁽ᵏ⁾ − x*‖∞"}[metrica] + "  (escala log.)")
     ax.set_title("Comparación de métodos: " + titulos[metrica])
-    ax.legend(loc="best", fontsize=8)
+    _leyenda(ax, 3)
     fig.tight_layout()
     return fig
 
 
 def grafica_autovalores(autovalores, rho):
     """Autovalores de T en el plano complejo junto con el círculo unidad |λ| = 1."""
-    fig, ax = _figura(5.0, 5.0)
+    fig, ax = _figura(5.4, 5.4)
+    ax.add_patch(plt.Circle((0, 0), 1, color=COLOR_EPSILON, alpha=0.07, zorder=0))
     angulos = [2 * math.pi * k / 200 for k in range(201)]
     ax.plot([math.cos(t) for t in angulos], [math.sin(t) for t in angulos],
-            color="#2ca02c", label="|λ| = 1")
+            color=COLOR_EPSILON, label="|λ| = 1 (frontera de convergencia)")
     ax.plot([rho * math.cos(t) for t in angulos], [rho * math.sin(t) for t in angulos],
-            color="#d62728", linestyle="--", linewidth=1, label=f"|λ| = ρ(T) = {rho:.4g}")
+            color="#F472B6", linestyle="--", linewidth=1.3, label=f"|λ| = ρ(T) = {rho:.4g}")
     ax.scatter([z.real for z in autovalores], [z.imag for z in autovalores],
-               color="#1f77b4", zorder=3, label="Autovalores de T")
+               color=COLOR_DATOS, edgecolor="#0B1020", s=55, zorder=3, label="Autovalores de T")
     limite = max(1.2, rho * 1.2)
     ax.set_xlim(-limite, limite)
     ax.set_ylim(-limite, limite)
     ax.set_aspect("equal")
-    ax.axhline(0, color="black", linewidth=0.5)
-    ax.axvline(0, color="black", linewidth=0.5)
+    ax.axhline(0, color=SUAVE, linewidth=0.6)
+    ax.axvline(0, color=SUAVE, linewidth=0.6)
     ax.set_xlabel("Parte real")
     ax.set_ylabel("Parte imaginaria")
     ax.set_title("Autovalores de la matriz de iteración")
-    ax.legend(loc="upper right", fontsize=8)
+    _leyenda(ax, 1)
     fig.tight_layout()
     return fig
 
@@ -156,7 +171,7 @@ def grafica_precondicionador(comparaciones):
     precondicionado con M = D (línea discontinua).  Recibe la lista de
     ComparacionMetodo de algebra.precondicionamiento."""
     fig, ax = _figura()
-    colores = dict(COLORES, Richardson="#9467bd")
+    colores = COLORES
     hay_datos = False
     minimo = None
     recortado = False
@@ -178,10 +193,10 @@ def grafica_precondicionador(comparaciones):
             # Una curva divergente (p. ej. Richardson sin precondicionar) taparía a las demás.
             ax.set_ylim(min(minimo, 1.0) / 10, TOPE_GRAFICA)
             ax.text(0.99, 0.02, f"Eje recortado en {TOPE_GRAFICA:.0e}: hay una curva que diverge",
-                    transform=ax.transAxes, ha="right", va="bottom", fontsize=7, color="#555555")
+                    transform=ax.transAxes, ha="right", va="bottom", fontsize=7.5, color=SUAVE)
     ax.set_xlabel("Iteración k")
     ax.set_ylabel("d_k = ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞ (escala log.)")
     ax.set_title("Efecto del precondicionador diagonal M = D")
-    ax.legend(loc="best", fontsize=7)
+    _leyenda(ax, 4)
     fig.tight_layout()
     return fig

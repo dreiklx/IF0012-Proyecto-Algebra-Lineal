@@ -10,13 +10,10 @@ La gráfica se construye con los datos y con el resultado de NUESTRO método
 directo (punto o recta paramétrica); Matplotlib solo dibuja.
 """
 
-import matplotlib
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection  # noqa: E402
-
-COLORES_PLANOS = ["#1f77b4", "#ff7f0e", "#2ca02c", "#9467bd", "#8c564b", "#e377c2"]
+from visualizacion.tema import COLOR_SOLUCION, COLORES_PLANOS, FONDO_EJES
 
 
 def _centro_y_radio(resultado):
@@ -55,6 +52,8 @@ def grafica_planos(A, b, resultado):
     (ResultadoSistema de algebra.directos)."""
     fig = plt.figure(figsize=(7, 6), dpi=110)
     ax = fig.add_subplot(projection="3d")
+    for eje in (ax.xaxis, ax.yaxis, ax.zaxis):
+        eje.set_pane_color(FONDO_EJES)
     centro, radio = _centro_y_radio(resultado)
     for i, fila in enumerate(A):
         a = [float(v) for v in fila]
@@ -62,12 +61,12 @@ def grafica_planos(A, b, resultado):
             continue  # 0 = b_i no es un plano
         color = COLORES_PLANOS[i % len(COLORES_PLANOS)]
         esquinas = _esquinas_plano(a, float(b[i]), centro, radio)
-        ax.add_collection3d(Poly3DCollection([esquinas], alpha=0.3, facecolor=color,
+        ax.add_collection3d(Poly3DCollection([esquinas], alpha=0.35, facecolor=color,
                                              edgecolor=color))
         ax.plot([], [], color=color, linewidth=6, label=f"Ecuación {i + 1}")
     if resultado.solucion is not None:
         x, y, z = (float(v) for v in resultado.solucion)
-        ax.scatter([x], [y], [z], color="black", s=60, depthshade=False,
+        ax.scatter([x], [y], [z], color=COLOR_SOLUCION, edgecolor="#0B1020", s=70, depthshade=False,
                    label=f"Solución única ({x:.4g}, {y:.4g}, {z:.4g})")
     elif resultado.solucion_particular is not None and len(resultado.direcciones) == 1:
         p = [float(v) for v in resultado.solucion_particular]
@@ -76,7 +75,7 @@ def grafica_planos(A, b, resultado):
         # Recta x = p + t v, dibujada para t entre -escala y +escala
         extremos = [[p[j] - escala * v[j], p[j] + escala * v[j]] for j in range(3)]
         ax.plot(extremos[0], extremos[1], extremos[2],
-                color="black", linewidth=3, label="Recta de soluciones")
+                color=COLOR_SOLUCION, linewidth=3, label="Recta de soluciones")
     ax.set_xlabel("x")
     ax.set_ylabel("y")
     ax.set_zlabel("z")
@@ -104,10 +103,10 @@ def grafica_rectas(A, b, resultado):
             ax.axvline(bi / a1, color=color, label=f"Ecuación {i + 1}")
     if resultado.solucion is not None:
         x, y = (float(v) for v in resultado.solucion)
-        ax.scatter([x], [y], color="black", zorder=3, label=f"Solución ({x:.4g}, {y:.4g})")
+        ax.scatter([x], [y], color=COLOR_SOLUCION, edgecolor="#0B1020", s=60, zorder=3,
+                   label=f"Solución ({x:.4g}, {y:.4g})")
     ax.set_xlim(centro[0] - radio, centro[0] + radio)
     ax.set_ylim(centro[1] - radio, centro[1] + radio)
-    ax.grid(True, alpha=0.3)
     ax.set_xlabel("x")
     ax.set_ylabel("y")
     ax.set_title("Interpretación geométrica: cada ecuación es una recta")

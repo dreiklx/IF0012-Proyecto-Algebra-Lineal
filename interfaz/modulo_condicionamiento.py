@@ -24,28 +24,42 @@ from interfaz.componentes import (
     leer_vector_ui,
     mostrar_pasos,
 )
+from interfaz.estilo import (
+    encabezado_modulo,
+    escala_kappa,
+    insignias,
+    seccion,
+    tarjeta_resultado,
+    valor_destacado,
+)
+
+ETIQUETA_SENSIBILIDAD = {SENSIBILIDAD_BAJA: ("Sensibilidad baja", "ok"),
+                         SENSIBILIDAD_ALTA: ("Sensibilidad alta", "error")}
 
 
 def mostrar():
-    st.header("Módulo II · Condicionamiento y sensibilidad")
-    st.markdown(
-        r"Calcula $\kappa_\infty(A)=\|A\|_\infty\,\|A^{-1}\|_\infty$ con la inversa obtenida "
-        "por **nuestro** Gauss-Jordan, y compara la solución de $Ax=b$ con la del sistema "
-        r"perturbado $A\tilde x=b+\Delta b$.")
+    encabezado_modulo(
+        "II", "Condicionamiento y sensibilidad",
+        r"Calcula κ∞(A) = ‖A‖∞ · ‖A⁻¹‖∞ con la inversa obtenida por <b>nuestro</b> Gauss-Jordan "
+        "y compara la solución de A x = b con la del sistema perturbado A x̃ = b + Δb.",
+        [("Inversa propia [A | I] → [I | A⁻¹]", "info"), ("Norma ∞", ""), ("Escala 10 / 100", "")])
 
+    seccion("1", "Matriz y vector", "A debe ser cuadrada")
     nombre = st.selectbox("Cargar un ejemplo", list(ejemplos.CONDICION), key="cond_ejemplo")
     A_txt, b_txt, db_txt = ejemplos.CONDICION[nombre]
     col1, col2 = st.columns([3, 1])
     with col1:
-        texto_A = st.text_area("Matriz A (n × n)", A_txt, height=120, key=f"cond_A_{nombre}")
+        texto_A = st.text_area("Matriz A (n × n)", A_txt, height=120, key=f"cond_A_{nombre}",
+                               help="Una fila por línea. A debe ser cuadrada e invertible para calcular κ.")
     with col2:
         texto_b = st.text_area("Vector b", b_txt.replace(" ", "\n"), height=120, key=f"cond_b_{nombre}")
     ayuda_formato()
 
-    st.subheader("Perturbación de b")
+    seccion("2", "Perturbación de b")
     modo = st.radio("Tipo de perturbación",
                     ["Valor absoluto (Δb)", "Porcentaje de cada componente de b"],
-                    horizontal=True, key="cond_modo")
+                    horizontal=True, key="cond_modo",
+                    help="Absoluta: se suma Δb a b. Porcentual: Δbᵢ = p/100 · bᵢ en cada componente.")
     if modo.startswith("Valor"):
         texto_p = st.text_input(
             "Δb: un número (se suma a todas las componentes) o un vector de n números",
@@ -78,23 +92,36 @@ def mostrar():
 
 def mostrar_resultado(A, c, p):
     n = len(A)
+    seccion("3", "Número de condición")
     if c.clasificacion == MATRIZ_SINGULAR:
-        st.error("🚫 " + c.interpretacion)
+        with tarjeta_resultado("condicion"):
+            insignias([("Matriz singular", "error"), ("κ no está definido", "error")])
+            st.error("🚫 " + c.interpretacion)
+            st.info("💡 Recomendación: una matriz singular no tiene inversa. Revise si alguna fila "
+                    "es combinación de otras; el Módulo I muestra el rango y la clasificación del sistema.")
         with st.expander("Procedimiento de Gauss-Jordan (sin pivote en alguna columna)"):
             mostrar_pasos(c.resultado_inversa.pasos, separador=n)
         return
 
-    st.subheader("Número de condición")
-    c1, c2, c3 = st.columns(3)
-    c1.metric("‖A‖∞", formatear_numero(c.norma_A))
-    c2.metric("‖A⁻¹‖∞", formatear_numero(c.norma_inversa))
-    c3.metric("κ∞(A)", formatear_numero(c.kappa))
-    if c.clasificacion == SENSIBILIDAD_BAJA:
-        st.success("🟢 " + c.interpretacion)
-    elif c.clasificacion == SENSIBILIDAD_ALTA:
-        st.error("🔴 " + c.interpretacion)
-    else:
-        st.warning("🟠 " + c.interpretacion)
+    with tarjeta_resultado("condicion"):
+        izquierda, derecha = st.columns([2, 3])
+        with izquierda:
+            valor_destacado("κ∞(A)", formatear_numero(c.kappa),
+                            f"≈ {float(c.kappa):.6g}" if formatear_numero(c.kappa) != f"{float(c.kappa):.6g}" else "")
+            etiqueta = ETIQUETA_SENSIBILIDAD.get(c.clasificacion, ("Sensibilidad moderada", "aviso"))
+            insignias([etiqueta, ("A·A⁻¹ = I verificado" if c.resultado_inversa.verificacion_identidad
+                                  else "A·A⁻¹ ≠ I", "ok" if c.resultado_inversa.verificacion_identidad else "error")])
+        with derecha:
+            escala_kappa(c.kappa)
+            c1, c2 = st.columns(2)
+            c1.metric("‖A‖∞", formatear_numero(c.norma_A))
+            c2.metric("‖A⁻¹‖∞", formatear_numero(c.norma_inversa))
+        if c.clasificacion == SENSIBILIDAD_BAJA:
+            st.success("🟢 " + c.interpretacion)
+        elif c.clasificacion == SENSIBILIDAD_ALTA:
+            st.error("🔴 " + c.interpretacion)
+        else:
+            st.warning("🟠 " + c.interpretacion)
     st.latex(r"A^{-1} = " + latex_matriz(c.inversa))
     st.caption("Verificación: A·A⁻¹ = I se comprobó de forma exacta."
                if c.resultado_inversa.verificacion_identidad else "⚠️ A·A⁻¹ ≠ I")
@@ -103,7 +130,21 @@ def mostrar_resultado(A, c, p):
 
     if p is None:
         return
-    st.subheader("Análisis de la perturbación")
+    seccion("4", "Análisis de la perturbación")
+    with tarjeta_resultado("perturbacion"):
+        d1, d2, d3 = st.columns(3)
+        d1.metric("‖Δb‖∞ / ‖b‖∞", formatear_numero(p.error_relativo_b) if p.error_relativo_b is not None else "no definido")
+        d2.metric("‖Δx‖∞ / ‖x‖∞", formatear_numero(p.error_relativo_x) if p.error_relativo_x is not None else "no definido")
+        d3.metric("Cota κ∞·‖Δb‖/‖b‖", formatear_numero(p.cota) if p.cota is not None else "no definida")
+        if p.cumple_cota is not None:
+            insignias([("La cota teórica se cumple", "ok") if p.cumple_cota else ("La cota NO se cumple", "error")]
+                      + ([(f"Amplificación observada: {formatear_numero(p.amplificacion)}", "info")]
+                         if p.amplificacion is not None else []))
+        st.latex(r"\frac{\|\Delta x\|_\infty}{\|x\|_\infty} \le \kappa_\infty(A)\,"
+                 r"\frac{\|\Delta b\|_\infty}{\|b\|_\infty}")
+        st.info("💡 " + p.interpretacion)
+    for aviso in p.avisos:
+        st.warning("⚠️ " + aviso)
     filas = []
     for i in range(n):
         filas.append({
@@ -114,15 +155,6 @@ def mostrar_resultado(A, c, p):
             "Δxᵢ = x̃ᵢ − xᵢ": formatear_numero(p.delta_x[i]),
         })
     st.table(filas)
-    d1, d2, d3 = st.columns(3)
-    d1.metric("‖Δb‖∞ / ‖b‖∞", formatear_numero(p.error_relativo_b) if p.error_relativo_b is not None else "no definido")
-    d2.metric("‖Δx‖∞ / ‖x‖∞", formatear_numero(p.error_relativo_x) if p.error_relativo_x is not None else "no definido")
-    d3.metric("Cota κ∞·‖Δb‖/‖b‖", formatear_numero(p.cota) if p.cota is not None else "no definida")
-    for aviso in p.avisos:
-        st.warning("⚠️ " + aviso)
-    st.latex(r"\frac{\|\Delta x\|_\infty}{\|x\|_\infty} \le \kappa_\infty(A)\,"
-             r"\frac{\|\Delta b\|_\infty}{\|b\|_\infty}")
-    st.info("💡 " + p.interpretacion)
     if p.error_relativo_x is not None and p.error_relativo_b:
         st.caption(f"Valores exactos: ‖Δb‖/‖b‖ = {formatear_numero(p.error_relativo_b)}, "
                    f"‖Δx‖/‖x‖ = {formatear_numero(p.error_relativo_x)}.")

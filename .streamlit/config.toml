@@ -12,8 +12,26 @@ port = 8501
 headless = true
 
 [theme]
-base = "light"
-primaryColor = "#1f4e9c"
+# Identidad visual «software científico»: fondo azul grafito, acento azul eléctrico y cian.
+base = "dark"
+primaryColor = "#4F8CFF"
+backgroundColor = "#0B1020"
+secondaryBackgroundColor = "#141C30"
+textColor = "#E6ECF7"
+linkColor = "#22D3EE"
+borderColor = "#26324D"
+showWidgetBorder = true
+baseRadius = "10px"
+font = "'Segoe UI', 'Inter', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif"
+codeFont = "'Cascadia Code', 'Consolas', 'SFMono-Regular', monospace"
+baseFontSize = 15
+dataframeHeaderBackgroundColor = "#18223A"
+chartCategoricalColors = ["#4F8CFF", "#F472B6", "#22D3EE", "#FBBF24", "#A78BFA"]
+
+[theme.sidebar]
+backgroundColor = "#0E1528"
+secondaryBackgroundColor = "#141C30"
+borderColor = "#1F2A44"
 
 [client]
 # Oculta el botón "Deploy" (no se publica la aplicación).
