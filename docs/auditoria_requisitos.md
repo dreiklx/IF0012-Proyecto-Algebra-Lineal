@@ -29,7 +29,7 @@
 
 | Evidencia | Resultado |
 |---|---|
-| `.venv\Scripts\python -m unittest` | **228 pruebas, 228 OK** (03-nov-2026, tras el editor y las gráficas interactivas) |
+| `.venv\Scripts\python -m unittest` | **232 pruebas, 228 OK** (03-nov-2026, tras el editor y las gráficas interactivas) |
 | Auditoría independiente (`auditoria/*.py`) | **0 fallos** en todas: 4500 sistemas; 400 inversas, determinantes y κ; 200 perturbaciones; 300 mínimos cuadrados; 600 ejecuciones iterativas; 300 análisis espectrales; **150 análisis del precondicionador (nuevo)**; los casos difíciles se comportan como se espera |
 | Imports de `algebra/` | Solo `fractions`, `math`, `cmath`, `dataclasses` y módulos propios. Ningún `.py` del proyecto importa NumPy, SciPy ni SymPy |
 

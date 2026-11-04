@@ -70,14 +70,18 @@ proyecto-algebra/
 │   ├── espectral.py           ← Módulo IV: D, L, U, T, polinomio, autovalores, ρ(T)
 │   ├── dispersas.py           ← Incentivo: formato CSR
 │   └── precondicionamiento.py ← Incentivo: precondicionador diagonal M = D
+├── paginas/                   ← una página por módulo (barra superior); cada una llama a mostrar()
 ├── interfaz/                  ← Streamlit: una pantalla por módulo
+│   ├── navegacion.py          ← lista de páginas (archivo, título, dirección)
+│   ├── portada.py             ← portada: módulos, incentivos y la figura [A | b] → [I | x]
+│   ├── estilo.py              ← sistema de diseño: colores, tipografía, animaciones
 │   ├── componentes.py         ← LaTeX, tablas y lectura de datos con mensajes de error
 │   ├── ejemplos.py            ← ejemplos precargados del curso
 │   └── modulo_directos.py, modulo_condicionamiento.py, modulo_minimos.py, modulo_iterativos.py
 ├── visualizacion/             ← Matplotlib: solo dibuja
 │   ├── graficos.py            ← recta de ajuste, convergencia, comparación, autovalores
 │   └── geometria_3d.py        ← rectas y planos del Módulo I
-├── tests/                     ← 228 pruebas automáticas (unittest)
+├── tests/                     ← 232 pruebas automáticas (unittest)
 ├── auditoria/                 ← comparación aleatoria contra oráculos independientes
 ├── casos_prueba/              ← casos documentados por módulo (entrada, esperado, obtenido)
 └── docs/                      ← manual, guías, decisiones, matriz de cumplimiento
@@ -127,7 +131,7 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
    └─► visualizacion/*.py (figura de Matplotlib) ──► st.pyplot
 ```
 
-`app.py` contiene el diccionario `PAGINAS`, que asocia cada opción de la barra lateral (`st.sidebar.radio(..., key="navegacion")`) con el módulo de interfaz cuyo `mostrar()` se ejecuta.
+`interfaz/navegacion.py` contiene la lista `PAGINAS` (archivo, título y dirección de cada página). `app.py` la convierte en páginas `st.Page` y la muestra como barra superior con `st.navigation(..., position="top")`. Cada archivo de `paginas/` solo llama al `mostrar()` de su módulo de interfaz. La portada está en `interfaz/portada.py`.
 
 ### Índice de funciones importantes (archivo:línea)
 
@@ -663,11 +667,11 @@ Cada respuesta se puede comprobar en el código (se indica dónde) o con la apli
 
 3. **¿Cómo está organizado el código y por qué así?**
    - Hay tres capas: `algebra/` (cálculos), `interfaz/` (pantallas) y `visualizacion/` (dibujos).
-   - El núcleo no depende de la interfaz. Por eso se prueba solo (228 pruebas) y la interfaz no repite cálculos.
+   - El núcleo no depende de la interfaz. Por eso se prueba solo (232 pruebas) y la interfaz no repite cálculos.
    - En los iterativos, cada método es una función `paso_*` y el bucle de parada es uno solo (`_ejecutar`), para no triplicar la lógica.
 
 4. **¿Cómo saben que los resultados son correctos?**
-   - Hay 228 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.
+   - Hay 232 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.
    - La auditoría aleatoria (`auditoria/`) compara miles de casos con oráculos escritos aparte (Leibniz, adjunta, Cramer, una implementación separada de las iteraciones, Gelfand) y da 0 fallos.
    - La aplicación además se autoverifica:
      - b − Ax = 0 en el Módulo I;
@@ -861,7 +865,7 @@ python -m venv .venv
 .venv\Scripts\python -m streamlit run app.py
 ```
 
-5. Pruebas: `ejecutar_pruebas.bat` o `.venv\Scripts\python -m unittest`. Deben salir **228 pruebas OK**.
+5. Pruebas: `ejecutar_pruebas.bat` o `.venv\Scripts\python -m unittest`. Deben salir **232 pruebas OK**.
 6. Auditoría (opcional, unos 20 s): `.venv\Scripts\python auditoria\auditoria_directos.py .` y `.venv\Scripts\python auditoria\auditoria_iterativos.py .` (y `auditoria_precondicionamiento.py`). Deben dar «fallos 0».
 
 > **Antes de la defensa:** cada integrante debe hacer la instalación **en su propia computadora** al menos una vez. La primera instalación necesita internet; no la dejen para el aula.

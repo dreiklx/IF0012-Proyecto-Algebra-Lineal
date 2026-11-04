@@ -12,12 +12,18 @@
 | Defensa individual | Semana del **16 de noviembre de 2026** |
 | Número de grupo | **01, confirmado por el equipo (03-nov-2026)**. Integrantes, exclusivamente los cuatro de arriba |
 
+## Navegación superior y rediseño (03-nov-2026, rama `feature/navegacion-superior`)
+
+- **Navegación:** barra superior nativa (`st.navigation`, `position="top"`) con una dirección por módulo; la barra lateral se eliminó, porque quedaba vacía.
+- **Diseño:** portada editorial y cabeceras de módulo nuevas; un solo sistema de diseño en `interfaz/estilo.py`; animaciones de 140 a 220 ms que respetan `prefers-reduced-motion`. Detalle y mediciones en `diseno_visual.md` §8.
+- **Pruebas:** 232 OK (4 nuevas de navegación); auditoría con 0 fallos; ejemplos idénticos; sin cambios en `algebra/`, `visualizacion/` ni `auditoria/`.
+
 ## Gráficas interactivas y reauditoría (03-nov-2026, rama `feature/graficas-interactivas`)
 
 - **Gráficas:** Plotly 6.3.0 (única dependencia nueva) en `visualizacion/interactivas.py`. La 3D se puede rotar, ampliar y restablecer, y muestra valores al pasar el cursor; las 2D tienen zoom ＋/－ y por región, desplazamiento, autoescala, restablecer, valores y series activables. Los datos son exactamente los del núcleo (`tests/test_graficas_interactivas.py`, 8 pruebas).
 - **Seguridad:** se restauraron `.env` y `.env.*` en `.gitignore` (el commit 59dd149 los había quitado) y una prueba lo vigila. No hay credenciales en los archivos rastreados ni en el historial (búsqueda de nombres y patrones; ningún valor se imprimió).
 - **Reauditoría contra los PDF:** los archivos son los originales (huellas, tamaños y fechas); hay una sola versión de la rúbrica; los métodos que no están en los PDF siguen marcados como extensión. Detalle en `comparacion_procedimientos.md`. El editor no altera ningún ejemplo (prueba nueva).
-- **Propuesta de navegación** (no implementada): `propuesta_navegacion.md`.
+- **Propuesta de navegación:** `propuesta_navegacion.md` (Opción A implementada después; ver la sección anterior).
 - **Pruebas:** 228 OK; la auditoría sigue con 0 fallos; los ejemplos precargados dan resultados idénticos; sin cambios en `algebra/` ni `auditoria/`.
 
 ## Editor interactivo de datos (03-nov-2026, rama `feature/editor-interactivo`)
@@ -131,7 +137,7 @@
 
 ```
 .venv\Scripts\python -m unittest
-Ran 228 tests ... OK            (0 fallos, 0 omitidas; 03-nov-2026)
+Ran 232 tests ... OK            (0 fallos, 0 omitidas; 03-nov-2026)
 ```
 
 | Archivo | Pruebas | Qué cubre | Tipo de oráculo |
