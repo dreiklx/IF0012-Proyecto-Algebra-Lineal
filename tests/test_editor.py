@@ -17,6 +17,7 @@ try:
 except ImportError:  # pragma: no cover
     AppTest = None
 
+from interfaz import navegacion as nav
 from interfaz.editor import (
     PUNTOS,
     VECTOR,
@@ -127,13 +128,13 @@ class TestEditorEnLaAplicacion(unittest.TestCase):
     def abrir(self, pagina):
         at = AppTest.from_file(RUTA_APP, default_timeout=60)
         at.run()
-        at.sidebar.radio(key="navegacion").set_value(pagina)
+        at.switch_page(pagina)
         at.run()
         self.assertFalse(at.exception, at.exception)
         return at
 
     def test_editar_celda_actualiza_el_texto_y_el_calculo(self):
-        at = self.abrir("I · Sistemas lineales (Gauss)")
+        at = self.abrir(nav.SISTEMAS)
         nombre = at.selectbox(key="dir_ejemplo").value      # A = [[1,1,1],[2,1,-1],[-1,1,2]]
         clave = f"dir_A_{nombre}"
         at.text_input(key=f"{clave}__c0_0").input("2")      # a11: 1 -> 2
@@ -146,7 +147,7 @@ class TestEditorEnLaAplicacion(unittest.TestCase):
         self.assertIn("6", " ".join(str(m.value) for m in at.metric))
 
     def test_botones_de_filas_columnas_identidad_y_restaurar(self):
-        at = self.abrir("I · Sistemas lineales (Gauss)")
+        at = self.abrir(nav.SISTEMAS)
         clave = f"dir_A_{at.selectbox(key='dir_ejemplo').value}"
         at.button(key=f"{clave}__mas_col").click()
         at.run()
@@ -166,7 +167,7 @@ class TestEditorEnLaAplicacion(unittest.TestCase):
         self.assertEqual(at.text_area(key=clave).value, "1 1 1\n2 1 -1\n-1 1 2")
 
     def test_pegar_con_comas(self):
-        at = self.abrir("I · Sistemas lineales (Gauss)")
+        at = self.abrir(nav.SISTEMAS)
         nombre = at.selectbox(key="dir_ejemplo").value
         at.text_area(key=f"dir_A_{nombre}").input("4, -1, 1\n-2, 6, 1\n1, 1, 5")
         at.run()
@@ -178,7 +179,7 @@ class TestEditorEnLaAplicacion(unittest.TestCase):
         self.assertIn("Solución única", " ".join(str(s.value) for s in at.success))
 
     def test_dimensiones_incompatibles_bloquean_el_calculo(self):
-        at = self.abrir("I · Sistemas lineales (Gauss)")
+        at = self.abrir(nav.SISTEMAS)
         nombre = at.selectbox(key="dir_ejemplo").value
         at.text_area(key=f"dir_b_{nombre}").input("6\n3")
         at.run()
@@ -186,7 +187,7 @@ class TestEditorEnLaAplicacion(unittest.TestCase):
         self.assertIn("b debe tener 3", " ".join(str(e.value) for e in at.error))
 
     def test_modulo_IV_exige_matriz_cuadrada_y_x0_compatible(self):
-        at = self.abrir("IV · Métodos iterativos")
+        at = self.abrir(nav.ITERATIVOS)
         nombre = at.selectbox(key="it_ejemplo").value
         at.text_area(key=f"it_A_{nombre}").input("10 -1\n-1 11\n2 -1")
         at.run()
@@ -206,7 +207,7 @@ class TestEditorEnLaAplicacion(unittest.TestCase):
         self.assertIn("Criterio satisfecho: d_7", " ".join(str(s.value) for s in at.success))
 
     def test_tabla_de_puntos_modulo_III(self):
-        at = self.abrir("III · Mínimos cuadrados")
+        at = self.abrir(nav.MINIMOS)
         nombre = at.selectbox(key="aj_ejemplo").value       # (1,2) (2,2.5) (3,3.7) (4,4.1)
         clave = f"aj_xy_{nombre}"
         self.assertEqual(at.text_area(key=clave).value, "1 2\n2 2.5\n3 3.7\n4 4.1")

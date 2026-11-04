@@ -152,6 +152,7 @@ def _accion(clave, accion, columnas_fijas=None):
         celdas = [[""] * n for _ in range(m)]
     elif accion == "restaurar":
         celdas = celdas_de_texto(ss[_k(clave, "ejemplo")], columnas_fijas)
+        ss[_k(clave, "cargado")] = True
     _escribir(clave, celdas)
 
 
@@ -161,6 +162,7 @@ def restaurar(*claves):
         if _k(clave, "ejemplo") in st.session_state:
             _escribir(clave, celdas_de_texto(st.session_state[_k(clave, "ejemplo")],
                                              st.session_state.get(_k(clave, "fijas"))))
+            st.session_state[_k(clave, "cargado")] = True
 
 
 # ---------------------------------------------------------------------------
@@ -236,7 +238,11 @@ def editor(clave, etiqueta, ejemplo, tipo=MATRIZ, nombre=None, css="ed", encabez
             if valor is not None and tipo != PUNTOS:
                 st.latex(r"\text{Interpretado: }" + latex_matriz(valor if tipo == MATRIZ else [[v] for v in valor]))
         _, mensaje, estado = analizar(ss[clave], tipo, nombre)
-        insignias([(("✔ " if estado == "ok" else "⚠ ") + mensaje, estado)])
+        cargado = ss.pop(_k(clave, "cargado"), False)
+        insignias([(("✔ " if estado == "ok" else "⚠ ") + ("Ejemplo cargado · " if cargado else "") + mensaje,
+                     estado)])
+        # marca invisible: el CSS destaca el editor solo en la ejecución en que se cargó el ejemplo
+        st.markdown(f'<span class="ed-marca{" ed-cargado" if cargado else ""}"></span>', unsafe_allow_html=True)
     return normalizar(ss[clave])
 
 

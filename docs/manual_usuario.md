@@ -68,10 +68,12 @@ La interacción solo cambia la vista: los datos son los calculados por el núcle
 
 ## 3b. Navegación
 
-La aplicación usa un tema oscuro propio. En la **portada** hay una tarjeta por módulo y otra por cada incentivo; sus botones abren directamente la pantalla donde está la funcionalidad. Dentro de cada módulo las etapas están numeradas (1 Datos, 2 Método o parámetros, 3 Resultado) y el resultado principal aparece en una tarjeta destacada con etiquetas de estado.
+La aplicación usa un tema oscuro propio. En la **portada** están los cuatro módulos, cada uno con su enlace «Abrir el módulo», y la lista de incentivos, con un enlace «Ver →» a la pantalla donde está cada funcionalidad. Dentro de cada módulo las etapas están numeradas (1 Datos, 2 Método o parámetros, 3 Resultado) y el resultado principal aparece en una tarjeta destacada con etiquetas de estado.
 
 
-La barra lateral izquierda tiene cinco opciones: Inicio y los módulos I a IV. Es una sola aplicación integrada.
+La **barra superior** tiene cinco opciones: Inicio y los módulos I a IV. El módulo abierto aparece resaltado y subrayado en cian. Es una sola aplicación integrada.
+
+Cada módulo tiene su propia dirección (por ejemplo, `http://localhost:8501/iterativos`). Se puede abrir directamente y los botones «atrás» y «adelante» del navegador funcionan. Los datos escritos en un módulo se conservan al pasar a otro, mientras la pestaña del navegador siga abierta.
 
 ## 4. Módulo I — Sistemas lineales
 

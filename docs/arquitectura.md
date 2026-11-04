@@ -2,7 +2,8 @@
 
 ```text
 proyecto-algebra/
-├── app.py                  Punto de entrada Streamlit: navegación entre los 4 módulos
+├── app.py                  Punto de entrada Streamlit: barra superior (st.navigation) con las 5 páginas
+├── paginas/                Una página por módulo; cada archivo llama al mostrar() de su módulo
 ├── algebra/                NÚCLEO MATEMÁTICO: Python puro, sin dependencias externas
 │   ├── matriz.py           Validación, transpuesta, suma, producto, normas, residuo
 │   ├── validacion.py       Texto del usuario → Fraction exacta; mensajes de error
@@ -16,7 +17,10 @@ proyecto-algebra/
 ├── interfaz/               PRESENTACIÓN: Streamlit; no contiene cálculos
 │   ├── componentes.py      LaTeX, tablas, lectura con mensajes de error
 │   ├── editor.py           Editor interactivo de matrices, vectores y puntos (rejilla + texto)
-│   ├── estilo.py           Identidad visual: hoja de estilos y componentes (tarjetas, etiquetas)
+│   ├── estilo.py           Sistema de diseño: tokens, tipografía, componentes y animaciones
+│   ├── navegacion.py       Lista de páginas (archivo, título, dirección URL)
+│   ├── portada.py          Portada; su figura [A | b] → [I | x] la calcula el núcleo
+│   ├── recursos/marca.svg  Marca «Ax» de la barra superior
 │   ├── ejemplos.py         Ejemplos del curso (resultados verificados)
 │   └── modulo_*.py         Una página por módulo
 ├── visualizacion/          GRÁFICAS: Matplotlib; solo dibujan resultados del núcleo

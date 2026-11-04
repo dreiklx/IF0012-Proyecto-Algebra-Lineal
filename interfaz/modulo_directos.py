@@ -145,7 +145,7 @@ def mostrar_resultado(A, b, r):
     if n in (2, 3) and len(A) <= 6:
         with st.expander("Interpretación geométrica", expanded=False):
             marca_incentivo("Experiencia de usuario", "0,5 %")
-            grafica, texto = st.columns([3, 2])
+            grafica, texto = st.columns([5, 2])
             with grafica:
                 if n == 2:
                     mostrar_interactiva(rectas_2d(A, b, r), "rectas", mostrar_ayuda=False)

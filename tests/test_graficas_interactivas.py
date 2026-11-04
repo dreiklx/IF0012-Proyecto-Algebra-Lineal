@@ -14,6 +14,7 @@ from algebra.espectral import radio_espectral
 from algebra.iterativos import ConfiguracionIterativa, comparar_metodos, configuraciones_homogeneas, ejecutar
 from algebra.minimos import ajuste_lineal
 from algebra.precondicionamiento import analizar_precondicionador
+from interfaz import navegacion as nav
 from visualizacion import graficos, interactivas
 from visualizacion.geometria_3d import _centro_y_radio, _esquinas_plano
 
@@ -128,7 +129,7 @@ class TestGraficasEnLaAplicacion(unittest.TestCase):
         ruta = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "app.py")
         at = AppTest.from_file(ruta, default_timeout=60)
         at.run()
-        at.sidebar.radio(key="navegacion").set_value("IV · Métodos iterativos")
+        at.switch_page(nav.ITERATIVOS)
         at.run()
         at.button(key="it_ejecutar").click()
         at.run()

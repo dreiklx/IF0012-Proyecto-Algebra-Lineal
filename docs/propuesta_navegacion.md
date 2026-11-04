@@ -1,6 +1,13 @@
 # Propuesta: evolución de la navegación y de la identidad visual de Ax
 
-**Estado: PROPUESTA, NO IMPLEMENTADA** (03-nov-2026). No se cambió la barra lateral, la navegación ni se agregaron animaciones de página. Este documento sirve para decidir.
+**Estado: IMPLEMENTADA la Opción A** (03-nov-2026, rama `feature/navegacion-superior`). El resultado y las mediciones están en `diseno_visual.md` §8. El resto del documento se conserva como registro de la decisión.
+
+**Diferencias con lo propuesto:**
+
+- **Tipografía de títulos:** Bahnschrift, que viene con Windows 10/11, en lugar de Space Grotesk. No hay que distribuir archivos de fuentes y funciona sin internet.
+- **Ayuda de formato de entrada:** no pasó a un popover de la barra. Ya está en cada editor (pestaña «Pegar» y ayuda del campo) y en la portada («Cómo introducir los datos»).
+- **Páginas:** son archivos (`paginas/*.py`) en lugar de funciones, para que las pruebas puedan abrir cada módulo con `AppTest.switch_page`.
+- **Etiquetas de la barra:** caben completas a 1024 px («IV · Métodos iterativos»), así que no hizo falta abreviarlas.
 
 ## 1. Arquitectura actual (lo que condiciona cualquier rediseño)
 

@@ -175,9 +175,9 @@ Capturas reales de la aplicación en ejecución (Edge sin interfaz controlado po
 | Análisis e interpretación | 6 % | `_interpretar`, mensajes del núcleo | Mensajes por color, recomendaciones, «cómo leer el diagrama» | `test_app` | COMPLETADO (juicio de la docente) |
 | Diseño del código | 5 % | Capas `algebra/`, `interfaz/` y `visualizacion/`; el editor y las gráficas, en módulos propios | — | `docs/arquitectura.md` | COMPLETADO |
 | Validaciones y errores | 4 % | `validacion.py`, `validar_configuracion` | Validación previa en el editor y bloqueo por dimensiones incompatibles | `test_validacion`, `test_editor` | COMPLETADO |
-| Interfaz y usabilidad | 5 % | — | Identidad Ax, editor interactivo, **gráficas interactivas**, probado a 1440 y 1024 px | Capturas en `docs/capturas/` | COMPLETADO (juicio de la docente) |
+| Interfaz y usabilidad | 5 % | — | Identidad Ax, **navegación superior** con el módulo activo marcado, editor interactivo, **gráficas interactivas**, probado a 1440, 1366 y 1024 px | Capturas en `docs/capturas/`; `TestNavegacion` | COMPLETADO (juicio de la docente) |
 | Manual de usuario | 3 % | `docs/manual_usuario.md` (editor y gráficas documentados) | — | Probado en otra computadora (equipo) | COMPLETADO |
-| Casos de prueba | 3 % | `casos_prueba/`, 228 pruebas | — | — | Propios: COMPLETADO. **Caso obligatorio: PENDIENTE (externo, no recibido)** |
+| Casos de prueba | 3 % | `casos_prueba/`, 232 pruebas | — | — | Propios: COMPLETADO. **Caso obligatorio: PENDIENTE (externo, no recibido)** |
 
 ### 7.2 Incentivos (hasta 5 %): versión vigente
 
@@ -190,3 +190,87 @@ Capturas reales de la aplicación en ejecución (Edge sin interfaz controlado po
 | Extensión matemática | 1 % | «Funcionalidad adicional pertinente, correctamente implementada y defendida» | `espectral.py` (Faddeev-LeVerrier, Durand-Kerner, Schur-Cohn, p(±1)), T de SOR, Richardson | IV → «Convergencia» | `test_espectral`, auditoría (300 casos) | **Sí**, siempre que la defensa la justifique: no está en los PDF |
 
 **Nada queda pendiente de implementar en los incentivos.** El puntaje lo asigna la docente; el riesgo principal es la defensa de las extensiones.
+
+
+## 8. Navegación superior y rediseño integral (03-nov-2026, rama `feature/navegacion-superior`)
+
+Es la implementación de la Opción A de `propuesta_navegacion.md`. **No se modificó** `algebra/`, `visualizacion/` ni `auditoria/`, ni ninguna fórmula, algoritmo, validación o dato de las gráficas. Los 23 ejemplos precargados dan resultados idénticos a los de antes, comparados con el oráculo independiente.
+
+### 8.1 Navegación
+
+- **Barra superior nativa** (`st.navigation(..., position="top")`): Inicio, I · Sistemas lineales, II · Condicionamiento, III · Mínimos cuadrados y IV · Métodos iterativos.
+- **Una dirección por módulo:** `/sistemas`, `/condicionamiento`, `/minimos` y `/iterativos`. Funcionan los botones «atrás» y «adelante» del navegador.
+- **Registro único** en `interfaz/navegacion.py`. Lo usan `app.py`, la portada y las pruebas. Cada archivo de `paginas/` solo llama al `mostrar()` de su módulo, y las claves de los widgets no cambiaron.
+- **Módulo activo:** texto blanco y un subrayado cian de 2 px que se desliza en 200 ms al cambiar de página. Las demás opciones van en gris y se aclaran al pasar el cursor.
+- **Barra lateral eliminada.** Tenía la marca y dos notas. La marca pasó a la barra superior (`st.logo`, `interfaz/recursos/marca.svg`), la ayuda de entrada ya estaba en cada editor y en la portada, y la información de la UCR va en el pie de la portada.
+
+### 8.2 Identidad
+
+- **Sistema de diseño único** (`interfaz/estilo.py`, 10 secciones). Los colores, las tipografías, los radios y las duraciones son variables en `:root`; ningún estilo está repetido en los módulos.
+- **Menos efectos.** Se quitaron los halos de fondo, los degradados de la portada, las cabeceras y los botones, el texto con degradado y las sombras grandes.
+- **Una sola tarjeta por resultado:** el resultado principal, con un borde cian a la izquierda. Las métricas dejaron de ser tarjetas: ahora son columnas separadas por reglas finas.
+- **Uso del color:** el cian marca lo activo o el resultado, y el violeta, los incentivos.
+- **Tipografía**, toda local, sin fuentes externas ni internet:
+  - títulos en **Bahnschrift**, que viene con Windows 10/11 (si falta, Segoe UI);
+  - texto en Segoe UI;
+  - matrices, celdas del editor, números de sección y rótulos técnicos en **Cascadia Code / Consolas**;
+  - cifras tabulares en las métricas y las tablas.
+
+### 8.3 Portada
+
+- Composición editorial, sin rejilla de tarjetas:
+  - a la izquierda, el título, el propósito y tres datos clave (núcleo, directos, iterativos);
+  - a la derecha, una figura matemática sobre papel cuadriculado tenue.
+- **La figura no es decorativa.** Es la eliminación de Gauss-Jordan [A | b] ∼ [I | x] del primer ejemplo del Módulo I, que el núcleo calcula al abrir la página: x = (1/3, 4, 5/3), rango 3 y det(A) = 3. Una prueba lo comprueba.
+- **Cuatro módulos en columnas**, cada uno con su número romano, título, una frase y el enlace «Abrir el módulo».
+- **Los cinco incentivos en una lista de filas** (nombre, valor máximo, descripción, «Dónde verlo» y el enlace «Ver →»), sin insignias.
+
+### 8.4 Pantallas de los módulos
+
+- **Cabecera editorial:** rótulo «MÓDULO I» en mono cian, título de 1,75 a 2,25 rem y descripción. Ya no va en una caja.
+- **Etapas numeradas** (01, 02, 03) con una regla fina.
+- **Editor de matrices:** aprovecha el ancho que liberó la barra lateral. Las celdas conservan su tamaño mínimo (2,45 rem de alto, fuente de 1,02 rem).
+- **Gráficas:** ganan ancho, mantienen su altura y toda la interactividad. La 3D del Módulo I pasó a ocupar 5/7 del expansor, con 859 px de ancho a 1440 px y 560 px de alto, igual que antes. Se comprobó con un arrastre real del ratón que la cámara rota.
+- **Fórmulas:** más espacio vertical en `katex-display`.
+
+### 8.5 Animaciones (solo `opacity` y `transform`, de 140 a 220 ms)
+
+| Microinteracción | Duración | Comprobado con eventos `animationstart` reales |
+|---|---|---|
+| Aparición del resultado principal | 220 ms | Se reproduce **una vez** al pulsar «Resolver»; en reruns posteriores (cambiar el método o el pivoteo), **0 eventos** |
+| Cambio de página (cabecera) | 200 ms | Una vez por cambio de módulo |
+| Indicador de la barra superior | 200 ms | Transición del subrayado |
+| Cambio de pestaña (panel e indicador) | 200 ms | Un fundido por cambio; 0 en reruns |
+| «Cargar ejemplo» | 220 ms | Destello del borde de los dos editores **solo** en esa ejecución, más el aviso «Ejemplo cargado · …»; en el rerun siguiente, 0 eventos y la marca desaparece |
+| Hover y pulsación de botones, enlaces y pestañas; color de los campos | 140 ms | Transiciones de color y 1 px de elevación |
+
+- **Movimiento reducido:** con `prefers-reduced-motion: reduce` (emulado), todas las duraciones quedan en 0 s.
+- **Descartado:** partículas, paralaje, números que cuentan y animaciones infinitas.
+- **Corrección detectada al medir:** en Streamlit 1.66 las pestañas usan react-aria (`data-testid="stTab"`), no baseweb. Los selectores antiguos de pestañas no tenían efecto y se reemplazaron.
+
+### 8.6 Responsive
+
+Las 9 pantallas (portada, I, II, III, ajuste y las 4 pestañas de IV) se revisaron con Chromium sin interfaz, el mismo motor que Brave, a **1440×900, 1366×768 y 1024×768**:
+
+- **sin desbordamiento horizontal** en ninguna de las 27 (`scrollWidth` = ancho de la ventana);
+- la barra superior cabe completa;
+- el módulo activo siempre se identifica.
+
+La aplicación se abrió también en Brave.
+
+**Capturas:**
+
+- `capturas/0_inicio.png`, `1_modulo_I.png`, `1b_geometria.png`, `2_modulo_II.png`, `3_modulo_III*.png` y `4*_modulo_IV_*.png` (1440 px);
+- `nav_1366_*.png` y `nav_1024_*.png`;
+- `antes_navegacion_inicio.png`: la portada anterior.
+
+### 8.7 Pruebas
+
+- **Adaptación:** las pruebas de interfaz pasaron de `at.sidebar.radio(key="navegacion")` a `at.switch_page(nav.SISTEMAS)`, etc. Lo que verifican no cambió.
+- **4 pruebas nuevas** (`TestNavegacion`):
+  - registro de páginas;
+  - cada página abre su módulo y la barra lateral queda vacía;
+  - la portada enlaza los 4 módulos y los 5 incentivos;
+  - la figura de la portada es el resultado del núcleo.
+- **Empaquetado:** `paginas/` y la marca se entregan en el ZIP, y `test_empaquetado` lo comprueba.
+- **Total:** 232 pruebas OK; la auditoría sigue con 0 fallos.

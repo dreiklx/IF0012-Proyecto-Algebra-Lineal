@@ -23,12 +23,15 @@ borderColor = "#26324D"
 showWidgetBorder = true
 baseRadius = "10px"
 font = "'Segoe UI', 'Inter', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif"
+# Títulos con más carácter: Bahnschrift viene con Windows 10/11 (sin fuentes externas ni internet).
+headingFont = "'Bahnschrift', 'Segoe UI Variable Display', 'Segoe UI', system-ui, sans-serif"
 codeFont = "'Cascadia Code', 'Consolas', 'SFMono-Regular', monospace"
 baseFontSize = 15
 dataframeHeaderBackgroundColor = "#18223A"
 chartCategoricalColors = ["#4F8CFF", "#F472B6", "#22D3EE", "#FBBF24", "#A78BFA"]
 
 [theme.sidebar]
+# La navegación es superior; la barra lateral no se usa.
 backgroundColor = "#0E1528"
 secondaryBackgroundColor = "#141C30"
 borderColor = "#1F2A44"
