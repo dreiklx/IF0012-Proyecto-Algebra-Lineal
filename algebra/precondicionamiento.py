@@ -36,7 +36,6 @@ from fractions import Fraction
 from algebra.compartido.exactos import a_fraccion
 from algebra.compartido.matriz import identidad, validar_cuadrada, validar_vector
 from algebra.compartido.validacion import ErrorEntrada, formatear_numero
-from algebra.condicion import numero_condicion_infinito
 from algebra.espectral import (
     AVISO_CASI_REPETIDOS,
     N_MAX_ESPECTRAL,
@@ -51,6 +50,7 @@ from algebra.iterativos import (
     SOR,
     ejecutar,
 )
+from algebra.modulo_II_condicionamiento.condicion import numero_condicion_infinito
 
 
 @dataclass

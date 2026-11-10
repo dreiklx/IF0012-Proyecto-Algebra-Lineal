@@ -8,7 +8,7 @@ import unittest
 from fractions import Fraction as F
 
 from algebra.compartido.matriz import ErrorDimension
-from algebra.condicion import (
+from algebra.modulo_II_condicionamiento.condicion import (
     MATRIZ_SINGULAR,
     PERTURBACION_ABSOLUTA,
     PERTURBACION_PORCENTAJE,

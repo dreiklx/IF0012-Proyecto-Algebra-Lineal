@@ -4,7 +4,7 @@ import streamlit as st
 
 from algebra.compartido.matriz import ErrorMatriz
 from algebra.compartido.validacion import ErrorEntrada, formatear_numero, leer_vector
-from algebra.condicion import (
+from algebra.modulo_II_condicionamiento.condicion import (
     MATRIZ_SINGULAR,
     PERTURBACION_ABSOLUTA,
     PERTURBACION_PORCENTAJE,
