@@ -1,4 +1,4 @@
-"""Pruebas de algebra/minimos.py (Módulo III).
+"""Pruebas de algebra/modulo_III_minimos/minimos.py (Módulo III).
 
 Oráculos calculados a mano (desarrollo en los comentarios).  Además se
 comprueba la propiedad independiente Aᵀ r = 0 de toda solución de mínimos

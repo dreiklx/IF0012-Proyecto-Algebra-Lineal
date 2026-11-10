@@ -1,4 +1,4 @@
-"""Pruebas de algebra/dispersas.py (incentivo «matrices dispersas»)."""
+"""Pruebas de algebra/modulo_IV_iterativos/dispersas.py (incentivo «matrices dispersas»)."""
 
 import time
 import unittest

@@ -35,7 +35,7 @@ MATRIZ, VECTOR, PUNTOS = "matriz", "vector", "puntos"
 
 
 # ---------------------------------------------------------------------------
-# Conversión texto <-> celdas (funciones puras, probadas en tests/test_editor.py)
+# Conversión texto <-> celdas (funciones puras, probadas en tests/interfaz/test_editor.py)
 # ---------------------------------------------------------------------------
 
 def normalizar(texto):

@@ -19,7 +19,7 @@
 | 1 | ¿Qué aparece en la aplicación? | Una **iteración de Richardson**, x⁽ᵏ⁾ = x⁽ᵏ⁻¹⁾ + (b − A x⁽ᵏ⁻¹⁾), que se ejecuta **solo** dentro de la pestaña de precondicionamiento del Módulo IV, como cuarta fila de la tabla «original frente a precondicionado» |
 | 2 | ¿Es una matriz de iteración o una matriz del sistema? | Es un **método iterativo** cuya **matriz de iteración** es **T_R = I − A**. Sobre el sistema precondicionado se convierte en T̃_R = I − D⁻¹A. No es una matriz del sistema: A, b y la solución x no cambian |
 | 3 | ¿Qué fórmula utiliza? | Paso: x_nuevo[i] = x_anterior[i] + (b[i] − Σⱼ A[i][j]·x_anterior[j]). Matriz: T_R = I − A (exacta, con fracciones). Con M = D: x⁽ᵏ⁾ = x⁽ᵏ⁻¹⁾ + D⁻¹(b − Ax⁽ᵏ⁻¹⁾), que **es exactamente Jacobi** |
-| 4 | ¿Dónde está implementada? | `algebra/iterativos.py` (el paso) y `algebra/precondicionamiento.py` (la comparación y ρ). Las rutas exactas están en la sección 2 |
+| 4 | ¿Dónde está implementada? | `algebra/modulo_IV_iterativos/metodos.py` (el paso) y `algebra/modulo_IV_iterativos/precondicionamiento.py` (la comparación y ρ). Las rutas exactas están en la sección 2 |
 | 5 | ¿Qué función la calcula? | `paso_richardson` (densa), `paso_richardson_csr` (CSR), `ejecutar(..., metodo=RICHARDSON)` (bucle común) y `_rho` (ρ de I − A) |
 | 6 | ¿En qué módulo aparece? | **Solo en el Módulo IV**, pestaña «Precondicionamiento». No se ofrece como método en «Ejecutar un método», ni en la comparación ni en convergencia |
 | 7 | ¿Qué resultado produce? | En los 7 ejemplos precargados, Richardson **sin** precondicionar no converge: ρ(I − A) va de 4,25 a 12,37 y se detiene por máximo de iteraciones. **Con** M = D converge en 6 de 7, en 7 a 11 iteraciones (tabla 3). El séptimo es el ejemplo de clase donde ni Jacobi converge |
@@ -35,25 +35,25 @@
 
 | Archivo | Función / bloque | Líneas* | Fórmula o papel |
 |---|---|---|---|
-| `algebra/iterativos.py` | constante `RICHARDSON` y comentario | 52-55 | «Richardson no es uno de los métodos del enunciado: solo se usa en el análisis del precondicionador diagonal» |
-| `algebra/iterativos.py` | `paso_richardson(A, b, x_anterior)` | 194-206 | x⁽ᵏ⁾ = x⁽ᵏ⁻¹⁾ + (b − Ax⁽ᵏ⁻¹⁾); el docstring indica que T_R = I − A y que con D⁻¹A es Jacobi |
-| `algebra/iterativos.py` | `paso_richardson_csr` | 209-211 | El mismo paso, recorriendo solo los no nulos (CSR) |
-| `algebra/iterativos.py` | `PASOS`, `PASOS_CSR` | 214-217 | Registra el paso para que `ejecutar` lo use con los mismos criterios de parada |
-| `algebra/iterativos.py` | `_ejecutar` | 352 | Richardson no divide entre aᵢᵢ, así que no exige diagonal no nula |
-| `algebra/precondicionamiento.py` | docstring del módulo | 1-30 | Demostración de T̃ = T para Jacobi, GS y SOR; T_R = I − A frente a T̃_R = I − D⁻¹A = T_J |
-| `algebra/precondicionamiento.py` | `_rho(A, b, metodo, omega)` | 100-112 | Si el método es Richardson, T = I − A (exacta) y ρ con `analizar_matriz` |
-| `algebra/precondicionamiento.py` | `analizar_precondicionador` | 125-159 | Recorre `METODOS + (RICHARDSON,)` sobre (A, b) y sobre (D⁻¹A, D⁻¹b) con la misma configuración |
-| `algebra/precondicionamiento.py` | `_conclusiones` | 185-193 | Texto «Richardson: ρ(I − A) = … y ρ(I − D⁻¹A) = …» con iteraciones y motivo |
-| `interfaz/modulo_iterativos.py` | `precondicionamiento()` | 505-578 | Chips, tabla, conclusiones, aviso de extensión y gráfica |
+| `algebra/modulo_IV_iterativos/metodos.py` | constante `RICHARDSON` y comentario | 29-32 | «Richardson no es uno de los métodos del enunciado: solo se usa en el análisis del precondicionador diagonal» |
+| `algebra/modulo_IV_iterativos/metodos.py` | `paso_richardson(A, b, x_anterior)` | 75-87 | x⁽ᵏ⁾ = x⁽ᵏ⁻¹⁾ + (b − Ax⁽ᵏ⁻¹⁾); el docstring indica que T_R = I − A y que con D⁻¹A es Jacobi |
+| `algebra/modulo_IV_iterativos/dispersas.py` | `paso_richardson_csr` | 131-134 | El mismo paso, recorriendo solo los no nulos (CSR) |
+| `algebra/modulo_IV_iterativos/ejecucion.py` | `PASOS`, `PASOS_CSR` | 141-144 | Registra el paso para que `ejecutar` lo use con los mismos criterios de parada |
+| `algebra/modulo_IV_iterativos/ejecucion.py` | `_ejecutar` | 280 | Richardson no divide entre aᵢᵢ, así que no exige diagonal no nula |
+| `algebra/modulo_IV_iterativos/precondicionamiento.py` | docstring del módulo | 1-30 | Demostración de T̃ = T para Jacobi, GS y SOR; T_R = I − A frente a T̃_R = I − D⁻¹A = T_J |
+| `algebra/modulo_IV_iterativos/precondicionamiento.py` | `_rho(A, b, metodo, omega)` | 103-115 | Si el método es Richardson, T = I − A (exacta) y ρ con `analizar_matriz` |
+| `algebra/modulo_IV_iterativos/precondicionamiento.py` | `analizar_precondicionador` | 128-162 | Recorre `METODOS + (RICHARDSON,)` sobre (A, b) y sobre (D⁻¹A, D⁻¹b) con la misma configuración |
+| `algebra/modulo_IV_iterativos/precondicionamiento.py` | `_conclusiones` | 188-196 | Texto «Richardson: ρ(I − A) = … y ρ(I − D⁻¹A) = …» con iteraciones y motivo |
+| `interfaz/modulos/modulo_IV_iterativos/pestana_precondicionamiento.py` | `precondicionamiento()` | 18-93 (aviso de extensión: 85) | Chips, tabla, conclusiones, aviso de extensión y gráfica |
 | `visualizacion/interactivas.py` | `precondicionador()` | 259-290 | Curvas d_k «Richardson (original)» y «(con M = D)»; la vista se acota cuando una curva diverge |
 | `visualizacion/graficos.py`, `visualizacion/tema.py` | `MARCADORES`, `COLORES_METODOS` | 22, 193; 20 | Marcador y color (gráfica de respaldo en Matplotlib) |
-| `interfaz/portada.py` | lista de incentivos | 54 | Menciona Richardson en «Extensión matemática» |
-| `tests/test_precondicionamiento.py` | `TestPrecondicionador`, `TestRichardson` | 72-103 | ρ(I − A) = 3 + 2cos(π/5); Richardson con M = D da las iteraciones de Jacobi; no exige aᵢᵢ ≠ 0 |
-| `tests/test_graficas_interactivas.py` | prueba de la gráfica | 110-116 | La traza de Richardson conserva los datos completos |
+| `interfaz/portada.py` | lista de incentivos | 55 | Menciona Richardson en «Extensión matemática» |
+| `tests/modulo_IV/test_precondicionamiento.py` | `TestPrecondicionadorDiagonal`, `TestRichardson` | 44-108 (Richardson: 77-86 y 98-108) | ρ(I − A) = 3 + 2cos(π/5); Richardson con M = D da las iteraciones de Jacobi; no exige aᵢᵢ ≠ 0 |
+| `tests/interfaz/test_graficas_interactivas.py` | prueba de la gráfica | 118-124 | La traza de Richardson conserva los datos completos |
 | `auditoria/auditoria_precondicionamiento.py` | auditoría independiente | 9, 74-90 | Bucle propio x ← x + D⁻¹(b − Ax), comparado con Jacobi en cada iteración |
 | `casos_prueba/modulo_IV.md` | IV-23 | 67 | Caso documentado: 4,618 → 0,405 |
 
-\* Líneas al 09-nov-2026, antes de la reorganización de carpetas. La guía `guia_recorrido_codigo.md` da las rutas nuevas.
+\* Líneas al 10-nov-2026, después de la reorganización de carpetas (`docs/arquitectura.md`).
 
 ## 3. Resultados en los ejemplos precargados (configuración por defecto: criterio A, ε = 10⁻³, k_max = 50)
 

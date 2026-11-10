@@ -3,8 +3,8 @@
 Requisito: «cada módulo debe incluir al menos un caso de prueba documentado con entrada, salida esperada y resultado obtenido» (OFICIAL p. 3).
 
 - **Salida esperada:** calculada de forma independiente, a mano, por sustitución en las ecuaciones originales.
-- **Resultado obtenido:** lo que devolvió la aplicación (`algebra/directos.py`) al ejecutarse el 27-oct-2026.
-- **Pruebas automáticas equivalentes:** `tests/test_directos.py`.
+- **Resultado obtenido:** lo que devolvió la aplicación (`algebra/modulo_I_sistemas/directos.py`) al ejecutarse el 27-oct-2026.
+- **Pruebas automáticas equivalentes:** `tests/modulo_I/test_directos.py`.
 
 | ID | Entrada (A ; b) | Salida esperada (oráculo independiente) | Resultado obtenido | ¿Coincide? |
 |---|---|---|---|---|

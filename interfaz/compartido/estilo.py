@@ -12,7 +12,7 @@ Todo el estilo de la aplicación está en este archivo (una sola hoja, CSS):
   5. Cabecera de módulo, rótulos de sección, chips
   6. Resultado principal, métricas, escala de κ
   7. Controles: botones, enlaces, pestañas, campos, expansores
-  8. Editor de matrices (interfaz/editor.py)
+  8. Editor de matrices (interfaz/compartido/editor.py)
   9. Movimiento (120-220 ms, una sola vez) y prefers-reduced-motion
  10. Anchos intermedios (1024-1366 px)
 
@@ -231,7 +231,7 @@ div[class*="st-key-res_"] .katex-display .katex{font-size:1.45em}
 [data-testid="stAlert"]{border-radius:var(--r-m)}
 [data-testid="stPlotlyChart"]{border-top:1px solid var(--regla);padding-top:.4rem}
 
-/* 8. Editor de matrices (interfaz/editor.py) ------------------------------- */
+/* 8. Editor de matrices (interfaz/compartido/editor.py) ------------------------------- */
 div[class*="st-key-editor_"]{border:1px solid var(--borde);border-radius:var(--r-l);padding:.55rem .75rem .85rem;
   background:#111830;transition:border-color var(--t-media) var(--curva)}
 div[class*="st-key-editor_"]:focus-within{border-color:#34446A}

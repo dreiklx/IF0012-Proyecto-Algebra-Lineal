@@ -1,4 +1,4 @@
-"""Pruebas de algebra/condicion.py (Módulo II).
+"""Pruebas de algebra/modulo_II_condicionamiento/condicion.py (Módulo II).
 
 Los valores de κ∞ se derivaron a mano con la fórmula de la inversa 2x2
 (A⁻¹ = (1/det)[[d,-b],[-c,a]]) o con la estructura A = I + 10J (ver comentarios).

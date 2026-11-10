@@ -15,12 +15,12 @@
 ## Navegación superior y rediseño (03-nov-2026, rama `feature/navegacion-superior`)
 
 - **Navegación:** barra superior nativa (`st.navigation`, `position="top"`) con una dirección por módulo; la barra lateral se eliminó, porque quedaba vacía.
-- **Diseño:** portada editorial y cabeceras de módulo nuevas; un solo sistema de diseño en `interfaz/estilo.py`; animaciones de 140 a 220 ms que respetan `prefers-reduced-motion`. Detalle y mediciones en `diseno_visual.md` §8.
+- **Diseño:** portada editorial y cabeceras de módulo nuevas; un solo sistema de diseño en `interfaz/compartido/estilo.py`; animaciones de 140 a 220 ms que respetan `prefers-reduced-motion`. Detalle y mediciones en `diseno_visual.md` §8.
 - **Pruebas:** 232 OK (4 nuevas de navegación); auditoría con 0 fallos; ejemplos idénticos; sin cambios en `algebra/`, `visualizacion/` ni `auditoria/`.
 
 ## Gráficas interactivas y reauditoría (03-nov-2026, rama `feature/graficas-interactivas`)
 
-- **Gráficas:** Plotly 6.3.0 (única dependencia nueva) en `visualizacion/interactivas.py`. La 3D se puede rotar, ampliar y restablecer, y muestra valores al pasar el cursor; las 2D tienen zoom ＋/－ y por región, desplazamiento, autoescala, restablecer, valores y series activables. Los datos son exactamente los del núcleo (`tests/test_graficas_interactivas.py`, 8 pruebas).
+- **Gráficas:** Plotly 6.3.0 (única dependencia nueva) en `visualizacion/interactivas.py`. La 3D se puede rotar, ampliar y restablecer, y muestra valores al pasar el cursor; las 2D tienen zoom ＋/－ y por región, desplazamiento, autoescala, restablecer, valores y series activables. Los datos son exactamente los del núcleo (`tests/interfaz/test_graficas_interactivas.py`, 8 pruebas).
 - **Seguridad:** se restauraron `.env` y `.env.*` en `.gitignore` (el commit 59dd149 los había quitado) y una prueba lo vigila. No hay credenciales en los archivos rastreados ni en el historial (búsqueda de nombres y patrones; ningún valor se imprimió).
 - **Reauditoría contra los PDF:** los archivos son los originales (huellas, tamaños y fechas); hay una sola versión de la rúbrica; los métodos que no están en los PDF siguen marcados como extensión. Detalle en `comparacion_procedimientos.md`. El editor no altera ningún ejemplo (prueba nueva).
 - **Propuesta de navegación:** `propuesta_navegacion.md` (Opción A implementada después; ver la sección anterior).
@@ -28,18 +28,18 @@
 
 ## Editor interactivo de datos (03-nov-2026, rama `feature/editor-interactivo`)
 
-- **Componente nuevo:** `interfaz/editor.py`, con tres tipos (MATRIZ, VECTOR y PUNTOS), integrado en los cuatro módulos.
+- **Componente nuevo:** `interfaz/compartido/editor.py`, con tres tipos (MATRIZ, VECTOR y PUNTOS), integrado en los cuatro módulos.
   - Pestañas «Editor» (rejilla, ＋/－ filas y columnas, identidad, ceros, limpiar, restaurar) y «Pegar» (espacios, tabulaciones, «;» o «, », con vista previa).
   - Botón «⟲ Cargar ejemplo».
   - Tabla de puntos en el Módulo III y editor de x⁽⁰⁾ en el Módulo IV.
 - **Validación previa visual:** faltan valores, formato inválido con su posición, y dimensiones incompatibles que bloquean el botón. Las validaciones del núcleo no se tocaron.
 - **Sin cambios** en `algebra/` ni `auditoria/`; ninguna prueba existente se modificó.
-- **Pruebas:** 217, todas OK (las 204 anteriores más las 13 de `tests/test_editor.py`). La auditoría sigue con 0 fallos y los ejemplos precargados dan resultados idénticos.
+- **Pruebas:** 217, todas OK (las 204 anteriores más las 13 de `tests/interfaz/test_editor.py`). La auditoría sigue con 0 fallos y los ejemplos precargados dan resultados idénticos.
 
 ## Rediseño visual (03-nov-2026, rama `feature/rediseño-visual`)
 
 - **Identidad propia:** tema oscuro de software científico, portada con tarjetas de los cuatro módulos y de los cinco incentivos (con accesos directos), etapas numeradas, tarjetas de resultado, etiquetas de estado, barra de la escala de κ, recomendaciones contextuales y gráficas con un tema común.
-- **Archivos nuevos:** `interfaz/estilo.py` y `visualizacion/tema.py`. Archivos modificados: `app.py`, las cuatro pantallas de `interfaz/`, `visualizacion/graficos.py`, `visualizacion/geometria_3d.py` y `.streamlit/config.toml`.
+- **Archivos nuevos:** `interfaz/compartido/estilo.py` y `visualizacion/tema.py`. Archivos modificados: `app.py`, las cuatro pantallas de `interfaz/`, `visualizacion/graficos.py`, `visualizacion/geometria_3d.py` y `.streamlit/config.toml`.
 - **Sin cambios** en `algebra/`, `tests/` ni `auditoria/`. Los resultados de los 25 ejemplos precargados son idénticos byte a byte; 204 pruebas OK y la auditoría con 0 fallos.
 - **Documentación:** `docs/diseno_visual.md` (matrices de la rúbrica y de los incentivos con su presentación) y capturas en `docs/capturas/`.
 
@@ -58,7 +58,7 @@
 2. **Caso obligatorio (P-3).** Se releyó el enunciado y se revisó el texto de todos los PDF del curso. El caso **no está en ningún documento**. Se detalló qué dice cada página, qué acredita (rúbrica «Casos de prueba», 3 %), cómo incorporarlo y la pregunta exacta para la docente (`pendientes_docente.md`, P-3; `casos_prueba/README.md`).
 3. **Archivos internos de IA y credenciales fuera de la entrega y del repositorio:**
    - `.gitignore` excluye `CLAUDE.md`, `CLAUDE.local.md`, `.claude/`, `.mcp.json`, `.env*`, claves y archivos temporales.
-   - `empaquetar.py` los excluye y, además, se niega a crear el ZIP si encontrara alguno (prueba `tests/test_empaquetado.py`).
+   - `empaquetar.py` los excluye y, además, se niega a crear el ZIP si encontrara alguno (prueba `tests/entrega/test_empaquetado.py`).
    - Se comprobó que **ninguno** existe en el proyecto ni en el historial de Git.
    - La declaración del uso de IA (`docs/herramientas_y_bibliotecas.md` §4) **se conserva** y se entrega.
    - Se quitó de dos documentos la ruta local que contenía el nombre de usuario del equipo.
@@ -85,7 +85,7 @@
    - **Precondicionamiento:** la lámina indica qué comparar (κ y ρ de A frente a B = D⁻¹A).
    - **Procedimientos de clase no visibles en la aplicación:** det([A|b]) y Cramer en mínimos cuadrados; Sarrus en det(T − λI); reordenamiento de ecuaciones para lograr la dominancia.
 3. **Implementado:**
-   - `algebra/precondicionamiento.py`, con la pestaña «Precondicionamiento diagonal», y `paso_richardson`;
+   - `algebra/modulo_IV_iterativos/precondicionamiento.py`, con la pestaña «Precondicionamiento diagonal», y `paso_richardson`;
    - `minimos.cramer` y `det_aumentada`, con el desplegable de verificación del procedimiento de clase;
    - `espectral.desarrollo_sarrus`, mostrado para T 3×3;
    - `espectral.analizar_matriz`, una refactorización sin cambio de resultados: los 300 casos aleatorios y los ejemplos precargados dan lo mismo que el 02-nov;
@@ -94,7 +94,7 @@
    - la gráfica del precondicionador recorta las curvas divergentes.
 4. **Defecto corregido:** con un aᵢᵢ = 0, la pestaña «Convergencia» no mostraba ni la dominancia ni el reordenamiento, porque fallaba al construir T. Ahora los muestra junto con el error (prueba `test_modulo_IV_reordenamiento_y_sarrus`).
 5. **Pruebas nuevas (17):**
-   - `tests/test_precondicionamiento.py` (14), con oráculos de la lámina, a mano y de la teoría de la tridiagonal;
+   - `tests/modulo_IV/test_precondicionamiento.py` (14), con oráculos de la lámina, a mano y de la teoría de la tridiagonal;
    - 3 pruebas de interfaz.
    - Auditoría nueva: `auditoria/auditoria_precondicionamiento.py`, 150 casos y 0 fallos.
 6. **Revisión visual (Chrome, 03-nov):**
@@ -200,7 +200,7 @@ Los que dependen de la docente están detallados en [pendientes_docente.md](pend
 
 ZIP generado el 03-nov-2026 con `python empaquetar.py 01`: `dist/Grupo01-IF0012-Proyecto-IIC.zip`. Grupo 01, confirmado por el equipo.
 
-- **Contenido:** 64 archivos (regenerado tras la segunda parte del 03-nov), una sola carpeta raíz (`Grupo01-IF0012-Proyecto-IIC/`) y `testzip` sin errores. Incluye `algebra/precondicionamiento.py`, `tests/test_precondicionamiento.py`, `auditoria/auditoria_precondicionamiento.py` y `docs/comparacion_procedimientos.md`.
+- **Contenido:** 64 archivos (regenerado tras la segunda parte del 03-nov), una sola carpeta raíz (`Grupo01-IF0012-Proyecto-IIC/`) y `testzip` sin errores. Incluye `algebra/modulo_IV_iterativos/precondicionamiento.py`, `tests/modulo_IV/test_precondicionamiento.py`, `auditoria/auditoria_precondicionamiento.py` y `docs/comparacion_procedimientos.md`.
 - **Exclusiones:** sin `.venv`, `__pycache__`, `.pyc`, `.git`, `dist`, imágenes ni `secrets.toml`.
 - **Prueba en una copia limpia** (03-nov):
   - el ZIP se extrajo en una carpeta nueva;

@@ -8,7 +8,7 @@ Referencias:
 
 ---
 
-## 1. Operaciones básicas (`algebra/matriz.py`)
+## 1. Operaciones básicas (`algebra/compartido/matriz.py`)
 
 - **Producto:** si A es m×p y B es p×n, (AB)ᵢⱼ = Σₖ aᵢₖ bₖⱼ. Requiere que las columnas de A coincidan con las filas de B.
 - **Norma infinito de un vector:** ‖v‖∞ = máxᵢ |vᵢ|. Es el **máximo**, no la suma. La suma Σ|vᵢ| es la norma 1. Se cumple ‖v‖∞ ≤ ‖v‖₂ ≤ ‖v‖₁.
@@ -17,7 +17,7 @@ Referencias:
 
 Ejemplo comprobado: ‖(−2, 1, 7)‖∞ = 7 (S3-26/08 p. 25); ‖[[1, 2], [3, 1]]‖∞ = 4.
 
-## 2. Eliminación de Gauss y Gauss-Jordan (`algebra/directos.py`)
+## 2. Eliminación de Gauss y Gauss-Jordan (`algebra/modulo_I_sistemas/directos.py`)
 
 **Objetivo:** resolver A x = b y clasificar el sistema (OFICIAL p. 2, Módulo I).
 
@@ -69,7 +69,7 @@ Ejemplo comprobado: ‖(−2, 1, 7)‖∞ = 7 (S3-26/08 p. 25); ‖[[1, 2], [3, 
 
 **Corrección del manuscrito S3-24/08 p. 8:** la inversa de [[1, 2, 3], [2, −1, −1], [3, 0, −1]] es [[1/8, 1/4, 1/8], [−1/8, −5/4, 7/8], [3/8, 3/4, −5/8]].
 
-## 4. Número de condición y sensibilidad (`algebra/condicion.py`)
+## 4. Número de condición y sensibilidad (`algebra/modulo_II_condicionamiento/condicion.py`)
 
 **Fórmula** (OFICIAL p. 2):
 
@@ -109,7 +109,7 @@ Es un criterio del proyecto, no una frontera matemática universal. Las láminas
 - A = [[4, 1], [1, 3]]: κ∞ = 5·(5/11) = 25/11. Con Δb = (0.01, −0.01), x̃ = (26/275, 139/220) ≈ (0.0945, 0.6318). **La lámina S7-21/09 p. 20 da 0.6309, por un error aritmético.**
 - A = I + 10J (3×3): (I + 10J)⁻¹ = I − (10/31)J, κ∞ = 41. Con Δb = (1, −1, 1) la amplificación es exactamente 41 = κ: es el caso peor.
 
-## 5. Mínimos cuadrados (`algebra/minimos.py`)
+## 5. Mínimos cuadrados (`algebra/modulo_III_minimos/minimos.py`)
 
 **Planteamiento.** Si A es m×n con m > n, el sistema es **sobredeterminado** y en general b ∉ Col(A) (S8-30/09 p. 5). La solución de mínimos cuadrados x̂ minimiza ‖b − Ax‖₂ y cumple las **ecuaciones normales**:
 
@@ -137,7 +137,7 @@ Es un criterio del proyecto, no una frontera matemática universal. Las láminas
 - Tarea II #1: x̂ = (4/11, 15/11).
 - Puntos (1, 2), (2, 2.5), (3, 3.7), (4, 4.1): y = 0.75x + 1.2.
 
-## 6. Métodos iterativos (`algebra/iterativos.py`)
+## 6. Métodos iterativos (`algebra/modulo_IV_iterativos/`)
 
 **Descomposición:** A = D + L + U, con L y U estrictamente inferior y superior y **los signos que tienen en A**.
 
@@ -199,7 +199,7 @@ La solución exacta es (217/208, 59/26, −225/208). **Las láminas de S8 dan pa
 - Es una condición **suficiente, no necesaria**. Si no se cumple, no se concluye nada; por ejemplo, el GS de S9-07/10 converge sin dominancia.
 - Reordenar las ecuaciones puede lograr la dominancia (Tarea II #2 y #3). La aplicación no reordena automáticamente.
 
-## 8. Matrices de iteración y radio espectral (`algebra/espectral.py`)
+## 8. Matrices de iteración y radio espectral (`algebra/modulo_IV_iterativos/espectral.py`)
 
 **Matrices de iteración.** x⁽ᵏ⁺¹⁾ = T x⁽ᵏ⁾ + c, con:
 
@@ -261,7 +261,7 @@ La fórmula de T_ω es la estándar (Burden & Faires); no aparece en los PDF rev
 
 En el caso de Jacobi de S9-07/10, la hoja omite el término 4/3 y concluye ρ = 0.
 
-## 9. Matrices dispersas: formato CSR (`algebra/dispersas.py`) [Incentivo]
+## 9. Matrices dispersas: formato CSR (`algebra/modulo_IV_iterativos/dispersas.py`) [Incentivo]
 
 **Qué es una matriz dispersa.** Es una matriz en la que casi todos los elementos son cero: nnz ≪ n² (S9-05/10 p. 8).
 
@@ -281,7 +281,7 @@ En el caso de Jacobi de S9-07/10, la hoja omite el término 4/3 y concluye ρ = 
 
 **Ejemplo:** la tridiagonal 5×5 tiene nnz = 5 + 4 + 4 = 13 (S9-05/10 p. 8).
 
-## 10. Precondicionamiento diagonal (`algebra/precondicionamiento.py`) [Incentivo]
+## 10. Precondicionamiento diagonal (`algebra/modulo_IV_iterativos/precondicionamiento.py`) [Incentivo]
 
 **Procedimiento de clase** (S9-05/10, diapositivas 16-18):
 

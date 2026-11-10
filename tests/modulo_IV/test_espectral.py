@@ -1,4 +1,4 @@
-"""Pruebas de algebra/espectral.py (matrices de iteración y radio espectral).
+"""Pruebas de algebra/modulo_IV_iterativos/espectral.py (matrices de iteración y radio espectral).
 
 Oráculos independientes del código probado:
   * coeficientes del polinomio característico calculados a mano con

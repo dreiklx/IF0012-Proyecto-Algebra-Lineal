@@ -1,4 +1,4 @@
-"""Pruebas de algebra/iterativos.py — casos de aceptación P1–P21 de la especificación.
+"""Pruebas de algebra/modulo_IV_iterativos/ — casos de aceptación P1–P21 de la especificación.
 
 Oráculos: los valores esperados se obtuvieron el 27-oct-2026 con un programa
 independiente (escrito aparte, no con este módulo) y se contrastaron con:

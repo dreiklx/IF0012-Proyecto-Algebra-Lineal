@@ -1,4 +1,4 @@
-"""Pruebas del editor interactivo de matrices, vectores y puntos (interfaz/editor.py).
+"""Pruebas del editor interactivo de matrices, vectores y puntos (interfaz/compartido/editor.py).
 
   * Funciones puras: normalización de separadores, conversión texto <-> celdas,
     celdas vacías y redimensionado (resultados construidos a mano).

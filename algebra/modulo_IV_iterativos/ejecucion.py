@@ -84,7 +84,7 @@ class ConfiguracionIterativa:
     k_max: int = 50
     n_iteraciones: int = 5
     omega: float = 1.2
-    formato: str = "densa"    # "densa" o "csr" (almacenamiento disperso, algebra/dispersas.py)
+    formato: str = "densa"    # "densa" o "csr" (almacenamiento disperso, algebra/modulo_IV_iterativos/dispersas.py)
 
     def resumen(self):
         """Texto del encabezado que muestra la configuración usada."""

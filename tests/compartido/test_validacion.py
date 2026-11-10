@@ -1,4 +1,4 @@
-"""Pruebas de algebra/validacion.py (lectura de texto escrito por el usuario)."""
+"""Pruebas de algebra/compartido/validacion.py (lectura de texto escrito por el usuario)."""
 
 import unittest
 from fractions import Fraction

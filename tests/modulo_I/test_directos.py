@@ -1,4 +1,4 @@
-"""Pruebas de algebra/directos.py (Módulo I).
+"""Pruebas de algebra/modulo_I_sistemas/directos.py (Módulo I).
 
 Oráculos: las soluciones esperadas se comprobaron a mano por sustitución en
 las ecuaciones originales (el cálculo figura en cada comentario).  Varios

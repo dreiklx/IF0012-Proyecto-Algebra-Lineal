@@ -24,7 +24,7 @@ class TestEmpaquetado(unittest.TestCase):
         archivos = {
             "app.py": "", "README.md": "", "requirements.txt": "", "ejecutar.bat": "",
             "docs/manual_usuario.md": "", "docs/herramientas_y_bibliotecas.md": "uso de IA",
-            "casos_prueba/README.md": "", "algebra/matriz.py": "",
+            "casos_prueba/README.md": "", "algebra/compartido/matriz.py": "",
             "paginas/sistemas.py": "", "interfaz/recursos/marca.svg": "",
             # trampas
             "CLAUDE.md": "x", "docs/CLAUDE.md": "x", "algebra/.claude/settings.json": "{}",
@@ -48,7 +48,7 @@ class TestEmpaquetado(unittest.TestCase):
             self.assertNotIn(prohibido, incluidos)
         # La declaración de herramientas (uso de IA) sí se entrega.
         self.assertIn("docs/herramientas_y_bibliotecas.md", incluidos)
-        self.assertIn("algebra/matriz.py", incluidos)
+        self.assertIn("algebra/compartido/matriz.py", incluidos)
         # Las páginas de la navegación superior y la marca también se entregan.
         self.assertIn("paginas/sistemas.py", incluidos)
         self.assertIn("interfaz/recursos/marca.svg", incluidos)

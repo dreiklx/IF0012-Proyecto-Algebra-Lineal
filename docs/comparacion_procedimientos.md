@@ -97,7 +97,7 @@ Procedimiento de la docente (S9-05/10 pp. 21-23, diap. 17-19, releídas el 03-no
 - Un buen precondicionador busca ρ(B) < ρ(A) y κ(B) < κ(A), con los valores propios de B = D⁻¹A agrupados cerca de 1.
 - Ejemplo: tridiagonal [−1, 4, −1], con M = 4I y M⁻¹A = A/4.
 
-| Aspecto | Lámina | Código (`algebra/precondicionamiento.py`) | Conclusión |
+| Aspecto | Lámina | Código (`algebra/modulo_IV_iterativos/precondicionamiento.py`) | Conclusión |
 |---|---|---|---|
 | Construcción | M = D, M⁻¹A, M⁻¹b | `precondicionar_diagonal` (exacto) | Coincide; el ejemplo da A/4 y b/4 (prueba) |
 | Comparación de κ | κ(B) frente a κ(A) | κ∞(A) y κ∞(D⁻¹A) con la inversa propia | Coincide |
@@ -146,7 +146,7 @@ El enunciado los permite (exige implementar desde cero y no prohíbe procedimien
 
 **Representaciones gráficas.** La lámina S9-05/10 p. 17 (diap. 13) muestra «Evolución del error» en escala logarítmica frente a k para los tres métodos. La gráfica comparativa de la aplicación es esa misma representación (e_k, escala log., un color por método), ahora interactiva. La interpretación geométrica 3D (planos que se cortan) corresponde a S6-14/09 p. 26.
 
-**Editor de datos.** `tests/test_editor.py::TestEditorNoAlteraLosDatos` comprueba, para **todos** los ejemplos precargados de los cuatro módulos, que pasar por el editor (texto → celdas → texto) da exactamente la misma matriz o vector que leer el texto original:
+**Editor de datos.** `tests/interfaz/test_editor.py::TestEditorNoAlteraLosDatos` comprueba, para **todos** los ejemplos precargados de los cuatro módulos, que pasar por el editor (texto → celdas → texto) da exactamente la misma matriz o vector que leer el texto original:
 
 - mismos valores exactos;
 - mismas dimensiones;

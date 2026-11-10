@@ -216,16 +216,16 @@ Resultado esperado con la tridiagonal [−1, 4, −1]:
 
 | Función | Archivo | Qué hace |
 |---|---|---|
-| `resolver_gauss`, `resolver_gauss_jordan` | `algebra/directos.py` | Resuelven y clasifican A x = b con registro de pasos |
-| `inversa_gauss_jordan`, `determinante` | `algebra/directos.py` | [A\|I] → [I\|A⁻¹]; det por eliminación |
-| `numero_condicion_infinito`, `analizar_perturbacion` | `algebra/condicion.py` | κ∞ y análisis de Δb |
-| `minimos_cuadrados`, `ajuste_lineal`, `cramer` | `algebra/minimos.py` | Ecuaciones normales, residuo, recta y verificación por Cramer |
-| `ejecutar`, `comparar_metodos`, `dominancia_diagonal` | `algebra/iterativos.py` | Jacobi, GS y SOR con criterios A, B y C |
-| `reordenamiento_dominante` | `algebra/iterativos.py` | Orden de las ecuaciones que logra la dominancia diagonal |
-| `matriz_iteracion`, `radio_espectral`, `analizar_matriz`, `desarrollo_sarrus` | `algebra/espectral.py` | T, polinomio característico (y Sarrus en 3×3), autovalores y ρ |
-| `precondicionar_diagonal`, `analizar_precondicionador` | `algebra/precondicionamiento.py` | M = D, D⁻¹A y comparación original frente a precondicionado |
-| `a_csr` y pasos CSR | `algebra/dispersas.py` | Almacenamiento disperso |
-| `leer_matriz`, `leer_vector`, … | `algebra/validacion.py` | Lectura y validación del texto introducido |
+| `resolver_gauss`, `resolver_gauss_jordan` | `algebra/modulo_I_sistemas/directos.py` | Resuelven y clasifican A x = b con registro de pasos |
+| `inversa_gauss_jordan`, `determinante` | `algebra/modulo_I_sistemas/directos.py` | [A\|I] → [I\|A⁻¹]; det por eliminación |
+| `numero_condicion_infinito`, `analizar_perturbacion` | `algebra/modulo_II_condicionamiento/condicion.py` | κ∞ y análisis de Δb |
+| `minimos_cuadrados`, `ajuste_lineal`, `cramer` | `algebra/modulo_III_minimos/minimos.py` | Ecuaciones normales, residuo, recta y verificación por Cramer |
+| `ejecutar`, `comparar_metodos`, `dominancia_diagonal` | `algebra/modulo_IV_iterativos/` | Jacobi, GS y SOR con criterios A, B y C |
+| `reordenamiento_dominante` | `algebra/modulo_IV_iterativos/` | Orden de las ecuaciones que logra la dominancia diagonal |
+| `matriz_iteracion`, `radio_espectral`, `analizar_matriz`, `desarrollo_sarrus` | `algebra/modulo_IV_iterativos/espectral.py` | T, polinomio característico (y Sarrus en 3×3), autovalores y ρ |
+| `precondicionar_diagonal`, `analizar_precondicionador` | `algebra/modulo_IV_iterativos/precondicionamiento.py` | M = D, D⁻¹A y comparación original frente a precondicionado |
+| `a_csr` y pasos CSR | `algebra/modulo_IV_iterativos/dispersas.py` | Almacenamiento disperso |
+| `leer_matriz`, `leer_vector`, … | `algebra/compartido/validacion.py` | Lectura y validación del texto introducido |
 
 ## 9. Problemas frecuentes
 

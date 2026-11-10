@@ -59,32 +59,31 @@ Ningún archivo del proyecto importa NumPy, SciPy ni SymPy.
 
 ```
 proyecto-algebra/
-├── app.py                     ← punto de entrada: navegación entre los 4 módulos
-├── algebra/                   ← NÚCLEO MATEMÁTICO (Python puro)
-│   ├── matriz.py              ← validación, producto, transpuesta, normas, residuo
-│   ├── validacion.py          ← texto del usuario → Fraction; ε, k_max y ω
-│   ├── directos.py            ← Módulo I: Gauss, Gauss-Jordan, inversa, determinante
-│   ├── condicion.py           ← Módulo II: κ∞, perturbación, errores relativos
-│   ├── minimos.py             ← Módulo III: ecuaciones normales, residuo, recta
-│   ├── iterativos.py          ← Módulo IV: Jacobi, GS, SOR, parada, dominancia, comparación
-│   ├── espectral.py           ← Módulo IV: D, L, U, T, polinomio, autovalores, ρ(T)
-│   ├── dispersas.py           ← Incentivo: formato CSR
-│   └── precondicionamiento.py ← Incentivo: precondicionador diagonal M = D
-├── paginas/                   ← una página por módulo (barra superior); cada una llama a mostrar()
-├── interfaz/                  ← Streamlit: una pantalla por módulo
-│   ├── navegacion.py          ← lista de páginas (archivo, título, dirección)
-│   ├── portada.py             ← portada: módulos, incentivos y la figura [A | b] → [I | x]
-│   ├── estilo.py              ← sistema de diseño: colores, tipografía, animaciones
-│   ├── componentes.py         ← LaTeX, tablas y lectura de datos con mensajes de error
-│   ├── ejemplos.py            ← ejemplos precargados del curso
-│   └── modulo_directos.py, modulo_condicionamiento.py, modulo_minimos.py, modulo_iterativos.py
-├── visualizacion/             ← Matplotlib: solo dibuja
-│   ├── graficos.py            ← recta de ajuste, convergencia, comparación, autovalores
-│   └── geometria_3d.py        ← rectas y planos del Módulo I
-├── tests/                     ← 232 pruebas automáticas (unittest)
-├── auditoria/                 ← comparación aleatoria contra oráculos independientes
-├── casos_prueba/              ← casos documentados por módulo (entrada, esperado, obtenido)
-└── docs/                      ← manual, guías, decisiones, matriz de cumplimiento
+├── app.py                         ← punto de entrada: navegación entre los 4 módulos
+├── algebra/                       ← NÚCLEO MATEMÁTICO (Python puro)
+│   ├── compartido/                ← matriz.py (operaciones, normas), validacion.py (texto → Fraction), exactos.py
+│   ├── modulo_I_sistemas/         ← directos.py: Gauss, Gauss-Jordan, inversa, determinante
+│   ├── modulo_II_condicionamiento/← condicion.py: κ∞, perturbación, errores relativos
+│   ├── modulo_III_minimos/        ← minimos.py: ecuaciones normales, residuo, recta
+│   └── modulo_IV_iterativos/
+│       ├── metodos.py             ← fórmulas de Jacobi, GS y SOR (un paso cada uno)
+│       ├── ejecucion.py           ← bucle común, criterios A/B/C, motivo de parada
+│       ├── convergencia.py        ← dominancia diagonal y reordenamiento
+│       ├── espectral.py           ← D, L, U, T, polinomio, autovalores, ρ(T)
+│       ├── comparacion.py         ← comparación de los 3 métodos, error final
+│       ├── dispersas.py           ← Incentivo: formato CSR
+│       └── precondicionamiento.py ← Incentivo: precondicionador diagonal M = D
+├── paginas/                       ← una página por módulo (barra superior); cada una llama a mostrar()
+├── interfaz/                      ← Streamlit: no calcula nada
+│   ├── navegacion.py, portada.py
+│   ├── compartido/                ← estilo.py, componentes.py, editor.py, ejemplos.py
+│   └── modulos/                   ← modulo_I_sistemas.py, modulo_II_condicionamiento.py,
+│                                    modulo_III_minimos.py, modulo_IV_iterativos/ (una vista por pestaña)
+├── visualizacion/                 ← Plotly (interactivas.py) y Matplotlib (graficos.py): solo dibujan
+├── tests/                         ← 232 pruebas, una carpeta por módulo
+├── auditoria/                     ← comparación aleatoria contra oráculos independientes
+├── casos_prueba/                  ← casos documentados por módulo (entrada, esperado, obtenido)
+└── docs/                          ← manual, guías, referencia oficial, matriz de cumplimiento
 ```
 
 ### Reglas de dependencia
@@ -103,7 +102,7 @@ Por eso el núcleo se puede probar sin abrir la aplicación, y eso es exactament
   - `ResultadoSistema` e `ResultadoInversa` (`directos.py`);
   - `ResultadoCondicion` y `ResultadoPerturbacion` (`condicion.py`);
   - `ResultadoMinimos` y `ResultadoAjuste` (`minimos.py`);
-  - `ResultadoIterativo` y `ResultadoComparacion` (`iterativos.py`);
+  - `ResultadoIterativo` (`ejecucion.py`) y `ResultadoComparacion` (`comparacion.py`);
   - `ResultadoEspectral` (`espectral.py`).
 - **Errores:** son excepciones propias.
   - `ErrorMatriz` y su subclase `ErrorDimension`, en `matriz.py`;
@@ -117,18 +116,18 @@ Por eso el núcleo se puede probar sin abrir la aplicación, y eso es exactament
 Usuario escribe texto
    │   p. ej. "1 1 1\n2 1 -1\n-1 1 2"
    ▼
-interfaz/modulo_X.py  ──►  componentes.leer_matriz_ui / leer_vector_ui
+interfaz/modulos/…    ──►  componentes.leer_matriz_ui / leer_vector_ui  (interfaz/compartido/)
    │                         └─► validacion.leer_matriz → leer_numero (Fraction exacta)
    │                             si hay error: st.error("… elemento (2, 2) …") y se detiene
    ▼
-algebra/<módulo>.py   ──►  función principal (p. ej. resolver_gauss)
+algebra/modulo_X/…    ──►  función principal (p. ej. resolver_gauss)
    │                         valida dimensiones (matriz.validar_*), calcula y
    │                         devuelve un dataclass Resultado…
    ▼
 st.session_state       ──►  el resultado se guarda para que no desaparezca al interactuar
    ▼
-interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
-   └─► visualizacion/*.py (figura de Matplotlib) ──► st.pyplot
+interfaz/modulos/… (mostrar_resultado) ──► st.latex / st.table / st.metric
+   └─► visualizacion/interactivas.py (figura Plotly) ──► componentes.mostrar_interactiva
 ```
 
 `interfaz/navegacion.py` contiene la lista `PAGINAS` (archivo, título y dirección de cada página). `app.py` la convierte en páginas `st.Page` y la muestra como barra superior con `st.navigation(..., position="top")`. Cada archivo de `paginas/` solo llama al `mostrar()` de su módulo de interfaz. La portada está en `interfaz/portada.py`.
@@ -137,35 +136,35 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
 
 | Función | Qué hace |
 |---|---|
-| `algebra/validacion.py:26` `leer_numero` | Texto → `Fraction`. Acepta `3`, `-2.5`, `2,5`, `1/3` y `1e-3` |
-| `algebra/validacion.py:55` `leer_matriz` | Una fila por línea; exige que todas las filas tengan la misma longitud |
-| `algebra/validacion.py:89` `leer_tolerancia` / `:97` `leer_entero_positivo` / `:108` `leer_omega` | ε > 0; k_max y N enteros; 0 < ω < 2 |
-| `algebra/matriz.py:69` `validar_matriz` / `:122` `validar_sistema` | Comprueba la forma rectangular, los números válidos y que b tenga m componentes |
-| `algebra/matriz.py:240` `norma_infinito_vector` / `:255` `norma_infinito_matriz` | máx\|vᵢ\| y máxima suma de fila |
-| `algebra/matriz.py:335` `residuo` | r = b − Ax |
-| `algebra/directos.py:152` `_escalonar` | **Corazón del Módulo I**: pivotes, intercambios, eliminación, determinante |
-| `algebra/directos.py:244` `_resolver` | Clasificación por rangos y solución (única o paramétrica) |
-| `algebra/directos.py:331` `inversa_gauss_jordan` | [A \| I] → [I \| A⁻¹] y verificación A·A⁻¹ = I |
-| `algebra/directos.py:363` `determinante` | (−1)^intercambios · Π pivotes |
-| `algebra/condicion.py:104` `numero_condicion_infinito` | κ∞ e interpretación |
-| `algebra/condicion.py:133` `construir_delta_b` / `:157` `analizar_perturbacion` | Δb absoluta o porcentual; x frente a x̃ |
-| `algebra/minimos.py:111` `minimos_cuadrados` / `:182` `ajuste_lineal` | Ecuaciones normales, residuo, recta; det([A\|b]) si m = n + 1 |
-| `algebra/minimos.py:168` `cramer` | Regla de Cramer (procedimiento de clase), usada como verificación |
-| `algebra/iterativos.py:154` `paso_jacobi` / `:167` `paso_gauss_seidel` / `:180` `paso_sor` | Una iteración de cada método |
-| `algebra/iterativos.py:194` `paso_richardson` | Richardson x ← x + (b − Ax): solo para el análisis del precondicionador |
-| `algebra/iterativos.py:277` `validar_configuracion` | Valida A, b, x⁽⁰⁾, ε, k_max, N y ω |
-| `algebra/iterativos.py:331` `ejecutar` / `:346` `_ejecutar` | Bucle común, métricas d_k y r_k, criterios A, B y C, motivos de parada |
-| `algebra/iterativos.py:435` `dominancia_diagonal` | \|aᵢᵢ\| > Σ_{j≠i}\|aᵢⱼ\| fila por fila |
-| `algebra/iterativos.py:460` `reordenamiento_dominante` | Orden de las ecuaciones que logra la dominancia (como en la Tarea II) |
-| `algebra/iterativos.py:512` `comparar_metodos` | Los 3 métodos con las mismas condiciones; error final e = ‖x⁽ᵏ⁾ − x*‖∞ |
-| `algebra/espectral.py:114` `matriz_iteracion` | T y c exactas para Jacobi, GS y SOR |
-| `algebra/espectral.py:153` `polinomio_caracteristico` | Faddeev-LeVerrier (exacto) |
-| `algebra/espectral.py:328` `desarrollo_sarrus` | Procedimiento de clase en 3×3: tr(T), Σ menores, det(T) por Sarrus |
-| `algebra/espectral.py:205` `durand_kerner` / `:257` `raices` | Raíces: λ = 0 exactas, grado ≤ 2 por fórmula, grado ≥ 3 por Durand-Kerner |
-| `algebra/espectral.py:360` `analizar_matriz` | Autovalores, ρ, verificaciones y p(±1) = 0 de cualquier matriz |
-| `algebra/espectral.py:313` `concluir` / `:399` `radio_espectral` | ρ(T), verificaciones y conclusión |
-| `algebra/dispersas.py:61` `a_csr` | Densa → CSR (`valores`, `columnas`, `inicio`) |
-| `algebra/precondicionamiento.py:82` `precondicionar_diagonal` / `:125` `analizar_precondicionador` | M = D, B = D⁻¹A, b̃; comparación original frente a precondicionado |
+| `algebra/compartido/validacion.py:26` `leer_numero` | Texto → `Fraction`. Acepta `3`, `-2.5`, `2,5`, `1/3` y `1e-3` |
+| `algebra/compartido/validacion.py:55` `leer_matriz` | Una fila por línea; exige que todas las filas tengan la misma longitud |
+| `algebra/compartido/validacion.py:89` `leer_tolerancia` / `:97` `leer_entero_positivo` / `:108` `leer_omega` | ε > 0; k_max y N enteros; 0 < ω < 2 |
+| `algebra/compartido/matriz.py:69` `validar_matriz` / `:122` `validar_sistema` | Comprueba la forma rectangular, los números válidos y que b tenga m componentes |
+| `algebra/compartido/matriz.py:240` `norma_infinito_vector` / `:255` `norma_infinito_matriz` | máx\|vᵢ\| y máxima suma de fila |
+| `algebra/compartido/matriz.py:335` `residuo` | r = b − Ax |
+| `algebra/modulo_I_sistemas/directos.py:144` `_escalonar` | **Corazón del Módulo I**: pivotes, intercambios, eliminación, determinante |
+| `algebra/modulo_I_sistemas/directos.py:236` `_resolver` | Clasificación por rangos y solución (única o paramétrica) |
+| `algebra/modulo_I_sistemas/directos.py:323` `inversa_gauss_jordan` | [A \| I] → [I \| A⁻¹] y verificación A·A⁻¹ = I |
+| `algebra/modulo_I_sistemas/directos.py:355` `determinante` | (−1)^intercambios · Π pivotes |
+| `algebra/modulo_II_condicionamiento/condicion.py:105` `numero_condicion_infinito` | κ∞ e interpretación |
+| `algebra/modulo_II_condicionamiento/condicion.py:134` `construir_delta_b` / `:158` `analizar_perturbacion` | Δb absoluta o porcentual; x frente a x̃ |
+| `algebra/modulo_III_minimos/minimos.py:111` `minimos_cuadrados` / `:182` `ajuste_lineal` | Ecuaciones normales, residuo, recta; det([A\|b]) si m = n + 1 |
+| `algebra/modulo_III_minimos/minimos.py:168` `cramer` | Regla de Cramer (procedimiento de clase), usada como verificación |
+| `algebra/modulo_IV_iterativos/metodos.py:35` `paso_jacobi` / `:48` `paso_gauss_seidel` / `:61` `paso_sor` | Una iteración de cada método |
+| `algebra/modulo_IV_iterativos/metodos.py:75` `paso_richardson` | Richardson x ← x + (b − Ax): solo para el análisis del precondicionador |
+| `algebra/modulo_IV_iterativos/ejecucion.py:205` `validar_configuracion` | Valida A, b, x⁽⁰⁾, ε, k_max, N y ω |
+| `algebra/modulo_IV_iterativos/ejecucion.py:259` `ejecutar` / `:274` `_ejecutar` | Bucle común, métricas d_k y r_k, criterios A, B y C, motivos de parada |
+| `algebra/modulo_IV_iterativos/convergencia.py:25` `dominancia_diagonal` | \|aᵢᵢ\| > Σ_{j≠i}\|aᵢⱼ\| fila por fila |
+| `algebra/modulo_IV_iterativos/convergencia.py:50` `reordenamiento_dominante` | Orden de las ecuaciones que logra la dominancia (como en la Tarea II) |
+| `algebra/modulo_IV_iterativos/comparacion.py:49` `comparar_metodos` | Los 3 métodos con las mismas condiciones; error final e = ‖x⁽ᵏ⁾ − x*‖∞ |
+| `algebra/modulo_IV_iterativos/espectral.py:120` `matriz_iteracion` | T y c exactas para Jacobi, GS y SOR |
+| `algebra/modulo_IV_iterativos/espectral.py:159` `polinomio_caracteristico` | Faddeev-LeVerrier (exacto) |
+| `algebra/modulo_IV_iterativos/espectral.py:334` `desarrollo_sarrus` | Procedimiento de clase en 3×3: tr(T), Σ menores, det(T) por Sarrus |
+| `algebra/modulo_IV_iterativos/espectral.py:211` `durand_kerner` / `:263` `raices` | Raíces: λ = 0 exactas, grado ≤ 2 por fórmula, grado ≥ 3 por Durand-Kerner |
+| `algebra/modulo_IV_iterativos/espectral.py:366` `analizar_matriz` | Autovalores, ρ, verificaciones y p(±1) = 0 de cualquier matriz |
+| `algebra/modulo_IV_iterativos/espectral.py:319` `concluir` / `:405` `radio_espectral` | ρ(T), verificaciones y conclusión |
+| `algebra/modulo_IV_iterativos/dispersas.py:61` `a_csr` | Densa → CSR (`valores`, `columnas`, `inicio`) |
+| `algebra/modulo_IV_iterativos/precondicionamiento.py:85` `precondicionar_diagonal` / `:128` `analizar_precondicionador` | M = D, B = D⁻¹A, b̃; comparación original frente a precondicionado |
 
 ---
 
@@ -173,7 +172,7 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
 
 ### Módulo I — Sistemas lineales y métodos directos
 
-**Archivos:** `algebra/directos.py` (núcleo) e `interfaz/modulo_directos.py` (pantalla).
+**Archivos:** `algebra/modulo_I_sistemas/directos.py` (núcleo) e `interfaz/modulos/modulo_I_sistemas.py` (pantalla).
 
 1. **Problema.** Resolver Ax = b con A de m×n (no tiene que ser cuadrada) y clasificar el sistema.
 2. **Entrada.** A y b como texto. En la pantalla también se eligen el método («Gauss» o «Gauss-Jordan») y la estrategia de pivote («primer no nulo», como en clase, o «pivoteo parcial»).
@@ -217,7 +216,7 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
 
 ### Módulo II — Condicionamiento y sensibilidad
 
-**Archivos:** `algebra/condicion.py` e `interfaz/modulo_condicionamiento.py`.
+**Archivos:** `algebra/modulo_II_condicionamiento/condicion.py` e `interfaz/modulos/modulo_II_condicionamiento.py`.
 
 1. **Problema.** ¿Cuánto puede cambiar la solución x si los datos b cambian un poco?
 2. **Entrada.** A cuadrada, b y una perturbación: absoluta (un número o un vector Δb) o porcentual (un p o un vector de pᵢ).
@@ -250,7 +249,7 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
 
 ### Módulo III — Mínimos cuadrados y ajuste lineal
 
-**Archivos:** `algebra/minimos.py` e `interfaz/modulo_minimos.py`.
+**Archivos:** `algebra/modulo_III_minimos/minimos.py` e `interfaz/modulos/modulo_III_minimos.py`.
 
 1. **Problema.** Si A es m×n con m > n, Ax = b en general no tiene solución. Se busca x̂ que haga ‖b − Ax‖₂ lo más pequeño posible.
 2. **Entrada.** A y b (pestaña «Sistema sobredeterminado»), o listas de puntos xᵢ, yᵢ (pestaña «Ajuste lineal»).
@@ -282,7 +281,7 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
 
 ### Módulo IV — Métodos iterativos y convergencia
 
-**Archivos:** `algebra/iterativos.py`, `algebra/espectral.py`, `algebra/dispersas.py`, `algebra/precondicionamiento.py` e `interfaz/modulo_iterativos.py`. La pantalla tiene cuatro pestañas: «Ejecutar un método», «Comparar métodos», «Convergencia» y «Precondicionamiento diagonal».
+**Archivos:** `algebra/modulo_IV_iterativos/`, `algebra/modulo_IV_iterativos/espectral.py`, `algebra/modulo_IV_iterativos/dispersas.py`, `algebra/modulo_IV_iterativos/precondicionamiento.py` e `interfaz/modulos/modulo_IV_iterativos/`. La pantalla tiene cuatro pestañas: «Ejecutar un método», «Comparar métodos», «Convergencia» y «Precondicionamiento diagonal».
 
 1. **Problema.** Aproximar la solución de Ax = b (A n×n) con iteraciones x⁽ᵏ⁾, y saber si convergen.
 2. **Entrada:**
@@ -351,7 +350,7 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
     - `a_csr` guarda solo los no nulos en `valores`, `columnas` e `inicio`.
     - `paso_*_csr` recorre solo esos elementos, de modo que cada iteración cuesta O(nnz) en lugar de O(n²).
     - Las iteraciones son **idénticas** a las densas: se suman los mismos productos en el mismo orden.
-11. **Precondicionamiento diagonal** (`algebra/precondicionamiento.py`, pestaña «Precondicionamiento diagonal»):
+11. **Precondicionamiento diagonal** (`algebra/modulo_IV_iterativos/precondicionamiento.py`, pestaña «Precondicionamiento diagonal»):
     - `precondicionar_diagonal(A, b)` construye M = D, M⁻¹, B = D⁻¹A y b̃ = D⁻¹b, de forma exacta. Exige que no haya ningún aᵢᵢ = 0.
     - `analizar_precondicionador(A, b, config, ω)` calcula:
       - κ∞(A) y κ∞(B), con `numero_condicion_infinito`;
@@ -657,8 +656,8 @@ Cada respuesta se puede comprobar en el código (se indica dónde) o con la apli
 
 1. **¿Qué bibliotecas usaron y para qué? ¿Usaron alguna que resuelva los métodos?**
    - El núcleo (`algebra/`) solo usa la biblioteca estándar: `fractions`, `math`, `cmath` y `dataclasses`.
-   - Streamlit sirve para la interfaz y Matplotlib para las gráficas, como lo permite OFICIAL p. 1, y están documentadas en `docs/herramientas_y_bibliotecas.md`.
-   - Ningún archivo importa NumPy, SciPy ni SymPy. NumPy solo se instala porque lo necesitan internamente Streamlit y Matplotlib.
+   - Streamlit sirve para la interfaz, y Plotly y Matplotlib para las gráficas, como lo permite OFICIAL p. 1, y están documentadas en `docs/herramientas_y_bibliotecas.md`.
+   - Ningún archivo importa NumPy, SciPy ni SymPy. NumPy solo se instala porque lo necesitan internamente Streamlit, Plotly y Matplotlib.
 
 2. **¿Por qué usaron fracciones en unos módulos y `float` en otros?**
    - Con `Fraction`, Gauss, la inversa, κ y los mínimos cuadrados son exactos. Un pivote es 0 solo si es realmente 0, así que la clasificación y la detección de singularidad no dependen de redondeos.
@@ -787,7 +786,7 @@ Cada respuesta se puede comprobar en el código (se indica dónde) o con la apli
     2. Polinomio det(λI − T) con Faddeev-LeVerrier (Mₖ = TMₖ₋₁ + cₖ₋₁I, cₖ = −tr(TMₖ)/k), que es exacto y coincide con Sarrus en 3×3.
     3. Raíces: λ = 0 exactas, fórmula cuadrática para grado ≤ 2 y Durand-Kerner para grado ≥ 3.
     4. ρ = máx|λ|, verificado con |p(λ)| ≈ 0 y Σλ = traza.
-    - Archivo: `algebra/espectral.py`.
+    - Archivo: `algebra/modulo_IV_iterativos/espectral.py`.
 
 24. **¿Por qué no usaron el método de la potencia?**
     - Porque falla cuando el autovalor de mayor módulo es un par complejo, o hay dos de igual módulo y signo opuesto (±μ).
@@ -821,7 +820,7 @@ Cada respuesta se puede comprobar en el código (se indica dónde) o con la apli
     - Los pasos CSR recorren los no nulos en el mismo orden de columnas que los densos. Sumar productos por cero no cambia nada en punto flotante, así que las iteraciones son idénticas bit a bit (prueba en `test_dispersas`).
 
 30. **¿Qué es el precondicionamiento diagonal y qué efecto tiene en su aplicación?**
-    - Se resuelve D⁻¹Ax = D⁻¹b, con M = D, como en la lámina. Archivo: `algebra/precondicionamiento.py`.
+    - Se resuelve D⁻¹Ax = D⁻¹b, con M = D, como en la lámina. Archivo: `algebra/modulo_IV_iterativos/precondicionamiento.py`.
     - Para Jacobi, GS y SOR **no cambia nada**: T̃ = T y c̃ = c (demostración en D.7). La aplicación lo comprueba con fracciones y lo muestra en la tabla.
     - Sí cambia κ (si la diagonal no es uniforme), el residuo y Richardson, que precondicionado se convierte en Jacobi.
     - Si la docente pregunta por qué no coincide con la diapositiva 19, se muestra la demostración y la tabla en vivo.

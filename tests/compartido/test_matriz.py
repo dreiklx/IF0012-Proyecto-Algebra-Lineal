@@ -1,4 +1,4 @@
-"""Pruebas de algebra/matriz.py.
+"""Pruebas de algebra/compartido/matriz.py.
 
 Los valores esperados se calcularon a mano (el desarrollo está en los
 comentarios) o provienen de ejemplos del curso cuyo resultado se verificó por

@@ -17,7 +17,7 @@ Una aplicación web local e integrada (Streamlit) para modelar, resolver y anali
 
 - **Algoritmos centrales:** todos están implementados **desde cero** en Python (carpeta `algebra/`), solo con la biblioteca estándar. Ningún archivo del proyecto importa NumPy, SciPy ni SymPy.
 - **Aritmética:** los métodos directos usan fracciones exactas; los iterativos, punto flotante.
-- **Bibliotecas externas:** Streamlit y Matplotlib, que se usan únicamente para la interfaz y las gráficas.
+- **Bibliotecas externas:** Streamlit (interfaz), Plotly y Matplotlib (gráficas); ninguna resuelve los métodos del curso.
 
 ## Funcionalidades
 
@@ -61,11 +61,17 @@ Auditoría matemática independiente: compara el núcleo con oráculos escritos 
 
 ```
 app.py              punto de entrada: navegación entre los 4 módulos
-algebra/            núcleo matemático (Python puro): matriz, validacion, directos, condicion,
-                    minimos, iterativos, espectral, dispersas, precondicionamiento
-interfaz/           pantallas de Streamlit (una por módulo); no hacen cálculos
-visualizacion/      gráficas con Matplotlib; solo dibujan resultados ya calculados
-tests/              pruebas automáticas (unittest)
+algebra/            núcleo matemático (Python puro)
+  compartido/         matriz, validacion, exactos (lo que usan los 4 módulos)
+  modulo_I_sistemas/  directos.py            (Gauss, Gauss-Jordan, inversa, determinante)
+  modulo_II_condicionamiento/  condicion.py  (κ∞, perturbación)
+  modulo_III_minimos/ minimos.py             (ecuaciones normales, residuo, recta)
+  modulo_IV_iterativos/  metodos, ejecucion, convergencia, espectral, comparacion,
+                      dispersas (CSR), precondicionamiento (M = D)
+interfaz/           Streamlit: compartido/ (estilo, editor, componentes, ejemplos) y
+                    modulos/ (una vista por módulo); no hace cálculos
+visualizacion/      gráficas Plotly y Matplotlib; solo dibujan resultados ya calculados
+tests/              pruebas automáticas (unittest), una carpeta por módulo
 auditoria/          comparación aleatoria con oráculos independientes
 casos_prueba/       casos documentados por módulo (entrada, esperado, obtenido)
 docs/               manual, guías, decisiones, matriz de cumplimiento
@@ -73,7 +79,7 @@ dist/               entrega estable: ZIP, su SHA-256 y la guía en HTML
 empaquetar.py       genera el ZIP de entrega
 ```
 
-El detalle está en [docs/arquitectura.md](docs/arquitectura.md).
+El detalle está en [docs/arquitectura.md](docs/arquitectura.md); el recorrido de estudio, en [docs/guia_recorrido_codigo.md](docs/guia_recorrido_codigo.md).
 
 ## Guía de defensa y documentación
 
@@ -82,10 +88,14 @@ El detalle está en [docs/arquitectura.md](docs/arquitectura.md).
 | [docs/guia_defensa_equipo.md](docs/guia_defensa_equipo.md) | **Guía de defensa del equipo**: el código real función por función, la matemática, 34 preguntas con respuesta y el guion de demostración |
 | [dist/Guia_Defensa_IF0012.html](dist/Guia_Defensa_IF0012.html) | La misma guía, más el resumen, en un HTML autónomo que funciona sin internet. Descárguelo y ábralo en el navegador |
 | [docs/resumen_logica_por_modulo.md](docs/resumen_logica_por_modulo.md) | Resumen de estudio rápido por módulo |
-| [docs/propuesta_navegacion.md](docs/propuesta_navegacion.md) | Propuesta (no implementada) de navegación superior y animaciones |
+| [docs/propuesta_navegacion.md](docs/propuesta_navegacion.md) | Navegación superior y animaciones (implementada) |
 | [docs/diseno_visual.md](docs/diseno_visual.md) | Rediseño visual, rúbrica e incentivos en la interfaz, con capturas en `docs/capturas/` |
 | [docs/manual_usuario.md](docs/manual_usuario.md) | Manual de usuario: entradas, pasos y un ejemplo por módulo |
 | [docs/guia_matematica.md](docs/guia_matematica.md) | Fórmulas, procedimientos y ejemplos verificados |
+| [docs/referencia_oficial_procedimientos.md](docs/referencia_oficial_procedimientos.md) | Lo que enseñan los 18 PDF de la docente (457 páginas revisadas), con páginas y erratas |
+| [docs/investigacion_richardson.md](docs/investigacion_richardson.md) | Qué es Richardson, por qué está y la clasificación A/B/C/D de todos los procedimientos |
+| [docs/guia_recorrido_codigo.md](docs/guia_recorrido_codigo.md) | Recorrido del código para los cuatro integrantes |
+| [docs/investigacion_mediapipe.md](docs/investigacion_mediapipe.md) | Investigación (sin implementar) de control gestual de la gráfica 3D |
 | [docs/comparacion_procedimientos.md](docs/comparacion_procedimientos.md) | Procedimientos del enunciado, de los PDF de clase y del código, comparados |
 | [docs/auditoria_requisitos.md](docs/auditoria_requisitos.md) | Matriz de cumplimiento de la rúbrica normal y de los incentivos |
 | [docs/pendientes_docente.md](docs/pendientes_docente.md) | Lo que depende de la docente, con la pregunta exacta para cada caso |

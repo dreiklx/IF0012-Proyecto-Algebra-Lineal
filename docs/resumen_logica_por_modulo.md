@@ -24,7 +24,7 @@
 
 ---
 
-## Módulo I — Sistemas lineales (`algebra/directos.py`)
+## Módulo I — Sistemas lineales (`algebra/modulo_I_sistemas/directos.py`)
 
 **Qué hace.** Resuelve Ax = b (m×n cualquiera) con Gauss o Gauss-Jordan, muestra cada operación y clasifica el sistema.
 
@@ -76,7 +76,7 @@
 
 ---
 
-## Módulo II — Condicionamiento (`algebra/condicion.py`)
+## Módulo II — Condicionamiento (`algebra/modulo_II_condicionamiento/condicion.py`)
 
 **Qué hace.** Calcula κ∞(A), lo interpreta y compara x con x̃ cuando b se perturba.
 
@@ -124,7 +124,7 @@
 
 ---
 
-## Módulo III — Mínimos cuadrados (`algebra/minimos.py`)
+## Módulo III — Mínimos cuadrados (`algebra/modulo_III_minimos/minimos.py`)
 
 **Qué hace.** Para m > n busca x̂ que minimiza ‖b − Ax‖₂, y ajusta rectas y = mx + c.
 
@@ -172,7 +172,7 @@
 
 ---
 
-## Módulo IV — Métodos iterativos y convergencia (`algebra/iterativos.py`, `algebra/espectral.py`, `algebra/dispersas.py`)
+## Módulo IV — Métodos iterativos y convergencia (`algebra/modulo_IV_iterativos/`, `algebra/modulo_IV_iterativos/espectral.py`, `algebra/modulo_IV_iterativos/dispersas.py`)
 
 **Qué hace.** Jacobi, Gauss-Seidel y SOR con criterios configurables; comparación homogénea; dominancia diagonal; matriz de iteración y ρ(T).
 

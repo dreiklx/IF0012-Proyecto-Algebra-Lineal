@@ -14,7 +14,7 @@ Procedimiento del curso (S9-05/10 pp. 32-34, S9-07/10 pp. 3-7, Tarea II #4-5):
 
 Implementación (todo desde cero, sin bibliotecas de álgebra):
   * T se calcula con fracciones exactas; las inversas de D+L y D+ωL se
-    obtienen con nuestro Gauss-Jordan (algebra/directos.py).
+    obtienen con nuestro Gauss-Jordan (algebra/modulo_I_sistemas/directos.py).
   * Polinomio característico p(λ) = det(λI - T) = λⁿ + c1 λⁿ⁻¹ + ... + cn
     con el método de Faddeev-LeVerrier (EXTENSIÓN NO VISTA EN CLASE, necesaria
     para n > 3, donde la regla de Sarrus no aplica):

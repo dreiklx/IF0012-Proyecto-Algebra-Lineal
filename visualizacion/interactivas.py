@@ -8,7 +8,7 @@ dibujada, filtrado de valores positivos para la escala logarítmica) para que lo
 datos sean exactamente los mismos que en las figuras estáticas.
 
 La barra de herramientas (zoom +/−, zoom por región, desplazamiento, rotación 3D,
-restablecer vista) se configura en interfaz/componentes.py::mostrar_interactiva.
+restablecer vista) se configura en interfaz/compartido/componentes.py::mostrar_interactiva.
 """
 
 import math
