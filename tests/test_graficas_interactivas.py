@@ -16,7 +16,7 @@ from algebra.iterativos import (
     configuraciones_homogeneas,
     ejecutar,
 )
-from algebra.minimos import ajuste_lineal
+from algebra.modulo_III_minimos.minimos import ajuste_lineal
 from algebra.modulo_I_sistemas.directos import resolver_gauss
 from algebra.precondicionamiento import analizar_precondicionador
 from interfaz import navegacion as nav

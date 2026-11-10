@@ -30,7 +30,7 @@ from algebra.iterativos import (
     paso_richardson,
     reordenamiento_dominante,
 )
-from algebra.minimos import minimos_cuadrados
+from algebra.modulo_III_minimos.minimos import minimos_cuadrados
 from algebra.precondicionamiento import analizar_precondicionador, precondicionar_diagonal
 
 TRIDIAGONAL = [[4, -1, 0, 0], [-1, 4, -1, 0], [0, -1, 4, -1], [0, 0, -1, 4]]

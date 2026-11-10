@@ -4,7 +4,12 @@ import streamlit as st
 
 from algebra.compartido.matriz import ErrorMatriz
 from algebra.compartido.validacion import formatear_numero
-from algebra.minimos import ErrorAjuste, SOBREDETERMINADO, ajuste_lineal, minimos_cuadrados
+from algebra.modulo_III_minimos.minimos import (
+    ErrorAjuste,
+    SOBREDETERMINADO,
+    ajuste_lineal,
+    minimos_cuadrados,
+)
 from interfaz import ejemplos
 from interfaz.componentes import (
     latex_matriz,

@@ -10,7 +10,7 @@ import unittest
 from fractions import Fraction as F
 
 from algebra.compartido.matriz import ErrorDimension
-from algebra.minimos import (
+from algebra.modulo_III_minimos.minimos import (
     CUADRADO,
     ErrorAjuste,
     SOBREDETERMINADO,
