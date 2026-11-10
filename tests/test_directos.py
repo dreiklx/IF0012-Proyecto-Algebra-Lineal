@@ -10,7 +10,7 @@ import unittest
 from fractions import Fraction as F
 
 from algebra.compartido.matriz import ErrorDimension, ErrorMatriz
-from algebra.directos import (
+from algebra.modulo_I_sistemas.directos import (
     ErrorSistema,
     INCONSISTENTE,
     INFINITAS,

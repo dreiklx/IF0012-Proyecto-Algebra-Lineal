@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pyvista as pv  # noqa: E402
 
-from algebra.directos import resolver_gauss
+from algebra.modulo_I_sistemas.directos import resolver_gauss
 
 A = [[1, 1, 1], [2, 1, -1], [-1, 1, 2]]
 b = [6, 3, 7]

@@ -10,7 +10,8 @@ import sys, random, itertools
 from fractions import Fraction as F
 sys.path.insert(0, sys.argv[1] if len(sys.argv) > 1 else ".")
 from algebra.condicion import analizar_perturbacion, numero_condicion_infinito
-from algebra.directos import (
+from algebra.minimos import minimos_cuadrados
+from algebra.modulo_I_sistemas.directos import (
     INCONSISTENTE,
     INFINITAS,
     PIVOTEO_PARCIAL,
@@ -20,7 +21,6 @@ from algebra.directos import (
     resolver_gauss,
     resolver_gauss_jordan,
 )
-from algebra.minimos import minimos_cuadrados
 
 def leibniz(M):
     n=len(M); tot=F(0)

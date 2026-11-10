@@ -4,7 +4,7 @@ import streamlit as st
 
 from algebra.compartido.matriz import ErrorMatriz, residuo
 from algebra.compartido.validacion import formatear_numero
-from algebra.directos import (
+from algebra.modulo_I_sistemas.directos import (
     INCONSISTENTE,
     INFINITAS,
     PIVOTEO_PARCIAL,

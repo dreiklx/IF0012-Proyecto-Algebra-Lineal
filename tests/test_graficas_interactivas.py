@@ -9,10 +9,15 @@ import os
 import unittest
 from fractions import Fraction as F
 
-from algebra.directos import resolver_gauss
 from algebra.espectral import radio_espectral
-from algebra.iterativos import ConfiguracionIterativa, comparar_metodos, configuraciones_homogeneas, ejecutar
+from algebra.iterativos import (
+    ConfiguracionIterativa,
+    comparar_metodos,
+    configuraciones_homogeneas,
+    ejecutar,
+)
 from algebra.minimos import ajuste_lineal
+from algebra.modulo_I_sistemas.directos import resolver_gauss
 from algebra.precondicionamiento import analizar_precondicionador
 from interfaz import navegacion as nav
 from visualizacion import graficos, interactivas

@@ -20,7 +20,7 @@ from algebra.condicion import (
     construir_delta_b,
     numero_condicion_infinito,
 )
-from algebra.directos import ErrorSistema
+from algebra.modulo_I_sistemas.directos import ErrorSistema
 
 
 class TestNumeroCondicion(unittest.TestCase):

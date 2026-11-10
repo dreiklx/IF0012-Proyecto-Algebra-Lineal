@@ -36,7 +36,7 @@ from algebra.compartido.matriz import (
     validar_vector,
 )
 from algebra.compartido.validacion import formatear_numero
-from algebra.directos import inversa_gauss_jordan, solucion_unica
+from algebra.modulo_I_sistemas.directos import inversa_gauss_jordan, solucion_unica
 
 SENSIBILIDAD_BAJA = "BAJA"
 SENSIBILIDAD_MODERADA = "MODERADA"

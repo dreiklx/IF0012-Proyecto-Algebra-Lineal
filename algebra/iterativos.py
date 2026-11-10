@@ -36,7 +36,6 @@ from dataclasses import dataclass, field, replace
 from algebra.compartido.exactos import a_fraccion
 from algebra.compartido.matriz import ErrorMatriz, es_numero, validar_cuadrada, validar_vector
 from algebra.compartido.validacion import ErrorEntrada, formatear_numero
-from algebra.directos import ErrorSistema, solucion_unica
 from algebra.dispersas import (
     a_csr,
     paso_gauss_seidel_csr,
@@ -45,6 +44,7 @@ from algebra.dispersas import (
     producto_csr_vector,
     residuo_inf_csr,
 )
+from algebra.modulo_I_sistemas.directos import ErrorSistema, solucion_unica
 
 JACOBI = "Jacobi"
 GAUSS_SEIDEL = "Gauss-Seidel"

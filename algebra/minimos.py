@@ -45,7 +45,7 @@ from algebra.compartido.matriz import (
     validar_sistema,
 )
 from algebra.compartido.validacion import formatear_numero
-from algebra.directos import (
+from algebra.modulo_I_sistemas.directos import (
     INCONSISTENTE,
     INFINITAS,
     UNICA,
