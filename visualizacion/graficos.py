@@ -94,25 +94,36 @@ def grafica_convergencia(historial, criterio, tolerancia=None):
     return fig
 
 
+TITULOS_METRICA = {"d": "Cambio entre iteraciones d_k", "r": "Residuo r_k",
+                   "e": "Error respecto a la solución del método directo e_k"}
+
+
+def serie_metrica(r, indice, metrica, errores_historial=None):
+    """(k, valores) de la métrica 'd', 'r' o 'e' de un resultado, o None si no hay datos.
+    La comparten la gráfica Matplotlib y la interactiva (Plotly)."""
+    if not r.historial:
+        return None
+    ks = [f.k for f in r.historial]
+    if metrica == "d":
+        return ks, [f.d for f in r.historial]
+    if metrica == "r":
+        return ks, [f.r for f in r.historial]
+    if not errores_historial or errores_historial[indice] is None:
+        return None
+    return ks, errores_historial[indice]
+
+
 def grafica_comparacion(resultados, metrica, errores_historial=None):
     """Curvas superpuestas de Jacobi, Gauss-Seidel y SOR para la métrica elegida:
     'd' (cambio), 'r' (residuo) o 'e' (error respecto a la solución del método directo)."""
     fig, ax = _figura()
-    titulos = {"d": "Cambio entre iteraciones d_k", "r": "Residuo r_k",
-               "e": "Error respecto a la solución del método directo e_k"}
+    titulos = TITULOS_METRICA
     hay_datos = False
     for indice, r in enumerate(resultados):
-        if not r.historial:
+        serie = serie_metrica(r, indice, metrica, errores_historial)
+        if serie is None:
             continue
-        ks = [f.k for f in r.historial]
-        if metrica == "d":
-            valores = [f.d for f in r.historial]
-        elif metrica == "r":
-            valores = [f.r for f in r.historial]
-        else:
-            if not errores_historial or errores_historial[indice] is None:
-                continue
-            valores = errores_historial[indice]
+        ks, valores = serie
         puntos, _ = _positivos(ks, valores)
         if not puntos:
             continue

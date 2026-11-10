@@ -18,8 +18,8 @@ class TestEmpaquetado(unittest.TestCase):
     def setUp(self):
         # Copia mínima del proyecto en una carpeta temporal, con archivos "trampa".
         self.raiz = tempfile.mkdtemp()
-        for carpeta in ("docs", "casos_prueba", "algebra/.claude", "tests/__pycache__", "paginas",
-                        "interfaz/recursos"):
+        for carpeta in ("docs", "casos_prueba", "algebra/.claude", "algebra/compartido",
+                        "tests/__pycache__", "paginas", "interfaz/recursos"):
             os.makedirs(os.path.join(self.raiz, carpeta), exist_ok=True)
         archivos = {
             "app.py": "", "README.md": "", "requirements.txt": "", "ejecutar.bat": "",
