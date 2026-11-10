@@ -29,8 +29,7 @@ from interfaz.compartido.editor import (
     redimensionar,
     texto_de_celdas,
 )
-
-RUTA_APP = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "app.py")
+from tests.rutas import RUTA_APP
 
 
 class TestConversion(unittest.TestCase):

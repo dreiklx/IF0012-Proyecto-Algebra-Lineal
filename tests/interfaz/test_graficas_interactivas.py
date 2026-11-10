@@ -22,6 +22,7 @@ from algebra.modulo_IV_iterativos.espectral import radio_espectral
 from algebra.modulo_IV_iterativos.precondicionamiento import analizar_precondicionador
 from algebra.modulo_I_sistemas.directos import resolver_gauss
 from interfaz import navegacion as nav
+from tests.rutas import RUTA_APP
 from visualizacion import graficos, interactivas
 from visualizacion.geometria_3d import _centro_y_radio, _esquinas_plano
 
@@ -133,7 +134,7 @@ class TestGraficasEnLaAplicacion(unittest.TestCase):
             from streamlit.testing.v1 import AppTest
         except ImportError:  # pragma: no cover
             self.skipTest("Streamlit no está instalado")
-        ruta = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "app.py")
+        ruta = RUTA_APP
         at = AppTest.from_file(ruta, default_timeout=60)
         at.run()
         at.switch_page(nav.ITERATIVOS)

@@ -9,13 +9,13 @@ import os
 import unittest
 
 from interfaz import navegacion as nav
+from tests.rutas import RUTA_APP
 
 try:
     from streamlit.testing.v1 import AppTest
 except ImportError:  # pragma: no cover
     AppTest = None
 
-RUTA_APP = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "app.py")
 
 
 def textos(elementos):
