@@ -15,7 +15,7 @@ from algebra.modulo_IV_iterativos.ejecucion import (
 )
 from algebra.modulo_IV_iterativos.espectral import radio_espectral
 from algebra.modulo_IV_iterativos.metodos import SOR
-from interfaz.compartido.componentes import mostrar_interactiva
+from interfaz.compartido.componentes import iteracion_elegida, mostrar_interactiva
 from interfaz.compartido.estilo import marca_incentivo
 from visualizacion import interactivas
 
@@ -86,8 +86,7 @@ def comparar(leer_todo, bloqueado=False):
     if metrica == "e" and comp.referencia is None:
         st.info("No hay solución de referencia para graficar e_k.")
     else:
-        mostrar_interactiva(interactivas.comparacion(comp.resultados, metrica, comp.errores_historial),
-                            "comparacion")
+        explorar_comparacion(comp, metrica)
 
     with st.expander("Influencia de ω en SOR (barrido)"):
         texto = st.text_input("Valores de ω a probar", "0.8 1 1.1 1.2 1.5 1.8", key="it_barrido")
@@ -118,3 +117,42 @@ def comparar(leer_todo, bloqueado=False):
                 st.dataframe(filas, hide_index=True, width="stretch")
                 st.caption("Cuanto menor es ρ(T_ω), más rápida es la convergencia asintótica. "
                            "Con ω = 1, SOR coincide con Gauss-Seidel.")
+
+
+def explorar_comparacion(comp, metrica):
+    """Comparación explorable: destacar un método y ver los tres en una misma iteración.
+    Los valores salen de los historiales del núcleo y de comp.errores_historial."""
+    base = comp.resultados[0].configuracion
+    metodos = [r.configuracion.metodo for r in comp.resultados if r.historial]
+    if not metodos:
+        st.info("Ningún método produjo iteraciones que graficar.")
+        return
+    ks = list(range(0, max(r.k_final for r in comp.resultados if r.historial) + 1))
+    firma = (base.criterio, metrica, tuple(r.k_final for r in comp.resultados), tuple(metodos))
+    k = iteracion_elegida("comparacion", "it_k_comp", ks, firma) if len(ks) > 1 else ks[-1]
+    destacado = st.radio("Destacar método", ["Todos"] + metodos, horizontal=True, key="it_destacar",
+                         help="Atenúa los demás métodos para seguir una sola curva.")
+    tolerancia = base.tolerancia if base.criterio in ("A", "B") else None
+    fig = interactivas.comparacion(comp.resultados, metrica, comp.errores_historial,
+                                   destacado=None if destacado == "Todos" else destacado, k_destacada=k,
+                                   criterio=base.criterio, tolerancia=tolerancia)
+    mostrar_interactiva(fig, "comparacion", seleccion=True)
+    if len(ks) > 1:
+        st.slider("Iteración a comparar", min_value=ks[0], max_value=ks[-1], key="it_k_comp",
+                  help="También puede hacer clic en un punto de la gráfica.")
+    filas = []
+    for r, errores in zip(comp.resultados, comp.errores_historial or [None] * len(comp.resultados)):
+        nombre = r.configuracion.metodo + (f" (ω = {float(r.configuracion.omega):g})"
+                                           if r.configuracion.metodo == SOR else "")
+        fila = next((f for f in r.historial if f.k == k), None)
+        if fila is None:
+            filas.append({"Método": nombre, f"Estado en k = {k}": f"ya terminó en k = {r.k_final}",
+                          "d_k": "—", "r_k": "—", "e_k": "—"})
+            continue
+        e = errores[r.historial.index(fila)] if errores else None
+        filas.append({"Método": nombre,
+                      f"Estado en k = {k}": "última iteración" if fila.k == r.k_final else "iterando",
+                      "d_k": "—" if fila.d is None else formatear_numero(fila.d, 6),
+                      "r_k": formatear_numero(fila.r, 6),
+                      "e_k": "—" if e is None else formatear_numero(e, 6)})
+    st.dataframe(filas, hide_index=True, width="stretch")

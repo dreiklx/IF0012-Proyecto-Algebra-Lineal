@@ -168,6 +168,9 @@ h2.rotulo .rotulo-nota{font-family:var(--f-mono);font-size:.72rem;font-weight:40
 .chip-error{color:#FCA5A5;border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.08)}
 .chip-info{color:#93C5FD;border-color:rgba(79,140,255,.4);background:rgba(79,140,255,.08)}
 .chip-incentivo{color:#DDD6FE;border-color:rgba(167,139,250,.45);background:rgba(167,139,250,.09)}
+/* Gráficas 2D con selección: Streamlit añade unos píxeles al contenedor y aparecía una
+   barra de desplazamiento interna.  La gráfica 3D (graf_planos) no se toca. */
+div[class*="st-key-graf_"]:not(.st-key-graf_planos){overflow:visible !important}
 .procedencia{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem;margin:.1rem 0 .4rem;font-size:.74rem;color:var(--suave)}
 .procedencia .chip{font-size:.72rem;cursor:help}
 
