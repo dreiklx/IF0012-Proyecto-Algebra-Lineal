@@ -111,13 +111,13 @@ tr,pre,blockquote{break-inside:avoid}}
   <h4><a href="#parte-2">Parte 2 · Resumen por módulo</a></h4>
   <ul><li><a href="#r-lo-que-hay-que-saber-de-memoria-en-cualquier-modulo">Lo que hay que saber de memoria en cualquier módulo</a><ul>
 </ul></li>
-<li><a href="#r-modulo-i-sistemas-lineales-algebra-directos-py">Módulo I — Sistemas lineales (algebra/directos.py)</a><ul>
+<li><a href="#r-modulo-i-sistemas-lineales-algebra-modulo-i-sistemas-directos-py">Módulo I — Sistemas lineales (algebra/modulo_I_sistemas/directos.py)</a><ul>
 </ul></li>
-<li><a href="#r-modulo-ii-condicionamiento-algebra-condicion-py">Módulo II — Condicionamiento (algebra/condicion.py)</a><ul>
+<li><a href="#r-modulo-ii-condicionamiento-algebra-modulo-ii-condicionamiento-condicion-py">Módulo II — Condicionamiento (algebra/modulo_II_condicionamiento/condicion.py)</a><ul>
 </ul></li>
-<li><a href="#r-modulo-iii-minimos-cuadrados-algebra-minimos-py">Módulo III — Mínimos cuadrados (algebra/minimos.py)</a><ul>
+<li><a href="#r-modulo-iii-minimos-cuadrados-algebra-modulo-iii-minimos-minimos-py">Módulo III — Mínimos cuadrados (algebra/modulo_III_minimos/minimos.py)</a><ul>
 </ul></li>
-<li><a href="#r-modulo-iv-metodos-iterativos-y-convergencia-algebra-iterativos-py-algebra-espectral-py-algebra-dispersas-py">Módulo IV — Métodos iterativos y convergencia (algebra/iterativos.py, algebra/espectral.py, algebra/dispersas.py)</a><ul>
+<li><a href="#r-modulo-iv-metodos-iterativos-y-convergencia-algebra-modulo-iv-iterativos-algebra-modulo-iv-iterativos-espectral-py-algebra-modulo-iv-iterativos-dispersas-py">Módulo IV — Métodos iterativos y convergencia (algebra/modulo_IV_iterativos/, algebra/modulo_IV_iterativos/espectral.py, algebra/modulo_IV_iterativos/dispersas.py)</a><ul>
 </ul></li>
 <li><a href="#r-limitaciones-que-hay-que-defender-sin-ocultarlas">Limitaciones que hay que defender (sin ocultarlas)</a><ul>
 </ul></li>
@@ -129,16 +129,17 @@ tr,pre,blockquote{break-inside:avoid}}
   <h1>Guía de defensa del equipo — Proyecto final IF0012</h1>
   <p>Álgebra Lineal para Informática Empresarial · Universidad de Costa Rica, Sede del Caribe (Siquirres) · II Ciclo 2026</p>
   <p>Elmer López Hernández · Derek Farley Noguera · Daniel Córdoba Arias · Samir Sandoval Ramírez</p>
-  <div class="insignias"><span>Versión 03-nov-2026</span><span>232 pruebas automáticas OK</span>
+  <div class="insignias"><span>Versión 10-nov-2026.</span><span>232 pruebas automáticas OK</span>
   <span>Auditoría independiente: 0 fallos</span><span>Entrega: 11-nov-2026</span><span>Defensa: semana del 16-nov-2026</span></div>
 </header>
 <section class="parte" id="parte-1"><h1 class="titulo-parte">Parte 1 · Guía completa</h1>
 <p><strong>Para:</strong> Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Arias y Samir Sandoval Ramírez.<br />
 <strong>Defensa:</strong> semana del 16-nov-2026, individual, de 6 a 8 minutos por persona.<br />
-<strong>Versión:</strong> 03-nov-2026 (revisada tras compararla con los PDF de la docente; ver <code>docs/comparacion_procedimientos.md</code>). Explica el código <strong>real</strong> del repositorio. Todos los números de los ejemplos se obtuvieron ejecutando la aplicación y se contrastaron con un cálculo independiente.</p>
+<strong>Versión:</strong> 10-nov-2026. Rutas actualizadas a la nueva organización por módulos y revisada contra las 457 páginas de los PDF de la docente (<code>docs/referencia_oficial_procedimientos.md</code>). Explica el código <strong>real</strong> del repositorio. Todos los números de los ejemplos se obtuvieron ejecutando la aplicación y se contrastaron con un cálculo independiente.</p>
 <blockquote>
 <p><strong>Cómo usar esta guía.</strong> La docente elige <strong>al menos dos módulos</strong> y puede pedir un caso no preparado (OFICIAL p. 3). Por eso <strong>cada integrante debe dominar los cuatro</strong>. Primero lean las partes A y B, luego el módulo de la parte C junto con su teoría en la parte D, y al final practiquen las preguntas de la parte E con la aplicación abierta (parte F).<br />
-Para repasar rápido está <a href="#parte-2">resumen_logica_por_modulo.md</a>.</p>
+Para repasar rápido está <a href="#parte-2">resumen_logica_por_modulo.md</a>.<br />
+Para encontrar cada función en el código: <span class="ref">guia_recorrido_codigo.md</span>. Para Richardson: <span class="ref">investigacion_richardson.md</span>.</p>
 </blockquote>
 <hr />
 <h2 id="g-a-vision-general-del-proyecto">A. Visión general del proyecto</h2>
@@ -209,32 +210,31 @@ Para repasar rápido está <a href="#parte-2">resumen_logica_por_modulo.md</a>.<
 <h2 id="g-b-arquitectura-del-codigo">B. Arquitectura del código</h2>
 <h3 id="g-carpetas">Carpetas</h3>
 <pre><code>proyecto-algebra/
-├── app.py                     ← punto de entrada: navegación entre los 4 módulos
-├── algebra/                   ← NÚCLEO MATEMÁTICO (Python puro)
-│   ├── matriz.py              ← validación, producto, transpuesta, normas, residuo
-│   ├── validacion.py          ← texto del usuario → Fraction; ε, k_max y ω
-│   ├── directos.py            ← Módulo I: Gauss, Gauss-Jordan, inversa, determinante
-│   ├── condicion.py           ← Módulo II: κ∞, perturbación, errores relativos
-│   ├── minimos.py             ← Módulo III: ecuaciones normales, residuo, recta
-│   ├── iterativos.py          ← Módulo IV: Jacobi, GS, SOR, parada, dominancia, comparación
-│   ├── espectral.py           ← Módulo IV: D, L, U, T, polinomio, autovalores, ρ(T)
-│   ├── dispersas.py           ← Incentivo: formato CSR
-│   └── precondicionamiento.py ← Incentivo: precondicionador diagonal M = D
-├── paginas/                   ← una página por módulo (barra superior); cada una llama a mostrar()
-├── interfaz/                  ← Streamlit: una pantalla por módulo
-│   ├── navegacion.py          ← lista de páginas (archivo, título, dirección)
-│   ├── portada.py             ← portada: módulos, incentivos y la figura [A | b] → [I | x]
-│   ├── estilo.py              ← sistema de diseño: colores, tipografía, animaciones
-│   ├── componentes.py         ← LaTeX, tablas y lectura de datos con mensajes de error
-│   ├── ejemplos.py            ← ejemplos precargados del curso
-│   └── modulo_directos.py, modulo_condicionamiento.py, modulo_minimos.py, modulo_iterativos.py
-├── visualizacion/             ← Matplotlib: solo dibuja
-│   ├── graficos.py            ← recta de ajuste, convergencia, comparación, autovalores
-│   └── geometria_3d.py        ← rectas y planos del Módulo I
-├── tests/                     ← 232 pruebas automáticas (unittest)
-├── auditoria/                 ← comparación aleatoria contra oráculos independientes
-├── casos_prueba/              ← casos documentados por módulo (entrada, esperado, obtenido)
-└── docs/                      ← manual, guías, decisiones, matriz de cumplimiento
+├── app.py                         ← punto de entrada: navegación entre los 4 módulos
+├── algebra/                       ← NÚCLEO MATEMÁTICO (Python puro)
+│   ├── compartido/                ← matriz.py (operaciones, normas), validacion.py (texto → Fraction), exactos.py
+│   ├── modulo_I_sistemas/         ← directos.py: Gauss, Gauss-Jordan, inversa, determinante
+│   ├── modulo_II_condicionamiento/← condicion.py: κ∞, perturbación, errores relativos
+│   ├── modulo_III_minimos/        ← minimos.py: ecuaciones normales, residuo, recta
+│   └── modulo_IV_iterativos/
+│       ├── metodos.py             ← fórmulas de Jacobi, GS y SOR (un paso cada uno)
+│       ├── ejecucion.py           ← bucle común, criterios A/B/C, motivo de parada
+│       ├── convergencia.py        ← dominancia diagonal y reordenamiento
+│       ├── espectral.py           ← D, L, U, T, polinomio, autovalores, ρ(T)
+│       ├── comparacion.py         ← comparación de los 3 métodos, error final
+│       ├── dispersas.py           ← Incentivo: formato CSR
+│       └── precondicionamiento.py ← Incentivo: precondicionador diagonal M = D
+├── paginas/                       ← una página por módulo (barra superior); cada una llama a mostrar()
+├── interfaz/                      ← Streamlit: no calcula nada
+│   ├── navegacion.py, portada.py
+│   ├── compartido/                ← estilo.py, componentes.py, editor.py, ejemplos.py
+│   └── modulos/                   ← modulo_I_sistemas.py, modulo_II_condicionamiento.py,
+│                                    modulo_III_minimos.py, modulo_IV_iterativos/ (una vista por pestaña)
+├── visualizacion/                 ← Plotly (interactivas.py) y Matplotlib (graficos.py): solo dibujan
+├── tests/                         ← 232 pruebas, una carpeta por módulo
+├── auditoria/                     ← comparación aleatoria contra oráculos independientes
+├── casos_prueba/                  ← casos documentados por módulo (entrada, esperado, obtenido)
+└── docs/                          ← manual, guías, referencia oficial, matriz de cumplimiento
 </code></pre>
 <h3 id="g-reglas-de-dependencia">Reglas de dependencia</h3>
 <ul>
@@ -251,7 +251,7 @@ Para repasar rápido está <a href="#parte-2">resumen_logica_por_modulo.md</a>.<
 <li><code>ResultadoSistema</code> e <code>ResultadoInversa</code> (<code>directos.py</code>);</li>
 <li><code>ResultadoCondicion</code> y <code>ResultadoPerturbacion</code> (<code>condicion.py</code>);</li>
 <li><code>ResultadoMinimos</code> y <code>ResultadoAjuste</code> (<code>minimos.py</code>);</li>
-<li><code>ResultadoIterativo</code> y <code>ResultadoComparacion</code> (<code>iterativos.py</code>);</li>
+<li><code>ResultadoIterativo</code> (<code>ejecucion.py</code>) y <code>ResultadoComparacion</code> (<code>comparacion.py</code>);</li>
 <li><code>ResultadoEspectral</code> (<code>espectral.py</code>).</li>
 </ul>
 </li>
@@ -267,18 +267,18 @@ Para repasar rápido está <a href="#parte-2">resumen_logica_por_modulo.md</a>.<
 <pre><code>Usuario escribe texto
    │   p. ej. &quot;1 1 1\n2 1 -1\n-1 1 2&quot;
    ▼
-interfaz/modulo_X.py  ──►  componentes.leer_matriz_ui / leer_vector_ui
+interfaz/modulos/…    ──►  componentes.leer_matriz_ui / leer_vector_ui  (interfaz/compartido/)
    │                         └─► validacion.leer_matriz → leer_numero (Fraction exacta)
    │                             si hay error: st.error(&quot;… elemento (2, 2) …&quot;) y se detiene
    ▼
-algebra/&lt;módulo&gt;.py   ──►  función principal (p. ej. resolver_gauss)
+algebra/modulo_X/…    ──►  función principal (p. ej. resolver_gauss)
    │                         valida dimensiones (matriz.validar_*), calcula y
    │                         devuelve un dataclass Resultado…
    ▼
 st.session_state       ──►  el resultado se guarda para que no desaparezca al interactuar
    ▼
-interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
-   └─► visualizacion/*.py (figura de Matplotlib) ──► st.pyplot
+interfaz/modulos/… (mostrar_resultado) ──► st.latex / st.table / st.metric
+   └─► visualizacion/interactivas.py (figura Plotly) ──► componentes.mostrar_interactiva
 </code></pre>
 <p><code>interfaz/navegacion.py</code> contiene la lista <code>PAGINAS</code> (archivo, título y dirección de cada página). <code>app.py</code> la convierte en páginas <code>st.Page</code> y la muestra como barra superior con <code>st.navigation(..., position="top")</code>. Cada archivo de <code>paginas/</code> solo llama al <code>mostrar()</code> de su módulo de interfaz. La portada está en <code>interfaz/portada.py</code>.</p>
 <h3 id="g-indice-de-funciones-importantes-archivo-linea">Índice de funciones importantes (archivo:línea)</h3>
@@ -291,119 +291,119 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
 </thead>
 <tbody>
 <tr>
-<td><code>algebra/validacion.py:26</code> <code>leer_numero</code></td>
+<td><code>algebra/compartido/validacion.py:26</code> <code>leer_numero</code></td>
 <td>Texto → <code>Fraction</code>. Acepta <code>3</code>, <code>-2.5</code>, <code>2,5</code>, <code>1/3</code> y <code>1e-3</code></td>
 </tr>
 <tr>
-<td><code>algebra/validacion.py:55</code> <code>leer_matriz</code></td>
+<td><code>algebra/compartido/validacion.py:55</code> <code>leer_matriz</code></td>
 <td>Una fila por línea; exige que todas las filas tengan la misma longitud</td>
 </tr>
 <tr>
-<td><code>algebra/validacion.py:89</code> <code>leer_tolerancia</code> / <code>:97</code> <code>leer_entero_positivo</code> / <code>:108</code> <code>leer_omega</code></td>
+<td><code>algebra/compartido/validacion.py:89</code> <code>leer_tolerancia</code> / <code>:97</code> <code>leer_entero_positivo</code> / <code>:108</code> <code>leer_omega</code></td>
 <td>ε &gt; 0; k_max y N enteros; 0 &lt; ω &lt; 2</td>
 </tr>
 <tr>
-<td><code>algebra/matriz.py:69</code> <code>validar_matriz</code> / <code>:122</code> <code>validar_sistema</code></td>
+<td><code>algebra/compartido/matriz.py:69</code> <code>validar_matriz</code> / <code>:122</code> <code>validar_sistema</code></td>
 <td>Comprueba la forma rectangular, los números válidos y que b tenga m componentes</td>
 </tr>
 <tr>
-<td><code>algebra/matriz.py:240</code> <code>norma_infinito_vector</code> / <code>:255</code> <code>norma_infinito_matriz</code></td>
+<td><code>algebra/compartido/matriz.py:240</code> <code>norma_infinito_vector</code> / <code>:255</code> <code>norma_infinito_matriz</code></td>
 <td>máx|vᵢ| y máxima suma de fila</td>
 </tr>
 <tr>
-<td><code>algebra/matriz.py:335</code> <code>residuo</code></td>
+<td><code>algebra/compartido/matriz.py:335</code> <code>residuo</code></td>
 <td>r = b − Ax</td>
 </tr>
 <tr>
-<td><code>algebra/directos.py:152</code> <code>_escalonar</code></td>
+<td><code>algebra/modulo_I_sistemas/directos.py:144</code> <code>_escalonar</code></td>
 <td><strong>Corazón del Módulo I</strong>: pivotes, intercambios, eliminación, determinante</td>
 </tr>
 <tr>
-<td><code>algebra/directos.py:244</code> <code>_resolver</code></td>
+<td><code>algebra/modulo_I_sistemas/directos.py:236</code> <code>_resolver</code></td>
 <td>Clasificación por rangos y solución (única o paramétrica)</td>
 </tr>
 <tr>
-<td><code>algebra/directos.py:331</code> <code>inversa_gauss_jordan</code></td>
+<td><code>algebra/modulo_I_sistemas/directos.py:323</code> <code>inversa_gauss_jordan</code></td>
 <td>[A | I] → [I | A⁻¹] y verificación A·A⁻¹ = I</td>
 </tr>
 <tr>
-<td><code>algebra/directos.py:363</code> <code>determinante</code></td>
+<td><code>algebra/modulo_I_sistemas/directos.py:355</code> <code>determinante</code></td>
 <td>(−1)^intercambios · Π pivotes</td>
 </tr>
 <tr>
-<td><code>algebra/condicion.py:104</code> <code>numero_condicion_infinito</code></td>
+<td><code>algebra/modulo_II_condicionamiento/condicion.py:105</code> <code>numero_condicion_infinito</code></td>
 <td>κ∞ e interpretación</td>
 </tr>
 <tr>
-<td><code>algebra/condicion.py:133</code> <code>construir_delta_b</code> / <code>:157</code> <code>analizar_perturbacion</code></td>
+<td><code>algebra/modulo_II_condicionamiento/condicion.py:134</code> <code>construir_delta_b</code> / <code>:158</code> <code>analizar_perturbacion</code></td>
 <td>Δb absoluta o porcentual; x frente a x̃</td>
 </tr>
 <tr>
-<td><code>algebra/minimos.py:111</code> <code>minimos_cuadrados</code> / <code>:182</code> <code>ajuste_lineal</code></td>
+<td><code>algebra/modulo_III_minimos/minimos.py:111</code> <code>minimos_cuadrados</code> / <code>:182</code> <code>ajuste_lineal</code></td>
 <td>Ecuaciones normales, residuo, recta; det([A|b]) si m = n + 1</td>
 </tr>
 <tr>
-<td><code>algebra/minimos.py:168</code> <code>cramer</code></td>
+<td><code>algebra/modulo_III_minimos/minimos.py:168</code> <code>cramer</code></td>
 <td>Regla de Cramer (procedimiento de clase), usada como verificación</td>
 </tr>
 <tr>
-<td><code>algebra/iterativos.py:154</code> <code>paso_jacobi</code> / <code>:167</code> <code>paso_gauss_seidel</code> / <code>:180</code> <code>paso_sor</code></td>
+<td><code>algebra/modulo_IV_iterativos/metodos.py:35</code> <code>paso_jacobi</code> / <code>:48</code> <code>paso_gauss_seidel</code> / <code>:61</code> <code>paso_sor</code></td>
 <td>Una iteración de cada método</td>
 </tr>
 <tr>
-<td><code>algebra/iterativos.py:194</code> <code>paso_richardson</code></td>
+<td><code>algebra/modulo_IV_iterativos/metodos.py:75</code> <code>paso_richardson</code></td>
 <td>Richardson x ← x + (b − Ax): solo para el análisis del precondicionador</td>
 </tr>
 <tr>
-<td><code>algebra/iterativos.py:277</code> <code>validar_configuracion</code></td>
+<td><code>algebra/modulo_IV_iterativos/ejecucion.py:205</code> <code>validar_configuracion</code></td>
 <td>Valida A, b, x⁽⁰⁾, ε, k_max, N y ω</td>
 </tr>
 <tr>
-<td><code>algebra/iterativos.py:331</code> <code>ejecutar</code> / <code>:346</code> <code>_ejecutar</code></td>
+<td><code>algebra/modulo_IV_iterativos/ejecucion.py:259</code> <code>ejecutar</code> / <code>:274</code> <code>_ejecutar</code></td>
 <td>Bucle común, métricas d_k y r_k, criterios A, B y C, motivos de parada</td>
 </tr>
 <tr>
-<td><code>algebra/iterativos.py:435</code> <code>dominancia_diagonal</code></td>
+<td><code>algebra/modulo_IV_iterativos/convergencia.py:25</code> <code>dominancia_diagonal</code></td>
 <td>|aᵢᵢ| &gt; Σ_{j≠i}|aᵢⱼ| fila por fila</td>
 </tr>
 <tr>
-<td><code>algebra/iterativos.py:460</code> <code>reordenamiento_dominante</code></td>
+<td><code>algebra/modulo_IV_iterativos/convergencia.py:50</code> <code>reordenamiento_dominante</code></td>
 <td>Orden de las ecuaciones que logra la dominancia (como en la Tarea II)</td>
 </tr>
 <tr>
-<td><code>algebra/iterativos.py:512</code> <code>comparar_metodos</code></td>
+<td><code>algebra/modulo_IV_iterativos/comparacion.py:49</code> <code>comparar_metodos</code></td>
 <td>Los 3 métodos con las mismas condiciones; error final e = ‖x⁽ᵏ⁾ − x*‖∞</td>
 </tr>
 <tr>
-<td><code>algebra/espectral.py:114</code> <code>matriz_iteracion</code></td>
+<td><code>algebra/modulo_IV_iterativos/espectral.py:120</code> <code>matriz_iteracion</code></td>
 <td>T y c exactas para Jacobi, GS y SOR</td>
 </tr>
 <tr>
-<td><code>algebra/espectral.py:153</code> <code>polinomio_caracteristico</code></td>
+<td><code>algebra/modulo_IV_iterativos/espectral.py:159</code> <code>polinomio_caracteristico</code></td>
 <td>Faddeev-LeVerrier (exacto)</td>
 </tr>
 <tr>
-<td><code>algebra/espectral.py:328</code> <code>desarrollo_sarrus</code></td>
+<td><code>algebra/modulo_IV_iterativos/espectral.py:334</code> <code>desarrollo_sarrus</code></td>
 <td>Procedimiento de clase en 3×3: tr(T), Σ menores, det(T) por Sarrus</td>
 </tr>
 <tr>
-<td><code>algebra/espectral.py:205</code> <code>durand_kerner</code> / <code>:257</code> <code>raices</code></td>
+<td><code>algebra/modulo_IV_iterativos/espectral.py:211</code> <code>durand_kerner</code> / <code>:263</code> <code>raices</code></td>
 <td>Raíces: λ = 0 exactas, grado ≤ 2 por fórmula, grado ≥ 3 por Durand-Kerner</td>
 </tr>
 <tr>
-<td><code>algebra/espectral.py:360</code> <code>analizar_matriz</code></td>
+<td><code>algebra/modulo_IV_iterativos/espectral.py:366</code> <code>analizar_matriz</code></td>
 <td>Autovalores, ρ, verificaciones y p(±1) = 0 de cualquier matriz</td>
 </tr>
 <tr>
-<td><code>algebra/espectral.py:313</code> <code>concluir</code> / <code>:399</code> <code>radio_espectral</code></td>
+<td><code>algebra/modulo_IV_iterativos/espectral.py:319</code> <code>concluir</code> / <code>:405</code> <code>radio_espectral</code></td>
 <td>ρ(T), verificaciones y conclusión</td>
 </tr>
 <tr>
-<td><code>algebra/dispersas.py:61</code> <code>a_csr</code></td>
+<td><code>algebra/modulo_IV_iterativos/dispersas.py:61</code> <code>a_csr</code></td>
 <td>Densa → CSR (<code>valores</code>, <code>columnas</code>, <code>inicio</code>)</td>
 </tr>
 <tr>
-<td><code>algebra/precondicionamiento.py:82</code> <code>precondicionar_diagonal</code> / <code>:125</code> <code>analizar_precondicionador</code></td>
+<td><code>algebra/modulo_IV_iterativos/precondicionamiento.py:85</code> <code>precondicionar_diagonal</code> / <code>:128</code> <code>analizar_precondicionador</code></td>
 <td>M = D, B = D⁻¹A, b̃; comparación original frente a precondicionado</td>
 </tr>
 </tbody>
@@ -411,7 +411,7 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
 <hr />
 <h2 id="g-c-los-cuatro-modulos-funcion-por-funcion">C. Los cuatro módulos, función por función</h2>
 <h3 id="g-modulo-i-sistemas-lineales-y-metodos-directos">Módulo I — Sistemas lineales y métodos directos</h3>
-<p><strong>Archivos:</strong> <code>algebra/directos.py</code> (núcleo) e <code>interfaz/modulo_directos.py</code> (pantalla).</p>
+<p><strong>Archivos:</strong> <code>algebra/modulo_I_sistemas/directos.py</code> (núcleo) e <code>interfaz/modulos/modulo_I_sistemas.py</code> (pantalla).</p>
 <ol>
 <li><strong>Problema.</strong> Resolver Ax = b con A de m×n (no tiene que ser cuadrada) y clasificar el sistema.</li>
 <li><strong>Entrada.</strong> A y b como texto. En la pantalla también se eligen el método («Gauss» o «Gauss-Jordan») y la estrategia de pivote («primer no nulo», como en clase, o «pivoteo parcial»).</li>
@@ -460,7 +460,7 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
         - <code>solucion_unica(A, b)</code> es la puerta de entrada que usan los Módulos II, III y IV: devuelve x o lanza <code>ErrorSistema</code>.</li>
 </ol>
 <h3 id="g-modulo-ii-condicionamiento-y-sensibilidad">Módulo II — Condicionamiento y sensibilidad</h3>
-<p><strong>Archivos:</strong> <code>algebra/condicion.py</code> e <code>interfaz/modulo_condicionamiento.py</code>.</p>
+<p><strong>Archivos:</strong> <code>algebra/modulo_II_condicionamiento/condicion.py</code> e <code>interfaz/modulos/modulo_II_condicionamiento.py</code>.</p>
 <ol>
 <li><strong>Problema.</strong> ¿Cuánto puede cambiar la solución x si los datos b cambian un poco?</li>
 <li><strong>Entrada.</strong> A cuadrada, b y una perturbación: absoluta (un número o un vector Δb) o porcentual (un p o un vector de pᵢ).</li>
@@ -502,7 +502,7 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
 <li><strong>Errores posibles:</strong> <code>ErrorDimension</code>, <code>ErrorEntrada</code> (texto de la perturbación) y <code>ErrorSistema</code> (se atrapan en la interfaz).</li>
 </ol>
 <h3 id="g-modulo-iii-minimos-cuadrados-y-ajuste-lineal">Módulo III — Mínimos cuadrados y ajuste lineal</h3>
-<p><strong>Archivos:</strong> <code>algebra/minimos.py</code> e <code>interfaz/modulo_minimos.py</code>.</p>
+<p><strong>Archivos:</strong> <code>algebra/modulo_III_minimos/minimos.py</code> e <code>interfaz/modulos/modulo_III_minimos.py</code>.</p>
 <ol>
 <li><strong>Problema.</strong> Si A es m×n con m &gt; n, Ax = b en general no tiene solución. Se busca x̂ que haga ‖b − Ax‖₂ lo más pequeño posible.</li>
 <li><strong>Entrada.</strong> A y b (pestaña «Sistema sobredeterminado»), o listas de puntos xᵢ, yᵢ (pestaña «Ajuste lineal»).</li>
@@ -539,7 +539,7 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
 </li>
 </ol>
 <h3 id="g-modulo-iv-metodos-iterativos-y-convergencia">Módulo IV — Métodos iterativos y convergencia</h3>
-<p><strong>Archivos:</strong> <code>algebra/iterativos.py</code>, <code>algebra/espectral.py</code>, <code>algebra/dispersas.py</code>, <code>algebra/precondicionamiento.py</code> e <code>interfaz/modulo_iterativos.py</code>. La pantalla tiene cuatro pestañas: «Ejecutar un método», «Comparar métodos», «Convergencia» y «Precondicionamiento diagonal».</p>
+<p><strong>Archivos:</strong> <code>algebra/modulo_IV_iterativos/</code>, <code>algebra/modulo_IV_iterativos/espectral.py</code>, <code>algebra/modulo_IV_iterativos/dispersas.py</code>, <code>algebra/modulo_IV_iterativos/precondicionamiento.py</code> e <code>interfaz/modulos/modulo_IV_iterativos/</code>. La pantalla tiene cuatro pestañas: «Ejecutar un método», «Comparar métodos», «Convergencia» y «Precondicionamiento diagonal».</p>
 <ol>
 <li><strong>Problema.</strong> Aproximar la solución de Ax = b (A n×n) con iteraciones x⁽ᵏ⁾, y saber si convergen.</li>
 <li><strong>Entrada:</strong><ul>
@@ -660,7 +660,7 @@ interfaz/modulo_X.mostrar_resultado ──► st.latex / st.table / st.metric
         - <code>paso_*_csr</code> recorre solo esos elementos, de modo que cada iteración cuesta O(nnz) en lugar de O(n²).<br />
         - Las iteraciones son <strong>idénticas</strong> a las densas: se suman los mismos productos en el mismo orden.</p>
 </li>
-<li><strong>Precondicionamiento diagonal</strong> (<code>algebra/precondicionamiento.py</code>, pestaña «Precondicionamiento diagonal»):<br />
+<li><strong>Precondicionamiento diagonal</strong> (<code>algebra/modulo_IV_iterativos/precondicionamiento.py</code>, pestaña «Precondicionamiento diagonal»):<br />
         - <code>precondicionar_diagonal(A, b)</code> construye M = D, M⁻¹, B = D⁻¹A y b̃ = D⁻¹b, de forma exacta. Exige que no haya ningún aᵢᵢ = 0.<br />
         - <code>analizar_precondicionador(A, b, config, ω)</code> calcula:<br />
             - κ∞(A) y κ∞(B), con <code>numero_condicion_infinito</code>;<br />
@@ -1005,8 +1005,8 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 <p><strong>¿Qué bibliotecas usaron y para qué? ¿Usaron alguna que resuelva los métodos?</strong></p>
 <ul>
 <li>El núcleo (<code>algebra/</code>) solo usa la biblioteca estándar: <code>fractions</code>, <code>math</code>, <code>cmath</code> y <code>dataclasses</code>.</li>
-<li>Streamlit sirve para la interfaz y Matplotlib para las gráficas, como lo permite OFICIAL p. 1, y están documentadas en <code>docs/herramientas_y_bibliotecas.md</code>.</li>
-<li>Ningún archivo importa NumPy, SciPy ni SymPy. NumPy solo se instala porque lo necesitan internamente Streamlit y Matplotlib.</li>
+<li>Streamlit sirve para la interfaz, y Plotly y Matplotlib para las gráficas, como lo permite OFICIAL p. 1, y están documentadas en <code>docs/herramientas_y_bibliotecas.md</code>.</li>
+<li>Ningún archivo importa NumPy, SciPy ni SymPy. NumPy solo se instala porque lo necesitan internamente Streamlit, Plotly y Matplotlib.</li>
 </ul>
 </li>
 <li>
@@ -1180,7 +1180,7 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
         2. Polinomio det(λI − T) con Faddeev-LeVerrier (Mₖ = TMₖ₋₁ + cₖ₋₁I, cₖ = −tr(TMₖ)/k), que es exacto y coincide con Sarrus en 3×3.<br />
         3. Raíces: λ = 0 exactas, fórmula cuadrática para grado ≤ 2 y Durand-Kerner para grado ≥ 3.<br />
         4. ρ = máx|λ|, verificado con |p(λ)| ≈ 0 y Σλ = traza.<br />
-        - Archivo: <code>algebra/espectral.py</code>.</p>
+        - Archivo: <code>algebra/modulo_IV_iterativos/espectral.py</code>.</p>
 </li>
 <li>
 <p><strong>¿Por qué no usaron el método de la potencia?</strong><br />
@@ -1221,7 +1221,7 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 </li>
 <li>
 <p><strong>¿Qué es el precondicionamiento diagonal y qué efecto tiene en su aplicación?</strong><br />
-        - Se resuelve D⁻¹Ax = D⁻¹b, con M = D, como en la lámina. Archivo: <code>algebra/precondicionamiento.py</code>.<br />
+        - Se resuelve D⁻¹Ax = D⁻¹b, con M = D, como en la lámina. Archivo: <code>algebra/modulo_IV_iterativos/precondicionamiento.py</code>.<br />
         - Para Jacobi, GS y SOR <strong>no cambia nada</strong>: T̃ = T y c̃ = c (demostración en D.7). La aplicación lo comprueba con fracciones y lo muestra en la tabla.<br />
         - Sí cambia κ (si la diagonal no es uniforme), el residuo y Richardson, que precondicionado se convierte en Jacobi.<br />
         - Si la docente pregunta por qué no coincide con la diapositiva 19, se muestra la demostración y la tabla en vivo.</p>
@@ -1247,7 +1247,15 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 <p><strong>¿Qué es Richardson y por qué aparece en la pestaña de precondicionamiento?</strong><br />
         - Es la iteración x⁽ᵏ⁾ = x⁽ᵏ⁻¹⁾ + (b − Ax⁽ᵏ⁻¹⁾), con T_R = I − A.<br />
         - No es uno de los métodos del enunciado ni se vio en clase. Se incluye porque es el método más simple sobre el que M = D tiene efecto: con M = D se convierte en Jacobi.<br />
-        - Así se documenta un efecto real del precondicionador, en vez de inventar uno.</p>
+        - Así se documenta un efecto real del precondicionador, en vez de inventar uno.<br />
+        - <strong>Si la profesora pregunta «¿eso lo vimos?»:</strong> «No, profesora. Es una extensión, y la aplicación la rotula como "Extensión no vista en clase". La usamos solo para mostrar el efecto de M = D, porque en Jacobi, Gauss-Seidel y SOR la matriz de iteración no cambia.»<br />
+        - Demostración en una línea: T̃_R = I − D⁻¹A = I − D⁻¹(D + L + U) = −D⁻¹(L + U) = T_J.</p>
+</li>
+<li>
+<p><strong>¿Cómo está organizado el código? Muéstreme dónde está Jacobi.</strong><br />
+        - <code>algebra/</code> es el núcleo y tiene una carpeta por módulo: <code>modulo_I_sistemas/</code> … <code>modulo_IV_iterativos/</code>. Lo común está en <code>algebra/compartido/</code>.<br />
+        - Jacobi: <code>algebra/modulo_IV_iterativos/metodos.py</code>, función <code>paso_jacobi</code>. El bucle y la parada están en <code>ejecucion.py</code> (<code>ejecutar</code>).<br />
+        - La interfaz (<code>interfaz/modulos/…</code>) solo lee los datos, llama al núcleo y muestra el resultado; las gráficas (<code>visualizacion/</code>) solo dibujan.</p>
 </li>
 </ol>
 <hr />
@@ -1537,7 +1545,7 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 <p><strong>Uso de IA:</strong> está declarado en <code>docs/herramientas_y_bibliotecas.md</code> §4. Ni el enunciado ni el programa exigen una autorización previa: lo que se exige es declararlo y poder defender el trabajo. Si la docente pregunta, digan con honestidad para qué se usó y demuestren que entienden el código. No afirmen que ella lo autorizó expresamente.</p>
 </section>
 <section class="parte" id="parte-2"><h1 class="titulo-parte">Parte 2 · Resumen de la lógica por módulo</h1>
-<p><strong>Versión:</strong> 03-nov-2026. Es la versión condensada de <a href="#parte-1">guia_defensa_equipo.md</a>; allí están las demostraciones y las 34 preguntas con su respuesta completa.<br />
+<p><strong>Versión:</strong> 10-nov-2026 (rutas de la nueva organización). Es la versión condensada de <a href="#parte-1">guia_defensa_equipo.md</a>; allí están las demostraciones y las 35 preguntas con su respuesta completa.<br />
 <strong>Regla de oro:</strong> la docente elige al menos dos módulos y puede pedir un caso no preparado. <strong>Estudien los cuatro.</strong></p>
 <h2 id="r-lo-que-hay-que-saber-de-memoria-en-cualquier-modulo">Lo que hay que saber de memoria en cualquier módulo</h2>
 <ol>
@@ -1583,7 +1591,7 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 </li>
 </ol>
 <hr />
-<h2 id="r-modulo-i-sistemas-lineales-algebra-directos-py">Módulo I — Sistemas lineales (<code>algebra/directos.py</code>)</h2>
+<h2 id="r-modulo-i-sistemas-lineales-algebra-modulo-i-sistemas-directos-py">Módulo I — Sistemas lineales (<code>algebra/modulo_I_sistemas/directos.py</code>)</h2>
 <p><strong>Qué hace.</strong> Resuelve Ax = b (m×n cualquiera) con Gauss o Gauss-Jordan, muestra cada operación y clasifica el sistema.</p>
 <p><strong>Funciones que hay que identificar:</strong></p>
 <ul>
@@ -1669,7 +1677,7 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 <li>¿Por qué A singular ⇔ falta un pivote ⇔ det = 0?</li>
 </ul>
 <hr />
-<h2 id="r-modulo-ii-condicionamiento-algebra-condicion-py">Módulo II — Condicionamiento (<code>algebra/condicion.py</code>)</h2>
+<h2 id="r-modulo-ii-condicionamiento-algebra-modulo-ii-condicionamiento-condicion-py">Módulo II — Condicionamiento (<code>algebra/modulo_II_condicionamiento/condicion.py</code>)</h2>
 <p><strong>Qué hace.</strong> Calcula κ∞(A), lo interpreta y compara x con x̃ cuando b se perturba.</p>
 <p><strong>Funciones:</strong></p>
 <ul>
@@ -1732,7 +1740,7 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 <li>¿Cómo se calcula la inversa? → Con nuestro Gauss-Jordan, verificando A·A⁻¹ = I.</li>
 </ul>
 <hr />
-<h2 id="r-modulo-iii-minimos-cuadrados-algebra-minimos-py">Módulo III — Mínimos cuadrados (<code>algebra/minimos.py</code>)</h2>
+<h2 id="r-modulo-iii-minimos-cuadrados-algebra-modulo-iii-minimos-minimos-py">Módulo III — Mínimos cuadrados (<code>algebra/modulo_III_minimos/minimos.py</code>)</h2>
 <p><strong>Qué hace.</strong> Para m &gt; n busca x̂ que minimiza ‖b − Ax‖₂, y ajusta rectas y = mx + c.</p>
 <p><strong>Funciones:</strong></p>
 <ul>
@@ -1789,7 +1797,7 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 <li>¿Con qué método se resuelven? → El Gauss propio del Módulo I, porque lo exige el enunciado. Cramer, que usa la docente, se muestra como verificación y coincide: det([A|b]) = −11; 363, 715 y −319.</li>
 </ul>
 <hr />
-<h2 id="r-modulo-iv-metodos-iterativos-y-convergencia-algebra-iterativos-py-algebra-espectral-py-algebra-dispersas-py">Módulo IV — Métodos iterativos y convergencia (<code>algebra/iterativos.py</code>, <code>algebra/espectral.py</code>, <code>algebra/dispersas.py</code>)</h2>
+<h2 id="r-modulo-iv-metodos-iterativos-y-convergencia-algebra-modulo-iv-iterativos-algebra-modulo-iv-iterativos-espectral-py-algebra-modulo-iv-iterativos-dispersas-py">Módulo IV — Métodos iterativos y convergencia (<code>algebra/modulo_IV_iterativos/</code>, <code>algebra/modulo_IV_iterativos/espectral.py</code>, <code>algebra/modulo_IV_iterativos/dispersas.py</code>)</h2>
 <p><strong>Qué hace.</strong> Jacobi, Gauss-Seidel y SOR con criterios configurables; comparación homogénea; dominancia diagonal; matriz de iteración y ρ(T).</p>
 <p><strong>Funciones:</strong></p>
 <ul>
