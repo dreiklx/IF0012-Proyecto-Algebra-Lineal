@@ -1,6 +1,6 @@
 # Casos de prueba — Módulo IV: métodos iterativos y convergencia
 
-Los oráculos de las iteraciones se obtuvieron el 27-oct-2026 con un programa independiente, escrito aparte de `algebra/iterativos.py`. Se contrastaron así:
+Los oráculos de las iteraciones se obtuvieron el 27-oct-2026 con un programa independiente, escrito aparte de `algebra/modulo_IV_iterativos/`. Se contrastaron así:
 
 - La solución exacta de S es (217/208, 59/26, −225/208), comprobada por sustitución.
 - Las iteraciones 1–3 de SOR coinciden con el manuscrito S8-30/09 pp. 32-33.
@@ -16,7 +16,7 @@ Los radios espectrales se verificaron con oráculos independientes:
 
 - **Sistema S:** 10x − y + 2z = 6, −x + 11y − z = 25, 2x − y + 10z = −11. Es estrictamente diagonalmente dominante.
 - **Configuración:** x⁽⁰⁾ = 0, ε = 10⁻³, k_max = 50, norma ∞ y desigualdad estricta.
-- **Pruebas automáticas:** `tests/test_iterativos.py` (P1–P21) y `tests/test_espectral.py`.
+- **Pruebas automáticas:** `tests/modulo_IV/test_iterativos.py` (P1–P21) y `tests/modulo_IV/test_espectral.py`.
 
 ## Métodos y criterios de parada
 

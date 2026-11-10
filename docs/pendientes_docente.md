@@ -141,7 +141,7 @@ Se usó un solo criterio: si el enunciado oficial (OFICIAL) basta para decidir, 
   - M = D; se resuelve M⁻¹Ax = M⁻¹b aplicando «el método iterativo (Jacobi, Gauss-Seidel, SOR, etc.)».
   - Un buen precondicionador busca ρ(B) < ρ(A) y κ(B) < κ(A), con B = M⁻¹A.
   - La diapositiva 19 muestra a Jacobi «con precondicionamiento» convergiendo más rápido.
-- **Qué se implementó** (`algebra/precondicionamiento.py`, pestaña «Precondicionamiento diagonal»):
+- **Qué se implementó** (`algebra/modulo_IV_iterativos/precondicionamiento.py`, pestaña «Precondicionamiento diagonal»):
   - exactamente esa comparación: κ∞(A) frente a κ∞(B), y los autovalores y ρ de A y de B;
   - las iteraciones de Jacobi, GS, SOR y Richardson sobre los dos sistemas;
   - la comparación exacta de las matrices de iteración.

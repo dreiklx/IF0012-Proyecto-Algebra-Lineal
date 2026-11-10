@@ -8,8 +8,24 @@ No forma parte de la suite rápida de tests/ porque tarda unos 20 segundos y es 
 import sys, random, math, cmath, itertools
 from fractions import Fraction as F
 sys.path.insert(0, sys.argv[1] if len(sys.argv) > 1 else ".")
-from algebra.iterativos import ejecutar, ConfiguracionIterativa, JACOBI, GAUSS_SEIDEL, SOR
-from algebra.espectral import matriz_iteracion, polinomio_caracteristico, raices, radio_espectral, CONVERGE, NO_CONVERGE, INDETERMINADO
+from algebra.modulo_IV_iterativos.ejecucion import (
+    ConfiguracionIterativa,
+    ejecutar,
+)
+from algebra.modulo_IV_iterativos.espectral import (
+    CONVERGE,
+    INDETERMINADO,
+    NO_CONVERGE,
+    matriz_iteracion,
+    polinomio_caracteristico,
+    radio_espectral,
+    raices,
+)
+from algebra.modulo_IV_iterativos.metodos import (
+    GAUSS_SEIDEL,
+    JACOBI,
+    SOR,
+)
 random.seed(7)
 def oraculo(A,b,met,x0,crit,eps,kmax,N,w):
     n=len(A); x=list(x0)

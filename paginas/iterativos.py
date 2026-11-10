@@ -1,5 +1,5 @@
 """Página «iterativos» (la registra app.py con st.navigation)."""
 
-from interfaz import modulo_iterativos
+from interfaz.modulos import modulo_IV_iterativos
 
-modulo_iterativos.mostrar()
+modulo_IV_iterativos.mostrar()

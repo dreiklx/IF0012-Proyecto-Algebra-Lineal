@@ -12,7 +12,7 @@ import os
 
 import streamlit as st
 
-from interfaz.estilo import aplicar_estilo
+from interfaz.compartido.estilo import aplicar_estilo
 from interfaz.navegacion import INICIO, PAGINAS
 
 RAIZ = os.path.dirname(os.path.abspath(__file__))

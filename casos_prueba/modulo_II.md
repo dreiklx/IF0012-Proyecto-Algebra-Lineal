@@ -2,8 +2,8 @@
 
 κ∞(A) = ‖A‖∞·‖A⁻¹‖∞. Los oráculos se obtuvieron a mano: con la fórmula de la inversa 2×2, A⁻¹ = (1/det)[[d, −b], [−c, a]], o con la estructura A = I + 10J, cuya inversa es (I + 10J)⁻¹ = I − (10/31)J.
 
-- **Resultado obtenido:** ejecución de `algebra/condicion.py` el 27-oct-2026.
-- **Pruebas automáticas:** `tests/test_condicion.py`.
+- **Resultado obtenido:** ejecución de `algebra/modulo_II_condicionamiento/condicion.py` el 27-oct-2026.
+- **Pruebas automáticas:** `tests/modulo_II/test_condicion.py`.
 
 | ID | Entrada | Salida esperada (oráculo) | Resultado obtenido | ¿Coincide? |
 |---|---|---|---|---|

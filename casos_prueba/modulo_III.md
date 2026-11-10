@@ -4,8 +4,8 @@ Los oráculos se calcularon a mano. Las ecuaciones normales 2×2 se resolvieron 
 
 También se verifica una propiedad independiente: **Aᵀr = 0**.
 
-- **Resultado obtenido:** ejecución de `algebra/minimos.py` el 27-oct-2026.
-- **Pruebas automáticas:** `tests/test_minimos.py`.
+- **Resultado obtenido:** ejecución de `algebra/modulo_III_minimos/minimos.py` el 27-oct-2026.
+- **Pruebas automáticas:** `tests/modulo_III/test_minimos.py`.
 
 | ID | Entrada | Salida esperada (oráculo) | Resultado obtenido | ¿Coincide? |
 |---|---|---|---|---|

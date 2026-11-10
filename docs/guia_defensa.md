@@ -1,6 +1,6 @@
 # Guía de estudio para la defensa individual
 
-> **Versión ampliada (02-nov-2026):** [guia_defensa_equipo.md](guia_defensa_equipo.md) explica el código real función por función, incluye 34 preguntas con respuesta y el guion de demostración. Para repasar rápido: [resumen_logica_por_modulo.md](resumen_logica_por_modulo.md). Esta guía se conserva por la tabla de errores de las láminas (§6).
+> **Versión ampliada (02-nov-2026):** [guia_defensa_equipo.md](guia_defensa_equipo.md) explica el código real función por función, incluye 35 preguntas con respuesta y el guion de demostración. Para repasar rápido: [resumen_logica_por_modulo.md](resumen_logica_por_modulo.md). Esta guía se conserva por la tabla de errores de las láminas (§6).
 
 ## Formato de la defensa (OFICIAL p. 3-4)
 
@@ -30,7 +30,7 @@ Integrantes: Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Aria
 
 ---
 
-## Módulo I — Gauss y Gauss-Jordan (`algebra/directos.py`)
+## Módulo I — Gauss y Gauss-Jordan (`algebra/modulo_I_sistemas/directos.py`)
 
 **Saber explicar:**
 
@@ -59,7 +59,7 @@ Integrantes: Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Aria
 
 ---
 
-## Módulo II — Condicionamiento (`algebra/condicion.py`)
+## Módulo II — Condicionamiento (`algebra/modulo_II_condicionamiento/condicion.py`)
 
 **Saber explicar:**
 
@@ -79,7 +79,7 @@ Integrantes: Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Aria
 
 ---
 
-## Módulo III — Mínimos cuadrados (`algebra/minimos.py`)
+## Módulo III — Mínimos cuadrados (`algebra/modulo_III_minimos/minimos.py`)
 
 **Saber explicar:**
 
@@ -99,7 +99,7 @@ Integrantes: Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Aria
 
 ---
 
-## Módulo IV — Métodos iterativos (`algebra/iterativos.py`, `algebra/espectral.py`)
+## Módulo IV — Métodos iterativos (`algebra/modulo_IV_iterativos/`, `algebra/modulo_IV_iterativos/espectral.py`)
 
 **Saber explicar:**
 
@@ -141,7 +141,7 @@ Integrantes: Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Aria
 ## 5. Estructuras de datos y validaciones
 
 - **Matriz:** lista de filas; **vector:** lista. Los resultados son `dataclass`, por ejemplo `ResultadoSistema` o `ResultadoIterativo`.
-- **Validaciones** (OFICIAL p. 3), en `algebra/validacion.py` y `algebra/matriz.py`:
+- **Validaciones** (OFICIAL p. 3), en `algebra/compartido/validacion.py` y `algebra/compartido/matriz.py`:
   - campos vacíos o no numéricos, indicando la posición;
   - dimensiones;
   - singularidad;

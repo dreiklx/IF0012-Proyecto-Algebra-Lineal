@@ -8,7 +8,7 @@ dibujada, filtrado de valores positivos para la escala logarítmica) para que lo
 datos sean exactamente los mismos que en las figuras estáticas.
 
 La barra de herramientas (zoom +/−, zoom por región, desplazamiento, rotación 3D,
-restablecer vista) se configura en interfaz/componentes.py::mostrar_interactiva.
+restablecer vista) se configura en interfaz/compartido/componentes.py::mostrar_interactiva.
 """
 
 import math
@@ -16,7 +16,7 @@ import math
 import plotly.graph_objects as go
 
 from visualizacion.geometria_3d import _centro_y_radio, _esquinas_plano
-from visualizacion.graficos import MARCADORES, _positivos
+from visualizacion.graficos import MARCADORES, TITULOS_METRICA, _positivos, serie_metrica
 from visualizacion.tema import (
     COLOR_DATOS,
     COLOR_EPSILON,
@@ -200,21 +200,13 @@ def convergencia(historial, criterio, tolerancia=None):
 
 
 def comparacion(resultados, metrica, errores_historial=None):
-    titulos = {"d": "Cambio entre iteraciones d_k", "r": "Residuo r_k",
-               "e": "Error respecto a la solución del método directo e_k"}
+    titulos = TITULOS_METRICA
     fig = _base("Comparación de métodos: " + titulos[metrica])
     for indice, r in enumerate(resultados):
-        if not r.historial:
+        serie = serie_metrica(r, indice, metrica, errores_historial)
+        if serie is None:
             continue
-        ks = [f.k for f in r.historial]
-        if metrica == "d":
-            valores = [f.d for f in r.historial]
-        elif metrica == "r":
-            valores = [f.r for f in r.historial]
-        else:
-            if not errores_historial or errores_historial[indice] is None:
-                continue
-            valores = errores_historial[indice]
+        ks, valores = serie
         metodo = r.configuracion.metodo
         nombre = metodo + (f" (ω = {float(r.configuracion.omega):.3g})" if metodo == "SOR" else "")
         puntos, _ = _positivos(ks, valores)

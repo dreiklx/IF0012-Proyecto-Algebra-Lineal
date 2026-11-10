@@ -16,8 +16,8 @@
   - Cada interacción **vuelve a ejecutar el script entero** y dibuja la página de nuevo en el servidor. No hay un estado del lado del navegador que persista entre pantallas.
   - Las animaciones CSS se reproducen cada vez que un elemento se vuelve a montar, no solo al «aparecer» por primera vez.
 - **Dependencias del rediseño:**
-  - El estilo está centralizado en `interfaz/estilo.py` (CSS inyectado) y `.streamlit/config.toml`.
-  - Las pruebas de interfaz (`tests/test_app.py`, `tests/test_editor.py`) navegan con `at.sidebar.radio(key="navegacion")`. Si cambia la navegación, hay que adaptar esas 30 pruebas sin cambiar lo que verifican.
+  - El estilo está centralizado en `interfaz/compartido/estilo.py` (CSS inyectado) y `.streamlit/config.toml`.
+  - Las pruebas de interfaz (`tests/interfaz/test_app.py`, `tests/interfaz/test_editor.py`) navegan con `at.sidebar.radio(key="navegacion")`. Si cambia la navegación, hay que adaptar esas 30 pruebas sin cambiar lo que verifican.
   - Las claves de los widgets (`dir_resolver`, `it_ejecutar`, …) no dependen de la navegación y no cambiarían.
 
 ## 2. Qué permite Streamlit 1.66 (verificado en la documentación de la versión instalada)

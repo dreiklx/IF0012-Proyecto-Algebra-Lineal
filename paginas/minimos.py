@@ -1,5 +1,5 @@
 """Página «minimos» (la registra app.py con st.navigation)."""
 
-from interfaz import modulo_minimos
+from interfaz.modulos import modulo_III_minimos
 
-modulo_minimos.mostrar()
+modulo_III_minimos.mostrar()

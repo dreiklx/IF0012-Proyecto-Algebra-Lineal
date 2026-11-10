@@ -7,10 +7,11 @@ al abrir la página.
 
 import streamlit as st
 
-from algebra.directos import resolver_gauss_jordan
-from algebra.validacion import leer_matriz, leer_vector
-from interfaz import ejemplos, navegacion as nav
-from interfaz.estilo import _e
+from algebra.compartido.validacion import leer_matriz, leer_vector
+from algebra.modulo_I_sistemas.directos import resolver_gauss_jordan
+from interfaz import navegacion as nav
+from interfaz.compartido import ejemplos
+from interfaz.compartido.estilo import _e
 
 MODULOS = [
     ("I", "Sistemas lineales y métodos directos", nav.SISTEMAS,
@@ -51,7 +52,7 @@ INCENTIVOS = [
      "Todos los módulos; I → «Interpretación geométrica»"),
     ("Extensión matemática", "hasta 1 %", nav.ITERATIVOS,
      "Radio espectral con autovalores complejos (Faddeev-LeVerrier y Durand-Kerner), "
-     "decisiones exactas, matriz de iteración de SOR y Richardson.",
+     "decisiones exactas, matriz de iteración de SOR y Richardson (extensión no vista en clase).",
      "IV → «Convergencia: dominancia y radio espectral»"),
 ]
 

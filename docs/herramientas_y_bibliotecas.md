@@ -48,7 +48,7 @@ Queda **[pendiente de confirmar con la docente]** si `math.sqrt` y `cmath.sqrt` 
 |---|---|
 | `unittest` (estándar) | Pruebas automáticas |
 | `streamlit.testing.v1.AppTest` | Pruebas de integración de la interfaz sin navegador |
-| Git (local, sin repositorio remoto) | Historial de cambios |
+| Git + GitHub (repositorio privado `dreiklx/IF0012-Proyecto-Algebra-Lineal`) | Historial de cambios; ramas por funcionalidad, sin `push --force` |
 
 ## 4. Uso de herramientas de inteligencia artificial
 
@@ -89,6 +89,57 @@ El análisis completo está en `docs/pendientes_docente.md`, P-2.
 
 **Decisión:**
 
-- La aplicación obligatoria no depende de PyVista. La interpretación geométrica se hace con Matplotlib (`visualizacion/geometria_3d.py`).
+- La aplicación obligatoria no depende de PyVista. La interpretación geométrica se hace con Plotly (`visualizacion/interactivas.py`), con Matplotlib como respaldo (`visualizacion/geometria_3d.py`).
 - Posible vía futura, experimental y no probada dentro de la aplicación: incrustar el HTML exportado con `streamlit.components.v1.html`.
 - Antes de integrarlo habría que probar la estabilidad en el equipo de la defensa.
+
+## 6. Evaluación de bibliotecas para reducir código (10-nov-2026)
+
+**Regla:** no se reemplaza ningún método que la docente espera que implementemos: Gauss, Gauss-Jordan, determinante, inversa, mínimos cuadrados, Jacobi, Gauss-Seidel, SOR y radio espectral (OFICIAL p. 1). Solo se evaluó código auxiliar.
+
+**Medición previa:** pylint `duplicate-code` (bloques de 6 o más líneas) se ejecutó sobre todo el código, de forma aislada con `uvx`, sin instalarlo en el proyecto. Encontró **un solo bloque repetido**, en la visualización, y se resolvió con una función propia (`serie_metrica`), sin dependencias nuevas. El resto del código repetitivo ya estaba centralizado: el editor, la lectura con mensajes y el estilo.
+
+**Clasificación del código:**
+
+| Tipo | Ejemplos | Decisión |
+|---|---|---|
+| A. Se puede simplificar con bibliotecas | Tablas (listas de diccionarios a `st.dataframe`), CSV (módulo `csv`) | Ya usan lo más simple; pandas no reduce líneas |
+| B. Conviene compartir como funciones comunes | Lectura con errores, estilo, series de gráficas | Hecho: `interfaz/compartido/`, `algebra/compartido/`, `serie_metrica` |
+| C. Matemática que debemos implementar y entender | `algebra/modulo_*` | **Propia, sin bibliotecas** |
+| D. Necesario para mostrar el procedimiento | Pasos de Gauss, tabla de iteraciones, desarrollo de Sarrus | Propio; es lo que se evalúa |
+
+| Biblioteca | Problema que resolvería | Código que reduciría | Impacto | Licencia | Decisión |
+|---|---|---|---|---|---|
+| NumPy | Operaciones con matrices | `algebra/compartido/matriz.py` (~350 líneas) | **Negativo:** oculta los procedimientos, trabaja en punto flotante (rompe la clasificación exacta) y su `linalg` está prohibido | BSD | **Rechazada** para nuestro código (ya llega como dependencia interna de Streamlit) |
+| SciPy / SymPy | Métodos iterativos, autovalores, fracciones simbólicas | Núcleo completo | Sustituiría lo que se evalúa | BSD | **Rechazada** |
+| pandas | Tablas y CSV | ~15 líneas | Ninguno real: `st.dataframe` acepta listas de diccionarios | BSD | **Rechazada** (no se importa; llega por Streamlit) |
+| pydantic | Validación de entradas | `validacion.py` (~130 líneas) | Mensajes en inglés y menos control de la posición del error; dependencia nueva | MIT | **Rechazada** |
+| streamlit-aggrid / data_editor de terceros | Editor de matrices | `editor.py` (~320 líneas) | Cambiaría la validación por celda ya probada; JS adicional | MIT | **Rechazada** |
+| attrs | Dataclasses | — | `dataclasses` (estándar) ya cubre el uso | MIT | **Rechazada** |
+| ruff / pylint | Calidad del código (no se entregan) | — | Solo desarrollo | MIT / GPL-2.0 | **Usados como herramienta externa** (`uvx`), sin añadir dependencias |
+
+**Resultado:** no se añadió **ninguna** dependencia a `requirements.txt`. Siguen siendo tres (Streamlit, Plotly y Matplotlib), todas de interfaz o gráficas, como lo permite OFICIAL p. 1.
+
+## 7. Herramientas de desarrollo con IA (no forman parte de la entrega)
+
+Están instaladas **a nivel de usuario**, fuera del proyecto. No aparecen en `requirements*.txt` ni en el ZIP, y sus archivos (`graphify-out/`, `.graphifyignore`, `.claude/`, `CLAUDE.md`) están excluidos por `.gitignore` y por `empaquetar.py`.
+
+| Herramienta | Versión y licencia | Instalación | Para qué se usó | Riesgos revisados |
+|---|---|---|---|---|
+| **uv** | 0.13.7, MIT/Apache-2.0 | `pip install --user uv` (paquete oficial de Astral) | Instalar herramientas aisladas (`uv tool`) | No modifica el proyecto |
+| **Graphify** (`graphifyy`) | 0.9.102, Apache-2.0 | `uv tool install graphifyy`; skill de Claude Code en `~/.claude/skills/graphify` | Grafo del código: dependencias, funciones centrales, comunidades, ciclos (ninguno), impacto de cada etapa de la reorganización | Se ejecutó **solo con extracción AST local** (`graphify update .`): sin LLM, sin enviar datos y sin procesar los PDF de la docente (`.graphifyignore`) |
+| **Caveman** | 4.0.1, Apache-2.0 | Plugin de usuario de Claude Code (ya instalado el 04-nov) | Respuestas breves en el modo moderado (`caveman`) para los informes de avance | Sus propias reglas excluyen código, documentación, commits y advertencias de seguridad; se activa con un hook al iniciar la sesión |
+
+**Inventario de skills y plugins disponibles en Claude Code (10-nov-2026):**
+
+| Skill o plugin | ¿Útil aquí? | Decisión |
+|---|---|---|
+| graphify | Sí: arquitectura | Usado |
+| caveman | Sí: informes | Instalado; modo moderado |
+| code-review, security-review, simplify (integrados) | Sí: revisión antes de entregar | Disponibles sin instalar nada |
+| pdf / docx / xlsx / pptx (document-skills) | Parcial: los PDF se revisaron directamente con PyMuPDF en un entorno aparte, con referencias de página | No necesario |
+| ui-ux-pro-max | Sí: revisión visual | Disponible (plugin de usuario) |
+| vercel, claude-seo, instagram-agent, youtube-agent | No: el proyecto es una aplicación local, no un sitio web | No aplicables |
+
+No se instaló ningún plugin nuevo. Los disponibles cubren Python, pruebas, revisión, seguridad, documentación y diagramas, y cada instalación nueva ejecuta código de terceros y añade instrucciones al asistente sin un beneficio claro.
+

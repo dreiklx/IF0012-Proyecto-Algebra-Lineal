@@ -9,9 +9,21 @@ No forma parte de la suite rápida de tests/ porque tarda unos 20 segundos y es 
 import sys, random, itertools
 from fractions import Fraction as F
 sys.path.insert(0, sys.argv[1] if len(sys.argv) > 1 else ".")
-from algebra.directos import resolver_gauss, resolver_gauss_jordan, inversa_gauss_jordan, determinante, PIVOTEO_PARCIAL, UNICA, INFINITAS, INCONSISTENTE
-from algebra.condicion import numero_condicion_infinito, analizar_perturbacion
-from algebra.minimos import minimos_cuadrados
+from algebra.modulo_III_minimos.minimos import minimos_cuadrados
+from algebra.modulo_II_condicionamiento.condicion import (
+    analizar_perturbacion,
+    numero_condicion_infinito,
+)
+from algebra.modulo_I_sistemas.directos import (
+    INCONSISTENTE,
+    INFINITAS,
+    PIVOTEO_PARCIAL,
+    UNICA,
+    determinante,
+    inversa_gauss_jordan,
+    resolver_gauss,
+    resolver_gauss_jordan,
+)
 
 def leibniz(M):
     n=len(M); tot=F(0)

@@ -7,7 +7,7 @@ Sirve para evaluar PyVista (https://docs.pyvista.org/).
     venv_pv\\Scripts\\python -m pip install pyvista==0.49.1
     venv_pv\\Scripts\\python prototipos\\pyvista_planos.py   (desde la raíz del proyecto)
 
-El sistema se resuelve con NUESTRO Gauss (algebra/directos.py); PyVista solo
+El sistema se resuelve con NUESTRO Gauss (algebra/modulo_I_sistemas/directos.py); PyVista solo
 dibuja: un pyvista.Plane por ecuación (centro = un punto del plano, dirección =
 vector normal (a, b, c)) y una esfera en la solución única.
 Genera prototipos/planos_pyvista.png en modo fuera de pantalla (off_screen).
@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pyvista as pv  # noqa: E402
 
-from algebra.directos import resolver_gauss  # noqa: E402
+from algebra.modulo_I_sistemas.directos import resolver_gauss
 
 A = [[1, 1, 1], [2, 1, -1], [-1, 1, 2]]
 b = [6, 3, 7]

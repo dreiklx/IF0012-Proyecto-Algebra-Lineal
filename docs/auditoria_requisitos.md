@@ -1,4 +1,4 @@
-# Matriz de cumplimiento — revisión del 03-nov-2026
+# Matriz de cumplimiento — revisión del 10-nov-2026
 
 **Fuente:** `INTRUCCIONES-PROYECTO FINAL-ÁLGEBRA LINEAL-IIC2026.pdf` (OFICIAL). Se releyeron las pp. 1-5 en texto el 03-nov-2026:
 
@@ -9,7 +9,11 @@
 **Documentos relacionados:**
 
 - [comparacion_procedimientos.md](comparacion_procedimientos.md): procedimientos de clase frente al código;
-- [pendientes_docente.md](pendientes_docente.md): lo que depende de la docente.
+- [pendientes_docente.md](pendientes_docente.md): lo que depende de la docente;
+- [referencia_oficial_procedimientos.md](referencia_oficial_procedimientos.md): lo que enseñan los 18 PDF (457 páginas revisadas en imagen el 09-nov);
+- [investigacion_richardson.md](investigacion_richardson.md): clasificación A/B/C/D de todos los procedimientos.
+
+> **10-nov-2026, reorganización y reauditoría:** se reorganizó el código por módulos sin cambiar ningún resultado (volcado de 273 resultados idéntico). Se volvió a auditar la rúbrica contra los PDF completos y se añadió la sección 3b, con la verificación estricta de cada incentivo. Las rutas de esta matriz son las nuevas.
 
 > **03-nov-2026, gráficas interactivas:** las matrices vigentes de la rúbrica y de los incentivos, con la presentación de cada criterio, están en [diseno_visual.md §7](diseno_visual.md). Pruebas: **228 OK**; auditoría: 0 fallos.
 >
@@ -25,12 +29,12 @@
 | **PENDIENTE DE CONFIRMACIÓN** | Depende de un dato o de una respuesta de la docente, o de una confirmación del grupo |
 | **NO VERIFICABLE** | Solo lo puede evaluar la docente, por ejemplo la defensa o el puntaje que asigne |
 
-## Evidencia general (03-nov-2026)
+## Evidencia general (10-nov-2026)
 
 | Evidencia | Resultado |
 |---|---|
-| `.venv\Scripts\python -m unittest` | **232 pruebas, 228 OK** (03-nov-2026, tras el editor y las gráficas interactivas) |
-| Auditoría independiente (`auditoria/*.py`) | **0 fallos** en todas: 4500 sistemas; 400 inversas, determinantes y κ; 200 perturbaciones; 300 mínimos cuadrados; 600 ejecuciones iterativas; 300 análisis espectrales; **150 análisis del precondicionador (nuevo)**; los casos difíciles se comportan como se espera |
+| `.venv\Scripts\python -m unittest` | **232 pruebas, 232 OK** (10-nov-2026, tras la reorganización) |
+| Auditoría independiente (`auditoria/*.py`) | **0 fallos** en todas: 4500 sistemas; 400 inversas, determinantes y κ; 200 perturbaciones; 300 mínimos cuadrados; 600 ejecuciones iterativas; 300 análisis espectrales; 150 análisis del precondicionador; los casos difíciles se comportan como se espera (reejecutada el 10-nov con la nueva estructura) |
 | Imports de `algebra/` | Solo `fractions`, `math`, `cmath`, `dataclasses` y módulos propios. Ningún `.py` del proyecto importa NumPy, SciPy ni SymPy |
 
 ---
@@ -39,10 +43,10 @@
 
 | Criterio | Puntaje | Qué solicita la profesora («Excelente») | Dónde está implementado | Evidencia | Estado |
 |---|---:|---|---|---|---|
-| Módulo I: sistemas lineales | 8 % | «Implementación correcta, clasificación de soluciones, validaciones y procedimiento completo» | `algebra/directos.py` (`_escalonar`, `_resolver`, `_rango_aumentada`, `_sustitucion_atras`); `interfaz/modulo_directos.py` | `test_directos` (26); auditoría de 4500 sistemas contra rangos por menores y Cramer; `test_app` con los 3 tipos; pasos visibles | COMPLETADO |
-| Módulo II: condicionamiento | 8 % | «κ correcto, perturbación, errores relativos e interpretación coherente» | `algebra/condicion.py` (`numero_condicion_infinito`, `construir_delta_b`, `analizar_perturbacion`, `_interpretar`) | `test_condicion` (13); 400 κ por adjunta; 200 perturbaciones por Cramer; mensajes vistos | COMPLETADO |
-| Módulo III: mínimos cuadrados | 8 % | «Ecuaciones normales, residual, error, ajuste y gráfica correctos» | `algebra/minimos.py` (`minimos_cuadrados`, `ajuste_lineal`, `cramer`); `graficos.grafica_ajuste` | `test_minimos`; 300 casos con Aᵀr = 0; verificación de clase (det([A\|b]) y Cramer) idéntica al manuscrito S8-30/09 pp. 6-7 (`test_minimos_como_el_manuscrito`) | COMPLETADO |
-| Módulo IV: métodos iterativos | 8 % | «Jacobi, Gauss-Seidel y SOR correctos; convergencia, error y comparación bien presentados» | `algebra/iterativos.py`, `algebra/espectral.py`; 4 pestañas en `interfaz/modulo_iterativos.py` | P1–P21; 600 ejecuciones frente a una implementación independiente; `test_espectral` (25); «error final» igual a la definición de la lámina S9-05/10 p. 17 | COMPLETADO |
+| Módulo I: sistemas lineales | 8 % | «Implementación correcta, clasificación de soluciones, validaciones y procedimiento completo» | `algebra/modulo_I_sistemas/directos.py` (`_escalonar`, `_resolver`, `_rango_aumentada`, `_sustitucion_atras`); `interfaz/modulos/modulo_I_sistemas.py` | `test_directos` (26); auditoría de 4500 sistemas contra rangos por menores y Cramer; `test_app` con los 3 tipos; pasos visibles | COMPLETADO |
+| Módulo II: condicionamiento | 8 % | «κ correcto, perturbación, errores relativos e interpretación coherente» | `algebra/modulo_II_condicionamiento/condicion.py` (`numero_condicion_infinito`, `construir_delta_b`, `analizar_perturbacion`, `_interpretar`) | `test_condicion` (13); 400 κ por adjunta; 200 perturbaciones por Cramer; mensajes vistos | COMPLETADO |
+| Módulo III: mínimos cuadrados | 8 % | «Ecuaciones normales, residual, error, ajuste y gráfica correctos» | `algebra/modulo_III_minimos/minimos.py` (`minimos_cuadrados`, `ajuste_lineal`, `cramer`); `graficos.grafica_ajuste` | `test_minimos`; 300 casos con Aᵀr = 0; verificación de clase (det([A\|b]) y Cramer) idéntica al manuscrito S8-30/09 pp. 6-7 (`test_minimos_como_el_manuscrito`) | COMPLETADO |
+| Módulo IV: métodos iterativos | 8 % | «Jacobi, Gauss-Seidel y SOR correctos; convergencia, error y comparación bien presentados» | `algebra/modulo_IV_iterativos/`, `algebra/modulo_IV_iterativos/espectral.py`; 4 pestañas en `interfaz/modulos/modulo_IV_iterativos/` | P1–P21; 600 ejecuciones frente a una implementación independiente; `test_espectral` (25); «error final» igual a la definición de la lámina S9-05/10 p. 17 | COMPLETADO |
 | Procedimiento matemático | 7 % | «Desarrollo claro, completo y justificable en los módulos» | Pasos de Gauss; [A\|I] → [I\|A⁻¹]; AᵀA y Aᵀb; det([A\|b]) y Cramer; D, L, U, T, c, polinomio y desarrollo de Sarrus en 3×3; tabla de iteraciones | `test_app` (pasos y verificación de Cramer y Sarrus); [comparacion_procedimientos.md](comparacion_procedimientos.md) | COMPLETADO |
 | Análisis e interpretación | 6 % | «Interpreta estabilidad, sensibilidad, residual, error y convergencia correctamente» | Textos automáticos: sensibilidad (`_interpretar`), b ∈ Col(A), residuo, motivos de parada (sin afirmar divergencia), dominancia como condición suficiente, ρ, precondicionador | `test_app`; los textos dependen de los resultados calculados | COMPLETADO (la calidad la juzga la docente) |
 | Diseño del código | 5 % | «Código modular, legible, reutilizable y comentado» | 3 capas (`algebra/`, `interfaz/`, `visualizacion/`); un paso por método y un bucle común; `analizar_matriz` reutilizado; docstrings con fórmulas y referencias | `docs/arquitectura.md` | COMPLETADO |
@@ -68,12 +72,39 @@
 | Incentivo | Puntaje adicional | Requisito (literal) | Implementación actual | Evidencia | Estado |
 |---|---:|---|---|---|---|
 | Visualización avanzada | hasta 1 % | «Gráficas comparativas adicionales, historial de convergencia o reportes exportables con utilidad real» | Comparación superpuesta de los 3 métodos (e, d o r); autovalores con el círculo unidad; barrido de ω; **CSV** del historial con precisión completa; gráfica del efecto del precondicionador; planos 2D y 3D del Módulo I | `test_csv_exportado_contiene_historial_completo`, `test_app` | COMPLETADO |
-| Precondicionamiento | hasta 1.5 % | «Implementación correcta de un precondicionador diagonal y comparación documentada de su efecto» | `algebra/precondicionamiento.py` y la pestaña «Precondicionamiento diagonal»: M = D, B = D⁻¹A, b̃; κ∞(A) frente a κ∞(B); autovalores de A y de B; Jacobi, GS, SOR y Richardson en ambos sistemas; comparación **exacta** de T y c; conclusiones y gráfica | `TestPrecondicionadorDiagonal` (5) y `TestRichardson` (2) en `test_precondicionamiento.py`; `test_modulo_IV_precondicionamiento`; auditoría de 150 casos aleatorios sin fallos; documentación en guia_matematica §10 y comparacion_procedimientos.md | COMPLETADO (nuevo, 03-nov). La comparación muestra lo que la teoría exige: sin efecto en Jacobi, GS y SOR, y efecto real en κ y en Richardson |
-| Matrices dispersas | hasta 1 % | «Representación o tratamiento eficiente de matrices dispersas, con explicación de la estrategia» | CSR propio (`algebra/dispersas.py`); casilla «Usar almacenamiento disperso»; nnz, densidad y memoria | `test_dispersas` (iteraciones idénticas a las densas), `test_modulo_IV_formato_csr`; explicación en guia_matematica §9 | COMPLETADO |
+| Precondicionamiento | hasta 1.5 % | «Implementación correcta de un precondicionador diagonal y comparación documentada de su efecto» | `algebra/modulo_IV_iterativos/precondicionamiento.py` y la pestaña «Precondicionamiento diagonal»: M = D, B = D⁻¹A, b̃; κ∞(A) frente a κ∞(B); autovalores de A y de B; Jacobi, GS, SOR y Richardson en ambos sistemas; comparación **exacta** de T y c; conclusiones y gráfica | `TestPrecondicionadorDiagonal` (5) y `TestRichardson` (2) en `test_precondicionamiento.py`; `test_modulo_IV_precondicionamiento`; auditoría de 150 casos aleatorios sin fallos; documentación en guia_matematica §10 y comparacion_procedimientos.md | COMPLETADO (nuevo, 03-nov). La comparación muestra lo que la teoría exige: sin efecto en Jacobi, GS y SOR, y efecto real en κ y en Richardson |
+| Matrices dispersas | hasta 1 % | «Representación o tratamiento eficiente de matrices dispersas, con explicación de la estrategia» | CSR propio (`algebra/modulo_IV_iterativos/dispersas.py`); casilla «Usar almacenamiento disperso»; nnz, densidad y memoria | `test_dispersas` (iteraciones idénticas a las densas), `test_modulo_IV_formato_csr`; explicación en guia_matematica §9 | COMPLETADO |
 | Experiencia de usuario | hasta 0.5 % | «Mejoras sustantivas de accesibilidad, ayuda contextual o interacción, no solo decoración» | Ejemplos cargables; ayudas contextuales; errores con la celda exacta; resultados persistentes; **sugerencia de reordenamiento para lograr dominancia** (nuevo); interpretación geométrica | `test_app`, `test_modulo_IV_reordenamiento_y_sarrus` | COMPLETADO (el juicio es de la docente) |
 | Extensión matemática | hasta 1 % | «Funcionalidad adicional pertinente, correctamente implementada y defendida» | ρ con autovalores complejos para n ≤ 8 (Faddeev-LeVerrier y Durand-Kerner); decisiones exactas (Schur-Cohn, p(±1) = 0); T de SOR; solución paramétrica; determinante; Richardson | `test_espectral` (25); 300 análisis espectrales aleatorios contra Leibniz y Gelfand | COMPLETADO. Defenderlo exige dominar los dos algoritmos (guía, D.5) |
 
 **Total implementado:** los 5 incentivos, que suman un máximo posible de **5 %**. Los puntos que se otorguen: NO VERIFICABLE.
+
+## 3b. Verificación estricta de los incentivos (10-nov-2026)
+
+**Criterio de esta verificación:** que existan cinco funciones no basta. Cada incentivo se comprueba contra **las palabras exactas de OFICIAL p. 5**, en seis puntos:
+
+1. existe;
+2. es correcto;
+3. usa el procedimiento que corresponde;
+4. se llega a él desde la aplicación;
+5. está documentado;
+6. se puede demostrar en la defensa.
+
+| Incentivo (máx.) | Exigencia literal | 1 | 2 | 3 | 4 | 5 | 6 | Riesgo y cómo cubrirlo |
+|---|---|---|---|---|---|---|---|---|
+| Visualización avanzada (1 %) | «gráficas comparativas adicionales, historial de convergencia **o** reportes exportables con utilidad real» | ✅ | ✅ (datos de las gráficas = datos del núcleo; `test_graficas_interactivas`) | ✅ | IV → todas las pestañas; I → interpretación geométrica | `diseno_visual.md` §7 | Exportar el CSV y abrirlo | **Bajo.** Cubre las tres alternativas: comparación superpuesta, historial d_k/r_k/e_k, CSV con precisión completa |
+| Precondicionamiento (1,5 %) | «implementación correcta de un **precondicionador diagonal** y **comparación documentada de su efecto**» | ✅ M = D exacto | ✅ (150 casos auditados; T̃ = T demostrado) | ✅ Construcción igual a la lámina S9-05/10 pp. 19-22 | IV → «Precondicionamiento diagonal» | `investigacion_richardson.md`, `guia_matematica.md` §10, P-8 | Ejemplo tridiagonal: κ, T idénticas, Richardson 4,618 → 0,405 | **Medio.** El resultado contradice la lámina p. 23 (Jacobi «más rápido»). Hay que explicar que con M = D Jacobi, GS y SOR no cambian, y que Richardson (rotulado como extensión no vista en clase) muestra el efecto real. Guion de 30 s en `investigacion_richardson.md` §6 |
+| Matrices dispersas (1 %) | «representación **o** tratamiento eficiente … **con explicación de la estrategia**» | ✅ CSR propio | ✅ (iteraciones idénticas a las densas; `test_dispersas`) | ✅ CSR, como S9-05/10 p. 9 | IV → «Ejecutar un método» → casilla CSR | `guia_matematica.md` §9 y, **desde el 10-nov, dentro de la aplicación**: desplegable con las listas `valores`, `columnas` e `inicio` y la estrategia O(nnz) | Activar la casilla con la tridiagonal | **Bajo.** Antes la estrategia solo estaba en la documentación y en un texto de ayuda; ahora se muestra en pantalla (prueba en `test_app`) |
+| Experiencia de usuario (0,5 %) | «mejoras sustantivas de accesibilidad, ayuda contextual o interacción, **no solo decoración**» | ✅ | ✅ | — | Todos los módulos | `diseno_visual.md`, `manual_usuario.md` | Editor de rejilla con validación previa y bloqueo por dimensiones; errores con la celda exacta; ayuda en cada campo; sugerencia de reordenamiento; ejemplos del curso; respeta «reducir movimiento» | **Bajo-medio.** Mostrar primero la funcionalidad (validación, reordenamiento) y no la estética |
+| Extensión matemática (1 %) | «funcionalidad adicional **pertinente**, **correctamente implementada** y **defendida**» | ✅ | ✅ (300 análisis espectrales contra Leibniz y Gelfand; `test_espectral`) | Pertinente: ρ(T) para n > 3 y con autovalores complejos, que el procedimiento de clase (Sarrus) no cubre | IV → «Convergencia» | `guia_defensa_equipo.md` D.5; `investigacion_richardson.md` §5 (categoría C) | Ejemplo S9-07/10: ρ ≈ 1,174 con autovalores complejos (la lámina dice 0) | **Medio.** «Defendida» exige que el expositor sepa explicar Faddeev-LeVerrier (polinomio por trazas) y Durand-Kerner (raíces simultáneas). En 3×3 coincide con Sarrus, que es lo de clase |
+
+**Conclusión honesta:**
+
+- Los cinco incentivos tienen implementación, evidencia y ruta en la aplicación.
+- Los riesgos están en la **defensa**, no en el código:
+  - el precondicionamiento contradice una lámina;
+  - la extensión requiere explicar dos algoritmos que no se vieron en clase.
+- El 5 % es el **máximo posible**. Cuánto se otorgue lo decide la docente y no se puede verificar desde aquí.
 
 ## 4. Requisitos detallados del enunciado (OFICIAL pp. 1-3)
 
@@ -174,4 +205,4 @@
 3. **n > 8:** no se calcula ρ.
 4. **Iterativos en punto flotante:** las diferencias se justifican por ε (OFICIAL p. 3).
 5. **Precondicionador M = D:** no acelera Jacobi, GS ni SOR. Es un hecho matemático demostrado y verificado, no una limitación de la implementación, y contradice la tabla de la lámina S9-05/10 p. 23.
-6. **Gráficas:** no hay pruebas automáticas de su contenido visual.
+6. **Gráficas:** las pruebas verifican los datos que dibujan (`tests/interfaz/test_graficas_interactivas.py`), no su aspecto visual.
