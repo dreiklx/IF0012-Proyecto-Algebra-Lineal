@@ -102,6 +102,9 @@ def planos_3d(A, b, resultado):
     fig.update_layout(scene=dict(**escena, aspectmode="cube",
                                  camera=dict(eye=dict(x=1.55, y=-1.55, z=1.05))),
                       margin=dict(l=0, r=52, t=56, b=10), dragmode="orbit",
+                      # uirevision fija: si la cámara de la figura no cambia, Plotly conserva la
+                      # vista que dejó el ratón (o el control gestual) entre ejecuciones.
+                      uirevision="planos",
                       legend=dict(orientation="v", y=0.98, x=0.01, xanchor="left", bgcolor="rgba(24,34,58,.85)"))
     return fig
 
