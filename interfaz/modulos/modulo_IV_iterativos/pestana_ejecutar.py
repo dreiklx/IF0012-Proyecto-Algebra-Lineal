@@ -157,8 +157,6 @@ def mostrar_ejecucion(r):
         st.info("💡 Recomendación: revise la pestaña «Convergencia» (dominancia diagonal y ρ(T)). "
                 "Si ρ(T) < 1 el método converge y basta con más iteraciones; si ρ(T) ≥ 1, cambie de "
                 "método, de ω o reordene las ecuaciones.")
-    st.markdown("**Aproximación final** x⁽ᵏ⁾ = (" +
-                ", ".join(formatear_numero(v, 10) for v in r.x_final) + ")")
     st.caption("d_k mide cuánto cambió la aproximación; r_k mide cuánto falla la ecuación "
                "A x = b. Ninguno de los dos es el error respecto a la solución exacta.")
     st.dataframe(filas_tabla(r), hide_index=True, width="stretch")
