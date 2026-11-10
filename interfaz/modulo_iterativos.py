@@ -14,15 +14,15 @@ from algebra.compartido.validacion import (
     leer_tolerancia,
     leer_vector,
 )
-from algebra.dispersas import a_csr
-from algebra.espectral import (
+from algebra.modulo_IV_iterativos.dispersas import a_csr
+from algebra.modulo_IV_iterativos.espectral import (
     CONVERGE,
     NO_CALCULADO,
     NO_CONVERGE,
     desarrollo_sarrus,
     radio_espectral,
 )
-from algebra.iterativos import (
+from algebra.modulo_IV_iterativos.iterativos import (
     CRITERIO_CAMBIO,
     CRITERIO_ITERACIONES,
     CRITERIO_RESIDUO,
@@ -44,7 +44,7 @@ from algebra.iterativos import (
     reordenamiento_dominante,
     vector_diagonal,
 )
-from algebra.precondicionamiento import analizar_precondicionador
+from algebra.modulo_IV_iterativos.precondicionamiento import analizar_precondicionador
 from interfaz import ejemplos
 from interfaz.componentes import (
     latex_matriz,

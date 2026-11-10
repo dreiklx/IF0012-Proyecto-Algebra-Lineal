@@ -51,7 +51,7 @@ from algebra.compartido.matriz import (
     validar_cuadrada,
 )
 from algebra.compartido.validacion import ErrorEntrada, formatear_numero
-from algebra.iterativos import GAUSS_SEIDEL, JACOBI, SOR
+from algebra.modulo_IV_iterativos.iterativos import GAUSS_SEIDEL, JACOBI, SOR
 from algebra.modulo_I_sistemas.directos import inversa_gauss_jordan
 
 N_MAX_ESPECTRAL = 8            # tamaño máximo para el que se calcula ρ

@@ -199,7 +199,7 @@ class TestComponentes(unittest.TestCase):
     def test_csv_exportado_contiene_historial_completo(self):
         import csv
         import io
-        from algebra.iterativos import ConfiguracionIterativa, ejecutar
+        from algebra.modulo_IV_iterativos.iterativos import ConfiguracionIterativa, ejecutar
         from interfaz.modulo_iterativos import csv_historial
         r = ejecutar([[10, -1, 2], [-1, 11, -1], [2, -1, 10]], [6, 25, -11],
                      ConfiguracionIterativa())

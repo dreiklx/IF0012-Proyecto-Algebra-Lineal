@@ -8,8 +8,13 @@ No forma parte de la suite rápida de tests/ porque tarda unos 20 segundos y es 
 import sys, random
 from fractions import Fraction as F
 sys.path.insert(0, sys.argv[1] if len(sys.argv) > 1 else ".")
-from algebra.espectral import raices, radio_espectral, durand_kerner, polinomio_caracteristico
-from algebra.iterativos import JACOBI, GAUSS_SEIDEL, SOR
+from algebra.modulo_IV_iterativos.espectral import (
+    durand_kerner,
+    polinomio_caracteristico,
+    radio_espectral,
+    raices,
+)
+from algebra.modulo_IV_iterativos.iterativos import GAUSS_SEIDEL, JACOBI, SOR
 def poli(rs):  # coeficientes de prod (λ - r) con r Fraction (reales)
     c=[F(1)]
     for r in rs:

@@ -12,10 +12,11 @@ NO se usan como referencia.
 import unittest
 from fractions import Fraction as F
 
-from algebra.iterativos import (
+from algebra.modulo_IV_iterativos.iterativos import (
     CRITERIO_CAMBIO,
     CRITERIO_ITERACIONES,
     CRITERIO_RESIDUO,
+    ConfiguracionIterativa,
     DIAGONAL_CERO,
     ENTRADA_INVALIDA,
     ERROR_NO_FINITO,
@@ -27,7 +28,6 @@ from algebra.iterativos import (
     SOR,
     TOLERANCIA_CAMBIO,
     TOLERANCIA_RESIDUO,
-    ConfiguracionIterativa,
     comparar_metodos,
     configuraciones_homogeneas,
     dominancia_diagonal,

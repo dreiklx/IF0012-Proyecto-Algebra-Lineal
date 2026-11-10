@@ -9,16 +9,16 @@ import os
 import unittest
 from fractions import Fraction as F
 
-from algebra.espectral import radio_espectral
-from algebra.iterativos import (
+from algebra.modulo_III_minimos.minimos import ajuste_lineal
+from algebra.modulo_IV_iterativos.espectral import radio_espectral
+from algebra.modulo_IV_iterativos.iterativos import (
     ConfiguracionIterativa,
     comparar_metodos,
     configuraciones_homogeneas,
     ejecutar,
 )
-from algebra.modulo_III_minimos.minimos import ajuste_lineal
+from algebra.modulo_IV_iterativos.precondicionamiento import analizar_precondicionador
 from algebra.modulo_I_sistemas.directos import resolver_gauss
-from algebra.precondicionamiento import analizar_precondicionador
 from interfaz import navegacion as nav
 from visualizacion import graficos, interactivas
 from visualizacion.geometria_3d import _centro_y_radio, _esquinas_plano

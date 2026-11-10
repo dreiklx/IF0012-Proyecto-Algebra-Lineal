@@ -14,7 +14,7 @@ import unittest
 from fractions import Fraction as F
 
 from algebra.compartido.validacion import ErrorEntrada
-from algebra.espectral import (
+from algebra.modulo_IV_iterativos.espectral import (
     CONVERGE,
     INDETERMINADO,
     NO_CONVERGE,
@@ -25,7 +25,13 @@ from algebra.espectral import (
     radio_espectral,
     texto_polinomio_curso,
 )
-from algebra.iterativos import ConfiguracionIterativa, GAUSS_SEIDEL, JACOBI, SOR, ejecutar
+from algebra.modulo_IV_iterativos.iterativos import (
+    ConfiguracionIterativa,
+    GAUSS_SEIDEL,
+    JACOBI,
+    SOR,
+    ejecutar,
+)
 
 
 def biseccion(f, a, b, iteraciones=200):
@@ -225,7 +231,7 @@ class TestRegresionAuditoria(unittest.TestCase):
         # T triangular con el autovalor 1/2 triple (bloque de Jordan): ρ = 1/2 < 1,
         # pero Durand-Kerner pierde precisión con raíces múltiples: la aplicación
         # no debe presentar como fiable un ρ impreciso.
-        from algebra.espectral import raices
+        from algebra.modulo_IV_iterativos.espectral import raices
         av, ceros, fiable, avisos, decision = raices(polinomio_caracteristico(
             [[F(1, 2), 1, 0], [0, F(1, 2), 1], [0, 0, F(1, 2)]]))
         self.assertFalse(fiable)
@@ -237,7 +243,7 @@ class TestRegresionAuditoria(unittest.TestCase):
 class TestConclusion(unittest.TestCase):
 
     def test_bandas(self):
-        from algebra.espectral import concluir
+        from algebra.modulo_IV_iterativos.espectral import concluir
         self.assertEqual(concluir(0.5, True), CONVERGE)
         self.assertEqual(concluir(1.5, True), NO_CONVERGE)
         self.assertEqual(concluir(1 - 1e-10, True), INDETERMINADO)
@@ -251,7 +257,7 @@ class TestConclusion(unittest.TestCase):
 
     def test_raiz_doble_cerca_de_uno_no_da_conclusion_falsa(self):
         # (λ - a)²(λ - 1/10) con a = 1 ± 1e-7: el ρ verdadero está a 1e-7 de 1.
-        from algebra.espectral import AVISO_CASI_REPETIDOS, concluir, raices
+        from algebra.modulo_IV_iterativos.espectral import AVISO_CASI_REPETIDOS, concluir, raices
         for a, verdadero in ((1 - F(1, 10**7), CONVERGE), (1 + F(1, 10**7), NO_CONVERGE)):
             coef = [F(1), -(2 * a + F(1, 10)), a * a + 2 * a / 10, -a * a / 10]
             av, _, fiable, avisos, decision = raices(coef)

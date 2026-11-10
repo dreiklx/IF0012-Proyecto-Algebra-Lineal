@@ -3,18 +3,24 @@
 import time
 import unittest
 
-from algebra.dispersas import a_csr, a_densa, paso_gauss_seidel_csr, producto_csr_vector, tridiagonal
-from algebra.iterativos import (
+from algebra.modulo_IV_iterativos.dispersas import (
+    a_csr,
+    a_densa,
+    paso_gauss_seidel_csr,
+    producto_csr_vector,
+    tridiagonal,
+)
+from algebra.modulo_IV_iterativos.iterativos import (
     CRITERIO_CAMBIO,
     CRITERIO_RESIDUO,
+    ConfiguracionIterativa,
     GAUSS_SEIDEL,
     JACOBI,
     METODOS,
     SOR,
     TOLERANCIA_CAMBIO,
-    paso_gauss_seidel,
-    ConfiguracionIterativa,
     ejecutar,
+    paso_gauss_seidel,
 )
 
 S_A = [[10, -1, 2], [-1, 11, -1], [2, -1, 10]]

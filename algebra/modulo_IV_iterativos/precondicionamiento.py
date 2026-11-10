@@ -36,21 +36,21 @@ from fractions import Fraction
 from algebra.compartido.exactos import a_fraccion
 from algebra.compartido.matriz import identidad, validar_cuadrada, validar_vector
 from algebra.compartido.validacion import ErrorEntrada, formatear_numero
-from algebra.espectral import (
+from algebra.modulo_II_condicionamiento.condicion import numero_condicion_infinito
+from algebra.modulo_IV_iterativos.espectral import (
     AVISO_CASI_REPETIDOS,
     N_MAX_ESPECTRAL,
     analizar_matriz,
     concluir,
     matriz_iteracion,
 )
-from algebra.iterativos import (
+from algebra.modulo_IV_iterativos.iterativos import (
     ConfiguracionIterativa,
     METODOS,
     RICHARDSON,
     SOR,
     ejecutar,
 )
-from algebra.modulo_II_condicionamiento.condicion import numero_condicion_infinito
 
 
 @dataclass

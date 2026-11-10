@@ -17,8 +17,9 @@ import unittest
 from fractions import Fraction as F
 
 from algebra.compartido.validacion import ErrorEntrada
-from algebra.espectral import desarrollo_sarrus, matriz_iteracion
-from algebra.iterativos import (
+from algebra.modulo_III_minimos.minimos import minimos_cuadrados
+from algebra.modulo_IV_iterativos.espectral import desarrollo_sarrus, matriz_iteracion
+from algebra.modulo_IV_iterativos.iterativos import (
     CRITERIO_CAMBIO,
     ConfiguracionIterativa,
     GAUSS_SEIDEL,
@@ -30,8 +31,10 @@ from algebra.iterativos import (
     paso_richardson,
     reordenamiento_dominante,
 )
-from algebra.modulo_III_minimos.minimos import minimos_cuadrados
-from algebra.precondicionamiento import analizar_precondicionador, precondicionar_diagonal
+from algebra.modulo_IV_iterativos.precondicionamiento import (
+    analizar_precondicionador,
+    precondicionar_diagonal,
+)
 
 TRIDIAGONAL = [[4, -1, 0, 0], [-1, 4, -1, 0], [0, -1, 4, -1], [0, 0, -1, 4]]
 

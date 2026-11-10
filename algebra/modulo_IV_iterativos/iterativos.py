@@ -36,7 +36,7 @@ from dataclasses import dataclass, field, replace
 from algebra.compartido.exactos import a_fraccion
 from algebra.compartido.matriz import ErrorMatriz, es_numero, validar_cuadrada, validar_vector
 from algebra.compartido.validacion import ErrorEntrada, formatear_numero
-from algebra.dispersas import (
+from algebra.modulo_IV_iterativos.dispersas import (
     a_csr,
     paso_gauss_seidel_csr,
     paso_jacobi_csr,
