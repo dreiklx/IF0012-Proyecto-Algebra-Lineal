@@ -62,7 +62,28 @@ def ejecutar_un_metodo(leer_todo, criterio, bloqueado=False):
             st.info(f"🧩 Formato CSR: nnz = {info.nnz} de {info.n}² = {info.n * info.n} "
                     f"elementos (densidad {info.densidad:.1%}). Números almacenados: "
                     f"{memoria['csr']} (CSR) frente a {memoria['densa']} (denso).")
+            explicar_csr(info)
         mostrar_ejecucion(st.session_state["it_resultado"])
+
+
+def explicar_csr(info):
+    """Muestra las tres listas del formato CSR y la estrategia (incentivo «Matrices dispersas»)."""
+    with st.expander("¿Cómo se guarda la matriz en CSR y por qué es eficiente?"):
+        st.markdown(
+            "**Estrategia (S9-05/10 pp. 9 y 13).** Solo se guardan los elementos no nulos, fila "
+            "por fila, en tres listas. En cada iteración, la fila *i* de Jacobi, Gauss-Seidel o "
+            "SOR recorre únicamente las posiciones `inicio[i]` … `inicio[i+1] − 1`, así que el "
+            "costo por iteración es O(nnz) en lugar de O(n²). Los ceros nunca se multiplican, y "
+            "por eso las iteraciones son idénticas a las del formato denso.")
+        st.table({
+            "Lista": ["valores (aᵢⱼ no nulos)", "columnas (j de cada valor)",
+                      "inicio (dónde empieza cada fila)"],
+            "Contenido": [", ".join(formatear_numero(v) for v in info.valores),
+                          ", ".join(str(j + 1) for j in info.columnas),
+                          ", ".join(str(k) for k in info.inicio)],
+            "Tamaño": [info.nnz, info.nnz, info.n + 1]})
+        st.caption("Las columnas se muestran numeradas desde 1, como en clase; en el código "
+                   "empiezan en 0. Memoria: 2·nnz + n + 1 números frente a n².")
 
 
 def mostrar_motivo(r):

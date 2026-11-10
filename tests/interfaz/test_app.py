@@ -127,6 +127,8 @@ class TestAplicacion(unittest.TestCase):
         at.run()
         self.assertFalse(at.exception)
         self.assertIn("Formato CSR: nnz = 9", textos(at.info))
+        # La estrategia CSR se explica en la aplicación (incentivo «Matrices dispersas»).
+        self.assertIn("O(nnz)", " ".join(str(m.value) for m in at.markdown))
         self.assertIn("Criterio satisfecho: d_7", textos(at.success))
 
     def test_modulo_IV_precondicionamiento(self):
