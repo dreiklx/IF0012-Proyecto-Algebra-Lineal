@@ -88,6 +88,12 @@ def convergencia(texto_A, texto_b, texto_omega, bloqueado=False):
         SOR: r"T_\omega=(D+\omega L)^{-1}\left[(1-\omega)D-\omega U\right],\qquad c=\omega(D+\omega L)^{-1}b",
     }
     st.latex(formulas[it.metodo])
+    if it.metodo == SOR:
+        st.caption("Cat. C · La matriz de iteración de SOR no aparece en los PDF del curso (en clase "
+                   "SOR se calcula por componentes): es una extensión, necesaria para obtener ρ(T).")
+    else:
+        st.caption("Cat. A · Como en los manuscritos de clase (S9-07/10 pp. 3-7): A = D + L + U, "
+                   "T y c, y ρ(T) = máx |λ| con det(T − λI) = 0.")
     st.latex(r"D=" + latex_matriz(it.D) + r",\; L=" + latex_matriz(it.L) + r",\; U=" + latex_matriz(it.U))
     st.latex(r"T=" + latex_matriz(it.T) + r",\qquad c=" + latex_vector(it.c))
 
@@ -104,9 +110,10 @@ def convergencia(texto_A, texto_b, texto_omega, bloqueado=False):
             f"con tr(T) = {formatear_numero(traza)}, Σ menores = {formatear_numero(menores)} y "
             f"det(T) = {formatear_numero(det)} — "
             + ("coincide con el polinomio calculado." if coincide else "⚠️ no coincide."))
-    st.caption("Coeficientes calculados de forma exacta (método de Faddeev-LeVerrier; para 3×3 "
-               "coincide con el desarrollo por Sarrus visto en clase). Raíces: λ = 0 exactas, "
-               "fórmula cuadrática o método de Durand-Kerner (ver guía matemática).")
+    st.caption("Coeficientes calculados de forma exacta con el método de Faddeev-LeVerrier "
+               "(Cat. C, extensión no vista en clase; para 3×3 coincide con el desarrollo por Sarrus "
+               "visto en clase). Raíces: λ = 0 exactas, fórmula cuadrática o método de Durand-Kerner "
+               "(Cat. C, extensión no vista en clase; ver guía matemática).")
     st.table([{"λ": formatear_numero(z, 8), "Parte real": f"{z.real:.8g}",
                "Parte imaginaria": f"{z.imag:.8g}", "|λ|": f"{abs(z):.8g}"}
               for z in esp.autovalores])

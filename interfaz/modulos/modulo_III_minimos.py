@@ -32,6 +32,7 @@ from interfaz.compartido.editor import (
 from interfaz.compartido.estilo import (
     encabezado_modulo,
     insignias,
+    procedencia,
     seccion,
     tarjeta_resultado,
     valor_destacado,
@@ -47,6 +48,14 @@ def mostrar():
         "norma ‖r‖₂. El ajuste lineal es el caso particular de la matriz de diseño [xᵢ 1].",
         [("Ecuaciones normales", "info"), ("Resueltas con Gauss", "info"), ("Fracciones exactas", "ok"),
          ("Verificación por Cramer", "")])
+    procedencia([
+        ("A", "det[A | b] ≠ 0: b no es combinación de las columnas", "S8-30/09 p. 6"),
+        ("A", "Sistema normal AᵀA x = Aᵀb", "S8-30/09 pp. 5-7"),
+        ("A", "Regla de Cramer (verificación)", "S8-30/09 pp. 4 y 7"),
+        ("B", "Resolver con un método directo propio", "OFICIAL p. 2"),
+        ("B", "Residuo r = b − A x̂ y ‖r‖₂", "OFICIAL p. 2"),
+        ("B", "Recta de mejor ajuste y gráfica", "OFICIAL p. 2"),
+    ])
     pestana_sistema, pestana_ajuste = st.tabs(["Sistema sobredeterminado", "Ajuste lineal de datos"])
     with pestana_sistema:
         sistema()
