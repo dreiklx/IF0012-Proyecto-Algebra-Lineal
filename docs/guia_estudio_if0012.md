@@ -80,7 +80,7 @@ algebra/          NÚCLEO MATEMÁTICO: Python puro, sin bibliotecas externas
 interfaz/         pantallas en Streamlit (no calcula)
 visualizacion/    gráficas Plotly y Matplotlib (solo dibujan)
 gestos/           control gestual de la gráfica 3D (MediaPipe; no toca el álgebra)
-tests/            269 pruebas automáticas
+tests/            281 pruebas automáticas
 auditoria/        comparación con miles de casos aleatorios
 ```
 
@@ -455,7 +455,7 @@ Ejemplo, Módulo IV «Ejecutar»:
 
 ### D.5 Cómo se verificó
 
-- **269 pruebas** (`python -m unittest`).
+- **281 pruebas** (`python -m unittest`).
 - **Auditoría aleatoria con 0 fallos:**
   - 4500 sistemas;
   - 400 inversas, determinantes y κ;
@@ -636,7 +636,7 @@ Las respuestas corresponden al código de `main` y a los PDF de la profesora.
     - Ningún archivo importa NumPy, SciPy ni SymPy.
 
 15. **¿Cómo saben que los resultados son correctos?**
-    - Hay 269 pruebas, con valores esperados calculados aparte.
+    - Hay 281 pruebas, con valores esperados calculados aparte.
     - La auditoría aleatoria, con oráculos independientes (Leibniz, adjunta, Cramer, Gelfand), da 0 fallos.
     - La aplicación se autoverifica. No usamos los resultados de las láminas como referencia, porque varios tienen errores.
 
@@ -676,11 +676,17 @@ Las respuestas corresponden al código de `main` y a los PDF de la profesora.
     - Cada ecuación es un plano y la solución es su intersección: un punto, una recta o nada (S6-14/09 p. 26).
     - Se puede rotar, acercar y ver las coordenadas al pasar el cursor.
 
-23. **¿Qué gráficas hay en el Módulo IV?**
+23. **¿Qué gráficas hay en el Módulo IV y cómo se exploran?**
     - El error frente a la iteración (lo exige el enunciado).
     - La comparación superpuesta de los tres métodos.
     - Los autovalores con el círculo unidad.
     - El efecto del precondicionador.
+    - Se exploran así:
+      - ⛶ las amplía a pantalla completa;
+      - un **clic en un punto** o el deslizador «Iteración a explorar» muestran k, x⁽ᵏ⁾, d_k y r_k;
+      - un recuadro lista varias iteraciones;
+      - «Destacar método» sigue una sola curva en la comparación.
+    - Los rótulos salen del motivo real de parada: «Criterio A cumplido en k = 7» o «Se alcanzó k_max sin cumplir el criterio». Nunca se marca convergencia que no ocurrió.
 
 ### F.5 MediaPipe
 
@@ -768,6 +774,6 @@ Las respuestas corresponden al código de `main` y a los PDF de la profesora.
 **Antes de la defensa:**
 
 - Instalar en su propia computadora: `ejecutar.bat`, o `pip install -r requirements.txt`.
-- Correr las pruebas: 269 OK.
+- Correr las pruebas: 281 OK.
 - Practicar la demostración de cada módulo con los ejemplos precargados.
 - Probar los gestos con la mano y la luz del aula.

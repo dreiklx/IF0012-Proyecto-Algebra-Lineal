@@ -63,6 +63,11 @@ Todas las gráficas se pueden explorar con el ratón:
 - **Valores:** al pasar el cursor se ven los valores de cada punto, con los tres métodos a la vez en la comparación.
 - **Series:** un clic en la leyenda oculta o muestra una serie; un doble clic deja solo esa.
 - **Imagen:** el icono de la cámara descarga una imagen PNG.
+- **Pantalla completa:** el ícono ⛶, arriba a la derecha de cada gráfica, la amplía a toda la ventana sin perder la barra ni la leyenda. **Esc** la devuelve a su tamaño.
+- **Seleccionar** (gráficas del Módulo IV):
+  - **un clic sobre un punto** muestra esa iteración;
+  - la herramienta **«Seleccionar zona»** (recuadro punteado de la barra) y un arrastre listan las iteraciones de esa región.
+- **Resaltes:** el estado final se rotula según el motivo real de parada del método. Por ejemplo, «Criterio A cumplido en k = 7» o «Se alcanzó k_max sin cumplir el criterio». Nunca se marca como convergente un método que no cumplió el criterio.
 
 La interacción solo cambia la vista: los datos son los calculados por el núcleo.
 
@@ -182,7 +187,12 @@ Elija Jacobi, Gauss-Seidel o SOR y pulse **Ejecutar**. La casilla **«Usar almac
 - **Las métricas finales:** iteraciones, d final, r final y si se cumplió el criterio.
 - **La tabla de iteraciones** con k, x⁽ᵏ⁾, d_k y r_k. La columna que actúa como criterio dice «(criterio de parada)» y la otra «(informativo)».
 - **El botón «Descargar tabla de iteraciones (CSV)»**, que exporta los valores con precisión completa.
-- **La gráfica** de d_k y r_k en escala logarítmica, con la línea ε.
+- **La gráfica** de d_k y r_k en escala logarítmica:
+  - la línea ε aparece solo con los criterios A o B;
+  - se resaltan la primera y la última iteración, y «ε alcanzado» solo si el criterio se cumplió;
+  - el sombreado marca los tramos en que d_k aumentó;
+  - al pasar el cursor se ve también x⁽ᵏ⁾.
+- **«Iteración a explorar»:** un deslizador (o un clic en la gráfica) elige una iteración. La gráfica la marca y un panel muestra el método, k, d_k, r_k, x⁽ᵏ⁾ y si el valor del criterio ya era menor que ε. Si se selecciona una zona, aparece la tabla de esas iteraciones.
 
 ### Pestaña «Comparar métodos»
 
@@ -193,7 +203,14 @@ Ejecuta los tres métodos con las mismas condiciones y avisa si el experimento n
 - **error final e** = ‖x⁽ᵏ⁾ − x*‖∞, donde x* es la solución del método directo. Es el «error final ‖x⁽ᵏ⁾ − x‖∞» de la tabla de la lámina S9-05/10 p. 17;
 - ρ(T) de cada método.
 
-Hay una gráfica superpuesta de e (por defecto), d o r. En «Influencia de ω en SOR» se pueden probar varios valores de ω.
+Hay una gráfica superpuesta de e (por defecto), d o r:
+
+- **«Destacar método»** atenúa los demás para seguir una sola curva.
+- La última iteración de cada método queda rotulada («k = 7»).
+- La línea ε solo aparece si la métrica graficada es la del criterio usado (d con A, r con B).
+- **«Iteración a comparar»** (deslizador o clic) marca una k y muestra en una tabla el valor de cada método en esa iteración, o «ya terminó en k = …».
+
+En «Influencia de ω en SOR» se pueden probar varios valores de ω.
 
 ### Pestaña «Convergencia: dominancia y radio espectral»
 

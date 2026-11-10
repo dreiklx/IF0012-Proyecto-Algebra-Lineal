@@ -71,7 +71,7 @@ proyecto-algebra/
 │   ├── servidor.py                 canal 127.0.0.1 (SSE) que lleva la cámara a la gráfica
 │   └── modelos/hand_landmarker.task  modelo de MediaPipe (Apache-2.0)
 │
-├── tests/                          269 pruebas (unittest), una carpeta por módulo
+├── tests/                          281 pruebas (unittest), una carpeta por módulo
 │   ├── compartido/  modulo_I/  modulo_II/  modulo_III/  modulo_IV/
 │   ├── interfaz/                   la aplicación completa con streamlit.testing (AppTest)
 │   ├── entrega/                    el ZIP no filtra archivos internos; .gitignore protege credenciales

@@ -23,7 +23,7 @@ from algebra.modulo_IV_iterativos.ejecucion import (
     ejecutar,
 )
 from algebra.modulo_IV_iterativos.metodos import METODOS, SOR
-from interfaz.compartido.componentes import mostrar_interactiva
+from interfaz.compartido.componentes import iteracion_elegida, iteraciones_seleccionadas, mostrar_interactiva
 from interfaz.compartido.estilo import (
     insignias,
     marca_incentivo,
@@ -164,7 +164,53 @@ def mostrar_ejecucion(r):
     st.download_button("⬇️ Descargar tabla de iteraciones (CSV)", csv_historial(r),
                        file_name=f"iteraciones_{r.configuracion.metodo}.csv", mime="text/csv",
                        key=f"csv_{r.configuracion.metodo}")
-    fig = interactivas.convergencia(r.historial, r.configuracion.criterio,
-                               r.configuracion.tolerancia
-                               if r.configuracion.criterio != CRITERIO_ITERACIONES else None)
-    mostrar_interactiva(fig, "convergencia")
+    explorar_convergencia(r)
+
+
+def explorar_convergencia(r):
+    """Gráfica de convergencia explorable: hitos reales, iteración elegida (clic o
+    deslizador) con su detalle y tabla de una zona seleccionada.  Todo sale de r.historial
+    y de r.codigo; aquí no se calcula nada nuevo."""
+    config = r.configuracion
+    ks = [f.k for f in r.historial]
+    firma = (config.metodo, config.criterio, r.codigo, len(ks), r.historial[-1].r)
+    k = iteracion_elegida("convergencia", "it_k_conv", ks, firma) if len(ks) > 1 else ks[-1]
+    tolerancia = config.tolerancia if config.criterio != CRITERIO_ITERACIONES else None
+    fig = interactivas.convergencia(r.historial, config.criterio, tolerancia, metodo=config.metodo,
+                                    codigo=r.codigo, k_destacada=k)
+    mostrar_interactiva(fig, "convergencia", seleccion=True)
+    if len(ks) > 1:
+        st.slider("Iteración a explorar", min_value=ks[0], max_value=ks[-1], key="it_k_conv",
+                  help="También puede hacer clic en un punto de la gráfica.")
+    detalle_iteracion(r, r.historial[ks.index(k)], tolerancia)
+    elegidas = [kk for kk in iteraciones_seleccionadas("convergencia") if kk in ks]
+    if len(elegidas) > 1:
+        st.markdown(f"**Zona seleccionada:** iteraciones {elegidas[0]} a {elegidas[-1]}")
+        st.dataframe([fila for fila in filas_tabla(r) if fila["k"] in elegidas],
+                     hide_index=True, width="stretch")
+
+
+def detalle_iteracion(r, fila, tolerancia):
+    """Panel con los valores de una iteración (los mismos de la tabla)."""
+    config = r.configuracion
+    with st.container(border=True, key="it_detalle_k"):
+        c1, c2, c3, c4 = st.columns([1.2, 0.8, 1.4, 1.4])
+        c1.metric("Método", config.metodo + (f" (ω = {config.omega:g})" if config.metodo == SOR else ""))
+        c2.metric("Iteración k", fila.k)
+        c3.metric("d_k = ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞", "—" if fila.d is None else formatear_numero(fila.d, 6))
+        c4.metric("r_k = ‖b − Ax⁽ᵏ⁾‖∞", formatear_numero(fila.r, 6))
+        st.markdown("x⁽ᵏ⁾ = (" + ", ".join(formatear_numero(v, CIFRAS) for v in fila.x) + ")")
+        notas = []
+        if fila.k == r.historial[0].k:
+            notas.append(("Vector inicial x⁽⁰⁾" if fila.k == 0 else "Primera iteración", ""))
+        if fila.k == r.k_final:
+            texto, _ = interactivas.ESTADOS_FINALES.get(r.codigo, ("Última iteración", None))
+            notas.append((texto.format(k=fila.k), "ok" if r.criterio_cumplido else "aviso"))
+        if tolerancia is not None:
+            valor = fila.d if config.criterio == CRITERIO_CAMBIO else fila.r
+            if valor is not None:
+                nombre = "d_k" if config.criterio == CRITERIO_CAMBIO else "r_k"
+                notas.append((f"{nombre} {'<' if valor < tolerancia else '≥'} ε = {tolerancia:g}",
+                              "ok" if valor < tolerancia else ""))
+        if notas:
+            insignias(notas)

@@ -274,3 +274,16 @@ La aplicación se abrió también en Brave.
   - la figura de la portada es el resultado del núcleo.
 - **Empaquetado:** `paginas/` y la marca se entregan en el ZIP, y `test_empaquetado` lo comprueba.
 - **Total:** 232 pruebas OK; la auditoría sigue con 0 fallos.
+
+## 9. Gráficas de exploración (10-nov-2026, rama `feature/graficas-exploracion`)
+
+Las gráficas 2D pasan de mostrar resultados a permitir explorarlos:
+
+- iteración elegida con un clic o con el deslizador, y un panel de detalle;
+- selección de zonas;
+- hitos tomados del código de terminación real;
+- método destacado;
+- pantalla completa señalada en la ayuda.
+
+La gráfica 3D y su control gestual no cambiaron. Propuesta, decisiones, verificación y capturas en [propuesta_graficas.md](propuesta_graficas.md).
+
