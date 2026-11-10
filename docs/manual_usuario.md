@@ -96,6 +96,19 @@ Cada módulo tiene su propia dirección (por ejemplo, `http://localhost:8501/ite
 - **Solución** en fracciones exactas y en decimal, con la comprobación b − Ax.
 - **Procedimiento paso a paso:** cada operación elemental (Fi ↔ Fj, Fi → Fi − m·Fj, …) con la matriz resultante. Los intercambios de filas indican su motivo.
 - **Interpretación geométrica** (2 o 3 incógnitas): rectas o planos y su intersección.
+- **Control con gestos de la mano** (solo con 3 incógnitas; opcional):
+  - Debajo de la gráfica 3D, pulse «📷 Activar cámara y gestos». La cámara **solo** se enciende con ese botón; mientras está encendida se ve «● Cámara activa».
+  - Gestos:
+    - muestre la **palma abierta** medio segundo para empezar;
+    - haga una **pinza** con el pulgar y el índice y mueva la mano para girar la vista;
+    - haga **pinza con las dos manos** y sepárelas para acercar, o júntelas para alejar;
+    - el **puño** pausa el control;
+    - la **victoria ✌** sostenida un segundo vuelve a la vista inicial.
+  - El ratón sigue funcionando en todo momento.
+  - La cámara se apaga con «⏹ Detener y apagar cámara», al cambiar de módulo o al cerrar la pestaña.
+  - Las imágenes no se guardan ni se envían a ningún lado.
+  - Si no hay cámara, si otra aplicación la está usando o si Windows no da permiso, aparece un mensaje con la solución. Ver Configuración → Privacidad y seguridad → Cámara → «Permitir que las aplicaciones de escritorio accedan a la cámara».
+- **Procedimiento con la notación de clase:** cada paso muestra primero la operación como la escribe la profesora (por ejemplo «−2F₁ + F₂») y, en letra pequeña, la forma F2 → F2 − (2)·F1.
 - **Advertencias:** pivotes numéricamente problemáticos.
 
 *Ejemplo:* el ejemplo «S6-16/09 p. 29» da solución única x = (1/3, 4, 5/3).

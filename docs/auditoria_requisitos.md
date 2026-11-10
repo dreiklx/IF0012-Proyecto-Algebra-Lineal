@@ -33,9 +33,38 @@
 
 | Evidencia | Resultado |
 |---|---|
-| `.venv\Scripts\python -m unittest` | **232 pruebas, 232 OK** (10-nov-2026, tras la reorganización) |
+| `.venv\Scripts\python -m unittest` | **268 pruebas, 268 OK** (10-nov-2026, tarde: +1 de notación de clase, +34 de `gestos/`, +1 del panel gestual). Antes: 232 tras la reorganización |
 | Auditoría independiente (`auditoria/*.py`) | **0 fallos** en todas: 4500 sistemas; 400 inversas, determinantes y κ; 200 perturbaciones; 300 mínimos cuadrados; 600 ejecuciones iterativas; 300 análisis espectrales; 150 análisis del precondicionador; los casos difíciles se comportan como se espera (reejecutada el 10-nov con la nueva estructura) |
 | Imports de `algebra/` | Solo `fractions`, `math`, `cmath`, `dataclasses` y módulos propios. Ningún `.py` del proyecto importa NumPy, SciPy ni SymPy |
+
+
+## 0. Matriz consolidada (10-nov-2026, tarde)
+
+Los detalles de cada fila están en las secciones 1, 3 y 3b.
+
+**Columnas:**
+
+- «Presentación» dice dónde se ve el criterio en la aplicación.
+- «Cat.» remite a las categorías A/B/C/D de `auditoria_textos_profesora.md`.
+
+| Criterio | Puntaje | Requisito (OFICIAL) | Implementación | Presentación en la app | Evidencia | Estado |
+|---|---:|---|---|---|---|---|
+| Módulo I | 8 % | Gauss o Gauss-Jordan, clasificación, validaciones, procedimiento | `directos.py` | I → pasos con la notación de clase («−2F₁ + F₂»), «Sol = {…}», clasificación «como en clase», distintivos Cat. | `test_directos` (27), 4500 sistemas auditados | COMPLETADO |
+| Módulo II | 8 % | κ∞ con inversa propia, perturbación, errores relativos, interpretación | `condicion.py` | II → escala 10/100, tarjeta de κ, Cat. A/B | `test_condicion`, 400 κ y 200 perturbaciones | COMPLETADO |
+| Módulo III | 8 % | Ecuaciones normales, residuo, ajuste, gráfica | `minimos.py` | III → los 3 pasos de clase (det[A\|b], AᵀA, Cramer), gráfica | `test_minimos`, 300 casos | COMPLETADO |
+| Módulo IV | 8 % | Jacobi, GS, SOR, convergencia, error, comparación | `modulo_IV_iterativos/` | IV → 4 pestañas, tabla, motivo, comparación, ρ(T) | 600 ejecuciones + 300 espectrales | COMPLETADO |
+| Procedimiento matemático | 7 % | Desarrollo claro y justificable | Pasos, [A\|I], AᵀA, D, L, U, T, Sarrus | Notación de la profesora; Cat. A con la página del PDF | `comparacion_procedimientos.md`, `auditoria_textos_profesora.md` | COMPLETADO |
+| Análisis e interpretación | 6 % | Estabilidad, sensibilidad, residuo, convergencia | Textos generados desde los resultados | Mensajes en cada módulo | `test_app` | COMPLETADO (lo juzga la docente) |
+| Diseño del código | 5 % | Modular, legible, comentado | `algebra/` por módulo; `gestos/` separado | — | `arquitectura.md`, Graphify sin ciclos | COMPLETADO |
+| Validaciones | 4 % | Mensajes claros, sin cierres | `validacion.py`; `ejecutar` sin excepciones; cámara con mensajes propios | Errores con la celda exacta | `test_validacion`, `test_control` (error de cámara) | COMPLETADO |
+| Interfaz | 5 % | Intuitiva y consistente | Editor de rejilla, ejemplos, ayudas | Todos los módulos | `test_app` | COMPLETADO |
+| Manual | 3 % | Claro y reproducible | `manual_usuario.md` (incluye el control gestual) | — | Instalación limpia | COMPLETADO |
+| Casos de prueba | 3 % | Documentados; caso obligatorio | `casos_prueba/` | — | Pruebas automáticas | Propios: COMPLETADO; obligatorio: PENDIENTE DE CONFIRMACIÓN |
+| Inc. Visualización avanzada | ≤ 1 % | Gráficas comparativas, historial o reportes exportables | Comparación superpuesta, historial d/r/e, CSV | IV → «Comparar», «Ejecutar» (CSV) | `test_csv_exportado_contiene_historial_completo` (demostrado) | COMPLETADO |
+| Inc. Precondicionamiento | ≤ 1,5 % | Precondicionador diagonal + comparación documentada | M = D, κ(A) frente a κ(B), T exacta, Richardson (Cat. C) | IV → «Precondicionamiento diagonal» | `test_precondicionamiento`, 150 casos auditados (demostrado) | COMPLETADO (riesgo: contradice la lámina p. 23) |
+| Inc. Matrices dispersas | ≤ 1 % | Tratamiento eficiente + estrategia | CSR propio, O(nnz) | IV → casilla CSR con las tres listas en pantalla | `test_dispersas`, `test_modulo_IV_formato_csr` (demostrado) | COMPLETADO |
+| Inc. Experiencia de usuario | ≤ 0,5 % | Accesibilidad, ayuda contextual o interacción sustantiva | Validación previa, reordenamiento sugerido, procedencia Cat., **control gestual opcional de la vista 3D** | I → panel «Control con gestos»; todos los módulos | `test_app`, `tests/gestos` (34), `test_control_gestual`; prueba de punta a punta en Brave con cámara real (`investigacion_mediapipe.md` §5) | COMPLETADO. Los gestos con mano real quedan por probar ante la cámara |
+| Inc. Extensión matemática | ≤ 1 % | Funcionalidad pertinente, correcta y defendida | ρ(T) para n ≤ 8 con complejos (Faddeev-LeVerrier y Durand-Kerner, Cat. C), T de SOR | IV → «Convergencia» (rotulado «extensión no vista en clase») | `test_espectral`, 300 análisis (demostrado) | COMPLETADO (riesgo: hay que saber defenderlo) |
 
 ---
 

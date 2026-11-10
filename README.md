@@ -17,13 +17,13 @@ Una aplicación web local e integrada (Streamlit) para modelar, resolver y anali
 
 - **Algoritmos centrales:** todos están implementados **desde cero** en Python (carpeta `algebra/`), solo con la biblioteca estándar. Ningún archivo del proyecto importa NumPy, SciPy ni SymPy.
 - **Aritmética:** los métodos directos usan fracciones exactas; los iterativos, punto flotante.
-- **Bibliotecas externas:** Streamlit (interfaz), Plotly y Matplotlib (gráficas); ninguna resuelve los métodos del curso.
+- **Bibliotecas externas:** Streamlit (interfaz), Plotly y Matplotlib (gráficas), MediaPipe y OpenCV (control gestual opcional de la gráfica 3D); ninguna resuelve los métodos del curso.
 
 ## Funcionalidades
 
 | Módulo | Contenido |
 |---|---|
-| **I · Sistemas lineales** | Gauss y Gauss-Jordan paso a paso; clasificación por rangos (única, infinitas o inconsistente); solución paramétrica; determinante; interpretación geométrica en 2D y 3D |
+| **I · Sistemas lineales** | Gauss y Gauss-Jordan paso a paso; clasificación por rangos (única, infinitas o inconsistente); solución paramétrica; determinante; interpretación geométrica en 2D y 3D; control opcional de la vista 3D con gestos de la mano (MediaPipe, en este equipo) |
 | **II · Condicionamiento** | Inversa por Gauss-Jordan (verificando A·A⁻¹ = I); κ∞(A) con la escala del proyecto; perturbación absoluta o porcentual de b; errores relativos y cota teórica |
 | **III · Mínimos cuadrados** | Detección de sistema sobredeterminado; ecuaciones normales AᵀAx̂ = Aᵀb resueltas con Gauss; residuo y ‖r‖₂; verificación con el procedimiento de clase (det([A\|b]) y Cramer); ajuste lineal con gráfica |
 | **IV · Métodos iterativos** | Jacobi, Gauss-Seidel y SOR con criterios de parada A, B y C; tabla, gráficas y exportación CSV; comparación homogénea con error final ‖x⁽ᵏ⁾ − x*‖∞; dominancia diagonal con sugerencia de reordenamiento; matriz de iteración, polinomio característico (con Sarrus en 3×3), autovalores y radio espectral; almacenamiento disperso CSR; precondicionador diagonal M = D |
@@ -47,7 +47,7 @@ python -m venv .venv
 .venv\Scripts\python -m unittest
 ```
 
-También se puede usar `ejecutar_pruebas.bat`. Son **232 pruebas**: el núcleo matemático, la validación, la interfaz (con `streamlit.testing`) y el empaquetado.
+También se puede usar `ejecutar_pruebas.bat`. Son **268 pruebas**: el núcleo matemático, la validación, la interfaz (con `streamlit.testing`) y el empaquetado.
 
 Auditoría matemática independiente: compara el núcleo con oráculos escritos aparte, con semilla fija, y tarda unos 20 s. Debe decir «fallos 0».
 
@@ -71,6 +71,8 @@ algebra/            núcleo matemático (Python puro)
 interfaz/           Streamlit: compartido/ (estilo, editor, componentes, ejemplos) y
                     modulos/ (una vista por módulo); no hace cálculos
 visualizacion/      gráficas Plotly y Matplotlib; solo dibujan resultados ya calculados
+gestos/             control gestual de la gráfica 3D (cámara, MediaPipe, gestos, cámara orbital);
+                    separado del núcleo matemático
 tests/              pruebas automáticas (unittest), una carpeta por módulo
 auditoria/          comparación aleatoria con oráculos independientes
 casos_prueba/       casos documentados por módulo (entrada, esperado, obtenido)

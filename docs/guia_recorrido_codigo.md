@@ -51,6 +51,7 @@ Las referencias `archivo:línea` corresponden al estado del 10-nov-2026. Si camb
 | `interfaz/compartido/` | Estilo, editor, componentes, ejemplos | No |
 | `interfaz/modulos/` | Una vista por módulo | No |
 | `visualizacion/` | Gráficas | No |
+| `gestos/` | Control gestual de la gráfica 3D: cámara, MediaPipe, reglas de gestos, cámara orbital, canal local. Leer en este orden: `mano.py` → `interpretacion.py` → `movimiento.py` → `control.py` | No (no toca el álgebra) |
 | `tests/<módulo>/` | Pruebas de cada módulo | Verifica |
 | `auditoria/` | Comparación con implementaciones independientes | Verifica |
 

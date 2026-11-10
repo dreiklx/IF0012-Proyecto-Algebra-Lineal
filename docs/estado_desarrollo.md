@@ -1,6 +1,6 @@
 # Estado del desarrollo
 
-**Última actualización:** 10-nov-2026: revisión completa de los PDF, investigación de Richardson, reorganización del código por módulos y reauditoría de la rúbrica. El historial completo está en `git log`.
+**Última actualización:** 10-nov-2026 (tarde): textos adaptados a la notación de la profesora, categorías Cat. A/B/C/D en la interfaz y control gestual con MediaPipe en Python. El historial completo está en `git log`.
 
 ## Datos del proyecto
 
@@ -11,6 +11,25 @@
 | Entrega | **11 de noviembre de 2026** |
 | Defensa individual | Semana del **16 de noviembre de 2026** |
 | Número de grupo | **01, confirmado por el equipo (03-nov-2026)**. Integrantes, exclusivamente los cuatro de arriba |
+
+## Textos de la profesora y control gestual (10-nov-2026, tarde; ramas `feature/textos-profesora` y `feature/mediapipe-python`)
+
+- **PDF:** se repitió el inventario. Los 18 PDF y el ZIP tienen el mismo MD5 que el 09-nov y no hay material nuevo. Las 23 páginas manuscritas de procedimiento se volvieron a examinar, y las 10 erratas principales se recalcularon de forma independiente. Ver `auditoria_textos_profesora.md`.
+- **Textos:**
+  - pasos de Gauss con su notación («−2F₁ + F₂», «(−1/3)F₃», «F₁ ↔ F₂»);
+  - «Sol = {…}»;
+  - clasificación «3 ecuaciones no nulas, 3 incógnitas»;
+  - filas F1, F2… en el editor;
+  - distintivos de procedencia **Cat. A/B/C/D** en los cuatro módulos, con la fuente al pasar el cursor;
+  - Faddeev-LeVerrier, Durand-Kerner y T de SOR rotulados como extensiones.
+  - Ninguna fórmula cambió: el volcado de 273 resultados es idéntico, salvo el campo de texto nuevo `Paso.notacion`.
+- **Control gestual:**
+  - paquete `gestos/` en Python: OpenCV, MediaPipe 1.2.2 Tasks, reglas de gestos, cámara orbital e hilo con perro guardián;
+  - un puente JS de unas 50 líneas, aprobado por el equipo tras medir que sin él la gráfica se actualiza 1-3 veces por segundo.
+  - Medido con la cámara real en Brave: ~32 fotogramas/s; canal a 29,7 cambios/s; memoria estable durante 3 min.
+  - Detalle en `investigacion_mediapipe.md`, `portabilidad_java_python.md` y `revision_chat_mediapipe.md`.
+  - **Pendiente:** probar los gestos con una mano real frente a la cámara.
+- **Pruebas:** 268 OK; auditoría con 0 fallos.
 
 ## Revisión profunda y reorganización (09/10-nov-2026, ramas `revision/auditoria-academica` y `refactor/arquitectura-modular`)
 
@@ -24,7 +43,7 @@
   - Verificación: 232 pruebas OK en cada etapa; volcado de 273 resultados idéntico; auditoría con 0 fallos. Detalle en `arquitectura.md` y `guia_recorrido_codigo.md`.
 - **Rúbrica:** matriz al 10-nov con verificación estricta de los incentivos (`auditoria_requisitos.md` §3b). La estrategia CSR ahora se explica dentro de la aplicación.
 - **Bibliotecas:** evaluadas; no se añadió ninguna (`herramientas_y_bibliotecas.md` §6). Herramientas de desarrollo (uv, Graphify, Caveman), fuera de la entrega (§7).
-- **MediaPipe:** solo investigación (`investigacion_mediapipe.md`); nada implementado.
+- **MediaPipe:** en esta etapa, solo investigación. Se implementó el 10-nov por la tarde (sección anterior).
 - **Seguridad:** el commit remoto 458cc75 (06-nov) había vaciado `.gitignore`. Se restauró (15c494b) y la prueba `TestGitignore` lo vigila.
 
 ## Navegación superior y rediseño (03-nov-2026, rama `feature/navegacion-superior`)

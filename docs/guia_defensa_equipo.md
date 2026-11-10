@@ -81,7 +81,7 @@ proyecto-algebra/
 │   └── modulos/                   ← modulo_I_sistemas.py, modulo_II_condicionamiento.py,
 │                                    modulo_III_minimos.py, modulo_IV_iterativos/ (una vista por pestaña)
 ├── visualizacion/                 ← Plotly (interactivas.py) y Matplotlib (graficos.py): solo dibujan
-├── tests/                         ← 232 pruebas, una carpeta por módulo
+├── tests/                         ← 268 pruebas, una carpeta por módulo
 ├── auditoria/                     ← comparación aleatoria contra oráculos independientes
 ├── casos_prueba/                  ← casos documentados por módulo (entrada, esperado, obtenido)
 └── docs/                          ← manual, guías, referencia oficial, matriz de cumplimiento
@@ -649,6 +649,55 @@ La memoria es 2·nnz + n + 1 números en lugar de n², y cada iteración cuesta 
 
 **Discrepancia con la lámina.** La diapositiva 19 muestra que Jacobi mejora con M = D. Eso no puede pasar: la aplicación lo demuestra en vivo con la columna «¿T y c idénticas? Sí (exacto)».
 
+### D.8 Qué es de clase y qué es extensión (Cat. A/B/C/D)
+
+En la cabecera de cada módulo hay distintivos «Cat.»; al pasar el cursor se ve la página del PDF. La tabla completa está en `docs/auditoria_textos_profesora.md`.
+
+| Cat. | Significado | Ejemplos |
+|---|---|---|
+| **A** | Visto en clase | OEF, Gauss, Gauss-Jordan, inversa [A\|I], κ en 5 pasos, sistema normal, Cramer, Jacobi, GS, SOR, x⁽⁰⁾ = bᵢ/aᵢᵢ, dominancia, T_J, T_GS, det(T − λI) por Sarrus |
+| **B** | Exigido por el enunciado | Norma ∞ y escala 10/100; resolver el sistema normal con nuestro Gauss; ‖r‖₂; tabla, motivo, comparación y gráfica del Módulo IV; detección de pivotes problemáticos |
+| **C** | Extensión o incentivo (no visto en clase) | Pivoteo parcial; T de SOR; **Faddeev-LeVerrier**; **Durand-Kerner**; **Richardson**; CSR; M = D; CSV; gráfica 3D y control gestual |
+| **D** | Sin respaldo | Ninguno |
+
+**Si preguntan «¿esto lo vimos en clase?»:**
+
+- Si el distintivo es Cat. A, citar la página del PDF.
+- Si es Cat. C, decir que es una extensión, rotulada así en la aplicación, y explicar por qué hace falta. Por ejemplo, Sarrus solo sirve para 3×3 y Faddeev-LeVerrier da el mismo polinomio para cualquier n.
+
+**Notación de la profesora:** los pasos de Gauss muestran primero «−2F₁ + F₂», «(−1/3)F₃» y «F₁ ↔ F₂», y el resultado cierra con «Sol = {(1/3, 4, 5/3)}» y «3 ecuaciones no nulas, 3 incógnitas → solución única», igual que su manuscrito de S6-16/09 p. 29.
+
+### D.9 Control gestual de la gráfica 3D (MediaPipe, en Python)
+
+**Qué es:** un complemento de experiencia de usuario (Cat. C). No calcula nada del álgebra; solo cambia desde dónde se mira la gráfica de planos del Módulo I.
+
+**Cadena:**
+
+1. `cv2.VideoCapture` lee un fotograma en memoria.
+2. MediaPipe Hand Landmarker devuelve 21 puntos por mano.
+3. Las reglas de `gestos/interpretacion.py` deciden el gesto.
+4. `gestos/movimiento.py` convierte el movimiento en una cámara orbital: eye = r(cos φ cos θ, cos φ sin θ, sin φ).
+5. Un canal local (127.0.0.1) lleva esos números a la gráfica.
+
+**Preguntas probables:**
+
+- **¿Se graba o se envía la imagen?** No. El fotograma se procesa y se descarta (`del fotograma`). Al navegador solo llegan 9 números. El servidor solo escucha en 127.0.0.1 y pide un token.
+- **¿Por qué no se confunde un puño con una pinza?** Todo se mide en «unidades de palma». En la pinza, la punta del índice queda fuera de la palma; en el puño, no.
+- **¿Por qué no tiembla?** Por cuatro mecanismos:
+  - suavizado exponencial (α = 0,35);
+  - zona muerta acumulada;
+  - antirrebote: tiempo mínimo para cada gesto;
+  - histéresis: la pinza entra con un umbral y sale con otro 1,5 veces mayor.
+- **¿Qué pasa si se cambia de módulo?** El panel envía un latido cada 0,5 s. Sin latido durante 4 s, el hilo libera la cámara.
+- **¿Por qué hay JavaScript?** Se midió que, sin él, Streamlit actualiza la gráfica 1-3 veces por segundo y vuelve a montarla. Con el puente de unas 50 líneas llega a ~30 veces por segundo sin trabarse. Todo lo demás es Python (ver `portabilidad_java_python.md`).
+- **Rendimiento medido:**
+  - ~32 fotogramas/s;
+  - detección de ~18-28 ms;
+  - CPU de alrededor de 1 núcleo de 12 hilos;
+  - memoria estable durante 3 min.
+
+**Antes de la defensa:** probar con la mano real en el equipo y con la luz del aula. Si algo falla, se usa el ratón: la gráfica funciona igual.
+
 ## E. Preguntas de defensa, con respuestas
 
 Cada respuesta se puede comprobar en el código (se indica dónde) o con la aplicación.
@@ -667,11 +716,11 @@ Cada respuesta se puede comprobar en el código (se indica dónde) o con la apli
 
 3. **¿Cómo está organizado el código y por qué así?**
    - Hay tres capas: `algebra/` (cálculos), `interfaz/` (pantallas) y `visualizacion/` (dibujos).
-   - El núcleo no depende de la interfaz. Por eso se prueba solo (232 pruebas) y la interfaz no repite cálculos.
+   - El núcleo no depende de la interfaz. Por eso se prueba solo (268 pruebas) y la interfaz no repite cálculos.
    - En los iterativos, cada método es una función `paso_*` y el bucle de parada es uno solo (`_ejecutar`), para no triplicar la lógica.
 
 4. **¿Cómo saben que los resultados son correctos?**
-   - Hay 232 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.
+   - Hay 268 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.
    - La auditoría aleatoria (`auditoria/`) compara miles de casos con oráculos escritos aparte (Leibniz, adjunta, Cramer, una implementación separada de las iteraciones, Gelfand) y da 0 fallos.
    - La aplicación además se autoverifica:
      - b − Ax = 0 en el Módulo I;
@@ -872,7 +921,7 @@ python -m venv .venv
 .venv\Scripts\python -m streamlit run app.py
 ```
 
-5. Pruebas: `ejecutar_pruebas.bat` o `.venv\Scripts\python -m unittest`. Deben salir **232 pruebas OK**.
+5. Pruebas: `ejecutar_pruebas.bat` o `.venv\Scripts\python -m unittest`. Deben salir **268 pruebas OK**.
 6. Auditoría (opcional, unos 20 s): `.venv\Scripts\python auditoria\auditoria_directos.py .` y `.venv\Scripts\python auditoria\auditoria_iterativos.py .` (y `auditoria_precondicionamiento.py`). Deben dar «fallos 0».
 
 > **Antes de la defensa:** cada integrante debe hacer la instalación **en su propia computadora** al menos una vez. La primera instalación necesita internet; no la dejen para el aula.
