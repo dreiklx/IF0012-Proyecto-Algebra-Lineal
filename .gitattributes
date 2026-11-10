@@ -6,3 +6,4 @@
 *.zip binary
 # sha256sum -c exige LF en el archivo de sumas
 dist/SHA256.txt text eol=lf
+*.task binary
