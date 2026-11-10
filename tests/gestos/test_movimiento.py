@@ -54,9 +54,9 @@ class TestCamaraOrbital(unittest.TestCase):
 
     def test_limites_de_elevacion_y_distancia(self):
         c = mv.CamaraOrbital()
-        c.girar(0, -10)           # mano muy arriba
+        c.girar(0, 10)            # mano muy abajo (eje vertical invertido)
         self.assertAlmostEqual(c.phi, mv.ELEVACION_MAX)
-        c.girar(0, 20)
+        c.girar(0, -20)           # mano muy arriba
         self.assertAlmostEqual(c.phi, mv.ELEVACION_MIN)
         for _ in range(50):
             c.zoom(2)
@@ -64,6 +64,22 @@ class TestCamaraOrbital(unittest.TestCase):
         for _ in range(50):
             c.zoom(0.5)
         self.assertAlmostEqual(c.r, mv.DISTANCIA_MAX)
+
+    def test_eje_vertical_invertido(self):
+        # Mano arriba (dy < 0 en la imagen) → elevación menor (la vista baja);
+        # mano abajo → elevación mayor.  El eje horizontal no cambia.
+        c = mv.CamaraOrbital()
+        phi0, theta0 = c.phi, c.theta
+        c.girar(0, -0.05)
+        self.assertLess(c.phi, phi0)
+        self.assertEqual(c.theta, theta0)
+        c.restablecer()
+        c.girar(0, 0.05)
+        self.assertGreater(c.phi, phi0)
+        c.restablecer()
+        c.girar(0.05, 0)                     # horizontal: igual que antes (θ disminuye)
+        self.assertLess(c.theta, theta0)
+        self.assertAlmostEqual(c.phi, phi0)
 
     def test_up_fijo(self):
         c = mv.CamaraOrbital()
