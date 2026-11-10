@@ -1,6 +1,6 @@
 # Estado del desarrollo
 
-**Última actualización:** 03-nov-2026, comparación con los PDF de la docente y auditoría de las dos rúbricas. El historial completo está en `git log`.
+**Última actualización:** 10-nov-2026: revisión completa de los PDF, investigación de Richardson, reorganización del código por módulos y reauditoría de la rúbrica. El historial completo está en `git log`.
 
 ## Datos del proyecto
 
@@ -11,6 +11,21 @@
 | Entrega | **11 de noviembre de 2026** |
 | Defensa individual | Semana del **16 de noviembre de 2026** |
 | Número de grupo | **01, confirmado por el equipo (03-nov-2026)**. Integrantes, exclusivamente los cuatro de arriba |
+
+## Revisión profunda y reorganización (09/10-nov-2026, ramas `revision/auditoria-academica` y `refactor/arquitectura-modular`)
+
+- **PDF de la docente:** 18 PDF (457 páginas) revisados **en imagen**, página por página, más el ZIP de la Tarea II (8 imágenes de estudiantes). Resultado: `referencia_oficial_procedimientos.md`, con procedimientos, notación, ejemplos, páginas y 12 erratas verificadas con fracciones.
+- **Richardson:** no aparece en los PDF ni en el enunciado. Es una extensión (categoría C) al servicio del incentivo de precondicionamiento y ahora se rotula en la aplicación como «Extensión no vista en clase». Análisis y clasificación A/B/C/D de todos los procedimientos en `investigacion_richardson.md`.
+- **Arquitectura:**
+  - `algebra/compartido/` y un paquete por módulo;
+  - `iterativos.py` dividido en `metodos`, `ejecucion`, `convergencia` y `comparacion`;
+  - la interfaz del Módulo IV, dividida por pestañas;
+  - las pruebas, por módulo.
+  - Verificación: 232 pruebas OK en cada etapa; volcado de 273 resultados idéntico; auditoría con 0 fallos. Detalle en `arquitectura.md` y `guia_recorrido_codigo.md`.
+- **Rúbrica:** matriz al 10-nov con verificación estricta de los incentivos (`auditoria_requisitos.md` §3b). La estrategia CSR ahora se explica dentro de la aplicación.
+- **Bibliotecas:** evaluadas; no se añadió ninguna (`herramientas_y_bibliotecas.md` §6). Herramientas de desarrollo (uv, Graphify, Caveman), fuera de la entrega (§7).
+- **MediaPipe:** solo investigación (`investigacion_mediapipe.md`); nada implementado.
+- **Seguridad:** el commit remoto 458cc75 (06-nov) había vaciado `.gitignore`. Se restauró (15c494b) y la prueba `TestGitignore` lo vigila.
 
 ## Navegación superior y rediseño (03-nov-2026, rama `feature/navegacion-superior`)
 

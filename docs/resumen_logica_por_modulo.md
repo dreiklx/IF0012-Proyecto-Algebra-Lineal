@@ -1,6 +1,6 @@
 # Resumen de la lógica por módulo — material de estudio para la defensa
 
-**Versión:** 03-nov-2026. Es la versión condensada de [guia_defensa_equipo.md](guia_defensa_equipo.md); allí están las demostraciones y las 34 preguntas con su respuesta completa.
+**Versión:** 10-nov-2026 (rutas de la nueva organización). Es la versión condensada de [guia_defensa_equipo.md](guia_defensa_equipo.md); allí están las demostraciones y las 35 preguntas con su respuesta completa.
 **Regla de oro:** la docente elige al menos dos módulos y puede pedir un caso no preparado. **Estudien los cuatro.**
 
 ## Lo que hay que saber de memoria en cualquier módulo

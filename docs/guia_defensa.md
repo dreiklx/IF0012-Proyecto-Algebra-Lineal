@@ -1,6 +1,6 @@
 # Guía de estudio para la defensa individual
 
-> **Versión ampliada (02-nov-2026):** [guia_defensa_equipo.md](guia_defensa_equipo.md) explica el código real función por función, incluye 34 preguntas con respuesta y el guion de demostración. Para repasar rápido: [resumen_logica_por_modulo.md](resumen_logica_por_modulo.md). Esta guía se conserva por la tabla de errores de las láminas (§6).
+> **Versión ampliada (02-nov-2026):** [guia_defensa_equipo.md](guia_defensa_equipo.md) explica el código real función por función, incluye 35 preguntas con respuesta y el guion de demostración. Para repasar rápido: [resumen_logica_por_modulo.md](resumen_logica_por_modulo.md). Esta guía se conserva por la tabla de errores de las láminas (§6).
 
 ## Formato de la defensa (OFICIAL p. 3-4)
 

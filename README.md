@@ -85,7 +85,7 @@ El detalle está en [docs/arquitectura.md](docs/arquitectura.md); el recorrido d
 
 | Documento | Contenido |
 |---|---|
-| [docs/guia_defensa_equipo.md](docs/guia_defensa_equipo.md) | **Guía de defensa del equipo**: el código real función por función, la matemática, 34 preguntas con respuesta y el guion de demostración |
+| [docs/guia_defensa_equipo.md](docs/guia_defensa_equipo.md) | **Guía de defensa del equipo**: el código real función por función, la matemática, 35 preguntas con respuesta y el guion de demostración |
 | [dist/Guia_Defensa_IF0012.html](dist/Guia_Defensa_IF0012.html) | La misma guía, más el resumen, en un HTML autónomo que funciona sin internet. Descárguelo y ábralo en el navegador |
 | [docs/resumen_logica_por_modulo.md](docs/resumen_logica_por_modulo.md) | Resumen de estudio rápido por módulo |
 | [docs/propuesta_navegacion.md](docs/propuesta_navegacion.md) | Navegación superior y animaciones (implementada) |

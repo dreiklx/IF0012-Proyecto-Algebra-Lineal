@@ -2,10 +2,11 @@
 
 **Para:** Elmer López Hernández, Derek Farley Noguera, Daniel Córdoba Arias y Samir Sandoval Ramírez.
 **Defensa:** semana del 16-nov-2026, individual, de 6 a 8 minutos por persona.
-**Versión:** 03-nov-2026 (revisada tras compararla con los PDF de la docente; ver `docs/comparacion_procedimientos.md`). Explica el código **real** del repositorio. Todos los números de los ejemplos se obtuvieron ejecutando la aplicación y se contrastaron con un cálculo independiente.
+**Versión:** 10-nov-2026. Rutas actualizadas a la nueva organización por módulos y revisada contra las 457 páginas de los PDF de la docente (`docs/referencia_oficial_procedimientos.md`). Explica el código **real** del repositorio. Todos los números de los ejemplos se obtuvieron ejecutando la aplicación y se contrastaron con un cálculo independiente.
 
 > **Cómo usar esta guía.** La docente elige **al menos dos módulos** y puede pedir un caso no preparado (OFICIAL p. 3). Por eso **cada integrante debe dominar los cuatro**. Primero lean las partes A y B, luego el módulo de la parte C junto con su teoría en la parte D, y al final practiquen las preguntas de la parte E con la aplicación abierta (parte F).
 > Para repasar rápido está [resumen_logica_por_modulo.md](resumen_logica_por_modulo.md).
+> Para encontrar cada función en el código: [guia_recorrido_codigo.md](guia_recorrido_codigo.md). Para Richardson: [investigacion_richardson.md](investigacion_richardson.md).
 
 ---
 
@@ -843,6 +844,13 @@ Cada respuesta se puede comprobar en el código (se indica dónde) o con la apli
     - Es la iteración x⁽ᵏ⁾ = x⁽ᵏ⁻¹⁾ + (b − Ax⁽ᵏ⁻¹⁾), con T_R = I − A.
     - No es uno de los métodos del enunciado ni se vio en clase. Se incluye porque es el método más simple sobre el que M = D tiene efecto: con M = D se convierte en Jacobi.
     - Así se documenta un efecto real del precondicionador, en vez de inventar uno.
+    - **Si la profesora pregunta «¿eso lo vimos?»:** «No, profesora. Es una extensión, y la aplicación la rotula como "Extensión no vista en clase". La usamos solo para mostrar el efecto de M = D, porque en Jacobi, Gauss-Seidel y SOR la matriz de iteración no cambia.»
+    - Demostración en una línea: T̃_R = I − D⁻¹A = I − D⁻¹(D + L + U) = −D⁻¹(L + U) = T_J.
+
+35. **¿Cómo está organizado el código? Muéstreme dónde está Jacobi.**
+    - `algebra/` es el núcleo y tiene una carpeta por módulo: `modulo_I_sistemas/` … `modulo_IV_iterativos/`. Lo común está en `algebra/compartido/`.
+    - Jacobi: `algebra/modulo_IV_iterativos/metodos.py`, función `paso_jacobi`. El bucle y la parada están en `ejecucion.py` (`ejecutar`).
+    - La interfaz (`interfaz/modulos/…`) solo lee los datos, llama al núcleo y muestra el resultado; las gráficas (`visualizacion/`) solo dibujan.
 
 ---
 
