@@ -12,7 +12,7 @@ from algebra.modulo_I_sistemas.directos import (
     resolver_gauss,
     resolver_gauss_jordan,
 )
-from interfaz.compartido import ejemplos
+from interfaz.compartido import control_gestual, ejemplos
 from interfaz.compartido.componentes import (
     CONTROLES_2D,
     CONTROLES_3D,
@@ -177,11 +177,17 @@ def mostrar_resultado(A, b, r):
                 if n == 2:
                     mostrar_interactiva(rectas_2d(A, b, r), "rectas", mostrar_ayuda=False)
                 else:
-                    mostrar_interactiva(planos_3d(A, b, r), "planos", tres_d=True, mostrar_ayuda=False)
+                    figura = planos_3d(A, b, r)
+                    camara = control_gestual.camara_para_figura()
+                    if camara is not None:
+                        figura.update_layout(scene_camera=camara)
+                    mostrar_interactiva(figura, "planos", tres_d=True, mostrar_ayuda=False)
             texto.caption("🖱️ " + (CONTROLES_2D if n == 2 else CONTROLES_3D))
             texto.caption("Cada ecuación es una recta (2 incógnitas) o un plano (3 incógnitas). "
                        "Solución única: se cortan en un punto; infinitas: comparten una recta "
                        "o un plano; inconsistente: no hay punto común a todos.")
+            if n == 3:
+                control_gestual.panel("graf_planos")
 
 
 def clasificacion_de_clase(r):

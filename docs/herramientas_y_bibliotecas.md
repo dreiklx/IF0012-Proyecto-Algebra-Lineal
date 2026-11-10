@@ -42,6 +42,18 @@ Queda **[pendiente de confirmar con la docente]** si `math.sqrt` y `cmath.sqrt` 
 - Estas bibliotecas las usan Streamlit y Matplotlib por dentro, para dibujar y para mostrar tablas.
 - Conviene confirmarlo con la docente, porque la autorización de NumPy está pendiente.
 
+### Control gestual (desde el 10-nov-2026; ver `investigacion_mediapipe.md`)
+
+| Biblioteca | Versión | Uso exclusivo | Licencia |
+|---|---|---|---|
+| MediaPipe (API Tasks, Hand Landmarker) | 1.2.2 | Detectar 21 puntos por mano en la imagen de la cámara web, **en este equipo** (`gestos/deteccion.py`) | Apache-2.0 |
+| OpenCV (`opencv-contrib-python`, dependencia de MediaPipe) | 5.0.0.93 | Abrir la cámara y voltear la imagen (`gestos/captura.py`) | Apache-2.0 |
+| Modelo `hand_landmarker.task` | float16, abr-2023 | Red neuronal de MediaPipe incluida en `gestos/modelos/` (7,8 MB) | Apache-2.0 (model card) |
+| `http.server`, `threading`, `secrets` (estándar) | — | Canal local 127.0.0.1 que envía la cámara 3D a la gráfica (`gestos/servidor.py`) | — |
+
+- **Nada del control gestual interviene en los métodos del curso.**
+- **JavaScript propio:** `interfaz/compartido/puente_camara.js`, de unas 50 líneas. Es el único JS de la aplicación. Solo aplica la cámara con `Plotly.relayout`. Lo aprobó el equipo el 10-nov, después de medir que sin él la gráfica se actualiza 1-3 veces por segundo (`portabilidad_java_python.md`).
+
 ## 3. Herramientas de desarrollo
 
 | Herramienta | Uso |

@@ -61,7 +61,17 @@ proyecto-algebra/
 │   ├── graficos.py                 versión Matplotlib (respaldo y pruebas)
 │   └── geometria_3d.py             geometría de rectas y planos para dibujar el Módulo I
 │
-├── tests/                          232 pruebas (unittest), una carpeta por módulo
+├── gestos/                         CONTROL GESTUAL de la gráfica 3D (10-nov; no es parte del núcleo)
+│   ├── mano.py                     21 puntos de MediaPipe, conexiones, tamaño de la palma
+│   ├── interpretacion.py           reglas de gestos, antirrebote, histéresis, calibración
+│   ├── movimiento.py               suavizado y cámara orbital (θ, φ, r) con límites
+│   ├── captura.py                  cámara web con OpenCV (DirectShow), en memoria
+│   ├── deteccion.py                MediaPipe Tasks Hand Landmarker (modo VIDEO)
+│   ├── control.py                  hilo de visión, estado con candado, perro guardián
+│   ├── servidor.py                 canal 127.0.0.1 (SSE) que lleva la cámara a la gráfica
+│   └── modelos/hand_landmarker.task  modelo de MediaPipe (Apache-2.0)
+│
+├── tests/                          268 pruebas (unittest), una carpeta por módulo
 │   ├── compartido/  modulo_I/  modulo_II/  modulo_III/  modulo_IV/
 │   ├── interfaz/                   la aplicación completa con streamlit.testing (AppTest)
 │   ├── entrega/                    el ZIP no filtra archivos internos; .gitignore protege credenciales
@@ -123,6 +133,7 @@ proyecto-algebra/
 ```
 
 - `algebra/` no importa nada de `interfaz/` ni de `visualizacion/`, ni bibliotecas externas.
+- `gestos/` no importa `algebra/` ni `interfaz/`. Solo `interfaz/compartido/control_gestual.py` lo usa. El hilo de visión nunca llama a `st.*`. Detalle: `investigacion_mediapipe.md` y `portabilidad_java_python.md`.
 - **El Módulo I es la base:** los módulos II, III y IV reutilizan su Gauss-Jordan y su Gauss, como pide el enunciado: «la inversa … con un algoritmo implementado por el grupo» y las ecuaciones normales «con un método directo ya implementado».
 - **No hay ciclos de importación.** Lo verificaron Graphify y un análisis AST propio.
 

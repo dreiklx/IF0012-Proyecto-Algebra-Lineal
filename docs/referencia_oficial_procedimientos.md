@@ -3,6 +3,7 @@
 **Fecha:** 09-nov-2026.
 **Para qué sirve:** reúne lo que enseñan los materiales de la profesora Imelda Sáenz Pineda. Es la referencia académica con la que se compara el proyecto Ax.
 **Regla de este documento:** solo se anota lo que aparece en los PDF.
+**10-nov:** se repitió el inventario (sin cambios en los PDF). Cómo resuelve la profesora, la clasificación Cat. A/B/C/D y las erratas recalculadas están en [auditoria_textos_profesora.md](auditoria_textos_profesora.md).
 
 - Las explicaciones que necesitan matemática externa van en recuadros **«Interpretación (externa)»**, separadas de lo literal.
 - Las erratas de las láminas se registran en la sección 9. No se corrigen en silencio.

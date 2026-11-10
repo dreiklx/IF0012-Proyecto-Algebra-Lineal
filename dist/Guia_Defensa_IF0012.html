@@ -96,6 +96,8 @@ tr,pre,blockquote{break-inside:avoid}}
 <li class="n3"><a href="#g-d-5b-lo-que-ensena-la-docente-y-como-lo-seguimos-en-el-radio-espectral">D.5b Lo que enseña la docente y cómo lo seguimos en el radio espectral</a></li>
 <li class="n3"><a href="#g-d-6-csr-incentivo-de-matrices-dispersas">D.6 CSR (incentivo de matrices dispersas)</a></li>
 <li class="n3"><a href="#g-d-7-precondicionamiento-diagonal-que-cambia-y-que-no">D.7 Precondicionamiento diagonal: qué cambia y qué no</a></li>
+<li class="n3"><a href="#g-d-8-que-es-de-clase-y-que-es-extension-cat-a-b-c-d">D.8 Qué es de clase y qué es extensión (Cat. A/B/C/D)</a></li>
+<li class="n3"><a href="#g-d-9-control-gestual-de-la-grafica-3d-mediapipe-en-python">D.9 Control gestual de la gráfica 3D (MediaPipe, en Python)</a></li>
 </ul></li>
 <li><a href="#g-e-preguntas-de-defensa-con-respuestas">E. Preguntas de defensa, con respuestas</a><ul>
 </ul></li>
@@ -129,7 +131,7 @@ tr,pre,blockquote{break-inside:avoid}}
   <h1>Guía de defensa del equipo — Proyecto final IF0012</h1>
   <p>Álgebra Lineal para Informática Empresarial · Universidad de Costa Rica, Sede del Caribe (Siquirres) · II Ciclo 2026</p>
   <p>Elmer López Hernández · Derek Farley Noguera · Daniel Córdoba Arias · Samir Sandoval Ramírez</p>
-  <div class="insignias"><span>Versión 10-nov-2026.</span><span>232 pruebas automáticas OK</span>
+  <div class="insignias"><span>Versión 10-nov-2026.</span><span>268 pruebas automáticas OK</span>
   <span>Auditoría independiente: 0 fallos</span><span>Entrega: 11-nov-2026</span><span>Defensa: semana del 16-nov-2026</span></div>
 </header>
 <section class="parte" id="parte-1"><h1 class="titulo-parte">Parte 1 · Guía completa</h1>
@@ -231,7 +233,7 @@ Para encontrar cada función en el código: <span class="ref">guia_recorrido_cod
 │   └── modulos/                   ← modulo_I_sistemas.py, modulo_II_condicionamiento.py,
 │                                    modulo_III_minimos.py, modulo_IV_iterativos/ (una vista por pestaña)
 ├── visualizacion/                 ← Plotly (interactivas.py) y Matplotlib (graficos.py): solo dibujan
-├── tests/                         ← 232 pruebas, una carpeta por módulo
+├── tests/                         ← 268 pruebas, una carpeta por módulo
 ├── auditoria/                     ← comparación aleatoria contra oráculos independientes
 ├── casos_prueba/                  ← casos documentados por módulo (entrada, esperado, obtenido)
 └── docs/                          ← manual, guías, referencia oficial, matriz de cumplimiento
@@ -997,6 +999,77 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 </ul>
 <p><strong>Valores propios.</strong> μ(B) = 1 − λ(T_J), así que «agrupados cerca de 1» significa ρ(T_J) pequeño.</p>
 <p><strong>Discrepancia con la lámina.</strong> La diapositiva 19 muestra que Jacobi mejora con M = D. Eso no puede pasar: la aplicación lo demuestra en vivo con la columna «¿T y c idénticas? Sí (exacto)».</p>
+<h3 id="g-d-8-que-es-de-clase-y-que-es-extension-cat-a-b-c-d">D.8 Qué es de clase y qué es extensión (Cat. A/B/C/D)</h3>
+<p>En la cabecera de cada módulo hay distintivos «Cat.»; al pasar el cursor se ve la página del PDF. La tabla completa está en <code>docs/auditoria_textos_profesora.md</code>.</p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Cat.</th>
+<th>Significado</th>
+<th>Ejemplos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td>Visto en clase</td>
+<td>OEF, Gauss, Gauss-Jordan, inversa [A|I], κ en 5 pasos, sistema normal, Cramer, Jacobi, GS, SOR, x⁽⁰⁾ = bᵢ/aᵢᵢ, dominancia, T_J, T_GS, det(T − λI) por Sarrus</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td>Exigido por el enunciado</td>
+<td>Norma ∞ y escala 10/100; resolver el sistema normal con nuestro Gauss; ‖r‖₂; tabla, motivo, comparación y gráfica del Módulo IV; detección de pivotes problemáticos</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>Extensión o incentivo (no visto en clase)</td>
+<td>Pivoteo parcial; T de SOR; <strong>Faddeev-LeVerrier</strong>; <strong>Durand-Kerner</strong>; <strong>Richardson</strong>; CSR; M = D; CSV; gráfica 3D y control gestual</td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td>Sin respaldo</td>
+<td>Ninguno</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Si preguntan «¿esto lo vimos en clase?»:</strong></p>
+<ul>
+<li>Si el distintivo es Cat. A, citar la página del PDF.</li>
+<li>Si es Cat. C, decir que es una extensión, rotulada así en la aplicación, y explicar por qué hace falta. Por ejemplo, Sarrus solo sirve para 3×3 y Faddeev-LeVerrier da el mismo polinomio para cualquier n.</li>
+</ul>
+<p><strong>Notación de la profesora:</strong> los pasos de Gauss muestran primero «−2F₁ + F₂», «(−1/3)F₃» y «F₁ ↔ F₂», y el resultado cierra con «Sol = {(1/3, 4, 5/3)}» y «3 ecuaciones no nulas, 3 incógnitas → solución única», igual que su manuscrito de S6-16/09 p. 29.</p>
+<h3 id="g-d-9-control-gestual-de-la-grafica-3d-mediapipe-en-python">D.9 Control gestual de la gráfica 3D (MediaPipe, en Python)</h3>
+<p><strong>Qué es:</strong> un complemento de experiencia de usuario (Cat. C). No calcula nada del álgebra; solo cambia desde dónde se mira la gráfica de planos del Módulo I.</p>
+<p><strong>Cadena:</strong></p>
+<ol>
+<li><code>cv2.VideoCapture</code> lee un fotograma en memoria.</li>
+<li>MediaPipe Hand Landmarker devuelve 21 puntos por mano.</li>
+<li>Las reglas de <code>gestos/interpretacion.py</code> deciden el gesto.</li>
+<li><code>gestos/movimiento.py</code> convierte el movimiento en una cámara orbital: eye = r(cos φ cos θ, cos φ sin θ, sin φ).</li>
+<li>Un canal local (127.0.0.1) lleva esos números a la gráfica.</li>
+</ol>
+<p><strong>Preguntas probables:</strong></p>
+<ul>
+<li><strong>¿Se graba o se envía la imagen?</strong> No. El fotograma se procesa y se descarta (<code>del fotograma</code>). Al navegador solo llegan 9 números. El servidor solo escucha en 127.0.0.1 y pide un token.</li>
+<li><strong>¿Por qué no se confunde un puño con una pinza?</strong> Todo se mide en «unidades de palma». En la pinza, la punta del índice queda fuera de la palma; en el puño, no.</li>
+<li><strong>¿Por qué no tiembla?</strong> Por cuatro mecanismos:<ul>
+<li>suavizado exponencial (α = 0,35);</li>
+<li>zona muerta acumulada;</li>
+<li>antirrebote: tiempo mínimo para cada gesto;</li>
+<li>histéresis: la pinza entra con un umbral y sale con otro 1,5 veces mayor.</li>
+</ul>
+</li>
+<li><strong>¿Qué pasa si se cambia de módulo?</strong> El panel envía un latido cada 0,5 s. Sin latido durante 4 s, el hilo libera la cámara.</li>
+<li><strong>¿Por qué hay JavaScript?</strong> Se midió que, sin él, Streamlit actualiza la gráfica 1-3 veces por segundo y vuelve a montarla. Con el puente de unas 50 líneas llega a ~30 veces por segundo sin trabarse. Todo lo demás es Python (ver <code>portabilidad_java_python.md</code>).</li>
+<li><strong>Rendimiento medido:</strong><ul>
+<li>~32 fotogramas/s;</li>
+<li>detección de ~18-28 ms;</li>
+<li>CPU de alrededor de 1 núcleo de 12 hilos;</li>
+<li>memoria estable durante 3 min.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Antes de la defensa:</strong> probar con la mano real en el equipo y con la luz del aula. Si algo falla, se usa el ratón: la gráfica funciona igual.</p>
 <h2 id="g-e-preguntas-de-defensa-con-respuestas">E. Preguntas de defensa, con respuestas</h2>
 <p>Cada respuesta se puede comprobar en el código (se indica dónde) o con la aplicación.</p>
 <p><strong>Generales y de diseño</strong></p>
@@ -1021,14 +1094,14 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 <p><strong>¿Cómo está organizado el código y por qué así?</strong></p>
 <ul>
 <li>Hay tres capas: <code>algebra/</code> (cálculos), <code>interfaz/</code> (pantallas) y <code>visualizacion/</code> (dibujos).</li>
-<li>El núcleo no depende de la interfaz. Por eso se prueba solo (232 pruebas) y la interfaz no repite cálculos.</li>
+<li>El núcleo no depende de la interfaz. Por eso se prueba solo (268 pruebas) y la interfaz no repite cálculos.</li>
 <li>En los iterativos, cada método es una función <code>paso_*</code> y el bucle de parada es uno solo (<code>_ejecutar</code>), para no triplicar la lógica.</li>
 </ul>
 </li>
 <li>
 <p><strong>¿Cómo saben que los resultados son correctos?</strong></p>
 <ul>
-<li>Hay 232 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.</li>
+<li>Hay 268 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.</li>
 <li>La auditoría aleatoria (<code>auditoria/</code>) compara miles de casos con oráculos escritos aparte (Leibniz, adjunta, Cramer, una implementación separada de las iteraciones, Gelfand) y da 0 fallos.</li>
 <li>La aplicación además se autoverifica:<ul>
 <li>b − Ax = 0 en el Módulo I;</li>
@@ -1277,7 +1350,7 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 .venv\Scripts\python -m streamlit run app.py
 </code></pre>
 <ol start="5">
-<li>Pruebas: <code>ejecutar_pruebas.bat</code> o <code>.venv\Scripts\python -m unittest</code>. Deben salir <strong>232 pruebas OK</strong>.</li>
+<li>Pruebas: <code>ejecutar_pruebas.bat</code> o <code>.venv\Scripts\python -m unittest</code>. Deben salir <strong>268 pruebas OK</strong>.</li>
 <li>Auditoría (opcional, unos 20 s): <code>.venv\Scripts\python auditoria\auditoria_directos.py .</code> y <code>.venv\Scripts\python auditoria\auditoria_iterativos.py .</code> (y <code>auditoria_precondicionamiento.py</code>). Deben dar «fallos 0».</li>
 </ol>
 <blockquote>
