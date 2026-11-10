@@ -19,13 +19,14 @@ class TestEmpaquetado(unittest.TestCase):
         # Copia mínima del proyecto en una carpeta temporal, con archivos "trampa".
         self.raiz = tempfile.mkdtemp()
         for carpeta in ("docs", "casos_prueba", "algebra/.claude", "algebra/compartido",
-                        "tests/__pycache__", "paginas", "interfaz/recursos"):
+                        "tests/__pycache__", "paginas", "interfaz/recursos", "gestos/modelos"):
             os.makedirs(os.path.join(self.raiz, carpeta), exist_ok=True)
         archivos = {
             "app.py": "", "README.md": "", "requirements.txt": "", "ejecutar.bat": "",
             "docs/manual_usuario.md": "", "docs/herramientas_y_bibliotecas.md": "uso de IA",
             "casos_prueba/README.md": "", "algebra/compartido/matriz.py": "",
             "paginas/sistemas.py": "", "interfaz/recursos/marca.svg": "",
+            "gestos/control.py": "", "gestos/modelos/hand_landmarker.task": "",
             # trampas
             "CLAUDE.md": "x", "docs/CLAUDE.md": "x", "algebra/.claude/settings.json": "{}",
             "algebra/.env": "TOKEN=1", "docs/.env.local": "x", ".streamlit/secrets.toml": "x",
@@ -52,6 +53,9 @@ class TestEmpaquetado(unittest.TestCase):
         # Las páginas de la navegación superior y la marca también se entregan.
         self.assertIn("paginas/sistemas.py", incluidos)
         self.assertIn("interfaz/recursos/marca.svg", incluidos)
+        # El control gestual y su modelo de MediaPipe forman parte de la entrega.
+        self.assertIn("gestos/control.py", incluidos)
+        self.assertIn("gestos/modelos/hand_landmarker.task", incluidos)
 
     def test_zip_generado_con_una_sola_raiz(self):
         with mock.patch.object(empaquetar, "RAIZ", self.raiz), \

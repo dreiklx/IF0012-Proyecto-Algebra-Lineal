@@ -3,3 +3,4 @@
 streamlit==1.66.1   # interfaz web local
 matplotlib==3.11.2  # gráficas estáticas (respaldo e imágenes)
 plotly==6.3.0       # gráficas interactivas (rotar, zoom, desplazar, valores al pasar el cursor)
+mediapipe==1.2.2    # control gestual de la gráfica 3D (trae opencv-contrib-python y numpy); la visión corre en este equipo
