@@ -89,9 +89,17 @@ def tabla_vector(v, nombre="x", cifras=6):
 
 
 def mostrar_pasos(pasos, separador):
-    """Muestra el procedimiento paso a paso (descripción + matriz)."""
+    """Muestra el procedimiento paso a paso (descripción + matriz).
+
+    Si el paso trae la notación de clase («−2F₁ + F₂»), se muestra primero y la
+    forma Fᵢ → Fᵢ − m·Fⱼ queda como aclaración."""
     for numero, paso in enumerate(pasos):
-        st.markdown(f"**Paso {numero}.** {paso.descripcion}")
+        notacion = getattr(paso, "notacion", "")
+        if notacion:
+            st.markdown(f"**Paso {numero}.** {notacion} &nbsp;·&nbsp; <small>{paso.descripcion}</small>",
+                        unsafe_allow_html=True)
+        else:
+            st.markdown(f"**Paso {numero}.** {paso.descripcion}")
         st.latex(latex_matriz(paso.matriz, separador=separador))
 
 

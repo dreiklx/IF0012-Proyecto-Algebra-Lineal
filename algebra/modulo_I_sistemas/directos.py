@@ -52,9 +52,16 @@ UMBRAL_PIVOTE_PEQUENO = Fraction(1, 10**10)
 
 @dataclass
 class Paso:
-    """Una operación del procedimiento y el estado de la matriz después de ella."""
+    """Una operación del procedimiento y el estado de la matriz después de ella.
+
+    `notacion` es la misma operación escrita como la profesora en sus manuscritos
+    (S3-24/08 pp. 4-5; S6-16/09 p. 29): el múltiplo de la fila pivote más la fila
+    que cambia («−2F₁ + F₂»), la normalización del pivote («−⅓F₃» → «(−1/3)F₃»)
+    y el intercambio «F₂ ↔ F₁».  Es solo texto: no interviene en el cálculo.
+    """
     descripcion: str
     matriz: list
+    notacion: str = ""
 
 
 @dataclass
@@ -105,6 +112,29 @@ def _copiar(M):
 
 def _texto_fila(i):
     return f"F{i + 1}"
+
+
+_SUBINDICES = str.maketrans("0123456789", "₀₁₂₃₄₅₆₇₈₉")
+
+
+def _fila_clase(i):
+    """F₁, F₂, ... con subíndice, como en los manuscritos."""
+    return "F" + str(i + 1).translate(_SUBINDICES)
+
+
+def _coeficiente_clase(k):
+    """Múltiplo escrito delante de la fila: 1 -> '', -1 -> '−', 1/3 -> '(1/3)'."""
+    if k == 1:
+        return ""
+    if k == -1:
+        return "−"
+    texto = formatear_numero(k).replace("-", "−")
+    return f"({texto})" if "/" in texto else texto
+
+
+def _notacion_combinacion(i, factor, r):
+    """Fi -> Fi - factor·Fr escrita como en clase: «(−factor)Fr + Fi»."""
+    return f"{_coeficiente_clase(-factor)}{_fila_clase(r)} + {_fila_clase(i)}"
 
 
 def _mayor_absoluto(A):
@@ -170,7 +200,8 @@ def _escalonar(M, n_columnas_pivote, estrategia, reducida, pasos, advertencias, 
                 motivo = "pivoteo parcial: se elige el mayor |elemento| de la columna"
             else:
                 motivo = f"el elemento ({fila + 1}, {c + 1}) es 0"
-            pasos.append(Paso(f"{_texto_fila(fila)} ↔ {_texto_fila(p)}  ({motivo})", _copiar(M)))
+            pasos.append(Paso(f"{_texto_fila(fila)} ↔ {_texto_fila(p)}  ({motivo})", _copiar(M),
+                              f"{_fila_clase(fila)} ↔ {_fila_clase(p)}"))
         pivote = M[fila][c]
         producto = producto * pivote
         if referencia > 0 and abs(pivote) < UMBRAL_PIVOTE_PEQUENO * referencia:
@@ -184,14 +215,16 @@ def _escalonar(M, n_columnas_pivote, estrategia, reducida, pasos, advertencias, 
             M[fila] = [valor / pivote for valor in M[fila]]
             pasos.append(Paso(
                 f"{_texto_fila(fila)} → {_texto_fila(fila)} ÷ ({formatear_numero(pivote)})"
-                f"  (pivote = 1)", _copiar(M)))
+                f"  (pivote = 1)", _copiar(M),
+                f"{_coeficiente_clase(1 / pivote)}{_fila_clase(fila)}"))
         filas_a_anular = range(m) if reducida else range(fila + 1, m)
         for i in filas_a_anular:
             if i == fila or M[i][c] == 0:
                 continue
             factor = M[i][c] / M[fila][c]
             M[i] = [M[i][j] - factor * M[fila][j] for j in range(len(M[i]))]
-            pasos.append(Paso(_describir_combinacion(i, factor, fila), _copiar(M)))
+            pasos.append(Paso(_describir_combinacion(i, factor, fila), _copiar(M),
+                              _notacion_combinacion(i, factor, fila)))
         pivotes.append((fila, c))
         fila += 1
     return pivotes, signo, producto
