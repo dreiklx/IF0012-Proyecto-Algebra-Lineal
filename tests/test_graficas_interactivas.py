@@ -10,13 +10,15 @@ import unittest
 from fractions import Fraction as F
 
 from algebra.modulo_III_minimos.minimos import ajuste_lineal
-from algebra.modulo_IV_iterativos.espectral import radio_espectral
-from algebra.modulo_IV_iterativos.iterativos import (
-    ConfiguracionIterativa,
+from algebra.modulo_IV_iterativos.comparacion import (
     comparar_metodos,
     configuraciones_homogeneas,
+)
+from algebra.modulo_IV_iterativos.ejecucion import (
+    ConfiguracionIterativa,
     ejecutar,
 )
+from algebra.modulo_IV_iterativos.espectral import radio_espectral
 from algebra.modulo_IV_iterativos.precondicionamiento import analizar_precondicionador
 from algebra.modulo_I_sistemas.directos import resolver_gauss
 from interfaz import navegacion as nav

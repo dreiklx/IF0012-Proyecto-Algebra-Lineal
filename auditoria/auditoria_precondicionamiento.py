@@ -14,7 +14,8 @@ import sys
 from fractions import Fraction as F
 
 sys.path.insert(0, sys.argv[1] if len(sys.argv) > 1 else ".")
-from algebra.modulo_IV_iterativos.iterativos import ConfiguracionIterativa, JACOBI, RICHARDSON
+from algebra.modulo_IV_iterativos.ejecucion import ConfiguracionIterativa
+from algebra.modulo_IV_iterativos.metodos import JACOBI, RICHARDSON
 from algebra.modulo_IV_iterativos.precondicionamiento import analizar_precondicionador
 
 random.seed(11)

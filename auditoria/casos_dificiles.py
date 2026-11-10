@@ -14,7 +14,7 @@ from algebra.modulo_IV_iterativos.espectral import (
     radio_espectral,
     raices,
 )
-from algebra.modulo_IV_iterativos.iterativos import GAUSS_SEIDEL, JACOBI, SOR
+from algebra.modulo_IV_iterativos.metodos import GAUSS_SEIDEL, JACOBI, SOR
 def poli(rs):  # coeficientes de prod (λ - r) con r Fraction (reales)
     c=[F(1)]
     for r in rs:

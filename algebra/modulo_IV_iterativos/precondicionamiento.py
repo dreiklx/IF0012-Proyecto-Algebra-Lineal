@@ -37,6 +37,10 @@ from algebra.compartido.exactos import a_fraccion
 from algebra.compartido.matriz import identidad, validar_cuadrada, validar_vector
 from algebra.compartido.validacion import ErrorEntrada, formatear_numero
 from algebra.modulo_II_condicionamiento.condicion import numero_condicion_infinito
+from algebra.modulo_IV_iterativos.ejecucion import (
+    ConfiguracionIterativa,
+    ejecutar,
+)
 from algebra.modulo_IV_iterativos.espectral import (
     AVISO_CASI_REPETIDOS,
     N_MAX_ESPECTRAL,
@@ -44,12 +48,10 @@ from algebra.modulo_IV_iterativos.espectral import (
     concluir,
     matriz_iteracion,
 )
-from algebra.modulo_IV_iterativos.iterativos import (
-    ConfiguracionIterativa,
+from algebra.modulo_IV_iterativos.metodos import (
     METODOS,
     RICHARDSON,
     SOR,
-    ejecutar,
 )
 
 

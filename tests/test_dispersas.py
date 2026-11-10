@@ -10,16 +10,18 @@ from algebra.modulo_IV_iterativos.dispersas import (
     producto_csr_vector,
     tridiagonal,
 )
-from algebra.modulo_IV_iterativos.iterativos import (
+from algebra.modulo_IV_iterativos.ejecucion import (
     CRITERIO_CAMBIO,
     CRITERIO_RESIDUO,
     ConfiguracionIterativa,
+    TOLERANCIA_CAMBIO,
+    ejecutar,
+)
+from algebra.modulo_IV_iterativos.metodos import (
     GAUSS_SEIDEL,
     JACOBI,
     METODOS,
     SOR,
-    TOLERANCIA_CAMBIO,
-    ejecutar,
     paso_gauss_seidel,
 )
 

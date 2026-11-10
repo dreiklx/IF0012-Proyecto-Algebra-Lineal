@@ -12,7 +12,12 @@ NO se usan como referencia.
 import unittest
 from fractions import Fraction as F
 
-from algebra.modulo_IV_iterativos.iterativos import (
+from algebra.modulo_IV_iterativos.comparacion import (
+    comparar_metodos,
+    configuraciones_homogeneas,
+)
+from algebra.modulo_IV_iterativos.convergencia import dominancia_diagonal
+from algebra.modulo_IV_iterativos.ejecucion import (
     CRITERIO_CAMBIO,
     CRITERIO_ITERACIONES,
     CRITERIO_RESIDUO,
@@ -20,19 +25,18 @@ from algebra.modulo_IV_iterativos.iterativos import (
     DIAGONAL_CERO,
     ENTRADA_INVALIDA,
     ERROR_NO_FINITO,
-    GAUSS_SEIDEL,
-    JACOBI,
     K_TOPE,
     MAXIMO_ITERACIONES,
     N_COMPLETADAS,
-    SOR,
     TOLERANCIA_CAMBIO,
     TOLERANCIA_RESIDUO,
-    comparar_metodos,
-    configuraciones_homogeneas,
-    dominancia_diagonal,
     ejecutar,
     vector_diagonal,
+)
+from algebra.modulo_IV_iterativos.metodos import (
+    GAUSS_SEIDEL,
+    JACOBI,
+    SOR,
 )
 
 # Sistema S (S8-30/09 pp. 17-18, 23, 29; Tarea II #2 reordenada)

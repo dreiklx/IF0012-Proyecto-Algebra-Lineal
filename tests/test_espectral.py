@@ -14,6 +14,10 @@ import unittest
 from fractions import Fraction as F
 
 from algebra.compartido.validacion import ErrorEntrada
+from algebra.modulo_IV_iterativos.ejecucion import (
+    ConfiguracionIterativa,
+    ejecutar,
+)
 from algebra.modulo_IV_iterativos.espectral import (
     CONVERGE,
     INDETERMINADO,
@@ -25,12 +29,10 @@ from algebra.modulo_IV_iterativos.espectral import (
     radio_espectral,
     texto_polinomio_curso,
 )
-from algebra.modulo_IV_iterativos.iterativos import (
-    ConfiguracionIterativa,
+from algebra.modulo_IV_iterativos.metodos import (
     GAUSS_SEIDEL,
     JACOBI,
     SOR,
-    ejecutar,
 )
 
 

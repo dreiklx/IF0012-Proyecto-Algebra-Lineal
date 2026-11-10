@@ -14,15 +14,16 @@ from algebra.compartido.validacion import (
     leer_tolerancia,
     leer_vector,
 )
-from algebra.modulo_IV_iterativos.dispersas import a_csr
-from algebra.modulo_IV_iterativos.espectral import (
-    CONVERGE,
-    NO_CALCULADO,
-    NO_CONVERGE,
-    desarrollo_sarrus,
-    radio_espectral,
+from algebra.modulo_IV_iterativos.comparacion import (
+    comparar_metodos,
+    configuraciones_homogeneas,
 )
-from algebra.modulo_IV_iterativos.iterativos import (
+from algebra.modulo_IV_iterativos.convergencia import (
+    dominancia_diagonal,
+    reordenamiento_dominante,
+)
+from algebra.modulo_IV_iterativos.dispersas import a_csr
+from algebra.modulo_IV_iterativos.ejecucion import (
     CRITERIO_CAMBIO,
     CRITERIO_ITERACIONES,
     CRITERIO_RESIDUO,
@@ -31,18 +32,23 @@ from algebra.modulo_IV_iterativos.iterativos import (
     ENTRADA_INVALIDA,
     ERROR_INTERNO,
     ERROR_NO_FINITO,
-    GAUSS_SEIDEL,
-    JACOBI,
     K_TOPE,
     MAXIMO_ITERACIONES,
+    ejecutar,
+    vector_diagonal,
+)
+from algebra.modulo_IV_iterativos.espectral import (
+    CONVERGE,
+    NO_CALCULADO,
+    NO_CONVERGE,
+    desarrollo_sarrus,
+    radio_espectral,
+)
+from algebra.modulo_IV_iterativos.metodos import (
+    GAUSS_SEIDEL,
+    JACOBI,
     METODOS,
     SOR,
-    comparar_metodos,
-    configuraciones_homogeneas,
-    dominancia_diagonal,
-    ejecutar,
-    reordenamiento_dominante,
-    vector_diagonal,
 )
 from algebra.modulo_IV_iterativos.precondicionamiento import analizar_precondicionador
 from interfaz import ejemplos

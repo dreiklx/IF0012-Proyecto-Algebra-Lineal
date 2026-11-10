@@ -1,15 +1,7 @@
-"""Módulo IV — Métodos iterativos: Jacobi, Gauss-Seidel y SOR (OFICIAL p. 2).
+"""Módulo IV — Ejecución de un método iterativo: validación, bucle y parada.
 
-Fórmulas por componentes (A = D + L + U; i = 1..n en orden):
-
-  Jacobi        (S8-30/09 p. 15)
-      x_i(k) = ( b_i - Σ_{j≠i} a_ij x_j(k-1) ) / a_ii
-
-  Gauss-Seidel  (S8-30/09 p. 22) — usa los valores ya actualizados
-      x_i(k) = ( b_i - Σ_{j<i} a_ij x_j(k) - Σ_{j>i} a_ij x_j(k-1) ) / a_ii
-
-  SOR           (S8-30/09 p. 28) — combina el valor anterior y el de Gauss-Seidel
-      x_i(k) = (1-ω) x_i(k-1) + ω · ( b_i - Σ_{j<i} a_ij x_j(k) - Σ_{j>i} a_ij x_j(k-1) ) / a_ii
+Un solo mecanismo común para Jacobi, Gauss-Seidel y SOR (las fórmulas de cada
+paso están en metodos.py), para no repetir tres veces la misma lógica.
 
 Métricas que se registran en CADA iteración, sea cual sea el criterio:
   d_k = ||x(k) - x(k-1)||∞   (cambio entre iteraciones; no existe para k = 0)
@@ -23,11 +15,8 @@ Criterios de parada (elegidos por el usuario; desigualdad estricta):
 El criterio A es el que la docente usa con más frecuencia
 (S8-30/09 pp. 18, 23, 29, 34, 39, 40; S9-05/10 pp. 18, 26).
 
-La aritmética de este módulo es de punto flotante (float): las iteraciones
-son aproximaciones que se cortan por tolerancia.
-
-El paso de cada método está separado del mecanismo común de iteración y
-parada (función `ejecutar`), para no repetir tres veces la misma lógica.
+`ejecutar` nunca lanza excepciones: todo problema vuelve como un código de
+terminación con su mensaje (OFICIAL p. 3: sin cierres inesperados).
 """
 
 import math
@@ -40,20 +29,21 @@ from algebra.modulo_IV_iterativos.dispersas import (
     a_csr,
     paso_gauss_seidel_csr,
     paso_jacobi_csr,
+    paso_richardson_csr,
     paso_sor_csr,
-    producto_csr_vector,
     residuo_inf_csr,
 )
-from algebra.modulo_I_sistemas.directos import ErrorSistema, solucion_unica
-
-JACOBI = "Jacobi"
-GAUSS_SEIDEL = "Gauss-Seidel"
-SOR = "SOR"
-METODOS = (JACOBI, GAUSS_SEIDEL, SOR)
-# Richardson no es uno de los métodos del enunciado: solo se usa en el análisis del
-# precondicionador diagonal (algebra/precondicionamiento.py), porque es el método
-# estacionario más simple sobre el que M = D sí tiene efecto.
-RICHARDSON = "Richardson"
+from algebra.modulo_IV_iterativos.metodos import (
+    GAUSS_SEIDEL,
+    JACOBI,
+    METODOS,
+    RICHARDSON,
+    SOR,
+    paso_gauss_seidel,
+    paso_jacobi,
+    paso_richardson,
+    paso_sor,
+)
 
 CRITERIO_CAMBIO = "A"
 CRITERIO_RESIDUO = "B"
@@ -148,70 +138,6 @@ class ResultadoIterativo:
         return self.ultima.r if self.ultima else None
 
 
-# ---------------------------------------------------------------------------
-# Pasos de cada método (una iteración)
-# ---------------------------------------------------------------------------
-
-def paso_jacobi(A, b, x_anterior, omega=None):
-    """Una iteración de Jacobi: todas las componentes usan x(k-1)."""
-    n = len(A)
-    x_nuevo = [0.0] * n
-    for i in range(n):
-        suma = 0.0
-        for j in range(n):
-            if j != i:
-                suma += A[i][j] * x_anterior[j]
-        x_nuevo[i] = (b[i] - suma) / A[i][i]
-    return x_nuevo
-
-
-def paso_gauss_seidel(A, b, x_anterior, omega=None):
-    """Una iteración de Gauss-Seidel: usa los valores ya actualizados (j < i)."""
-    n = len(A)
-    x = list(x_anterior)
-    for i in range(n):
-        suma = 0.0
-        for j in range(n):
-            if j != i:
-                suma += A[i][j] * x[j]   # x[j] ya es x_j(k) si j < i
-        x[i] = (b[i] - suma) / A[i][i]
-    return x
-
-
-def paso_sor(A, b, x_anterior, omega):
-    """Una iteración de SOR: x_i = (1-ω)·x_i(k-1) + ω·(valor de Gauss-Seidel)."""
-    n = len(A)
-    x = list(x_anterior)
-    for i in range(n):
-        suma = 0.0
-        for j in range(n):
-            if j != i:
-                suma += A[i][j] * x[j]
-        valor_gs = (b[i] - suma) / A[i][i]
-        x[i] = (1 - omega) * x_anterior[i] + omega * valor_gs
-    return x
-
-
-def paso_richardson(A, b, x_anterior, omega=None):
-    """Una iteración de Richardson (paso 1): x(k) = x(k-1) + (b - A x(k-1)).
-
-    Su matriz de iteración es T_R = I - A.  Aplicado al sistema precondicionado
-    D⁻¹A x = D⁻¹b da x(k) = x(k-1) + D⁻¹(b - A x(k-1)), que es exactamente Jacobi."""
-    n = len(A)
-    x_nuevo = [0.0] * n
-    for i in range(n):
-        ax = 0.0
-        for j in range(n):
-            ax += A[i][j] * x_anterior[j]
-        x_nuevo[i] = x_anterior[i] + (b[i] - ax)
-    return x_nuevo
-
-
-def paso_richardson_csr(M, b, x_anterior, omega=None):
-    ax = producto_csr_vector(M, x_anterior)
-    return [x_anterior[i] + (b[i] - ax[i]) for i in range(M.n)]
-
-
 PASOS = {JACOBI: paso_jacobi, GAUSS_SEIDEL: paso_gauss_seidel, SOR: paso_sor,
          RICHARDSON: paso_richardson}
 PASOS_CSR = {JACOBI: paso_jacobi_csr, GAUSS_SEIDEL: paso_gauss_seidel_csr, SOR: paso_sor_csr,
@@ -232,7 +158,8 @@ def _a_float(valor, nombre):
     return resultado
 
 
-def _norma_inf(v):
+def norma_inf(v):
+    """||v||∞ en float; propaga NaN (para detectar valores no finitos)."""
     mayor = 0.0
     for valor in v:
         if abs(valor) > mayor or math.isnan(valor):
@@ -308,7 +235,7 @@ def validar_configuracion(A, b, config):
                                "use un valor mayor (por ejemplo 1e-12).")
         if not _es_entero(config.k_max) or not (1 <= config.k_max <= K_TOPE):
             raise ErrorEntrada(f"El máximo de iteraciones debe ser un entero entre 1 y {K_TOPE}.")
-        escala = max(1.0, _norma_inf(b_f))
+        escala = max(1.0, norma_inf(b_f))
         if tol_f < 1e-14 * escala:
             advertencias.append(
                 "La tolerancia puede ser inalcanzable en aritmética de punto flotante.")
@@ -391,7 +318,7 @@ def _ejecutar(A, b, config):
         x_nuevo = paso(matriz, b_f, x, omega)
         d = r = None
         if all(math.isfinite(v) for v in x_nuevo):
-            d = _norma_inf([x_nuevo[i] - x[i] for i in range(n)])
+            d = norma_inf([x_nuevo[i] - x[i] for i in range(n)])
             r = residuo(matriz, b_f, x_nuevo)
         if d is None or not (math.isfinite(d) and math.isfinite(r)):
             return resultado(
@@ -420,148 +347,3 @@ def _ejecutar(A, b, config):
     return resultado(
         MAXIMO_ITERACIONES,
         "Se alcanzó el máximo de iteraciones sin satisfacer el criterio de parada.", False)
-
-
-# ---------------------------------------------------------------------------
-# Dominancia diagonal (S8-30/09 p. 37)
-# ---------------------------------------------------------------------------
-
-@dataclass
-class ResultadoDominancia:
-    estricta: bool
-    filas: list          # (i, |a_ii|, suma |a_ij| j≠i, cumple)
-    mensaje: str
-
-
-def dominancia_diagonal(A):
-    """Comprueba la dominancia diagonal estricta por filas: |a_ii| > Σ_{j≠i} |a_ij|.
-
-    Es una condición SUFICIENTE (no necesaria): si se cumple, Jacobi y
-    Gauss-Seidel convergen para cualquier x(0); si no se cumple, no se puede
-    concluir nada y hace falta otro análisis (por ejemplo el radio espectral).
-    """
-    n = validar_cuadrada(A, "matriz A")
-    filas = []
-    for i in range(n):
-        diagonal = abs(a_fraccion(A[i][i]))
-        suma = sum(abs(a_fraccion(A[i][j])) for j in range(n) if j != i)
-        filas.append((i, diagonal, suma, diagonal > suma))
-    estricta = all(f[3] for f in filas)
-    if estricta:
-        mensaje = ("A es estrictamente diagonalmente dominante por filas: Jacobi y "
-                   "Gauss-Seidel convergen para cualquier vector inicial (condición suficiente).")
-    else:
-        malas = ", ".join(str(f[0] + 1) for f in filas if not f[3])
-        mensaje = (f"A no es estrictamente diagonalmente dominante por filas (fallan las filas "
-                   f"{malas}). Esto NO implica que los métodos diverjan: la dominancia es solo "
-                   f"una condición suficiente; analice el radio espectral o reordene las ecuaciones.")
-    return ResultadoDominancia(estricta=estricta, filas=filas, mensaje=mensaje)
-
-
-def reordenamiento_dominante(A, b):
-    """Busca un reordenamiento de las ECUACIONES (filas de A y de b) que haga A
-    estrictamente diagonalmente dominante por filas, como en clase (Tarea II #2-3;
-    S9-05/10 p. 32).  No modifica nada: devuelve (A_reordenada, b_reordenado, orden)
-    o None si no existe.
-
-    Si la fila i es dominante con el elemento de la columna j, entonces
-    2|a_ij| > Σ_k |a_ik|; como esto solo lo cumple a lo sumo una columna por fila,
-    basta con asignar a cada fila su única columna candidata y comprobar que la
-    asignación es una permutación (coste O(n²), sin búsqueda exhaustiva)."""
-    n = validar_cuadrada(A, "matriz A")
-    if validar_vector(b, "vector b") != n:
-        raise ErrorEntrada(f"b debe tener {n} componentes (A es {n}x{n}).")
-    posicion = [None] * n          # posicion[j] = fila original que irá a la fila j
-    for i in range(n):
-        fila = [abs(a_fraccion(v)) for v in A[i]]
-        total = sum(fila)
-        candidatas = [j for j in range(n) if 2 * fila[j] > total]
-        if not candidatas or posicion[candidatas[0]] is not None:
-            return None
-        posicion[candidatas[0]] = i
-    return [list(A[i]) for i in posicion], [b[i] for i in posicion], posicion
-
-
-# ---------------------------------------------------------------------------
-# Comparación entre métodos
-# ---------------------------------------------------------------------------
-
-CAMPOS_HOMOGENEOS = ("criterio", "tolerancia", "k_max", "n_iteraciones", "x0")
-
-
-@dataclass
-class ResultadoComparacion:
-    resultados: list
-    homogeneo: bool
-    diferencias: list
-    referencia: list = None          # solución del método directo, si existe
-    errores_finales: list = None     # ||x_final - x*||∞ por método (o None)
-    errores_historial: list = None   # lista por método de e_k
-    nota: str = ("El número de iteraciones solo es comparable entre métodos que "
-                 "terminaron por el mismo motivo.")
-
-
-def _valor_campo(config, campo):
-    valor = getattr(config, campo)
-    if campo == "x0" and valor is not None:
-        return tuple(float(a_fraccion(v)) for v in valor)
-    if campo in ("tolerancia",):
-        return float(a_fraccion(valor))
-    return valor
-
-
-def comparar_metodos(A, b, configuraciones):
-    """Ejecuta varias configuraciones sobre el mismo A x = b y las compara.
-
-    Se considera homogéneo si coinciden criterio, tolerancia, k_max, N y x(0)
-    (los que corresponden al criterio).  ω solo afecta a SOR y no se compara.
-    """
-    resultados = [ejecutar(A, b, c) for c in configuraciones]
-    diferencias = []
-    base = configuraciones[0]
-    campos = list(CAMPOS_HOMOGENEOS)
-    if base.criterio == CRITERIO_ITERACIONES:
-        campos.remove("tolerancia")
-        campos.remove("k_max")
-    else:
-        campos.remove("n_iteraciones")
-    for campo in campos:
-        try:
-            valores = {_valor_campo(c, campo) for c in configuraciones}
-        except Exception:
-            valores = {None, "?"}
-        if len(valores) > 1:
-            diferencias.append(campo)
-
-    referencia = None
-    try:
-        referencia = [float(v) for v in solucion_unica(
-            [[a_fraccion(v) for v in fila] for fila in A], [a_fraccion(v) for v in b])]
-    except (ErrorSistema, ErrorMatriz, ErrorEntrada, OverflowError, ValueError):
-        referencia = None
-
-    errores_finales = []
-    errores_historial = []
-    for r in resultados:
-        if referencia is None or not r.historial:
-            errores_finales.append(None)
-            errores_historial.append(None)
-            continue
-        historia = [_norma_inf([fila.x[i] - referencia[i] for i in range(len(referencia))])
-                    for fila in r.historial]
-        errores_historial.append(historia)
-        errores_finales.append(historia[-1])
-    return ResultadoComparacion(
-        resultados=resultados, homogeneo=not diferencias, diferencias=diferencias,
-        referencia=referencia, errores_finales=errores_finales,
-        errores_historial=errores_historial)
-
-
-def configuraciones_homogeneas(criterio=CRITERIO_CAMBIO, tolerancia=1e-3, k_max=50,
-                               n_iteraciones=5, x0=None, omega=1.2):
-    """Devuelve las tres configuraciones (Jacobi, Gauss-Seidel, SOR) con los mismos
-    parámetros; SOR usa además su propio ω."""
-    return [ConfiguracionIterativa(metodo=m, criterio=criterio, tolerancia=tolerancia,
-                                   k_max=k_max, n_iteraciones=n_iteraciones,
-                                   x0=list(x0) if x0 is not None else None, omega=omega)
-            for m in METODOS]
