@@ -23,8 +23,8 @@ import streamlit as st
 
 from algebra.compartido.matriz import ErrorMatriz
 from algebra.compartido.validacion import ErrorEntrada, leer_matriz, leer_vector
-from interfaz.componentes import latex_matriz
-from interfaz.estilo import insignias
+from interfaz.compartido.componentes import latex_matriz
+from interfaz.compartido.estilo import insignias
 
 MAX_VISUAL_FILAS = 12      # por encima de esto la rejilla se reemplaza por el texto
 MAX_VISUAL_COLUMNAS = 10

@@ -13,8 +13,8 @@ from algebra.modulo_I_sistemas.directos import (
     resolver_gauss,
     resolver_gauss_jordan,
 )
-from interfaz import ejemplos
-from interfaz.componentes import (
+from interfaz.compartido import ejemplos
+from interfaz.compartido.componentes import (
     CONTROLES_2D,
     CONTROLES_3D,
     latex_matriz,
@@ -25,7 +25,7 @@ from interfaz.componentes import (
     mostrar_pasos,
     tabla_vector,
 )
-from interfaz.editor import (
+from interfaz.compartido.editor import (
     MATRIZ,
     VECTOR,
     analizar,
@@ -34,7 +34,7 @@ from interfaz.editor import (
     problema_dimensiones,
     restaurar,
 )
-from interfaz.estilo import (
+from interfaz.compartido.estilo import (
     encabezado_modulo,
     insignias,
     marca_incentivo,

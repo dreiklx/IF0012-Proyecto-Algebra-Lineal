@@ -15,15 +15,15 @@ from algebra.modulo_II_condicionamiento.condicion import (
     numero_condicion_infinito,
 )
 from algebra.modulo_I_sistemas.directos import ErrorSistema
-from interfaz import ejemplos
-from interfaz.componentes import (
+from interfaz.compartido import ejemplos
+from interfaz.compartido.componentes import (
     latex_matriz,
     latex_numero,
     leer_matriz_ui,
     leer_vector_ui,
     mostrar_pasos,
 )
-from interfaz.editor import (
+from interfaz.compartido.editor import (
     MATRIZ,
     VECTOR,
     analizar,
@@ -32,7 +32,7 @@ from interfaz.editor import (
     problema_dimensiones,
     restaurar,
 )
-from interfaz.estilo import (
+from interfaz.compartido.estilo import (
     encabezado_modulo,
     escala_kappa,
     insignias,

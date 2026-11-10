@@ -18,7 +18,7 @@ except ImportError:  # pragma: no cover
     AppTest = None
 
 from interfaz import navegacion as nav
-from interfaz.editor import (
+from interfaz.compartido.editor import (
     PUNTOS,
     VECTOR,
     analizar,
@@ -95,7 +95,7 @@ class TestEditorNoAlteraLosDatos(unittest.TestCase):
         return original
 
     def test_todos_los_ejemplos(self):
-        from interfaz import ejemplos
+        from interfaz.compartido import ejemplos
         for A, b in ejemplos.DIRECTOS.values():
             self.misma_lectura(A)
             self.misma_lectura(b.replace(" ", "\n"), vector=True)

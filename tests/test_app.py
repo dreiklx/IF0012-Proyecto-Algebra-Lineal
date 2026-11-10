@@ -188,7 +188,7 @@ class TestComponentes(unittest.TestCase):
 
     def test_latex_separa_filas_con_fracciones(self):
         from fractions import Fraction
-        from interfaz.componentes import latex_matriz
+        from interfaz.compartido.componentes import latex_matriz
         con = latex_matriz([[Fraction(65, 33)], [Fraction(-29, 33)]])
         self.assertIn(r"\[6pt]", con)
         self.assertIn(r"\frac{65}{33}", con)
@@ -200,7 +200,7 @@ class TestComponentes(unittest.TestCase):
         import csv
         import io
         from algebra.modulo_IV_iterativos.ejecucion import ConfiguracionIterativa, ejecutar
-        from interfaz.modulo_iterativos import csv_historial
+        from interfaz.modulos.modulo_IV_iterativos.pestana_ejecutar import csv_historial
         r = ejecutar([[10, -1, 2], [-1, 11, -1], [2, -1, 10]], [6, 25, -11],
                      ConfiguracionIterativa())
         filas = list(csv.reader(io.StringIO(csv_historial(r))))

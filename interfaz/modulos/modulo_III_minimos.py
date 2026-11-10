@@ -10,8 +10,8 @@ from algebra.modulo_III_minimos.minimos import (
     ajuste_lineal,
     minimos_cuadrados,
 )
-from interfaz import ejemplos
-from interfaz.componentes import (
+from interfaz.compartido import ejemplos
+from interfaz.compartido.componentes import (
     latex_matriz,
     latex_vector,
     leer_matriz_ui,
@@ -19,7 +19,7 @@ from interfaz.componentes import (
     mostrar_interactiva,
     tabla_vector,
 )
-from interfaz.editor import (
+from interfaz.compartido.editor import (
     MATRIZ,
     PUNTOS,
     VECTOR,
@@ -29,7 +29,7 @@ from interfaz.editor import (
     problema_dimensiones,
     restaurar,
 )
-from interfaz.estilo import (
+from interfaz.compartido.estilo import (
     encabezado_modulo,
     insignias,
     seccion,

@@ -1,5 +1,5 @@
 """Página «sistemas» (la registra app.py con st.navigation)."""
 
-from interfaz import modulo_directos
+from interfaz.modulos import modulo_I_sistemas
 
-modulo_directos.mostrar()
+modulo_I_sistemas.mostrar()

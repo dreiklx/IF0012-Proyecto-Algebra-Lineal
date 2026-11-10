@@ -9,8 +9,9 @@ import streamlit as st
 
 from algebra.compartido.validacion import leer_matriz, leer_vector
 from algebra.modulo_I_sistemas.directos import resolver_gauss_jordan
-from interfaz import ejemplos, navegacion as nav
-from interfaz.estilo import _e
+from interfaz import navegacion as nav
+from interfaz.compartido import ejemplos
+from interfaz.compartido.estilo import _e
 
 MODULOS = [
     ("I", "Sistemas lineales y métodos directos", nav.SISTEMAS,
