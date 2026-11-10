@@ -215,6 +215,19 @@ class TestAdvertenciasYErrores(unittest.TestCase):
         self.assertIn("F2 → F2 − (2)·F1", [p.descripcion for p in r.pasos])
         self.assertEqual(r.solucion, [1, 1])
 
+    def test_notacion_de_clase(self):
+        # Manuscrito S6-16/09 p. 29: x+y+z=6, 2x+y−z=3, −x+y+2z=7.  La docente anota
+        # −2F₁+F₂, F₁+F₃, −F₂ (pivote 1), −2F₂+F₃ y −⅓F₃; Gauss-Jordan registra las
+        # mismas operaciones con la misma notación.
+        r = resolver_gauss_jordan([[1, 1, 1], [2, 1, -1], [-1, 1, 2]], [6, 3, 7])
+        notaciones = [p.notacion for p in r.pasos]
+        for esperada in ("−2F₁ + F₂", "F₁ + F₃", "−F₂", "−2F₂ + F₃", "(−1/3)F₃"):
+            self.assertIn(esperada, notaciones)
+        self.assertEqual(r.solucion, [F(1, 3), 4, F(5, 3)])
+        # Intercambio: F₁ ↔ F₂ cuando el pivote es 0.
+        r = resolver_gauss([[0, 1], [1, 1]], [2, 3])
+        self.assertEqual(r.pasos[1].notacion, "F₁ ↔ F₂")
+
     def test_entradas_invalidas(self):
         with self.assertRaises(ErrorDimension):
             resolver_gauss([[1, 2], [3, 4]], [1, 2, 3])

@@ -29,6 +29,7 @@ Componentes:
   insignias()            «chips» de estado (converge, singular, exacto, ...)
   escala_kappa()         barra de la escala del proyecto (κ < 10, < 100, ≥ 100)
   marca_incentivo()      indica qué funcionalidad real corresponde a un incentivo
+  procedencia()          categorías A/B/C/D: de dónde sale cada procedimiento
 """
 
 import html
@@ -167,6 +168,8 @@ h2.rotulo .rotulo-nota{font-family:var(--f-mono);font-size:.72rem;font-weight:40
 .chip-error{color:#FCA5A5;border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.08)}
 .chip-info{color:#93C5FD;border-color:rgba(79,140,255,.4);background:rgba(79,140,255,.08)}
 .chip-incentivo{color:#DDD6FE;border-color:rgba(167,139,250,.45);background:rgba(167,139,250,.09)}
+.procedencia{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem;margin:.1rem 0 .4rem;font-size:.74rem;color:var(--suave)}
+.procedencia .chip{font-size:.72rem;cursor:help}
 
 /* 6. Resultado principal, métricas y escala de κ --------------------------- */
 div[class*="st-key-res_"]{border:1px solid rgba(34,211,238,.32) !important;border-radius:var(--r-l) !important;
@@ -344,3 +347,25 @@ def escala_kappa(kappa):
 def marca_incentivo(nombre, maximo):
     """Indica junto a una funcionalidad real a qué incentivo de la rúbrica corresponde."""
     insignias([(f"Incentivo · {nombre} (hasta {maximo})", "incentivo")])
+
+
+# Categorías de procedencia (docs/auditoria_textos_profesora.md, sección 3).
+PROCEDENCIA = {
+    "A": ("Visto en clase", "ok"),
+    "B": ("Exigido por el enunciado", "info"),
+    "C": ("Extensión o incentivo", "incentivo"),
+    "D": ("Sin respaldo en el material", "aviso"),
+}
+LEYENDA_PROCEDENCIA = " · ".join(f"Cat. {k}: {v[0].lower()}" for k, v in PROCEDENCIA.items())
+
+
+def procedencia(lista):
+    """lista de (categoría, procedimiento, fuente).  Cada chip muestra la categoría y el
+    procedimiento; al pasar el cursor se ve la categoría completa y la fuente."""
+    partes = []
+    for categoria, texto, fuente in lista:
+        nombre, tipo = PROCEDENCIA[categoria]
+        partes.append(f'<span class="chip chip-{tipo}" title="{html.escape(f"{nombre} — {fuente}")}">'
+                      f'Cat. {_e(categoria)} · {_e(texto)}</span>')
+    st.markdown(f'<div class="procedencia" title="{html.escape(LEYENDA_PROCEDENCIA)}">'
+                f'<span>Procedencia:</span>{"".join(partes)}</div>', unsafe_allow_html=True)

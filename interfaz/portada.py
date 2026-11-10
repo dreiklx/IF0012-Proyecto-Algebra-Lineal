@@ -136,6 +136,13 @@ def mostrar():
             with ir:
                 st.page_link(pagina, label="Ver →")
 
+    st.markdown(
+        '<div class="nota"><b>Procedencia de cada procedimiento.</b> En cada módulo, los distintivos '
+        '«Cat.» indican de dónde sale lo que se calcula: <b>Cat. A</b>, visto en clase (con la página '
+        'del PDF al pasar el cursor); <b>Cat. B</b>, exigido por el enunciado del proyecto; <b>Cat. C</b>, '
+        'extensión o incentivo no visto en clase (por ejemplo Richardson, Faddeev-LeVerrier y '
+        'Durand-Kerner); <b>Cat. D</b>, sin respaldo en el material.</div>', unsafe_allow_html=True)
+
     st.markdown('<h2 class="rotulo">Cómo introducir los datos</h2>', unsafe_allow_html=True)
     c1, c2 = st.columns([3, 2], gap="large")
     with c1:

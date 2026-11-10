@@ -17,6 +17,7 @@ from interfaz.compartido.componentes import (
     CONTROLES_2D,
     CONTROLES_3D,
     latex_matriz,
+    latex_numero,
     latex_vector,
     leer_matriz_ui,
     leer_vector_ui,
@@ -37,6 +38,7 @@ from interfaz.compartido.estilo import (
     encabezado_modulo,
     insignias,
     marca_incentivo,
+    procedencia,
     seccion,
     tarjeta_resultado,
 )
@@ -51,6 +53,15 @@ def mostrar():
         "sistema según los rangos de A y de [A | b].",
         [("Gauss", "info"), ("Gauss-Jordan", "info"), ("Fracciones exactas", "ok"),
          ("Paso a paso", "")])
+    procedencia([
+        ("A", "[A | b] y operaciones elementales", "S2-19/08 p. 27; S6-14/09 pp. 25-27"),
+        ("A", "Gauss y sustitución hacia atrás", "S6-14/09 pp. 28-32; S6-16/09 p. 29"),
+        ("A", "Gauss-Jordan", "S3-24/08 pp. 4-5; S6-14/09 p. 30"),
+        ("A", "Tipos de solución", "S6-14/09 p. 26; S6-16/09 p. 29"),
+        ("B", "Pivotes nulos o problemáticos", "OFICIAL p. 2"),
+        ("C", "Pivoteo parcial", "S6-14/09 p. 34 solo menciona PA = LU"),
+        ("C", "Gráfica de rectas y planos", "UX; interpretación de S6-14/09 p. 26"),
+    ])
 
     seccion("1", "Datos del sistema", "Construya A y b en el editor, péguelos o cargue un ejemplo del curso")
     sel, boton = st.columns([4, 1], vertical_alignment="bottom")
@@ -117,8 +128,11 @@ def mostrar_resultado(A, b, r):
         for aviso in r.advertencias:
             st.warning("⚠️ " + aviso)
 
+        st.caption(clasificacion_de_clase(r))
         if r.clasificacion == UNICA:
             st.latex(r"x = " + latex_vector(r.solucion))
+            st.latex(r"\text{Sol} = \left\{\left(" + ", ".join(latex_numero(v) for v in r.solucion)
+                     + r"\right)\right\}")
         elif r.clasificacion == INFINITAS:
             terminos = latex_vector(r.solucion_particular)
             for indice, (libre, v) in enumerate(zip(r.variables_libres, r.direcciones), start=1):
@@ -168,6 +182,18 @@ def mostrar_resultado(A, b, r):
             texto.caption("Cada ecuación es una recta (2 incógnitas) o un plano (3 incógnitas). "
                        "Solución única: se cortan en un punto; infinitas: comparten una recta "
                        "o un plano; inconsistente: no hay punto común a todos.")
+
+
+def clasificacion_de_clase(r):
+    """La misma clasificación con las palabras de los manuscritos (S6-16/09 p. 29):
+    ecuaciones no nulas de la forma escalonada frente al número de incógnitas."""
+    if r.clasificacion == UNICA:
+        return (f"Como en clase: {r.rango_A} ecuaciones no nulas, {r.n_incognitas} incógnitas "
+                f"→ solución única.")
+    if r.clasificacion == INFINITAS:
+        return (f"Como en clase: {r.rango_A} ecuaciones no nulas < {r.n_incognitas} incógnitas "
+                f"→ infinitas soluciones.")
+    return "Como en clase: aparece una ecuación 0 = c con c ≠ 0 → el sistema no tiene solución."
 
 
 def verificar(A, b, x):

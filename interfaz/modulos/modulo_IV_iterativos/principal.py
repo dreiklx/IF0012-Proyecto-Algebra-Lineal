@@ -33,7 +33,7 @@ from interfaz.compartido.editor import (
     problema_dimensiones,
     restaurar,
 )
-from interfaz.compartido.estilo import encabezado_modulo, seccion
+from interfaz.compartido.estilo import encabezado_modulo, procedencia, seccion
 from interfaz.modulos.modulo_IV_iterativos.pestana_comparar import comparar
 from interfaz.modulos.modulo_IV_iterativos.pestana_convergencia import convergencia
 from interfaz.modulos.modulo_IV_iterativos.pestana_ejecutar import ejecutar_un_metodo
@@ -55,6 +55,16 @@ def mostrar():
         "sistema original).",
         [("Jacobi", "info"), ("Gauss-Seidel", "info"), ("SOR", "info"), ("Radio espectral", ""),
          ("CSR", "incentivo"), ("Precondicionador M = D", "incentivo")])
+    procedencia([
+        ("A", "Jacobi, Gauss-Seidel y SOR por componentes", "S8-30/09 pp. 15-33"),
+        ("A", "Parada ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞ < ε o residuo", "S8-28/09 p. 6; S8-30/09 p. 28"),
+        ("A", "x⁽⁰⁾ = bᵢ/aᵢᵢ", "S8-30/09 pp. 19-20 y 24"),
+        ("A", "Dominancia diagonal y reordenamiento", "S8-30/09 p. 37; S9-05/10 pp. 32-33"),
+        ("A", "T_J, T_GS y ρ(T) por det(T − λI)", "S9-07/10 pp. 3-7"),
+        ("B", "Tabla k, x⁽ᵏ⁾, error; motivo; comparación; gráfica", "OFICIAL p. 2"),
+        ("C", "CSR y precondicionador M = D", "Incentivos, OFICIAL p. 5; S9-05/10"),
+        ("C", "T de SOR, Faddeev-LeVerrier, Durand-Kerner, Richardson", "Extensiones no vistas en clase"),
+    ])
 
     seccion("1", "Sistema A x = b", "A cuadrada, con diagonal no nula")
     sel, boton = st.columns([4, 1], vertical_alignment="bottom")

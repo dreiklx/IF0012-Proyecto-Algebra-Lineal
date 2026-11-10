@@ -287,7 +287,7 @@ def _controles(clave, tipo, columnas_fijas):
 def _rejilla(clave, m, n, tipo, encabezados, etiqueta_fila):
     if encabezados is None:
         encabezados = [f"c{j + 1}" for j in range(n)] if tipo == MATRIZ else [""] * n
-    etiqueta_fila = etiqueta_fila or ("f" if tipo == MATRIZ else ("p" if tipo == PUNTOS else ""))
+    etiqueta_fila = etiqueta_fila or ("F" if tipo == MATRIZ else ("p" if tipo == PUNTOS else ""))
     anchos = [0.45] + [1] * n
     if any(encabezados):
         cabecera = st.columns(anchos)

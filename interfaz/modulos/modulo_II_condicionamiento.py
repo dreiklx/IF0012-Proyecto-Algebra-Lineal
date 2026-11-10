@@ -36,6 +36,7 @@ from interfaz.compartido.estilo import (
     encabezado_modulo,
     escala_kappa,
     insignias,
+    procedencia,
     seccion,
     tarjeta_resultado,
     valor_destacado,
@@ -51,6 +52,13 @@ def mostrar():
         r"Calcula κ∞(A) = ‖A‖∞ · ‖A⁻¹‖∞ con la inversa obtenida por <b>nuestro</b> Gauss-Jordan "
         "y compara la solución de A x = b con la del sistema perturbado A x̃ = b + Δb.",
         [("Inversa propia [A | I] → [I | A⁻¹]", "info"), ("Norma ∞", ""), ("Escala 10 / 100", "")])
+    procedencia([
+        ("A", "κ(A) = ‖A‖ ‖A⁻¹‖ y sus 5 pasos", "S7-21/09 pp. 17 y 19"),
+        ("A", "Inversa por Gauss-Jordan", "S3-24/08 pp. 6-8"),
+        ("A", "Cota ‖Δx‖/‖x‖ ≤ κ ‖Δb‖/‖b‖", "S7-21/09 p. 18"),
+        ("B", "Norma ∞ y escala 10 / 100", "OFICIAL p. 2; la lámina usa 5 niveles"),
+        ("B", "Perturbación absoluta o porcentual", "OFICIAL p. 2"),
+    ])
 
     seccion("1", "Matriz y vector", "A debe ser cuadrada (n × n) y b tener n componentes")
     sel, boton = st.columns([4, 1], vertical_alignment="bottom")
