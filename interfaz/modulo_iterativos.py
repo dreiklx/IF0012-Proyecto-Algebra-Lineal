@@ -569,9 +569,12 @@ def precondicionamiento(leer_todo, bloqueado=False):
     st.dataframe(filas, hide_index=True, width="stretch")
     for texto in r.conclusiones:
         st.info("💡 " + texto)
-    st.caption("Richardson (x ← x + (b − Ax)) no es uno de los métodos del enunciado: se incluye "
-               "porque es el método estacionario más simple sobre el que M = D sí tiene efecto; "
-               "Richardson precondicionado con M = D es exactamente Jacobi. La lámina de la "
-               "diapositiva 19 muestra una mejora para Jacobi que no se puede reproducir, porque "
-               "Jacobi, Gauss-Seidel y SOR ya están normalizados por la diagonal.")
+    st.warning("**Extensión no vista en clase — método de Richardson.** "
+               "La fila «Richardson» (x ← x + (b − Ax), matriz de iteración I − A) no es uno de los "
+               "métodos del enunciado ni aparece en los PDF del curso: se incluye como herramienta "
+               "de demostración, porque es el método estacionario más simple sobre el que M = D sí "
+               "tiene efecto. Richardson precondicionado con M = D es exactamente Jacobi. La lámina "
+               "de la diapositiva 19 (S9-05/10 p. 23) muestra una mejora para Jacobi que no se puede "
+               "reproducir, porque Jacobi, Gauss-Seidel y SOR ya están normalizados por la diagonal.",
+               icon="🧪")
     mostrar_interactiva(interactivas.precondicionador(r.comparaciones), "precondicionador")

@@ -40,3 +40,7 @@ CLAUDE.local.md
 # Temporales
 *.tmp
 *.log
+
+# Herramientas de desarrollo (Graphify): grafo local del código, no se versiona
+graphify-out/
+.graphifyignore

@@ -1,6 +1,6 @@
 """Incentivo «Precondicionamiento» (OFICIAL p. 5): precondicionador diagonal M = D.
 
-Procedimiento de clase (S9-05/10 pp. 17-19, diapositivas 16-18):
+Procedimiento de clase (S9-05/10 pp. 19-22, diapositivas 15-18):
     M = D = diag(a_11, ..., a_nn),   B = M⁻¹A,   b̃ = M⁻¹b,
 y se aplica el método iterativo al sistema equivalente B x = b̃, que tiene la
 misma solución.  La lámina de la diapositiva 17 propone comparar
@@ -12,7 +12,8 @@ Comparación que se implementa (todo con nuestro código, sin bibliotecas):
   2. Autovalores y radio espectral de A y de B (polinomio característico exacto).
   3. Iteraciones de Jacobi, Gauss-Seidel y SOR sobre el sistema original y el
      precondicionado, con la misma configuración, y sus matrices de iteración.
-  4. Iteraciones de Richardson, x ← x + (b − Ax), sobre ambos sistemas.
+  4. Iteraciones de Richardson, x ← x + (b − Ax), sobre ambos sistemas
+     (EXTENSIÓN NO VISTA EN CLASE; ver docs/investigacion_richardson.md).
 
 Resultado matemático que la aplicación verifica de forma EXACTA:
   * En B = D⁻¹A la diagonal es I, L̃ = D⁻¹L y Ũ = D⁻¹U, de modo que

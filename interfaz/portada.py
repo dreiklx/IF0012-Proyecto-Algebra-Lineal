@@ -51,7 +51,7 @@ INCENTIVOS = [
      "Todos los módulos; I → «Interpretación geométrica»"),
     ("Extensión matemática", "hasta 1 %", nav.ITERATIVOS,
      "Radio espectral con autovalores complejos (Faddeev-LeVerrier y Durand-Kerner), "
-     "decisiones exactas, matriz de iteración de SOR y Richardson.",
+     "decisiones exactas, matriz de iteración de SOR y Richardson (extensión no vista en clase).",
      "IV → «Convergencia: dominancia y radio espectral»"),
 ]
 

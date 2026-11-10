@@ -137,6 +137,8 @@ class TestAplicacion(unittest.TestCase):
         texto = textos(at.info)
         self.assertIn("EXACTAMENTE los mismos", texto)
         self.assertIn("Richardson", texto)
+        # Richardson no está en los PDF del curso: debe rotularse como extensión.
+        self.assertIn("Extensión no vista en clase", textos(at.warning))
 
     def test_modulo_IV_reordenamiento_y_sarrus(self):
         at = self.abrir(nav.ITERATIVOS)
