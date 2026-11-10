@@ -51,7 +51,7 @@
 | Gesto | Acción | Regla (todo dividido por el tamaño de la palma = muñeca → nudillo medio) |
 |---|---|---|
 | ✋ Palma abierta sostenida 0,35 s | Activa el control y **calibra** la pinza | Los 4 dedos extendidos (punta–muñeca > 1,15 · articulación PIP–muñeca) |
-| 🤏 Pinza pulgar-índice | Agarrar y girar: horizontal = azimut θ, vertical = elevación φ | \|punta pulgar − punta índice\| / palma < umbral de entrada. Sale con un umbral 1,5 veces mayor (histéresis). La punta del índice debe quedar fuera de la palma, para no confundirla con el puño |
+| 🤏 Pinza pulgar-índice | Agarrar y girar: horizontal = azimut θ, vertical = elevación φ (eje vertical invertido el 10-nov a pedido del equipo: mano arriba baja la vista, mano abajo la sube; `CamaraOrbital.girar`) | \|punta pulgar − punta índice\| / palma < umbral de entrada. Sale con un umbral 1,5 veces mayor (histéresis). La punta del índice debe quedar fuera de la palma, para no confundirla con el puño |
 | 🤏🤏 Pinza con las dos manos | Zoom: separar acerca, juntar aleja | Cociente de distancias entre los dos puntos de agarre |
 | ✊ Puño sostenido 0,35 s | Pausa | Ningún dedo extendido |
 | ✌️ Victoria sostenida 0,8 s | Restablece la vista inicial (una vez por gesto) | Índice y medio extendidos; anular y meñique doblados |
