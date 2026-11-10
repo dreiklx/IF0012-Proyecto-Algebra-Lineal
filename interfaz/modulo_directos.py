@@ -2,6 +2,8 @@
 
 import streamlit as st
 
+from algebra.compartido.matriz import ErrorMatriz, residuo
+from algebra.compartido.validacion import formatear_numero
 from algebra.directos import (
     INCONSISTENTE,
     INFINITAS,
@@ -11,10 +13,7 @@ from algebra.directos import (
     resolver_gauss,
     resolver_gauss_jordan,
 )
-from algebra.matriz import ErrorMatriz, residuo
-from algebra.validacion import formatear_numero
 from interfaz import ejemplos
-from interfaz.editor import MATRIZ, VECTOR, analizar, aviso_dimensiones, editor, problema_dimensiones, restaurar
 from interfaz.componentes import (
     CONTROLES_2D,
     CONTROLES_3D,
@@ -26,7 +25,22 @@ from interfaz.componentes import (
     mostrar_pasos,
     tabla_vector,
 )
-from interfaz.estilo import encabezado_modulo, insignias, marca_incentivo, seccion, tarjeta_resultado
+from interfaz.editor import (
+    MATRIZ,
+    VECTOR,
+    analizar,
+    aviso_dimensiones,
+    editor,
+    problema_dimensiones,
+    restaurar,
+)
+from interfaz.estilo import (
+    encabezado_modulo,
+    insignias,
+    marca_incentivo,
+    seccion,
+    tarjeta_resultado,
+)
 from visualizacion.interactivas import planos_3d, rectas_2d
 
 

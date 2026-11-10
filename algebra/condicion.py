@@ -26,8 +26,8 @@ separado y nunca se confunde con "κ grande".
 from dataclasses import dataclass, field
 from fractions import Fraction
 
-from algebra.directos import a_fraccion, inversa_gauss_jordan, solucion_unica
-from algebra.matriz import (
+from algebra.compartido.exactos import a_fraccion
+from algebra.compartido.matriz import (
     ErrorDimension,
     norma_infinito_matriz,
     norma_infinito_vector,
@@ -35,7 +35,8 @@ from algebra.matriz import (
     validar_cuadrada,
     validar_vector,
 )
-from algebra.validacion import formatear_numero
+from algebra.compartido.validacion import formatear_numero
+from algebra.directos import inversa_gauss_jordan, solucion_unica
 
 SENSIBILIDAD_BAJA = "BAJA"
 SENSIBILIDAD_MODERADA = "MODERADA"

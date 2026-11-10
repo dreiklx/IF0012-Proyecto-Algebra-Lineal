@@ -24,7 +24,7 @@ resultado en punto flotante).
 
 from dataclasses import dataclass
 
-from algebra.matriz import validar_cuadrada
+from algebra.compartido.matriz import validar_cuadrada
 
 
 @dataclass

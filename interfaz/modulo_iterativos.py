@@ -5,12 +5,28 @@ import io
 
 import streamlit as st
 
+from algebra.compartido.matriz import ErrorMatriz
+from algebra.compartido.validacion import (
+    ErrorEntrada,
+    formatear_numero,
+    leer_entero_positivo,
+    leer_omega,
+    leer_tolerancia,
+    leer_vector,
+)
 from algebra.dispersas import a_csr
-from algebra.espectral import CONVERGE, NO_CALCULADO, NO_CONVERGE, desarrollo_sarrus, radio_espectral
+from algebra.espectral import (
+    CONVERGE,
+    NO_CALCULADO,
+    NO_CONVERGE,
+    desarrollo_sarrus,
+    radio_espectral,
+)
 from algebra.iterativos import (
     CRITERIO_CAMBIO,
     CRITERIO_ITERACIONES,
     CRITERIO_RESIDUO,
+    ConfiguracionIterativa,
     DIAGONAL_CERO,
     ENTRADA_INVALIDA,
     ERROR_INTERNO,
@@ -21,7 +37,6 @@ from algebra.iterativos import (
     MAXIMO_ITERACIONES,
     METODOS,
     SOR,
-    ConfiguracionIterativa,
     comparar_metodos,
     configuraciones_homogeneas,
     dominancia_diagonal,
@@ -29,19 +44,25 @@ from algebra.iterativos import (
     reordenamiento_dominante,
     vector_diagonal,
 )
-from algebra.matriz import ErrorMatriz
 from algebra.precondicionamiento import analizar_precondicionador
-from algebra.validacion import (
-    ErrorEntrada,
-    formatear_numero,
-    leer_entero_positivo,
-    leer_omega,
-    leer_tolerancia,
-    leer_vector,
-)
 from interfaz import ejemplos
-from interfaz.editor import MATRIZ, VECTOR, analizar, aviso_dimensiones, editor, normalizar, problema_dimensiones, restaurar
-from interfaz.componentes import mostrar_interactiva, latex_matriz, latex_vector, leer_matriz_ui, leer_vector_ui
+from interfaz.componentes import (
+    latex_matriz,
+    latex_vector,
+    leer_matriz_ui,
+    leer_vector_ui,
+    mostrar_interactiva,
+)
+from interfaz.editor import (
+    MATRIZ,
+    VECTOR,
+    analizar,
+    aviso_dimensiones,
+    editor,
+    normalizar,
+    problema_dimensiones,
+    restaurar,
+)
 from interfaz.estilo import (
     encabezado_modulo,
     insignias,

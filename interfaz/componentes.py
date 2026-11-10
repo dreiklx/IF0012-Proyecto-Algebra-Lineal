@@ -8,8 +8,8 @@ from fractions import Fraction
 
 import streamlit as st
 
-from algebra.matriz import ErrorMatriz
-from algebra.validacion import ErrorEntrada, formatear_numero, leer_matriz, leer_vector
+from algebra.compartido.matriz import ErrorMatriz
+from algebra.compartido.validacion import ErrorEntrada, formatear_numero, leer_matriz, leer_vector
 
 
 # ---------------------------------------------------------------------------

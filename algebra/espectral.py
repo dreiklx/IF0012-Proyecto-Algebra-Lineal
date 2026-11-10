@@ -43,10 +43,16 @@ import math
 from dataclasses import dataclass, field
 from fractions import Fraction
 
-from algebra.directos import a_fraccion, inversa_gauss_jordan
+from algebra.compartido.exactos import a_fraccion
+from algebra.compartido.matriz import (
+    identidad,
+    multiplicar_matrices,
+    multiplicar_matriz_vector,
+    validar_cuadrada,
+)
+from algebra.compartido.validacion import ErrorEntrada, formatear_numero
+from algebra.directos import inversa_gauss_jordan
 from algebra.iterativos import GAUSS_SEIDEL, JACOBI, SOR
-from algebra.matriz import identidad, multiplicar_matrices, multiplicar_matriz_vector, validar_cuadrada
-from algebra.validacion import ErrorEntrada, formatear_numero
 
 N_MAX_ESPECTRAL = 8            # tamaño máximo para el que se calcula ρ
 UMBRAL_RHO_UNO = 1e-9          # banda alrededor de 1 donde la conclusión es indeterminada

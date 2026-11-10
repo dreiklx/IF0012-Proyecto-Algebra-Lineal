@@ -34,15 +34,8 @@ con A = [[x_1, 1], ..., [x_k, 1]] (matriz de diseño) y b = (y_1, ..., y_k).
 import math
 from dataclasses import dataclass, field
 
-from algebra.directos import (
-    INCONSISTENTE,
-    INFINITAS,
-    UNICA,
-    a_fraccion,
-    determinante,
-    resolver_gauss,
-)
-from algebra.matriz import (
+from algebra.compartido.exactos import a_fraccion
+from algebra.compartido.matriz import (
     multiplicar_matrices,
     multiplicar_matriz_vector,
     norma_2_cuadrado_vector,
@@ -51,7 +44,14 @@ from algebra.matriz import (
     transpuesta,
     validar_sistema,
 )
-from algebra.validacion import formatear_numero
+from algebra.compartido.validacion import formatear_numero
+from algebra.directos import (
+    INCONSISTENTE,
+    INFINITAS,
+    UNICA,
+    determinante,
+    resolver_gauss,
+)
 
 SOBREDETERMINADO = "SOBREDETERMINADO"
 CUADRADO = "CUADRADO"

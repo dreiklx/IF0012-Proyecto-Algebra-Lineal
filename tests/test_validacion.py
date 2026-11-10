@@ -3,7 +3,7 @@
 import unittest
 from fractions import Fraction
 
-from algebra.validacion import (
+from algebra.compartido.validacion import (
     ErrorEntrada,
     formatear_numero,
     leer_entero_positivo,

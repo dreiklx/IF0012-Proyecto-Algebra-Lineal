@@ -87,7 +87,7 @@ class TestEditorNoAlteraLosDatos(unittest.TestCase):
     texto original: mismos valores exactos, dimensiones, orden, decimales y signos."""
 
     def misma_lectura(self, texto, vector=False):
-        from algebra.validacion import leer_matriz, leer_vector
+        from algebra.compartido.validacion import leer_matriz, leer_vector
         leer = leer_vector if vector else leer_matriz
         original = leer(texto)
         por_editor = leer(normalizar(texto_de_celdas(celdas_de_texto(texto))))
@@ -118,7 +118,7 @@ class TestEditorNoAlteraLosDatos(unittest.TestCase):
         M = self.misma_lectura("-2.5 0 1/3\n1e-3 -0,25 7")
         self.assertEqual(M, [[F(-5, 2), F(0), F(1, 3)], [F(1, 1000), F(-1, 4), F(7)]])
         # pegar con comas o tabulaciones da la misma matriz que con espacios
-        from algebra.validacion import leer_matriz
+        from algebra.compartido.validacion import leer_matriz
         self.assertEqual(leer_matriz(normalizar("4, -1, 1\n-2,\t6, 1")), [[4, -1, 1], [-2, 6, 1]])
 
 

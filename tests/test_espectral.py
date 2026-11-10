@@ -13,6 +13,7 @@ import math
 import unittest
 from fractions import Fraction as F
 
+from algebra.compartido.validacion import ErrorEntrada
 from algebra.espectral import (
     CONVERGE,
     INDETERMINADO,
@@ -24,8 +25,7 @@ from algebra.espectral import (
     radio_espectral,
     texto_polinomio_curso,
 )
-from algebra.iterativos import GAUSS_SEIDEL, JACOBI, SOR, ConfiguracionIterativa, ejecutar
-from algebra.validacion import ErrorEntrada
+from algebra.iterativos import ConfiguracionIterativa, GAUSS_SEIDEL, JACOBI, SOR, ejecutar
 
 
 def biseccion(f, a, b, iteraciones=200):

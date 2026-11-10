@@ -26,13 +26,14 @@ decimal que representan (por ejemplo 0.1 -> 1/10).
 from dataclasses import dataclass, field
 from fractions import Fraction
 
-from algebra.matriz import (
+from algebra.compartido.exactos import a_fraccion
+from algebra.compartido.matriz import (
     identidad,
     multiplicar_matrices,
     validar_cuadrada,
     validar_sistema,
 )
-from algebra.validacion import formatear_numero
+from algebra.compartido.validacion import formatear_numero
 
 UNICA = "UNICA"
 INFINITAS = "INFINITAS"
@@ -97,15 +98,6 @@ class ErrorSistema(ValueError):
 # ---------------------------------------------------------------------------
 # Utilidades internas
 # ---------------------------------------------------------------------------
-
-def a_fraccion(valor):
-    """Convierte int/Fraction/float a Fraction exacta del decimal escrito."""
-    if isinstance(valor, Fraction):
-        return valor
-    if isinstance(valor, int):
-        return Fraction(valor)
-    return Fraction(repr(valor))  # float: repr da el decimal más corto que lo representa
-
 
 def _copiar(M):
     return [list(fila) for fila in M]

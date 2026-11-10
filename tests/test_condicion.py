@@ -7,6 +7,7 @@ Los valores de κ∞ se derivaron a mano con la fórmula de la inversa 2x2
 import unittest
 from fractions import Fraction as F
 
+from algebra.compartido.matriz import ErrorDimension
 from algebra.condicion import (
     MATRIZ_SINGULAR,
     PERTURBACION_ABSOLUTA,
@@ -20,7 +21,6 @@ from algebra.condicion import (
     numero_condicion_infinito,
 )
 from algebra.directos import ErrorSistema
-from algebra.matriz import ErrorDimension
 
 
 class TestNumeroCondicion(unittest.TestCase):

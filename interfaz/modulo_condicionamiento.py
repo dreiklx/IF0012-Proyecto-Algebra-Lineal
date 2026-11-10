@@ -2,6 +2,8 @@
 
 import streamlit as st
 
+from algebra.compartido.matriz import ErrorMatriz
+from algebra.compartido.validacion import ErrorEntrada, formatear_numero, leer_vector
 from algebra.condicion import (
     MATRIZ_SINGULAR,
     PERTURBACION_ABSOLUTA,
@@ -13,16 +15,22 @@ from algebra.condicion import (
     numero_condicion_infinito,
 )
 from algebra.directos import ErrorSistema
-from algebra.matriz import ErrorMatriz
-from algebra.validacion import ErrorEntrada, formatear_numero, leer_vector
 from interfaz import ejemplos
-from interfaz.editor import MATRIZ, VECTOR, analizar, aviso_dimensiones, editor, problema_dimensiones, restaurar
 from interfaz.componentes import (
     latex_matriz,
     latex_numero,
     leer_matriz_ui,
     leer_vector_ui,
     mostrar_pasos,
+)
+from interfaz.editor import (
+    MATRIZ,
+    VECTOR,
+    analizar,
+    aviso_dimensiones,
+    editor,
+    problema_dimensiones,
+    restaurar,
 )
 from interfaz.estilo import (
     encabezado_modulo,

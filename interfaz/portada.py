@@ -7,8 +7,8 @@ al abrir la página.
 
 import streamlit as st
 
+from algebra.compartido.validacion import leer_matriz, leer_vector
 from algebra.directos import resolver_gauss_jordan
-from algebra.validacion import leer_matriz, leer_vector
 from interfaz import ejemplos, navegacion as nav
 from interfaz.estilo import _e
 

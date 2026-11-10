@@ -9,19 +9,19 @@ valor correcto y se indica.
 import unittest
 from fractions import Fraction as F
 
+from algebra.compartido.matriz import ErrorDimension, ErrorMatriz
 from algebra.directos import (
+    ErrorSistema,
     INCONSISTENTE,
     INFINITAS,
     PIVOTEO_PARCIAL,
     UNICA,
-    ErrorSistema,
     determinante,
     inversa_gauss_jordan,
     resolver_gauss,
     resolver_gauss_jordan,
     solucion_unica,
 )
-from algebra.matriz import ErrorDimension, ErrorMatriz
 
 
 def evaluar(A, x):

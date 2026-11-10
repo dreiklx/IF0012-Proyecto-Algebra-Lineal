@@ -33,17 +33,18 @@ parada (función `ejecutar`), para no repetir tres veces la misma lógica.
 import math
 from dataclasses import dataclass, field, replace
 
-from algebra.directos import ErrorSistema, a_fraccion, solucion_unica
+from algebra.compartido.exactos import a_fraccion
+from algebra.compartido.matriz import ErrorMatriz, es_numero, validar_cuadrada, validar_vector
+from algebra.compartido.validacion import ErrorEntrada, formatear_numero
+from algebra.directos import ErrorSistema, solucion_unica
 from algebra.dispersas import (
     a_csr,
     paso_gauss_seidel_csr,
-    producto_csr_vector,
     paso_jacobi_csr,
     paso_sor_csr,
+    producto_csr_vector,
     residuo_inf_csr,
 )
-from algebra.matriz import ErrorMatriz, es_numero, validar_cuadrada, validar_vector
-from algebra.validacion import ErrorEntrada, formatear_numero
 
 JACOBI = "Jacobi"
 GAUSS_SEIDEL = "Gauss-Seidel"

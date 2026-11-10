@@ -33,8 +33,10 @@ Resultado matemático que la aplicación verifica de forma EXACTA:
 from dataclasses import dataclass, field, replace
 from fractions import Fraction
 
+from algebra.compartido.exactos import a_fraccion
+from algebra.compartido.matriz import identidad, validar_cuadrada, validar_vector
+from algebra.compartido.validacion import ErrorEntrada, formatear_numero
 from algebra.condicion import numero_condicion_infinito
-from algebra.directos import a_fraccion
 from algebra.espectral import (
     AVISO_CASI_REPETIDOS,
     N_MAX_ESPECTRAL,
@@ -43,14 +45,12 @@ from algebra.espectral import (
     matriz_iteracion,
 )
 from algebra.iterativos import (
+    ConfiguracionIterativa,
     METODOS,
     RICHARDSON,
     SOR,
-    ConfiguracionIterativa,
     ejecutar,
 )
-from algebra.matriz import identidad, validar_cuadrada, validar_vector
-from algebra.validacion import ErrorEntrada, formatear_numero
 
 
 @dataclass

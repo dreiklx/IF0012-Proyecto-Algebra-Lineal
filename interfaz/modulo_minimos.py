@@ -2,11 +2,10 @@
 
 import streamlit as st
 
-from algebra.matriz import ErrorMatriz
-from algebra.minimos import SOBREDETERMINADO, ErrorAjuste, ajuste_lineal, minimos_cuadrados
-from algebra.validacion import formatear_numero
+from algebra.compartido.matriz import ErrorMatriz
+from algebra.compartido.validacion import formatear_numero
+from algebra.minimos import ErrorAjuste, SOBREDETERMINADO, ajuste_lineal, minimos_cuadrados
 from interfaz import ejemplos
-from interfaz.editor import MATRIZ, PUNTOS, VECTOR, analizar, aviso_dimensiones, editor, problema_dimensiones, restaurar
 from interfaz.componentes import (
     latex_matriz,
     latex_vector,
@@ -15,7 +14,23 @@ from interfaz.componentes import (
     mostrar_interactiva,
     tabla_vector,
 )
-from interfaz.estilo import encabezado_modulo, insignias, seccion, tarjeta_resultado, valor_destacado
+from interfaz.editor import (
+    MATRIZ,
+    PUNTOS,
+    VECTOR,
+    analizar,
+    aviso_dimensiones,
+    editor,
+    problema_dimensiones,
+    restaurar,
+)
+from interfaz.estilo import (
+    encabezado_modulo,
+    insignias,
+    seccion,
+    tarjeta_resultado,
+    valor_destacado,
+)
 from visualizacion.interactivas import ajuste as grafica_ajuste_interactiva
 
 

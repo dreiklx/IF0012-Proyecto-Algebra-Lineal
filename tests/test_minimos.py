@@ -9,17 +9,17 @@ import math
 import unittest
 from fractions import Fraction as F
 
+from algebra.compartido.matriz import ErrorDimension
 from algebra.directos import INFINITAS
 from algebra.minimos import (
     CUADRADO,
+    ErrorAjuste,
     SOBREDETERMINADO,
     SUBDETERMINADO,
-    ErrorAjuste,
     ajuste_lineal,
     clasificar_forma,
     minimos_cuadrados,
 )
-from algebra.matriz import ErrorDimension
 
 
 class TestMinimosCuadrados(unittest.TestCase):
