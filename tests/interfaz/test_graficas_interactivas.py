@@ -39,8 +39,8 @@ class TestDatosIdenticos(unittest.TestCase):
     def test_convergencia_igual_al_historial_y_a_matplotlib(self):
         r = ejecutar(S, B, ConfiguracionIterativa())
         fig = interactivas.convergencia(r.historial, "A", 1e-3)
-        d = trazas(fig, "d_k")[0]
-        rk = trazas(fig, "r_k")[0]
+        d = trazas(fig, "d<sub>k</sub>")[0]
+        rk = trazas(fig, "r<sub>k</sub>")[0]
         self.assertEqual(list(d.x), [f.k for f in r.historial if f.d is not None])
         self.assertEqual(list(d.y), [f.d for f in r.historial if f.d is not None])
         self.assertEqual(list(rk.y), [f.r for f in r.historial])
@@ -144,7 +144,7 @@ class TestGraficasEnLaAplicacion(unittest.TestCase):
         self.assertFalse(at.exception, at.exception)
         graficas = at.get("plotly_chart")
         self.assertEqual(len(graficas), 1)
-        self.assertIn("d_k", graficas[0].proto.spec)
+        self.assertIn("d\\u003csub\\u003ek", graficas[0].proto.spec)   # d<sub>k</sub>; el JSON escapa «<»
 
 
 if __name__ == "__main__":

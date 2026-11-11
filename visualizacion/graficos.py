@@ -1,8 +1,11 @@
-"""Gráficas 2D con Matplotlib.
+"""Gráficas 2D con Matplotlib: figuras de referencia (no se muestran en la app).
 
-Estas funciones SOLO dibujan resultados ya calculados por el núcleo
-(algebra/): no resuelven sistemas ni ajustan rectas.  Devuelven una figura
-de Matplotlib que la interfaz muestra con st.pyplot.
+La aplicación dibuja con Plotly (visualizacion/interactivas.py).  Estas figuras
+estáticas se conservan como oráculo independiente: las pruebas comprueban que
+Plotly dibuja exactamente los mismos puntos.  Aquí también viven los datos que
+comparten ambas versiones (serie_metrica, _positivos, MARCADORES, TITULOS_METRICA).
+Las etiquetas usan mathtext de Matplotlib ($d_k$).  SOLO dibujan resultados ya
+calculados por el núcleo (algebra/): no resuelven sistemas ni ajustan rectas.
 """
 
 import math
@@ -33,7 +36,7 @@ def _leyenda(ax, columnas=2):
 
 
 def grafica_ajuste(xs, ys, pendiente, intercepto, estimados):
-    """Datos (x_i, y_i), recta y = m x + c y los residuos como segmentos verticales."""
+    """Datos (xᵢ, yᵢ), recta y = m x + c y los residuos como segmentos verticales."""
     fig, ax = _figura()
     xs_f = [float(v) for v in xs]
     ys_f = [float(v) for v in ys]
@@ -67,8 +70,8 @@ def grafica_convergencia(historial, criterio, tolerancia=None):
     que actúa como criterio de parada."""
     fig, ax = _figura()
     ks = [f.k for f in historial]
-    series = [("d_k = ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞", [f.d for f in historial], "o-", COLOR_RECTA, "A"),
-              ("r_k = ‖b − Ax⁽ᵏ⁾‖∞", [f.r for f in historial], "s--", COLOR_RESIDUO, "B")]
+    series = [(MATH["d"], [f.d for f in historial], "o-", COLOR_RECTA, "A"),
+              (MATH["r"], [f.r for f in historial], "s--", COLOR_RESIDUO, "B")]
     hay_datos = False
     for nombre, valores, estilo, color, letra in series:
         puntos, ceros = _positivos(ks, valores)
@@ -79,7 +82,7 @@ def grafica_convergencia(historial, criterio, tolerancia=None):
                     markersize=4, label=etiqueta)
         if ceros:
             ax.scatter(ceros, [1e-17] * len(ceros), marker="v", color=color,
-                       label=f"{nombre.split(' =')[0]} = 0 exactamente")
+                       label=f"{nombre.split(' =')[0]}$ = 0 exactamente")   # «$d_k$ = 0»
             hay_datos = True
     if tolerancia is not None and criterio in ("A", "B"):
         ax.axhline(float(tolerancia), color=COLOR_EPSILON, linestyle="-.", linewidth=1.3,
@@ -94,8 +97,11 @@ def grafica_convergencia(historial, criterio, tolerancia=None):
     return fig
 
 
-TITULOS_METRICA = {"d": "Cambio entre iteraciones d_k", "r": "Residuo r_k",
-                   "e": "Error respecto a la solución del método directo e_k"}
+# Nombre de cada métrica en palabras; cada formato agrega su símbolo (mathtext o HTML).
+TITULOS_METRICA = {"d": "Cambio entre iteraciones", "r": "Residuo",
+                   "e": "Error respecto a la solución del método directo"}
+MATH = {"d": r"$d_k = \|x^{(k)} - x^{(k-1)}\|_\infty$", "r": r"$r_k = \|b - Ax^{(k)}\|_\infty$",
+        "e": r"$e_k = \|x^{(k)} - x^*\|_\infty$"}
 
 
 def serie_metrica(r, indice, metrica, errores_historial=None):
@@ -137,7 +143,7 @@ def grafica_comparacion(resultados, metrica, errores_historial=None):
     if hay_datos:
         ax.set_yscale("log")
     ax.set_xlabel("Iteración k")
-    ax.set_ylabel({"d": "d_k", "r": "r_k", "e": "e_k = ‖x⁽ᵏ⁾ − x*‖∞"}[metrica] + "  (escala log.)")
+    ax.set_ylabel(MATH[metrica] + "  (escala log.)")
     ax.set_title("Comparación de métodos: " + titulos[metrica])
     _leyenda(ax, 3)
     fig.tight_layout()
@@ -206,7 +212,7 @@ def grafica_precondicionador(comparaciones):
             ax.text(0.99, 0.02, f"Eje recortado en {TOPE_GRAFICA:.0e}: hay una curva que diverge",
                     transform=ax.transAxes, ha="right", va="bottom", fontsize=7.5, color=SUAVE)
     ax.set_xlabel("Iteración k")
-    ax.set_ylabel("d_k = ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞ (escala log.)")
+    ax.set_ylabel(MATH["d"] + " (escala log.)")
     ax.set_title("Efecto del precondicionador diagonal M = D")
     _leyenda(ax, 4)
     fig.tight_layout()

@@ -187,8 +187,10 @@ div[class*="st-key-res_"] .katex-display .katex{font-size:1.45em}
   padding:.15rem 0 .15rem .9rem}
 [data-testid="stMetricLabel"] p{color:var(--suave) !important;font-size:.8rem !important}
 [data-testid="stMetricValue"]{font-family:var(--f-titulo);font-size:1.55rem !important;color:var(--texto)}
-/* Nunca truncar un valor numérico con «…»: si no cabe, pasa a la línea siguiente */
-[data-testid="stMetricValue"] *,[data-testid="stMetricLabel"] *{white-space:normal !important;
+/* Nunca truncar un valor numérico con «…»: si no cabe, pasa a la línea siguiente.
+   Las fórmulas KaTeX ($d_k$) quedan fuera: partirlas desarma subíndices y superíndices. */
+[data-testid="stMetricValue"] *:not(.katex,.katex *),
+[data-testid="stMetricLabel"] *:not(.katex,.katex *){white-space:normal !important;
   overflow:visible !important;text-overflow:clip !important;overflow-wrap:anywhere}
 
 .escala{margin:.6rem 0 .2rem}
@@ -293,8 +295,16 @@ def aplicar_estilo():
     st.markdown(f"<style>{CSS}</style>", unsafe_allow_html=True)
 
 
+_ETIQUETAS_MATEMATICAS = {f"&lt;{e}&gt;": f"<{e}>" for e in ("sub", "/sub", "sup", "/sup")}
+
+
 def _e(texto):
-    return html.escape(str(texto), quote=False)
+    """Escapa el texto, pero deja pasar <sub> y <sup> (subíndices y superíndices: T<sub>J</sub>,
+    κ<sub>∞</sub>).  Ninguna otra etiqueta HTML sobrevive."""
+    seguro = html.escape(str(texto), quote=False)
+    for escapada, etiqueta in _ETIQUETAS_MATEMATICAS.items():
+        seguro = seguro.replace(escapada, etiqueta)
+    return seguro
 
 
 def insignias_html(lista):

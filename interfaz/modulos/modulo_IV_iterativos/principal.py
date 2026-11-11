@@ -38,11 +38,13 @@ from interfaz.modulos.modulo_IV_iterativos.pestana_comparar import comparar
 from interfaz.modulos.modulo_IV_iterativos.pestana_convergencia import convergencia
 from interfaz.modulos.modulo_IV_iterativos.pestana_ejecutar import ejecutar_un_metodo
 from interfaz.modulos.modulo_IV_iterativos.pestana_precondicionamiento import precondicionamiento
+from visualizacion import notacion
 
 ETIQUETAS_CRITERIO = {
-    CRITERIO_CAMBIO: "A · Cambio entre iteraciones  ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞ < ε",
-    CRITERIO_RESIDUO: "B · Residuo del sistema  ‖b − Ax⁽ᵏ⁾‖∞ < ε",
-    CRITERIO_ITERACIONES: "C · Número fijo de iteraciones N",
+    # Opciones de st.radio: renderizan LaTeX.
+    CRITERIO_CAMBIO: r"A · Cambio entre iteraciones  $\|x^{(k)} - x^{(k-1)}\|_\infty < \varepsilon$",
+    CRITERIO_RESIDUO: r"B · Residuo del sistema  $\|b - Ax^{(k)}\|_\infty < \varepsilon$",
+    CRITERIO_ITERACIONES: "C · Número fijo de iteraciones $N$",
 }
 
 
@@ -51,7 +53,7 @@ def mostrar():
         "IV", "Métodos iterativos y convergencia",
         "Jacobi, Gauss-Seidel y SOR implementados desde cero, con criterio de parada, tolerancia, "
         "vector inicial, máximo de iteraciones y factor de relajación configurables. En cada "
-        "iteración se registran <b>d_k</b> (cambio entre iteraciones) y <b>r_k</b> (residuo del "
+        "iteración se registran <b>d<sub>k</sub></b> (cambio entre iteraciones) y <b>r<sub>k</sub></b> (residuo del "
         "sistema original).",
         [("Jacobi", "info"), ("Gauss-Seidel", "info"), ("SOR", "info"), ("Radio espectral", ""),
          ("CSR", "incentivo"), ("Precondicionador M = D", "incentivo")])
@@ -60,7 +62,7 @@ def mostrar():
         ("A", "Parada ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞ < ε o residuo", "S8-28/09 p. 6; S8-30/09 p. 28"),
         ("A", "x⁽⁰⁾ = bᵢ/aᵢᵢ", "S8-30/09 pp. 19-20 y 24"),
         ("A", "Dominancia diagonal y reordenamiento", "S8-30/09 p. 37; S9-05/10 pp. 32-33"),
-        ("A", "T_J, T_GS y ρ(T) por det(T − λI)", "S9-07/10 pp. 3-7"),
+        ("A", "T<sub>J</sub>, T<sub>GS</sub> y ρ(T) por det(T − λI)", "S9-07/10 pp. 3-7"),
         ("B", "Tabla k, x⁽ᵏ⁾, error; motivo; comparación; gráfica", "OFICIAL p. 2"),
         ("C", "CSR y precondicionador M = D", "Incentivos, OFICIAL p. 5; S9-05/10"),
         ("C", "T de SOR, Faddeev-LeVerrier, Durand-Kerner, Richardson", "Extensiones no vistas en clase"),
@@ -91,12 +93,13 @@ def mostrar():
         texto_eps = texto_kmax = None
     else:
         texto_eps = c1.text_input("Tolerancia ε (> 0)", "1e-3", key="it_eps")
-        texto_kmax = c2.text_input(f"Máximo de iteraciones (1 a {K_TOPE})", "50", key="it_kmax")
+        texto_kmax = c2.text_input(rf"Máximo de iteraciones $k_{{\text{{máx}}}}$ (1 a {K_TOPE})", "50",
+                                   key="it_kmax")
         texto_n = None
     texto_omega = c3.text_input("ω de SOR (0 < ω < 2)", "1.2", key="it_omega",
                                 help="Solo se usa con SOR. El rango 0 < ω < 2 no garantiza "
                                      "por sí solo la convergencia.")
-    tipo_x0 = st.radio("Vector inicial x⁽⁰⁾", ["Vector cero", "xᵢ⁽⁰⁾ = bᵢ / aᵢᵢ", "Personalizado"],
+    tipo_x0 = st.radio("Vector inicial $x^{(0)}$", ["Vector cero", "xᵢ⁽⁰⁾ = bᵢ / aᵢᵢ", "Personalizado"],
                        horizontal=True, key="it_x0_tipo")
     A_previo = analizar(texto_A, MATRIZ, "matriz A")[0]
     texto_x0 = None
@@ -138,7 +141,7 @@ def mostrar():
                 datos["x0"] = vector_diagonal(A, b)
             return datos
         except (ErrorEntrada, ErrorMatriz) as error:
-            st.error(f"❌ {error}")
+            st.error(f"❌ {notacion.md(str(error))}")
             return None
 
     with pestana_uno:

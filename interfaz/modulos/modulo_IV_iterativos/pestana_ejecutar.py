@@ -30,7 +30,8 @@ from interfaz.compartido.estilo import (
     tarjeta_resultado,
     valor_destacado,
 )
-from visualizacion import interactivas
+from visualizacion import interactivas, notacion
+from visualizacion.notacion import D_K, D_K_DEF, R_K, R_K_DEF
 
 CIFRAS = 8
 
@@ -89,24 +90,25 @@ def explicar_csr(info):
 def mostrar_motivo(r):
     texto = r.mensaje
     if r.codigo in (ENTRADA_INVALIDA, DIAGONAL_CERO, ERROR_INTERNO, ERROR_NO_FINITO):
-        st.error("🚫 " + texto)
+        st.error("🚫 " + notacion.md(texto))
     elif r.codigo == MAXIMO_ITERACIONES:
-        st.warning("⏱️ " + texto)
+        st.warning("⏱️ " + notacion.md(texto))
     elif r.configuracion.criterio == CRITERIO_ITERACIONES:
-        st.info("ℹ️ " + texto)
+        st.info("ℹ️ " + notacion.md(texto))
     else:
-        st.success("✅ " + texto)
+        st.success("✅ " + notacion.md(texto))
 
 
 def filas_tabla(r):
+    """Filas de st.dataframe: sus encabezados no renderizan LaTeX, por eso van en Unicode."""
     criterio = r.configuracion.criterio
-    etiqueta_d = "d_k (criterio de parada)" if criterio == CRITERIO_CAMBIO else "d_k (informativo)"
-    etiqueta_r = "r_k (criterio de parada)" if criterio == CRITERIO_RESIDUO else "r_k (informativo)"
+    etiqueta_d = D_K.texto + (" (criterio de parada)" if criterio == CRITERIO_CAMBIO else " (informativo)")
+    etiqueta_r = R_K.texto + (" (criterio de parada)" if criterio == CRITERIO_RESIDUO else " (informativo)")
     filas = []
     for fila in r.historial:
         datos = {"k": fila.k}
         for i, valor in enumerate(fila.x, start=1):
-            datos[f"x{i}"] = formatear_numero(valor, CIFRAS)
+            datos[f"x{notacion.subindice(i)}"] = formatear_numero(valor, CIFRAS)
         datos[etiqueta_d] = "—" if fila.d is None else formatear_numero(fila.d, CIFRAS)
         datos[etiqueta_r] = formatear_numero(fila.r, CIFRAS)
         filas.append(datos)
@@ -114,7 +116,10 @@ def filas_tabla(r):
 
 
 def csv_historial(r):
-    """Tabla de iteraciones con precisión completa, para descargar (reporte exportable)."""
+    """Tabla de iteraciones con precisión completa, para descargar (reporte exportable).
+
+    Es un archivo de datos: los nombres de columna (x1, d_k, r_k) quedan en ASCII para
+    que cualquier hoja de cálculo o programa los lea sin problemas de codificación."""
     salida = io.StringIO()
     escritor = csv.writer(salida)
     n = len(r.historial[0].x)
@@ -129,19 +134,19 @@ def csv_historial(r):
 
 def mostrar_ejecucion(r):
     if r.codigo == ENTRADA_INVALIDA:
-        st.error("❌ " + r.mensaje)
+        st.error("❌ " + notacion.md(r.mensaje))
         return
     st.info("⚙️ " + r.configuracion.resumen())
     with tarjeta_resultado("ejecucion"):
         mostrar_motivo(r)
         tipo = {True: "ok", False: "error", None: "info"}[r.criterio_cumplido]
-        insignias([(r.configuracion.metodo, "info"), (r.codigo, tipo),
+        insignias([(r.configuracion.metodo, "info"), (notacion.motivo(r.codigo), tipo),
                    ("Almacenamiento CSR" if r.configuracion.formato == "csr" else "Almacenamiento denso", "")])
         for aviso in r.advertencias:
-            st.warning("⚠️ " + aviso)
+            st.warning("⚠️ " + notacion.md(aviso))
         if not r.historial:
             if r.codigo == DIAGONAL_CERO:
-                st.info("💡 Recomendación: reordene las ecuaciones para que ningún aᵢᵢ sea 0; la "
+                st.info("💡 Recomendación: reordene las ecuaciones para que ningún $a_{ii}$ sea 0; la "
                         "pestaña «Convergencia» propone un orden si existe uno diagonalmente dominante.")
             return
         valor_destacado("Aproximación final x⁽ᵏ⁾",
@@ -150,15 +155,15 @@ def mostrar_ejecucion(r):
         cumplido = {True: "Sí", False: "No", None: "No aplica"}[r.criterio_cumplido]
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("Iteraciones realizadas", r.k_final)
-        c2.metric("Diferencia final d_k", "—" if r.d_final is None else formatear_numero(r.d_final, 6))
-        c3.metric("Residuo final r_k", formatear_numero(r.r_final, 6))
+        c2.metric(f"Diferencia final {D_K.md()}", "—" if r.d_final is None else formatear_numero(r.d_final, 6))
+        c3.metric(f"Residuo final {R_K.md()}", formatear_numero(r.r_final, 6))
         c4.metric("¿Se cumplió el criterio?", cumplido)
     if r.codigo in (MAXIMO_ITERACIONES, ERROR_NO_FINITO):
         st.info("💡 Recomendación: revise la pestaña «Convergencia» (dominancia diagonal y ρ(T)). "
                 "Si ρ(T) < 1 el método converge y basta con más iteraciones; si ρ(T) ≥ 1, cambie de "
                 "método, de ω o reordene las ecuaciones.")
-    st.caption("d_k mide cuánto cambió la aproximación; r_k mide cuánto falla la ecuación "
-               "A x = b. Ninguno de los dos es el error respecto a la solución exacta.")
+    st.caption(f"{D_K_DEF.md()} mide cuánto cambió la aproximación; {R_K_DEF.md()} mide cuánto "
+               "falla la ecuación $Ax = b$. Ninguno de los dos es el error respecto a la solución exacta.")
     st.dataframe(filas_tabla(r), hide_index=True, width="stretch")
     marca_incentivo("Visualización avanzada: reporte exportable", "1 %")
     st.download_button("⬇️ Descargar tabla de iteraciones (CSV)", csv_historial(r),
@@ -197,19 +202,19 @@ def detalle_iteracion(r, fila, tolerancia):
         c1, c2, c3, c4 = st.columns([1.2, 0.8, 1.4, 1.4])
         c1.metric("Método", config.metodo + (f" (ω = {config.omega:g})" if config.metodo == SOR else ""))
         c2.metric("Iteración k", fila.k)
-        c3.metric("d_k = ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞", "—" if fila.d is None else formatear_numero(fila.d, 6))
-        c4.metric("r_k = ‖b − Ax⁽ᵏ⁾‖∞", formatear_numero(fila.r, 6))
+        c3.metric(D_K_DEF.md(), "—" if fila.d is None else formatear_numero(fila.d, 6))
+        c4.metric(R_K_DEF.md(), formatear_numero(fila.r, 6))
         st.markdown("x⁽ᵏ⁾ = (" + ", ".join(formatear_numero(v, CIFRAS) for v in fila.x) + ")")
         notas = []
         if fila.k == r.historial[0].k:
             notas.append(("Vector inicial x⁽⁰⁾" if fila.k == 0 else "Primera iteración", ""))
         if fila.k == r.k_final:
-            texto, _ = interactivas.ESTADOS_FINALES.get(r.codigo, ("Última iteración", None))
-            notas.append((texto.format(k=fila.k), "ok" if r.criterio_cumplido else "aviso"))
+            texto = interactivas.estado_final(r.codigo, fila.k) or "Última iteración"   # insignias admiten <sub>
+            notas.append((texto, "ok" if r.criterio_cumplido else "aviso"))
         if tolerancia is not None:
             valor = fila.d if config.criterio == CRITERIO_CAMBIO else fila.r
             if valor is not None:
-                nombre = "d_k" if config.criterio == CRITERIO_CAMBIO else "r_k"
+                nombre = (D_K if config.criterio == CRITERIO_CAMBIO else R_K).html   # insignia: admite <sub>
                 notas.append((f"{nombre} {'<' if valor < tolerancia else '≥'} ε = {tolerancia:g}",
                               "ok" if valor < tolerancia else ""))
         if notas:

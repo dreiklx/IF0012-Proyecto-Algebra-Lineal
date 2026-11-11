@@ -37,6 +37,7 @@ from interfaz.compartido.estilo import (
     tarjeta_resultado,
     valor_destacado,
 )
+from visualizacion import notacion
 from visualizacion.interactivas import ajuste as grafica_ajuste_interactiva
 
 
@@ -88,7 +89,7 @@ def sistema():
             try:
                 st.session_state["mc_resultado"] = minimos_cuadrados(A, b)
             except ErrorMatriz as error:
-                st.error(f"❌ {error}")
+                st.error(f"❌ {notacion.md(str(error))}")
     if "mc_resultado" in st.session_state:
         mostrar_minimos(st.session_state["mc_resultado"])
 
@@ -96,19 +97,19 @@ def sistema():
 def mostrar_minimos(r, nombres=None):
     seccion("2" if nombres is None else "3", "Ecuaciones normales y solución")
     if r.tipo == SOBREDETERMINADO:
-        st.info("🔎 " + r.mensaje_tipo)
+        st.info("🔎 " + notacion.md(r.mensaje_tipo))
     else:
-        st.warning("🔎 " + r.mensaje_tipo)
+        st.warning("🔎 " + notacion.md(r.mensaje_tipo))
     st.markdown("**Ecuaciones normales** AᵀA x̂ = Aᵀb:")
     st.latex(r"A^TA = " + latex_matriz(r.AtA) + r",\qquad A^Tb = " + latex_vector(r.Atb))
     if r.solucion is None:
         for aviso in r.advertencias:
-            st.error("🚫 " + aviso)
+            st.error("🚫 " + notacion.md(aviso))
         st.info("💡 Recomendación: elimine las columnas que sean combinación de otras (o agregue "
                 "datos que las distingan) para que AᵀA sea invertible.")
         return
     with tarjeta_resultado("minimos" if nombres is None else "minimos_ajuste"):
-        st.success("✅ " + r.mensaje)
+        st.success("✅ " + notacion.md(r.mensaje))
         insignias([("Sobredeterminado" if r.tipo == SOBREDETERMINADO else r.tipo.capitalize(), "info"),
                    ("b ∈ Col(A): solución exacta" if r.b_en_espacio_columna else "b ∉ Col(A): aproximación",
                     "ok" if r.b_en_espacio_columna else "aviso"),
@@ -140,6 +141,7 @@ def mostrar_minimos(r, nombres=None):
                + ") — el residuo es ortogonal a las columnas de A, propiedad que caracteriza "
                  "a la solución de mínimos cuadrados.")
     with st.expander("Verificación con el procedimiento de clase (S8-30/09 pp. 6-7)"):
+        st.caption("Mᵢ es AᵀA con la columna i reemplazada por Aᵀb (regla de Cramer).")
         if r.det_aumentada is not None:
             st.markdown(
                 f"1. det([A | b]) = **{formatear_numero(r.det_aumentada)}** "
@@ -151,7 +153,7 @@ def mostrar_minimos(r, nombres=None):
                         "decidió con el rango (Gauss).")
         st.markdown("2. Ecuaciones normales AᵀA x̂ = Aᵀb (arriba).")
         if r.cramer is not None:
-            detalle = ", ".join(f"det(M_{j + 1}) = {formatear_numero(d)}"
+            detalle = ", ".join(f"det(M{notacion.subindice(j + 1)}) = {formatear_numero(d)}"
                                 for j, d in enumerate(r.cramer["dets"]))
             coincide = r.cramer["solucion"] == r.solucion
             st.markdown(
@@ -194,7 +196,7 @@ def ajuste():
             try:
                 st.session_state["aj_resultado"] = ajuste_lineal(xs, ys)
             except ErrorAjuste as error:
-                st.error(f"❌ {error}")
+                st.error(f"❌ {notacion.md(str(error))}")
     if "aj_resultado" not in st.session_state:
         return
     r = st.session_state["aj_resultado"]

@@ -10,6 +10,7 @@ import streamlit as st
 
 from algebra.compartido.matriz import ErrorMatriz
 from algebra.compartido.validacion import ErrorEntrada, formatear_numero, leer_matriz, leer_vector
+from visualizacion import notacion
 
 
 # ---------------------------------------------------------------------------
@@ -45,6 +46,28 @@ def latex_vector(v, cifras=6):
     return latex_matriz([[x] for x in v], cifras=cifras)
 
 
+def latex_polinomio(coeficientes):
+    """det(T − λI) = (−1)ⁿ p(λ) en LaTeX, con el mismo signo y los mismos términos que
+    algebra/.../espectral.py::texto_polinomio_curso (aquí con fracciones apiladas).
+    `coeficientes` son los de p(λ), de mayor a menor grado."""
+    n = len(coeficientes) - 1
+    signo = -1 if n % 2 else 1
+    terminos = []
+    for k, c in enumerate(coeficientes):
+        valor = signo * c
+        if valor == 0:
+            continue
+        grado = n - k
+        potencia = "" if grado == 0 else (r"\lambda" if grado == 1 else rf"\lambda^{{{grado}}}")
+        magnitud = latex_numero(abs(valor))
+        texto = potencia if (abs(valor) == 1 and grado > 0) else magnitud + potencia
+        terminos.append(("-" if valor < 0 else "+", texto))
+    if not terminos:
+        return "0"
+    primero = ("-" if terminos[0][0] == "-" else "") + terminos[0][1]
+    return primero + "".join(f" {s} {t}" for s, t in terminos[1:])
+
+
 def texto_vector(v, cifras=6):
     return "(" + ", ".join(formatear_numero(x, cifras) for x in v) + ")"
 
@@ -58,7 +81,7 @@ def leer_matriz_ui(texto, nombre):
     try:
         return leer_matriz(texto, nombre)
     except (ErrorEntrada, ErrorMatriz) as error:
-        st.error(f"❌ {error}")
+        st.error(f"❌ {notacion.md(str(error))}")
         return None
 
 
@@ -66,7 +89,7 @@ def leer_vector_ui(texto, nombre):
     try:
         return leer_vector(texto, nombre)
     except (ErrorEntrada, ErrorMatriz) as error:
-        st.error(f"❌ {error}")
+        st.error(f"❌ {notacion.md(str(error))}")
         return None
 
 
@@ -81,7 +104,7 @@ def tabla_vector(v, nombre="x", cifras=6):
     """Filas para st.table: componente, valor exacto (si es fracción) y decimal."""
     filas = []
     for i, valor in enumerate(v, start=1):
-        fila = {"Componente": f"{nombre}{i}", "Valor": formatear_numero(valor, cifras)}
+        fila = {"Componente": f"{nombre}{notacion.subindice(i)}", "Valor": formatear_numero(valor, cifras)}
         if isinstance(valor, Fraction):
             fila["Decimal"] = f"{float(valor):.10g}"
         filas.append(fila)
@@ -94,12 +117,13 @@ def mostrar_pasos(pasos, separador):
     Si el paso trae la notación de clase («−2F₁ + F₂»), se muestra primero y la
     forma Fᵢ → Fᵢ − m·Fⱼ queda como aclaración."""
     for numero, paso in enumerate(pasos):
-        notacion = getattr(paso, "notacion", "")
-        if notacion:
-            st.markdown(f"**Paso {numero}.** {notacion} &nbsp;·&nbsp; <small>{paso.descripcion}</small>",
+        de_clase = getattr(paso, "notacion", "")
+        descripcion = notacion.md(paso.descripcion)        # F2 → F₂, x3 → x₃
+        if de_clase:
+            st.markdown(f"**Paso {numero}.** {de_clase} &nbsp;·&nbsp; <small>{descripcion}</small>",
                         unsafe_allow_html=True)
         else:
-            st.markdown(f"**Paso {numero}.** {paso.descripcion}")
+            st.markdown(f"**Paso {numero}.** {descripcion}")
         st.latex(latex_matriz(paso.matriz, separador=separador))
 
 

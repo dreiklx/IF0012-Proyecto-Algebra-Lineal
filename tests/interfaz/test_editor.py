@@ -203,7 +203,7 @@ class TestEditorEnLaAplicacion(unittest.TestCase):
         at.run()
         at.button(key="it_ejecutar").click()
         at.run()
-        self.assertIn("Criterio satisfecho: d_7", " ".join(str(s.value) for s in at.success))
+        self.assertIn("Criterio satisfecho: $d_{7}$", " ".join(str(s.value) for s in at.success))
 
     def test_tabla_de_puntos_modulo_III(self):
         at = self.abrir(nav.MINIMOS)
