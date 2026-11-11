@@ -8,7 +8,7 @@ altera un número.
 import re
 import unittest
 
-from interfaz.compartido.componentes import latex_despejes
+from interfaz.compartido.formulas import latex_despejes
 from interfaz.compartido.estilo import _e
 from visualizacion import interactivas, notacion
 from visualizacion.notacion import ecuacion, md, unicode

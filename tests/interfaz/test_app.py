@@ -190,7 +190,7 @@ class TestComponentes(unittest.TestCase):
 
     def test_latex_separa_filas_con_fracciones(self):
         from fractions import Fraction
-        from interfaz.compartido.componentes import latex_matriz
+        from interfaz.compartido.formulas import latex_matriz
         con = latex_matriz([[Fraction(65, 33)], [Fraction(-29, 33)]])
         self.assertIn(r"\[6pt]", con)
         self.assertIn(r"\frac{65}{33}", con)

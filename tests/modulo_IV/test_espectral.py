@@ -1,4 +1,5 @@
-"""Pruebas de algebra/modulo_IV_iterativos/espectral.py (matrices de iteración y radio espectral).
+"""Pruebas de la convergencia del Módulo IV: matriz_iteracion.py (T y c), polinomio_raices.py
+(polinomio característico y raíces) y espectral.py (radio espectral).
 
 Oráculos independientes del código probado:
   * coeficientes del polinomio característico calculados a mano con
@@ -18,15 +19,11 @@ from algebra.modulo_IV_iterativos.ejecucion import (
     ConfiguracionIterativa,
     ejecutar,
 )
-from algebra.modulo_IV_iterativos.espectral import (
-    CONVERGE,
-    INDETERMINADO,
-    NO_CONVERGE,
-    descomponer,
+from algebra.modulo_IV_iterativos.espectral import CONVERGE, INDETERMINADO, NO_CONVERGE, radio_espectral
+from algebra.modulo_IV_iterativos.matriz_iteracion import descomponer, matriz_iteracion
+from algebra.modulo_IV_iterativos.polinomio_raices import (
     durand_kerner,
-    matriz_iteracion,
     polinomio_caracteristico,
-    radio_espectral,
     texto_polinomio_curso,
 )
 from algebra.modulo_IV_iterativos.metodos import (
@@ -245,7 +242,7 @@ class TestRegresionAuditoria(unittest.TestCase):
         # T triangular con el autovalor 1/2 triple (bloque de Jordan): ρ = 1/2 < 1,
         # pero Durand-Kerner pierde precisión con raíces múltiples: la aplicación
         # no debe presentar como fiable un ρ impreciso.
-        from algebra.modulo_IV_iterativos.espectral import raices
+        from algebra.modulo_IV_iterativos.polinomio_raices import raices
         av, ceros, fiable, avisos, decision = raices(polinomio_caracteristico(
             [[F(1, 2), 1, 0], [0, F(1, 2), 1], [0, 0, F(1, 2)]]))
         self.assertFalse(fiable)
@@ -271,7 +268,8 @@ class TestConclusion(unittest.TestCase):
 
     def test_raiz_doble_cerca_de_uno_no_da_conclusion_falsa(self):
         # (λ - a)²(λ - 1/10) con a = 1 ± 1e-7: el ρ verdadero está a 1e-7 de 1.
-        from algebra.modulo_IV_iterativos.espectral import AVISO_CASI_REPETIDOS, concluir, raices
+        from algebra.modulo_IV_iterativos.espectral import concluir
+        from algebra.modulo_IV_iterativos.polinomio_raices import AVISO_CASI_REPETIDOS, raices
         for a, verdadero in ((1 - F(1, 10**7), CONVERGE), (1 + F(1, 10**7), NO_CONVERGE)):
             coef = [F(1), -(2 * a + F(1, 10)), a * a + 2 * a / 10, -a * a / 10]
             av, _, fiable, avisos, decision = raices(coef)

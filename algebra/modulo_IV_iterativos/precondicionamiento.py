@@ -41,13 +41,9 @@ from algebra.modulo_IV_iterativos.ejecucion import (
     ConfiguracionIterativa,
     ejecutar,
 )
-from algebra.modulo_IV_iterativos.espectral import (
-    AVISO_CASI_REPETIDOS,
-    N_MAX_ESPECTRAL,
-    analizar_matriz,
-    concluir,
-    matriz_iteracion,
-)
+from algebra.modulo_IV_iterativos.espectral import N_MAX_ESPECTRAL, analizar_matriz, concluir
+from algebra.modulo_IV_iterativos.matriz_iteracion import matriz_iteracion
+from algebra.modulo_IV_iterativos.polinomio_raices import AVISO_CASI_REPETIDOS
 from algebra.modulo_IV_iterativos.metodos import (
     METODOS,
     RICHARDSON,

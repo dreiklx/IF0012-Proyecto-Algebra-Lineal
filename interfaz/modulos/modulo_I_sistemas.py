@@ -16,13 +16,15 @@ from interfaz.compartido import control_gestual, ejemplos
 from interfaz.compartido.componentes import (
     CONTROLES_2D,
     CONTROLES_3D,
-    latex_matriz,
-    latex_numero,
-    latex_vector,
     leer_matriz_ui,
     leer_vector_ui,
     mostrar_interactiva,
     mostrar_pasos,
+)
+from interfaz.compartido.formulas import (
+    latex_matriz,
+    latex_numero,
+    latex_vector,
     tabla_vector,
 )
 from interfaz.compartido.editor import (

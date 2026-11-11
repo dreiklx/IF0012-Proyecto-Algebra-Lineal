@@ -1,11 +1,21 @@
 """Gráficas interactivas (Plotly): rotar, acercar, desplazar, consultar valores y
 activar o desactivar series.
 
-Igual que visualizacion/graficos.py y geometria_3d.py, estas funciones SOLO dibujan
-resultados ya calculados por el núcleo (algebra/): no resuelven, no iteran y no
-ajustan nada.  Reutilizan la misma geometría (esquinas de los planos, región
-dibujada, filtrado de valores positivos para la escala logarítmica) para que los
-datos sean exactamente los mismos que en las figuras estáticas.
+Son todas las gráficas que muestra la aplicación.  SOLO dibujan resultados ya
+calculados por el núcleo (algebra/): no resuelven, no iteran y no ajustan nada.
+Los datos que se dibujan (esquinas de los planos, región dibujada, valores
+positivos para la escala logarítmica) salen de datos_graficas.py; la notación
+(d<sub>k</sub>, x<sup>(k)</sup>) de notacion.py.
+
+| Módulo | Función            | Gráfica                                         |
+|--------|--------------------|-------------------------------------------------|
+| I      | rectas_2d          | rectas de un sistema 2×2 (opcional)             |
+| I      | planos_3d          | planos 3D con control gestual (opcional)        |
+| III    | ajuste             | datos y recta de mejor ajuste (OBLIGATORIA)     |
+| IV     | convergencia       | error vs. iteración de un método (OBLIGATORIA)  |
+| IV     | comparacion        | los tres métodos superpuestos (OBLIGATORIA)     |
+| IV     | autovalores        | λ de T y círculo unidad (extensión)             |
+| IV     | precondicionador   | efecto de M = D (incentivo)                     |
 
 La barra de herramientas (zoom +/−, zoom por región, desplazamiento, rotación 3D,
 restablecer vista) se configura en interfaz/compartido/componentes.py::mostrar_interactiva.
@@ -16,8 +26,14 @@ import math
 import plotly.graph_objects as go
 
 from visualizacion import notacion
-from visualizacion.geometria_3d import _centro_y_radio, _esquinas_plano
-from visualizacion.graficos import MARCADORES, TITULOS_METRICA, _positivos, serie_metrica
+from visualizacion.datos_graficas import (
+    MARCADORES,
+    TITULOS_METRICA,
+    centro_y_radio,
+    esquinas_plano,
+    positivos,
+    serie_metrica,
+)
 from visualizacion.tema import (
     COLOR_DATOS,
     COLOR_EPSILON,
@@ -72,12 +88,12 @@ def planos_3d(A, b, resultado):
     """Cada ecuación a·(x, y, z) = bᵢ como una porción cuadrada del plano (las mismas
     esquinas que la figura estática), más el punto o la recta de soluciones."""
     fig = _base("Interpretación geométrica: cada ecuación es un plano", alto=560, revision=False)
-    centro, radio = _centro_y_radio(resultado)
+    centro, radio = centro_y_radio(resultado)
     for i, fila in enumerate(A):
         a = [float(v) for v in fila]
         if all(v == 0 for v in a):
             continue
-        p0, p1, p2, p3 = _esquinas_plano(a, float(b[i]), centro, radio)
+        p0, p1, p2, p3 = esquinas_plano(a, float(b[i]), centro, radio)
         color = COLORES_PLANOS[i % len(COLORES_PLANOS)]
         ecuacion = notacion.ecuacion(a, "xyz", float(b[i]))
         fig.add_trace(go.Surface(
@@ -116,7 +132,7 @@ def planos_3d(A, b, resultado):
 
 def rectas_2d(A, b, resultado):
     fig = _base("Interpretación geométrica: cada ecuación es una recta", alto=500)
-    centro, radio = _centro_y_radio(resultado)
+    centro, radio = centro_y_radio(resultado)
     for i, fila in enumerate(A):
         a1, a2, bi = float(fila[0]), float(fila[1]), float(b[i])
         color = COLORES_PLANOS[i % len(COLORES_PLANOS)]
@@ -203,7 +219,7 @@ def _y_log(valor):
 
 def _serie(ks, valores, nombre, color, simbolo, guion="solid", detalle=None, especiales=None):
     """detalle: {k: texto extra para el cursor}; especiales: {k: color del borde resaltado}."""
-    puntos, ceros = _positivos(ks, valores)
+    puntos, ceros = positivos(ks, valores)
     trazas = []
     if puntos:
         xs = [p[0] for p in puntos]
@@ -320,7 +336,7 @@ def comparacion(resultados, metrica, errores_historial=None, destacado=None, k_d
         ks, valores = serie
         metodo = r.configuracion.metodo
         nombre = metodo + (f" (ω = {float(r.configuracion.omega):.3g})" if metodo == "SOR" else "")
-        puntos, _ = _positivos(ks, valores)
+        puntos, _ = positivos(ks, valores)
         if puntos:
             xs = [p[0] for p in puntos]
             color = COLORES_METODOS.get(metodo)
@@ -387,7 +403,7 @@ def precondicionador(comparaciones):
     minimo, recortado = None, False
     for f in comparaciones:
         for resultado, guion, sufijo in ((f.original, "solid", "original"), (f.precondicionado, "dash", "con M = D")):
-            puntos, _ = _positivos([fila.k for fila in resultado.historial], [fila.d for fila in resultado.historial])
+            puntos, _ = positivos([fila.k for fila in resultado.historial], [fila.d for fila in resultado.historial])
             if not puntos:
                 continue
             recortado = recortado or max(p[1] for p in puntos) > TOPE_GRAFICA

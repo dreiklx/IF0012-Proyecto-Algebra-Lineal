@@ -12,11 +12,13 @@ from algebra.modulo_III_minimos.minimos import (
 )
 from interfaz.compartido import ejemplos
 from interfaz.compartido.componentes import (
-    latex_matriz,
-    latex_vector,
     leer_matriz_ui,
     leer_vector_ui,
     mostrar_interactiva,
+)
+from interfaz.compartido.formulas import (
+    latex_matriz,
+    latex_vector,
     tabla_vector,
 )
 from interfaz.compartido.editor import (

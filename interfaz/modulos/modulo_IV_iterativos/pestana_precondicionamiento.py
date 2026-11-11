@@ -10,7 +10,8 @@ from algebra.compartido.validacion import ErrorEntrada, formatear_numero
 from algebra.modulo_IV_iterativos.ejecucion import ConfiguracionIterativa
 from algebra.modulo_IV_iterativos.metodos import METODOS
 from algebra.modulo_IV_iterativos.precondicionamiento import analizar_precondicionador
-from interfaz.compartido.componentes import latex_matriz, latex_vector, mostrar_interactiva
+from interfaz.compartido.componentes import mostrar_interactiva
+from interfaz.compartido.formulas import latex_matriz, latex_vector
 from interfaz.compartido.estilo import insignias, marca_incentivo, tarjeta_resultado
 from visualizacion import interactivas, notacion
 

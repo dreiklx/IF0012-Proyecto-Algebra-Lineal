@@ -19,9 +19,7 @@ from algebra.modulo_IV_iterativos.ejecucion import (
 )
 from algebra.modulo_IV_iterativos.metodos import (
     GAUSS_SEIDEL,
-    JACOBI,
     METODOS,
-    SOR,
     paso_gauss_seidel,
 )
 

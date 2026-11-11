@@ -26,9 +26,9 @@ from algebra.modulo_IV_iterativos.metodos import METODOS, SOR
 from interfaz.compartido.componentes import (
     iteracion_elegida,
     iteraciones_seleccionadas,
-    latex_despejes,
     mostrar_interactiva,
 )
+from interfaz.compartido.formulas import latex_despejes
 from interfaz.compartido.estilo import (
     insignias,
     marca_incentivo,

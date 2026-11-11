@@ -20,11 +20,10 @@ from algebra.compartido.validacion import ErrorEntrada
 from algebra.modulo_III_minimos.minimos import minimos_cuadrados
 from algebra.modulo_IV_iterativos.convergencia import reordenamiento_dominante
 from algebra.modulo_IV_iterativos.ejecucion import (
-    CRITERIO_CAMBIO,
     ConfiguracionIterativa,
     ejecutar,
 )
-from algebra.modulo_IV_iterativos.espectral import desarrollo_sarrus, matriz_iteracion
+from algebra.modulo_IV_iterativos.matriz_iteracion import desarrollo_sarrus, matriz_iteracion
 from algebra.modulo_IV_iterativos.metodos import (
     GAUSS_SEIDEL,
     JACOBI,

@@ -8,7 +8,6 @@
     obtienen a mano: no dependen de la interfaz.
 """
 
-import os
 import unittest
 from fractions import Fraction as F
 

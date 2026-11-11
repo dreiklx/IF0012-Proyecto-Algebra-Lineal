@@ -17,12 +17,11 @@ from algebra.modulo_II_condicionamiento.condicion import (
 from algebra.modulo_I_sistemas.directos import ErrorSistema
 from interfaz.compartido import ejemplos
 from interfaz.compartido.componentes import (
-    latex_matriz,
-    latex_numero,
     leer_matriz_ui,
     leer_vector_ui,
     mostrar_pasos,
 )
+from interfaz.compartido.formulas import latex_matriz, latex_numero
 from interfaz.compartido.editor import (
     MATRIZ,
     VECTOR,

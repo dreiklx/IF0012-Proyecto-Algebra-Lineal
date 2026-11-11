@@ -8,21 +8,18 @@ import streamlit as st
 from algebra.compartido.matriz import ErrorMatriz
 from algebra.compartido.validacion import ErrorEntrada, formatear_numero, leer_omega
 from algebra.modulo_IV_iterativos.convergencia import dominancia_diagonal, reordenamiento_dominante
-from algebra.modulo_IV_iterativos.espectral import (
-    CONVERGE,
-    NO_CALCULADO,
-    NO_CONVERGE,
-    desarrollo_sarrus,
-    radio_espectral,
-)
+from algebra.modulo_IV_iterativos.espectral import CONVERGE, NO_CALCULADO, NO_CONVERGE, radio_espectral
+from algebra.modulo_IV_iterativos.matriz_iteracion import desarrollo_sarrus
 from algebra.modulo_IV_iterativos.metodos import GAUSS_SEIDEL, JACOBI, METODOS, SOR
 from interfaz.compartido.componentes import (
-    latex_matriz,
-    latex_polinomio,
-    latex_vector,
     leer_matriz_ui,
     leer_vector_ui,
     mostrar_interactiva,
+)
+from interfaz.compartido.formulas import (
+    latex_matriz,
+    latex_polinomio,
+    latex_vector,
 )
 from interfaz.compartido.estilo import (
     insignias,
