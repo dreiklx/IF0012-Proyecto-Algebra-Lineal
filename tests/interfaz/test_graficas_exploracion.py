@@ -48,7 +48,7 @@ class TestConvergencia(unittest.TestCase):
         r = ejecutar(S, B, ConfiguracionIterativa(k_max=2))
         self.assertEqual(r.codigo, "MAXIMO_ITERACIONES")
         fig = interactivas.convergencia(r.historial, "A", 1e-3, codigo=r.codigo)
-        self.assertIn("Se alcanzó k<sub>máx</sub> = 2 sin cumplir el criterio", textos(fig))
+        self.assertIn("Se alcanzó k<sub>max</sub> = 2 sin cumplir el criterio", textos(fig))
         self.assertNotIn("ε alcanzado", textos(fig))
         self.assertFalse(any("cumplido en" in t for t in textos(fig)))
 

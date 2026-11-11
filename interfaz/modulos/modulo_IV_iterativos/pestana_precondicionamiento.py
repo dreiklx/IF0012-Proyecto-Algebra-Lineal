@@ -22,7 +22,7 @@ def precondicionamiento(leer_todo, bloqueado=False):
         r"$M = D = \mathrm{diag}(a_{11},\dots,a_{nn})$ y sistema equivalente "
         r"$M^{-1}Ax = M^{-1}b$. Se comparan $\kappa_\infty$, los autovalores y las iteraciones del sistema "
         "original y del precondicionado con **la misma** configuración "
-        r"(criterio, $\varepsilon$, $k_{\text{máx}}$, $x^{(0)}$ y $\omega$).")
+        r"(criterio, $\varepsilon$, $k_{\max}$, $x^{(0)}$ y $\omega$).")
     if st.button("Analizar el precondicionador M = D", type="primary", key="it_prec",
                  disabled=bloqueado):
         st.session_state.pop("it_precondicionado", None)

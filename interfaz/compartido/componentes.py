@@ -197,3 +197,29 @@ def iteracion_elegida(clave, clave_deslizador, ks, firma):
         st.session_state[clave_deslizador] = elegidas[0]
     st.session_state[ultima_sel] = elegidas
     return st.session_state[clave_deslizador]
+
+
+def latex_despejes(A, b, metodo, omega=None):
+    """Despeje de cada incógnita, como lo escribe la profesora antes de iterar
+    (S8-30/09 p. 19 Jacobi, p. 24 Gauss-Seidel, p. 32 SOR).  Solo escribe A, b y ω:
+    no calcula ninguna iteración.  Devuelve una línea LaTeX por incógnita (SOR: dos)."""
+    n = len(A)
+    lineas = []
+    for i in range(n):
+        numerador = latex_numero(b[i])
+        for j in range(n):
+            if j == i or A[i][j] == 0:
+                continue
+            nuevo = metodo != "Jacobi" and j < i       # Gauss-Seidel y SOR usan lo ya calculado
+            indice = "(k+1)" if nuevo else "(k)"
+            magnitud = abs(A[i][j])
+            coeficiente = "" if magnitud == 1 else latex_numero(magnitud)
+            numerador += (" - " if A[i][j] > 0 else " + ") + rf"{coeficiente}x_{{{j + 1}}}^{{{indice}}}"
+        cociente = rf"\dfrac{{{numerador}}}{{{latex_numero(A[i][i])}}}"
+        if metodo == "SOR":
+            w = latex_numero(omega)
+            lineas.append(rf"x_{{{i + 1}}}^{{GS}} = {cociente}")
+            lineas.append(rf"x_{{{i + 1}}}^{{(k+1)}} = (1 - {w})\,x_{{{i + 1}}}^{{(k)}} + {w}\,x_{{{i + 1}}}^{{GS}}")
+        else:
+            lineas.append(rf"x_{{{i + 1}}}^{{(k+1)}} = {cociente}")
+    return lineas

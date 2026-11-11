@@ -23,7 +23,12 @@ from algebra.modulo_IV_iterativos.ejecucion import (
     ejecutar,
 )
 from algebra.modulo_IV_iterativos.metodos import METODOS, SOR
-from interfaz.compartido.componentes import iteracion_elegida, iteraciones_seleccionadas, mostrar_interactiva
+from interfaz.compartido.componentes import (
+    iteracion_elegida,
+    iteraciones_seleccionadas,
+    latex_despejes,
+    mostrar_interactiva,
+)
 from interfaz.compartido.estilo import (
     insignias,
     marca_incentivo,
@@ -55,6 +60,7 @@ def ejecutar_un_metodo(leer_todo, criterio, bloqueado=False):
                 n_iteraciones=datos.get("n_iteraciones", 5), omega=datos["omega"],
                 formato="csr" if disperso else "densa")
             st.session_state["it_resultado"] = ejecutar(datos["A"], datos["b"], config)
+            st.session_state["it_sistema"] = (datos["A"], datos["b"])
             st.session_state["it_csr_info"] = a_csr(datos["A"]) if disperso else None
     if "it_resultado" in st.session_state:
         info = st.session_state.get("it_csr_info")
@@ -64,7 +70,7 @@ def ejecutar_un_metodo(leer_todo, criterio, bloqueado=False):
                     f"elementos (densidad {info.densidad:.1%}). Números almacenados: "
                     f"{memoria['csr']} (CSR) frente a {memoria['densa']} (denso).")
             explicar_csr(info)
-        mostrar_ejecucion(st.session_state["it_resultado"])
+        mostrar_ejecucion(st.session_state["it_resultado"], st.session_state.get("it_sistema"))
 
 
 def explicar_csr(info):
@@ -132,7 +138,7 @@ def csv_historial(r):
     return salida.getvalue()
 
 
-def mostrar_ejecucion(r):
+def mostrar_ejecucion(r, sistema=None):
     if r.codigo == ENTRADA_INVALIDA:
         st.error("❌ " + notacion.md(r.mensaje))
         return
@@ -162,6 +168,8 @@ def mostrar_ejecucion(r):
         st.info("💡 Recomendación: revise la pestaña «Convergencia» (dominancia diagonal y ρ(T)). "
                 "Si ρ(T) < 1 el método converge y basta con más iteraciones; si ρ(T) ≥ 1, cambie de "
                 "método, de ω o reordene las ecuaciones.")
+    if sistema is not None and r.historial and len(sistema[0]) <= 6:
+        mostrar_despejes(*sistema, r.configuracion)
     st.caption(f"{D_K_DEF.md()} mide cuánto cambió la aproximación; {R_K_DEF.md()} mide cuánto "
                "falla la ecuación $Ax = b$. Ninguno de los dos es el error respecto a la solución exacta.")
     st.dataframe(filas_tabla(r), hide_index=True, width="stretch")
@@ -219,3 +227,16 @@ def detalle_iteracion(r, fila, tolerancia):
                               "ok" if valor < tolerancia else ""))
         if notas:
             insignias(notas)
+
+
+def mostrar_despejes(A, b, config):
+    """Primer paso de clase: despejar cada incógnita (S8-30/09 pp. 19, 24 y 32)."""
+    fuente = {"Jacobi": "S8-30/09 p. 19", "Gauss-Seidel": "S8-30/09 p. 24", "SOR": "S8-30/09 p. 32"}
+    with st.expander(f"Despeje de las incógnitas ({config.metodo}, como en {fuente.get(config.metodo, 'clase')})"):
+        for linea in latex_despejes(A, b, config.metodo, config.omega):
+            st.latex(linea)
+        if config.metodo == "Gauss-Seidel":
+            st.caption("Los valores con (k+1) ya se calcularon en esta misma iteración.")
+        elif config.metodo == "SOR":
+            st.caption("Primero se calcula el valor de Gauss-Seidel x^GS y luego se combina con ω, "
+                       "componente por componente, como en el manuscrito.")

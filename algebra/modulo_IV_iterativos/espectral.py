@@ -77,6 +77,7 @@ class MatrizIteracion:
     T: list
     c: list
     omega: Fraction = None
+    inversa: list = None     # D⁻¹, (D+L)⁻¹ o (D+ωL)⁻¹: el paso 2 de clase (S9-07/10 pp. 3 y 6)
 
 
 @dataclass
@@ -132,11 +133,13 @@ def matriz_iteracion(A, b, metodo, omega=None):
         T = _escalar(-1, multiplicar_matrices(D_inv, _sumar(L, U)))
         c = multiplicar_matriz_vector(D_inv, b_ex)
         w = None
+        inversa = D_inv
     elif metodo == GAUSS_SEIDEL:
         DL_inv = inversa_gauss_jordan(_sumar(D, L)).inversa
         T = _escalar(-1, multiplicar_matrices(DL_inv, U))
         c = multiplicar_matriz_vector(DL_inv, b_ex)
         w = None
+        inversa = DL_inv
     elif metodo == SOR:
         if omega is None:
             raise ErrorEntrada("SOR requiere el factor de relajación ω.")
@@ -147,9 +150,10 @@ def matriz_iteracion(A, b, metodo, omega=None):
         derecha = _sumar(_escalar(1 - w, D), _escalar(-w, U))
         T = multiplicar_matrices(DwL_inv, derecha)
         c = [w * v for v in multiplicar_matriz_vector(DwL_inv, b_ex)]
+        inversa = DwL_inv
     else:
         raise ErrorEntrada(f"Método desconocido: {metodo}.")
-    return MatrizIteracion(metodo=metodo, D=D, L=L, U=U, T=T, c=c, omega=w)
+    return MatrizIteracion(metodo=metodo, D=D, L=L, U=U, T=T, c=c, omega=w, inversa=inversa)
 
 
 # ---------------------------------------------------------------------------

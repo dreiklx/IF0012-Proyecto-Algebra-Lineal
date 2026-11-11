@@ -165,7 +165,7 @@ class TestAplicacion(unittest.TestCase):
         at.run()
         self.assertFalse(at.exception, at.exception)
         texto = " | ".join(str(m.value) for m in at.markdown)
-        self.assertIn("det([A | b]) = **-11**", texto)
+        self.assertIn(r"$\det[A \mid b]$ = **−11**", texto)       # el valor −11 de la hoja
         self.assertIn("coincide exactamente", texto)
 
     def test_modulo_IV_jacobi_no_converge(self):

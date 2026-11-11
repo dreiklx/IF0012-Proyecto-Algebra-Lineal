@@ -37,7 +37,8 @@ class Simbolo(NamedTuple):
 D_K = Simbolo(r"d_k", "d<sub>k</sub>", "dₖ")
 R_K = Simbolo(r"r_k", "r<sub>k</sub>", "rₖ")
 E_K = Simbolo(r"e_k", "e<sub>k</sub>", "eₖ")
-K_MAX = Simbolo(r"k_{\text{máx}}", "k<sub>máx</sub>", "k máx")
+# Como la lámina S8-28/09 p. 6: «número máximo de iteraciones k_max».
+K_MAX = Simbolo(r"k_{\max}", "k<sub>max</sub>", "kₘₐₓ")
 X_K = Simbolo(r"x^{(k)}", "x<sup>(k)</sup>", "x⁽ᵏ⁾")
 X_0 = Simbolo(r"x^{(0)}", "x<sup>(0)</sup>", "x⁽⁰⁾")
 T_J = Simbolo(r"T_J", "T<sub>J</sub>", "T de Jacobi")
@@ -93,7 +94,7 @@ _FIJAS = {
     "x_i": (r"x_i", "xᵢ"),
     "T_GS": (r"T_{GS}", "T_GS"),
     "T_J": (r"T_J", "T_J"),
-    "k_max": (r"k_{\text{máx}}", "k máx"),
+    "k_max": (r"k_{\max}", "kₘₐₓ"),
     "d_k": (r"d_k", "dₖ"),
     "r_k": (r"r_k", "rₖ"),
     "e_k": (r"e_k", "eₖ"),
@@ -106,7 +107,38 @@ _PATRON = re.compile(
     r"|\b(?P<l>[FxtM])_?(?P<n>\d+)\b")      # F2, x3, t1, M_1: filas, incógnitas, parámetros
 
 
+def _signos(texto):
+    """Un solo signo menos (−, no el guion -) y divisores negativos entre paréntesis:
+    «(-5 − (0)) / -3» → «(−5 − (0)) / (−3)».  No toca «1e-3» ni «S9-07/10»."""
+    texto = texto.replace("||", "‖")                       # ||A||∞ → ‖A‖∞
+    texto = re.sub(r"(?<![\w)\]])-(?=\d)", "−", texto)
+    return re.sub(r"/ −(\d+(?:[./]\d+)*)", r"/ (−\1)", texto)
+
+
+# Normas y número de condición escritos en Unicode por el núcleo: ‖A⁻¹‖∞, κ∞(D⁻¹A), ‖r‖₂.
+_NORMA = re.compile(r"‖([A-Za-zΔ·⁻¹ ]{1,6})‖([∞₁₂])?|κ([∞₁₂])\(([A-Za-z⁻¹]{1,5})\)|κ∞")
+_INDICE_NORMA = {"∞": r"_\infty", "₁": "_1", "₂": "_2", None: "", "": ""}
+
+
+def _latex_simple(texto):
+    return texto.replace("⁻¹", "^{-1}").replace("Δ", r"\Delta ").replace("·", r"\cdot")
+
+
+def _normas(texto):
+    def cambio(m):
+        if m.group(0) == "κ∞":
+            return r"$\kappa_\infty$"
+        if m.group(3):
+            return rf"$\kappa{_INDICE_NORMA[m.group(3)]}({_latex_simple(m.group(4))})$"
+        return rf"$\|{_latex_simple(m.group(1))}\|{_INDICE_NORMA[m.group(2)]}$"
+    return _NORMA.sub(cambio, texto)
+
+
 def _reemplazar(texto, latex):
+    texto = _signos(texto)
+    if latex:
+        texto = _normas(texto)
+
     def cambio(m):
         if m.group("a"):
             return f"$a_{{{m.group('ij')}}}$" if latex else "a" + subindice(m.group("ij"))
@@ -121,8 +153,11 @@ def _reemplazar(texto, latex):
 
 def md(texto):
     """Texto del núcleo → markdown de Streamlit (LaTeX entre $), con los códigos de
-    terminación en palabras.  No altera ningún número."""
-    return _reemplazar(texto, latex=True)
+    terminación en palabras.  No altera ningún número.  Lo que ya está entre $…$ se
+    deja igual, así que también sirve para textos que mezclan prosa y LaTeX."""
+    partes = re.split(r"(\$[^$]*\$)", texto)
+    return "".join(p if p.startswith("$") and p.endswith("$") and len(p) > 1 else _reemplazar(p, latex=True)
+                   for p in partes)
 
 
 def unicode(texto):

@@ -85,22 +85,33 @@ def convergencia(texto_A, texto_b, texto_omega, bloqueado=False):
         return
     it = esp.iteracion
     st.subheader(f"2. Matriz de iteración de {it.metodo}")
+    # Pasos y nombres de los manuscritos (S9-07/10 pp. 3-7): T_J, C_J; T_GS, C_GS.
+    nombre_T, nombre_C, nombre_inv = {
+        JACOBI: ("T_J", "C_J", "D^{-1}"),
+        GAUSS_SEIDEL: ("T_{GS}", "C_{GS}", "(D+L)^{-1}"),
+        SOR: (r"T_\omega", r"C_\omega", r"(D+\omega L)^{-1}"),
+    }[it.metodo]
     formulas = {
-        JACOBI: r"T_J=-D^{-1}(L+U),\qquad c=D^{-1}b",
-        GAUSS_SEIDEL: r"T_{GS}=-(D+L)^{-1}U,\qquad c=(D+L)^{-1}b",
-        SOR: r"T_\omega=(D+\omega L)^{-1}\left[(1-\omega)D-\omega U\right],\qquad c=\omega(D+\omega L)^{-1}b",
+        JACOBI: r"T_J=-D^{-1}(L+U),\qquad C_J=D^{-1}b",
+        GAUSS_SEIDEL: r"T_{GS}=-(D+L)^{-1}U,\qquad C_{GS}=(D+L)^{-1}b",
+        SOR: r"T_\omega=(D+\omega L)^{-1}\left[(1-\omega)D-\omega U\right],\qquad C_\omega=\omega(D+\omega L)^{-1}b",
     }
-    st.latex(formulas[it.metodo])
+    st.latex(r"x^{(k+1)} = " + nombre_T + r"\,x^{(k)} + " + nombre_C + r",\qquad " + formulas[it.metodo])
     if it.metodo == SOR:
         st.caption("Cat. C · La matriz de iteración de SOR no aparece en los PDF del curso (en clase "
                    "SOR se calcula por componentes): es una extensión, necesaria para obtener ρ(T).")
     else:
-        st.caption("Cat. A · Como en los manuscritos de clase (S9-07/10 pp. 3-7): A = D + L + U, "
-                   "T y c, y ρ(T) = máx |λ| con det(T − λI) = 0.")
+        st.caption("Cat. A · Los mismos pasos de los manuscritos de clase (S9-07/10 pp. 3-7).")
+    st.markdown(r"**① Descomponer** $A = D + L + U$:")
     st.latex(r"D=" + latex_matriz(it.D) + r",\; L=" + latex_matriz(it.L) + r",\; U=" + latex_matriz(it.U))
-    st.latex(r"T=" + latex_matriz(it.T) + r",\qquad c=" + latex_vector(it.c))
+    if it.inversa is not None:
+        st.markdown(rf"**② Calcular** ${nombre_inv}$:")
+        st.latex(nombre_inv + " = " + latex_matriz(it.inversa))
+    st.markdown(rf"**③ Calcular** ${nombre_T}$ **y ④** ${nombre_C}$:")
+    st.latex(nombre_T + "=" + latex_matriz(it.T) + r",\qquad " + nombre_C + "=" + latex_vector(it.c))
 
     st.subheader("3. Polinomio característico, autovalores y radio espectral")
+    st.markdown(r"**⑤ Hallar** $\rho(T) = \max\{|\lambda|\}$ con $\det(T - \lambda I) = 0$:")
     if esp.conclusion == NO_CALCULADO:
         st.warning(notacion.md(esp.mensaje))
         return

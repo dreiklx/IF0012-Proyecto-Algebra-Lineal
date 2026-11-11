@@ -2,7 +2,7 @@
 
 import streamlit as st
 
-from algebra.compartido.matriz import ErrorMatriz
+from algebra.compartido.matriz import ErrorMatriz, sumas_absolutas_por_fila
 from algebra.compartido.validacion import ErrorEntrada, formatear_numero, leer_vector
 from algebra.modulo_II_condicionamiento.condicion import (
     MATRIZ_SINGULAR,
@@ -146,9 +146,7 @@ def mostrar_resultado(A, c, p):
             st.error("🔴 " + notacion.md(c.interpretacion))
         else:
             st.warning("🟠 " + notacion.md(c.interpretacion))
-    st.latex(r"A^{-1} = " + latex_matriz(c.inversa))
-    st.caption("Verificación: A·A⁻¹ = I se comprobó de forma exacta."
-               if c.resultado_inversa.verificacion_identidad else "⚠️ A·A⁻¹ ≠ I")
+    procedimiento_de_clase(A, c)
     with st.expander("Cálculo de la inversa por Gauss-Jordan: [A | I] → [I | A⁻¹]"):
         mostrar_pasos(c.resultado_inversa.pasos, separador=n)
 
@@ -186,3 +184,35 @@ def mostrar_resultado(A, c, p):
                    f"{formatear_numero(p.error_relativo_x)}.")
     st.markdown(rf"$x = ({', '.join(latex_numero(v) for v in p.x)})$, "
                 rf"$\tilde x = ({', '.join(latex_numero(v) for v in p.x_perturbada)})$")
+
+
+def _norma_por_filas(M, nombre):
+    """Paso de clase: «Fila i: |a| + |b| = s» y la norma ∞ como el máximo de esas sumas.
+    Las sumas las calcula el núcleo (sumas_absolutas_por_fila); aquí solo se escriben."""
+    sumas = sumas_absolutas_por_fila(M)
+    lineas = []
+    for i, (fila, suma) in enumerate(zip(M, sumas), start=1):
+        terminos = " + ".join(f"|{latex_numero(v)}|" for v in fila)
+        lineas.append(rf"Fila {i}: ${terminos} = {latex_numero(suma)}$")
+    st.markdown("  \n".join(lineas))
+    maximo = ", ".join(latex_numero(v) for v in sumas)
+    st.markdown(rf"${nombre} = \max\{{{maximo}\}} = {latex_numero(max(sumas))}$")
+
+
+def procedimiento_de_clase(A, c):
+    """Los 5 pasos de la lámina S7-21/09 p. 19, con los valores calculados por el núcleo."""
+    st.markdown("**Procedimiento de clase** (S7-21/09 p. 19), en la norma ∞ que exige el enunciado:")
+    with st.container(border=True, key="cond_pasos"):
+        st.markdown(r"**1. Elegir la norma:** $\|\cdot\|_\infty$, suma de valores absolutos por fila.")
+        st.markdown(r"**2. Calcular** $\|A\|_\infty$:")
+        _norma_por_filas(A, r"\|A\|_\infty")
+        st.markdown("**3. Calcular** $A^{-1}$ con Gauss-Jordan (pasos abajo) y verificar que $A$ es invertible:")
+        st.latex(r"A^{-1} = " + latex_matriz(c.inversa))
+        st.caption("Verificación: A·A⁻¹ = I se comprobó de forma exacta."
+                   if c.resultado_inversa.verificacion_identidad else "⚠️ A·A⁻¹ ≠ I")
+        st.markdown(r"**4. Calcular** $\|A^{-1}\|_\infty$ en la misma norma:")
+        _norma_por_filas(c.inversa, r"\|A^{-1}\|_\infty")
+        st.markdown("**5. Multiplicar:**")
+        st.latex(r"\kappa_\infty(A) = \|A\|_\infty\,\|A^{-1}\|_\infty = "
+                 + latex_numero(c.norma_A) + r" \cdot " + latex_numero(c.norma_inversa)
+                 + " = " + latex_numero(c.kappa))

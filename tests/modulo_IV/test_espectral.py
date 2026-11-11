@@ -75,6 +75,18 @@ class TestMatricesIteracion(unittest.TestCase):
         self.assertEqual(it.T, [[0, -1, -1], [0, 1, F(1, 3)], [0, F(-1, 3), F(-7, 9)]])
         self.assertEqual(it.c, [3, 0, F(7, 3)])
 
+    def test_inversa_del_paso_2_de_clase(self):
+        # S9-07/10 p. 3: D⁻¹ = diag(1/3, 1/3, 1/3) y T_J = −D⁻¹(L + U)
+        it = matriz_iteracion(Dv, [9, 9, -2], JACOBI)
+        self.assertEqual(it.inversa, [[F(1, 3), 0, 0], [0, F(1, 3), 0], [0, 0, F(1, 3)]])
+        # S9-07/10 p. 6: (D + L)⁻¹ multiplicada por D + L da I, y T_GS = −(D + L)⁻¹U
+        it = matriz_iteracion(Dv, [9, 9, -2], GAUSS_SEIDEL)
+        DL = [[it.D[i][j] + it.L[i][j] for j in range(3)] for i in range(3)]
+        producto = [[sum(it.inversa[i][k] * DL[k][j] for k in range(3)) for j in range(3)] for i in range(3)]
+        self.assertEqual(producto, [[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+        menos_inv_U = [[-sum(it.inversa[i][k] * it.U[k][j] for k in range(3)) for j in range(3)] for i in range(3)]
+        self.assertEqual(menos_inv_U, it.T)
+
     def test_iteracion_coincide_con_paso_del_metodo(self):
         # x(1) = T x(0) + c debe coincidir con una iteración de los métodos (x0 = 0 -> c)
         for metodo, omega in ((JACOBI, None), (GAUSS_SEIDEL, None), (SOR, F(6, 5))):

@@ -93,7 +93,7 @@ def mostrar():
         texto_eps = texto_kmax = None
     else:
         texto_eps = c1.text_input("Tolerancia ε (> 0)", "1e-3", key="it_eps")
-        texto_kmax = c2.text_input(rf"Máximo de iteraciones $k_{{\text{{máx}}}}$ (1 a {K_TOPE})", "50",
+        texto_kmax = c2.text_input(rf"Máximo de iteraciones $k_{{\max}}$ (1 a {K_TOPE})", "50",
                                    key="it_kmax")
         texto_n = None
     texto_omega = c3.text_input("ω de SOR (0 < ω < 2)", "1.2", key="it_omega",
