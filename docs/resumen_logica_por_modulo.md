@@ -134,7 +134,7 @@
 - `minimos_cuadrados`, que usa `transpuesta`, `multiplicar_matrices`, `resolver_gauss` y `norma_2_cuadrado_vector`;
 - `ajuste_lineal`, que construye la matriz de diseño `[[xᵢ, 1]]`;
 - `cramer` y el campo `det_aumentada`: el **procedimiento de clase** (S8-30/09 pp. 6-7), mostrado como verificación;
-- la gráfica, `grafica_ajuste`.
+- la gráfica, `visualizacion/interactivas.py::ajuste`.
 
 **Fórmulas:**
 
@@ -172,7 +172,7 @@
 
 ---
 
-## Módulo IV — Métodos iterativos y convergencia (`algebra/modulo_IV_iterativos/`, `algebra/modulo_IV_iterativos/espectral.py`, `algebra/modulo_IV_iterativos/dispersas.py`)
+## Módulo IV — Métodos iterativos y convergencia (`algebra/modulo_IV_iterativos/`, `algebra/modulo_IV_iterativos/matriz_iteracion.py`, `polinomio_raices.py`, `espectral.py`, `algebra/modulo_IV_iterativos/dispersas.py`)
 
 **Qué hace.** Jacobi, Gauss-Seidel y SOR con criterios configurables; comparación homogénea; dominancia diagonal; matriz de iteración y ρ(T).
 

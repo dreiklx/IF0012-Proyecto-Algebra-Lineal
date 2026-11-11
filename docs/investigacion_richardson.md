@@ -46,7 +46,7 @@
 | `algebra/modulo_IV_iterativos/precondicionamiento.py` | `_conclusiones` | 188-196 | Texto «Richardson: ρ(I − A) = … y ρ(I − D⁻¹A) = …» con iteraciones y motivo |
 | `interfaz/modulos/modulo_IV_iterativos/pestana_precondicionamiento.py` | `precondicionamiento()` | 18-93 (aviso de extensión: 85) | Chips, tabla, conclusiones, aviso de extensión y gráfica |
 | `visualizacion/interactivas.py` | `precondicionador()` | 259-290 | Curvas d_k «Richardson (original)» y «(con M = D)»; la vista se acota cuando una curva diverge |
-| `visualizacion/graficos.py`, `visualizacion/tema.py` | `MARCADORES`, `COLORES_METODOS` | 22, 193; 20 | Marcador y color (gráfica de respaldo en Matplotlib) |
+| `visualizacion/datos_graficas.py`, `visualizacion/tema.py` | `MARCADORES`, `COLORES_METODOS` | — | Marcador y color de cada método |
 | `interfaz/portada.py` | lista de incentivos | 55 | Menciona Richardson en «Extensión matemática» |
 | `tests/modulo_IV/test_precondicionamiento.py` | `TestPrecondicionadorDiagonal`, `TestRichardson` | 44-108 (Richardson: 77-86 y 98-108) | ρ(I − A) = 3 + 2cos(π/5); Richardson con M = D da las iteraciones de Jacobi; no exige aᵢᵢ ≠ 0 |
 | `tests/interfaz/test_graficas_interactivas.py` | prueba de la gráfica | 118-124 | La traza de Richardson conserva los datos completos |

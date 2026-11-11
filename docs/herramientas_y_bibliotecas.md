@@ -31,7 +31,7 @@ Queda **[pendiente de confirmar con la docente]** si `math.sqrt` y `cmath.sqrt` 
 |---|---|---|
 | Streamlit | 1.66.1 | Interfaz web local (formularios, tablas, pestañas, descarga de CSV) |
 | Plotly | 6.3.0 | **Gráficas interactivas de la interfaz** (desde el 03-nov-2026): rotar la figura 3D, acercar y alejar, zoom por región, desplazar, autoescala y restablecer, valores al pasar el cursor, ocultar y mostrar series. Solo dibuja datos calculados por `algebra/` (`visualizacion/interactivas.py`) |
-| Matplotlib | 3.11.2 | Figuras estáticas equivalentes (`visualizacion/graficos.py`, `geometria_3d.py`): se conservan como respaldo y para las pruebas que comparan que ambas dibujan los mismos datos |
+| Matplotlib | 3.11.2 | Figura estática de la convergencia (`visualizacion/referencia_matplotlib.py`): no se muestra en la aplicación; las pruebas la usan como oráculo independiente de Plotly |
 | `csv`, `io` (estándar) | — | Exportar la tabla de iteraciones |
 
 **Por qué Plotly.** Altair, que ya instalaba Streamlit, no hace gráficas 3D; Plotly cubre la 3D y la 2D con una misma barra de herramientas. Es la única dependencia nueva y funciona sin internet, porque plotly.js viene dentro del paquete.
@@ -101,7 +101,7 @@ El análisis completo está en `docs/pendientes_docente.md`, P-2.
 
 **Decisión:**
 
-- La aplicación obligatoria no depende de PyVista. La interpretación geométrica se hace con Plotly (`visualizacion/interactivas.py`), con Matplotlib como respaldo (`visualizacion/geometria_3d.py`).
+- La aplicación obligatoria no depende de PyVista. La interpretación geométrica se hace con Plotly (`visualizacion/interactivas.py`), sin respaldo en Matplotlib desde el 11-nov.
 - Posible vía futura, experimental y no probada dentro de la aplicación: incrustar el HTML exportado con `streamlit.components.v1.html`.
 - Antes de integrarlo habría que probar la estabilidad en el equipo de la defensa.
 

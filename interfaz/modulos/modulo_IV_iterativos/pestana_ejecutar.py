@@ -170,8 +170,9 @@ def mostrar_ejecucion(r, sistema=None):
                 "método, de ω o reordene las ecuaciones.")
     if sistema is not None and r.historial and len(sistema[0]) <= 6:
         mostrar_despejes(*sistema, r.configuracion)
-    st.caption(f"{D_K_DEF.md()} mide cuánto cambió la aproximación; {R_K_DEF.md()} mide cuánto "
-               "falla la ecuación $Ax = b$. Ninguno de los dos es el error respecto a la solución exacta.")
+    st.caption(f"{D_K_DEF.md()} mide cuánto cambió la aproximación (en los manuscritos de clase es la "
+               f"«tolerancia» $T_1, T_2, \\dots$); {R_K_DEF.md()} mide cuánto falla la ecuación $Ax = b$. "
+               "Ninguno de los dos es el error respecto a la solución exacta.")
     st.dataframe(filas_tabla(r), hide_index=True, width="stretch")
     marca_incentivo("Visualización avanzada: reporte exportable", "1 %")
     st.download_button("⬇️ Descargar tabla de iteraciones (CSV)", csv_historial(r),
