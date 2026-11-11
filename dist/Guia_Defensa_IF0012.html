@@ -119,7 +119,7 @@ tr,pre,blockquote{break-inside:avoid}}
 </ul></li>
 <li><a href="#r-modulo-iii-minimos-cuadrados-algebra-modulo-iii-minimos-minimos-py">Módulo III — Mínimos cuadrados (algebra/modulo_III_minimos/minimos.py)</a><ul>
 </ul></li>
-<li><a href="#r-modulo-iv-metodos-iterativos-y-convergencia-algebra-modulo-iv-iterativos-algebra-modulo-iv-iterativos-espectral-py-algebra-modulo-iv-iterativos-dispersas-py">Módulo IV — Métodos iterativos y convergencia (algebra/modulo_IV_iterativos/, algebra/modulo_IV_iterativos/espectral.py, algebra/modulo_IV_iterativos/dispersas.py)</a><ul>
+<li><a href="#r-modulo-iv-metodos-iterativos-y-convergencia-algebra-modulo-iv-iterativos-algebra-modulo-iv-iterativos-matriz-iteracion-py-polinomio-raices-py-espectral-py-algebra-modulo-iv-iterativos-dispersas-py">Módulo IV — Métodos iterativos y convergencia (algebra/modulo_IV_iterativos/, algebra/modulo_IV_iterativos/matriz_iteracion.py, polinomio_raices.py, espectral.py, algebra/modulo_IV_iterativos/dispersas.py)</a><ul>
 </ul></li>
 <li><a href="#r-limitaciones-que-hay-que-defender-sin-ocultarlas">Limitaciones que hay que defender (sin ocultarlas)</a><ul>
 </ul></li>
@@ -131,7 +131,7 @@ tr,pre,blockquote{break-inside:avoid}}
   <h1>Guía de defensa del equipo — Proyecto final IF0012</h1>
   <p>Álgebra Lineal para Informática Empresarial · Universidad de Costa Rica, Sede del Caribe (Siquirres) · II Ciclo 2026</p>
   <p>Elmer López Hernández · Derek Farley Noguera · Daniel Córdoba Arias · Samir Sandoval Ramírez</p>
-  <div class="insignias"><span>Versión 10-nov-2026.</span><span>281 pruebas automáticas OK</span>
+  <div class="insignias"><span>Versión 10-nov-2026.</span><span>295 pruebas automáticas OK</span>
   <span>Auditoría independiente: 0 fallos</span><span>Entrega: 11-nov-2026</span><span>Defensa: semana del 16-nov-2026</span></div>
 </header>
 <section class="parte" id="parte-1"><h1 class="titulo-parte">Parte 1 · Guía completa</h1>
@@ -222,7 +222,9 @@ Para encontrar cada función en el código: <span class="ref">guia_recorrido_cod
 │       ├── metodos.py             ← fórmulas de Jacobi, GS y SOR (un paso cada uno)
 │       ├── ejecucion.py           ← bucle común, criterios A/B/C, motivo de parada
 │       ├── convergencia.py        ← dominancia diagonal y reordenamiento
-│       ├── espectral.py           ← D, L, U, T, polinomio, autovalores, ρ(T)
+│       ├── matriz_iteracion.py    ← D, L, U, D⁻¹, T y c (clase)
+│       ├── polinomio_raices.py    ← polinomio y raíces (extensiones Cat. C)
+│       ├── espectral.py           ← autovalores, ρ(T) y conclusión
 │       ├── comparacion.py         ← comparación de los 3 métodos, error final
 │       ├── dispersas.py           ← Incentivo: formato CSR
 │       └── precondicionamiento.py ← Incentivo: precondicionador diagonal M = D
@@ -232,8 +234,8 @@ Para encontrar cada función en el código: <span class="ref">guia_recorrido_cod
 │   ├── compartido/                ← estilo.py, componentes.py, editor.py, ejemplos.py
 │   └── modulos/                   ← modulo_I_sistemas.py, modulo_II_condicionamiento.py,
 │                                    modulo_III_minimos.py, modulo_IV_iterativos/ (una vista por pestaña)
-├── visualizacion/                 ← Plotly (interactivas.py) y Matplotlib (graficos.py): solo dibujan
-├── tests/                         ← 281 pruebas, una carpeta por módulo
+├── visualizacion/                 ← Plotly (interactivas.py); Matplotlib solo como oráculo de las pruebas
+├── tests/                         ← 295 pruebas, una carpeta por módulo
 ├── auditoria/                     ← comparación aleatoria contra oráculos independientes
 ├── casos_prueba/                  ← casos documentados por módulo (entrada, esperado, obtenido)
 └── docs/                          ← manual, guías, referencia oficial, matriz de cumplimiento
@@ -377,27 +379,27 @@ interfaz/modulos/… (mostrar_resultado) ──► st.latex / st.table / st.metr
 <td>Los 3 métodos con las mismas condiciones; error final e = ‖x⁽ᵏ⁾ − x*‖∞</td>
 </tr>
 <tr>
-<td><code>algebra/modulo_IV_iterativos/espectral.py:120</code> <code>matriz_iteracion</code></td>
+<td><code>algebra/modulo_IV_iterativos/matriz_iteracion.py</code> <code>matriz_iteracion</code></td>
 <td>T y c exactas para Jacobi, GS y SOR</td>
 </tr>
 <tr>
-<td><code>algebra/modulo_IV_iterativos/espectral.py:159</code> <code>polinomio_caracteristico</code></td>
+<td><code>algebra/modulo_IV_iterativos/polinomio_raices.py</code> <code>polinomio_caracteristico</code></td>
 <td>Faddeev-LeVerrier (exacto)</td>
 </tr>
 <tr>
-<td><code>algebra/modulo_IV_iterativos/espectral.py:334</code> <code>desarrollo_sarrus</code></td>
+<td><code>algebra/modulo_IV_iterativos/matriz_iteracion.py</code> <code>desarrollo_sarrus</code></td>
 <td>Procedimiento de clase en 3×3: tr(T), Σ menores, det(T) por Sarrus</td>
 </tr>
 <tr>
-<td><code>algebra/modulo_IV_iterativos/espectral.py:211</code> <code>durand_kerner</code> / <code>:263</code> <code>raices</code></td>
+<td><code>algebra/modulo_IV_iterativos/polinomio_raices.py</code> <code>durand_kerner</code> / <code>raices</code></td>
 <td>Raíces: λ = 0 exactas, grado ≤ 2 por fórmula, grado ≥ 3 por Durand-Kerner</td>
 </tr>
 <tr>
-<td><code>algebra/modulo_IV_iterativos/espectral.py:366</code> <code>analizar_matriz</code></td>
+<td><code>algebra/modulo_IV_iterativos/espectral.py</code> <code>analizar_matriz</code></td>
 <td>Autovalores, ρ, verificaciones y p(±1) = 0 de cualquier matriz</td>
 </tr>
 <tr>
-<td><code>algebra/modulo_IV_iterativos/espectral.py:319</code> <code>concluir</code> / <code>:405</code> <code>radio_espectral</code></td>
+<td><code>algebra/modulo_IV_iterativos/espectral.py</code> <code>concluir</code> / <code>radio_espectral</code></td>
 <td>ρ(T), verificaciones y conclusión</td>
 </tr>
 <tr>
@@ -444,7 +446,7 @@ interfaz/modulos/… (mostrar_resultado) ──► st.latex / st.table / st.metr
 </ol>
 </li>
 <li><strong>Resultados (<code>ResultadoSistema</code>):</strong> <code>clasificacion</code>, <code>mensaje</code>, <code>rango_A</code>, <code>rango_aumentada</code>, <code>solucion</code> o <code>solucion_particular</code> con <code>direcciones</code>, <code>variables_libres</code>, <code>pasos</code>, <code>sustitucion</code>, <code>advertencias</code>, <code>matriz_final</code> y <code>determinante</code> (solo si A es cuadrada).<ul>
-<li>La pantalla además verifica b − Ax con <code>matriz.residuo</code> (debe dar 0) y dibuja rectas o planos si n = 2 o 3 (<code>geometria_3d.py</code>).</li>
+<li>La pantalla además verifica b − Ax con <code>matriz.residuo</code> (debe dar 0) y dibuja rectas o planos si n = 2 o 3 (<code>visualizacion/interactivas.py</code> <code>rectas_2d</code> / <code>planos_3d</code>).</li>
 </ul>
 </li>
 <li><strong>Validaciones:</strong><ul>
@@ -530,7 +532,7 @@ interfaz/modulos/… (mostrar_resultado) ──► st.latex / st.table / st.metr
 </li>
 </ol>
 </li>
-<li><strong>Resultados:</strong> <code>ResultadoMinimos</code> (<code>tipo</code>, <code>AtA</code>, <code>Atb</code>, <code>solucion</code>, <code>estimados</code>, <code>residuo</code>, <code>norma_residuo_2</code>, <code>norma_residuo_2_cuadrado</code>, <code>norma_residuo_inf</code>, <code>ortogonalidad</code> = Aᵀr y <code>mensaje</code>) y <code>ResultadoAjuste</code> (pendiente, intercepto, ecuación). <code>grafica_ajuste</code> dibuja los puntos, la recta y los residuos.</li>
+<li><strong>Resultados:</strong> <code>ResultadoMinimos</code> (<code>tipo</code>, <code>AtA</code>, <code>Atb</code>, <code>solucion</code>, <code>estimados</code>, <code>residuo</code>, <code>norma_residuo_2</code>, <code>norma_residuo_2_cuadrado</code>, <code>norma_residuo_inf</code>, <code>ortogonalidad</code> = Aᵀr y <code>mensaje</code>) y <code>ResultadoAjuste</code> (pendiente, intercepto, ecuación). <code>visualizacion/interactivas.py::ajuste</code> dibuja los puntos, la recta y los residuos.</li>
 <li><strong>Validaciones y errores:</strong><ul>
 <li>dimensiones;</li>
 <li>AᵀA singular;</li>
@@ -541,7 +543,7 @@ interfaz/modulos/… (mostrar_resultado) ──► st.latex / st.table / st.metr
 </li>
 </ol>
 <h3 id="g-modulo-iv-metodos-iterativos-y-convergencia">Módulo IV — Métodos iterativos y convergencia</h3>
-<p><strong>Archivos:</strong> <code>algebra/modulo_IV_iterativos/</code>, <code>algebra/modulo_IV_iterativos/espectral.py</code>, <code>algebra/modulo_IV_iterativos/dispersas.py</code>, <code>algebra/modulo_IV_iterativos/precondicionamiento.py</code> e <code>interfaz/modulos/modulo_IV_iterativos/</code>. La pantalla tiene cuatro pestañas: «Ejecutar un método», «Comparar métodos», «Convergencia» y «Precondicionamiento diagonal».</p>
+<p><strong>Archivos:</strong> <code>algebra/modulo_IV_iterativos/</code>, <code>algebra/modulo_IV_iterativos/matriz_iteracion.py</code>, <code>polinomio_raices.py</code>, <code>espectral.py</code>, <code>algebra/modulo_IV_iterativos/dispersas.py</code>, <code>algebra/modulo_IV_iterativos/precondicionamiento.py</code> e <code>interfaz/modulos/modulo_IV_iterativos/</code>. La pantalla tiene cuatro pestañas: «Ejecutar un método», «Comparar métodos», «Convergencia» y «Precondicionamiento diagonal».</p>
 <ol>
 <li><strong>Problema.</strong> Aproximar la solución de Ax = b (A n×n) con iteraciones x⁽ᵏ⁾, y saber si convergen.</li>
 <li><strong>Entrada:</strong><ul>
@@ -607,7 +609,7 @@ interfaz/modulos/… (mostrar_resultado) ──► st.latex / st.table / st.metr
 </li>
 <li><strong>Resultados:</strong><ul>
 <li><code>ResultadoIterativo</code>: <code>codigo</code>, <code>mensaje</code>, <code>criterio_cumplido</code>, <code>historial</code>, <code>advertencias</code>, <code>k_final</code>, <code>x_final</code>, <code>d_final</code> y <code>r_final</code>.</li>
-<li>La tabla (<code>filas_tabla</code>) rotula la columna que actúa como criterio. Hay gráfica (<code>grafica_convergencia</code>) y CSV (<code>csv_historial</code>).</li>
+<li>La tabla (<code>filas_tabla</code>) rotula la columna que actúa como criterio. Hay gráfica (<code>interactivas.convergencia</code>) y CSV (<code>csv_historial</code>).</li>
 <li><code>ResultadoComparacion</code> y <code>ResultadoEspectral</code> (T, polinomio, autovalores, ρ, <code>fiable</code>, <code>decision_exacta</code>, verificaciones y avisos).</li>
 </ul>
 </li>
@@ -670,7 +672,7 @@ interfaz/modulos/… (mostrar_resultado) ──► st.latex / st.table / st.metr
             - la ejecución de Jacobi, GS, SOR y <strong>Richardson</strong> (<code>paso_richardson</code>) sobre los dos sistemas, con la misma configuración;<br />
             - ρ de cada matriz de iteración;<br />
             - la comparación <strong>exacta</strong> de T y c (<code>T_identicas</code>) y si las iteraciones coinciden (<code>mismas_iteraciones</code>).<br />
-        - Devuelve <code>ResultadoPrecondicionamiento</code> con la lista <code>comparaciones</code> (de tipo <code>ComparacionMetodo</code>) y las <code>conclusiones</code> en texto. La gráfica es <code>grafica_precondicionador</code>.</li>
+        - Devuelve <code>ResultadoPrecondicionamiento</code> con la lista <code>comparaciones</code> (de tipo <code>ComparacionMetodo</code>) y las <code>conclusiones</code> en texto. La gráfica es <code>interactivas.precondicionador</code>.</li>
 </ol>
 <hr />
 <h2 id="g-d-explicacion-matematica-con-ejemplos-pequenos">D. Explicación matemática, con ejemplos pequeños</h2>
@@ -1094,14 +1096,14 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 <p><strong>¿Cómo está organizado el código y por qué así?</strong></p>
 <ul>
 <li>Hay tres capas: <code>algebra/</code> (cálculos), <code>interfaz/</code> (pantallas) y <code>visualizacion/</code> (dibujos).</li>
-<li>El núcleo no depende de la interfaz. Por eso se prueba solo (281 pruebas) y la interfaz no repite cálculos.</li>
+<li>El núcleo no depende de la interfaz. Por eso se prueba solo (295 pruebas) y la interfaz no repite cálculos.</li>
 <li>En los iterativos, cada método es una función <code>paso_*</code> y el bucle de parada es uno solo (<code>_ejecutar</code>), para no triplicar la lógica.</li>
 </ul>
 </li>
 <li>
 <p><strong>¿Cómo saben que los resultados son correctos?</strong></p>
 <ul>
-<li>Hay 281 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.</li>
+<li>Hay 295 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.</li>
 <li>La auditoría aleatoria (<code>auditoria/</code>) compara miles de casos con oráculos escritos aparte (Leibniz, adjunta, Cramer, una implementación separada de las iteraciones, Gelfand) y da 0 fallos.</li>
 <li>La aplicación además se autoverifica:<ul>
 <li>b − Ax = 0 en el Módulo I;</li>
@@ -1350,7 +1352,7 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 .venv\Scripts\python -m streamlit run app.py
 </code></pre>
 <ol start="5">
-<li>Pruebas: <code>ejecutar_pruebas.bat</code> o <code>.venv\Scripts\python -m unittest</code>. Deben salir <strong>281 pruebas OK</strong>.</li>
+<li>Pruebas: <code>ejecutar_pruebas.bat</code> o <code>.venv\Scripts\python -m unittest</code>. Deben salir <strong>295 pruebas OK</strong>.</li>
 <li>Auditoría (opcional, unos 20 s): <code>.venv\Scripts\python auditoria\auditoria_directos.py .</code> y <code>.venv\Scripts\python auditoria\auditoria_iterativos.py .</code> (y <code>auditoria_precondicionamiento.py</code>). Deben dar «fallos 0».</li>
 </ol>
 <blockquote>
@@ -1821,7 +1823,7 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 <li><code>minimos_cuadrados</code>, que usa <code>transpuesta</code>, <code>multiplicar_matrices</code>, <code>resolver_gauss</code> y <code>norma_2_cuadrado_vector</code>;</li>
 <li><code>ajuste_lineal</code>, que construye la matriz de diseño <code>[[xᵢ, 1]]</code>;</li>
 <li><code>cramer</code> y el campo <code>det_aumentada</code>: el <strong>procedimiento de clase</strong> (S8-30/09 pp. 6-7), mostrado como verificación;</li>
-<li>la gráfica, <code>grafica_ajuste</code>.</li>
+<li>la gráfica, <code>visualizacion/interactivas.py::ajuste</code>.</li>
 </ul>
 <p><strong>Fórmulas:</strong></p>
 <ul>
@@ -1870,7 +1872,7 @@ det = (+1)·2·(−3/2) = −3     (0 intercambios; pivotes 2 y −3/2)
 <li>¿Con qué método se resuelven? → El Gauss propio del Módulo I, porque lo exige el enunciado. Cramer, que usa la docente, se muestra como verificación y coincide: det([A|b]) = −11; 363, 715 y −319.</li>
 </ul>
 <hr />
-<h2 id="r-modulo-iv-metodos-iterativos-y-convergencia-algebra-modulo-iv-iterativos-algebra-modulo-iv-iterativos-espectral-py-algebra-modulo-iv-iterativos-dispersas-py">Módulo IV — Métodos iterativos y convergencia (<code>algebra/modulo_IV_iterativos/</code>, <code>algebra/modulo_IV_iterativos/espectral.py</code>, <code>algebra/modulo_IV_iterativos/dispersas.py</code>)</h2>
+<h2 id="r-modulo-iv-metodos-iterativos-y-convergencia-algebra-modulo-iv-iterativos-algebra-modulo-iv-iterativos-matriz-iteracion-py-polinomio-raices-py-espectral-py-algebra-modulo-iv-iterativos-dispersas-py">Módulo IV — Métodos iterativos y convergencia (<code>algebra/modulo_IV_iterativos/</code>, <code>algebra/modulo_IV_iterativos/matriz_iteracion.py</code>, <code>polinomio_raices.py</code>, <code>espectral.py</code>, <code>algebra/modulo_IV_iterativos/dispersas.py</code>)</h2>
 <p><strong>Qué hace.</strong> Jacobi, Gauss-Seidel y SOR con criterios configurables; comparación homogénea; dominancia diagonal; matriz de iteración y ρ(T).</p>
 <p><strong>Funciones:</strong></p>
 <ul>
