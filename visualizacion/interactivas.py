@@ -1,11 +1,21 @@
 """Gráficas interactivas (Plotly): rotar, acercar, desplazar, consultar valores y
 activar o desactivar series.
 
-Igual que visualizacion/graficos.py y geometria_3d.py, estas funciones SOLO dibujan
-resultados ya calculados por el núcleo (algebra/): no resuelven, no iteran y no
-ajustan nada.  Reutilizan la misma geometría (esquinas de los planos, región
-dibujada, filtrado de valores positivos para la escala logarítmica) para que los
-datos sean exactamente los mismos que en las figuras estáticas.
+Son todas las gráficas que muestra la aplicación.  SOLO dibujan resultados ya
+calculados por el núcleo (algebra/): no resuelven, no iteran y no ajustan nada.
+Los datos que se dibujan (esquinas de los planos, región dibujada, valores
+positivos para la escala logarítmica) salen de datos_graficas.py; la notación
+(d<sub>k</sub>, x<sup>(k)</sup>) de notacion.py.
+
+| Módulo | Función            | Gráfica                                         |
+|--------|--------------------|-------------------------------------------------|
+| I      | rectas_2d          | rectas de un sistema 2×2 (opcional)             |
+| I      | planos_3d          | planos 3D con control gestual (opcional)        |
+| III    | ajuste             | datos y recta de mejor ajuste (OBLIGATORIA)     |
+| IV     | convergencia       | error vs. iteración de un método (OBLIGATORIA)  |
+| IV     | comparacion        | los tres métodos superpuestos (OBLIGATORIA)     |
+| IV     | autovalores        | λ de T y círculo unidad (extensión)             |
+| IV     | precondicionador   | efecto de M = D (incentivo)                     |
 
 La barra de herramientas (zoom +/−, zoom por región, desplazamiento, rotación 3D,
 restablecer vista) se configura en interfaz/compartido/componentes.py::mostrar_interactiva.
@@ -15,8 +25,15 @@ import math
 
 import plotly.graph_objects as go
 
-from visualizacion.geometria_3d import _centro_y_radio, _esquinas_plano
-from visualizacion.graficos import MARCADORES, TITULOS_METRICA, _positivos, serie_metrica
+from visualizacion import notacion
+from visualizacion.datos_graficas import (
+    MARCADORES,
+    TITULOS_METRICA,
+    centro_y_radio,
+    esquinas_plano,
+    positivos,
+    serie_metrica,
+)
 from visualizacion.tema import (
     COLOR_DATOS,
     COLOR_EPSILON,
@@ -71,14 +88,14 @@ def planos_3d(A, b, resultado):
     """Cada ecuación a·(x, y, z) = bᵢ como una porción cuadrada del plano (las mismas
     esquinas que la figura estática), más el punto o la recta de soluciones."""
     fig = _base("Interpretación geométrica: cada ecuación es un plano", alto=560, revision=False)
-    centro, radio = _centro_y_radio(resultado)
+    centro, radio = centro_y_radio(resultado)
     for i, fila in enumerate(A):
         a = [float(v) for v in fila]
         if all(v == 0 for v in a):
             continue
-        p0, p1, p2, p3 = _esquinas_plano(a, float(b[i]), centro, radio)
+        p0, p1, p2, p3 = esquinas_plano(a, float(b[i]), centro, radio)
         color = COLORES_PLANOS[i % len(COLORES_PLANOS)]
-        ecuacion = " + ".join(f"{v:g}·{n}" for v, n in zip(a, "xyz")) + f" = {float(b[i]):g}"
+        ecuacion = notacion.ecuacion(a, "xyz", float(b[i]))
         fig.add_trace(go.Surface(
             x=[[p0[0], p1[0]], [p3[0], p2[0]]], y=[[p0[1], p1[1]], [p3[1], p2[1]]],
             z=[[p0[2], p1[2]], [p3[2], p2[2]]], name=f"Ecuación {i + 1}", showlegend=True,
@@ -115,11 +132,11 @@ def planos_3d(A, b, resultado):
 
 def rectas_2d(A, b, resultado):
     fig = _base("Interpretación geométrica: cada ecuación es una recta", alto=500)
-    centro, radio = _centro_y_radio(resultado)
+    centro, radio = centro_y_radio(resultado)
     for i, fila in enumerate(A):
         a1, a2, bi = float(fila[0]), float(fila[1]), float(b[i])
         color = COLORES_PLANOS[i % len(COLORES_PLANOS)]
-        etiqueta = f"Ecuación {i + 1}: {a1:g}x + {a2:g}y = {bi:g}"
+        etiqueta = f"Ecuación {i + 1}: {notacion.ecuacion([a1, a2], 'xy', bi)}"
         if a2 != 0:
             xs = [centro[0] - radio, centro[0] + radio]
             ys = [(bi - a1 * x) / a2 for x in xs]
@@ -153,7 +170,7 @@ def ajuste(xs, ys, pendiente, intercepto, estimados):
     for x, y, y_est in zip(xs_f, ys_f, estimados):
         rx += [x, x, None]
         ry += [y, float(y_est), None]
-    fig.add_trace(go.Scatter(x=rx, y=ry, mode="lines", name="Residuos rᵢ", hoverinfo="skip",
+    fig.add_trace(go.Scatter(x=rx, y=ry, mode="lines", name="Residuos r<sub>i</sub>", hoverinfo="skip",
                              line=dict(color=COLOR_RESIDUO, dash="dot", width=1.6)))
     fig.add_trace(go.Scatter(x=[x0, x1], y=[m * x0 + c, m * x1 + c], mode="lines",
                              name=f"Recta: y = {m:.6g}x {'+' if c >= 0 else '−'} {abs(c):.6g}",
@@ -163,15 +180,15 @@ def ajuste(xs, ys, pendiente, intercepto, estimados):
     # El dato con mayor |rᵢ| (donde el ajuste falla más) se resalta; solo cambia el estilo.
     mayor = max(range(len(residuos)), key=lambda i: abs(residuos[i])) if residuos else None
     fig.add_trace(go.Scatter(
-        x=xs_f, y=ys_f, mode="markers", name="Datos (xᵢ, yᵢ)",
+        x=xs_f, y=ys_f, mode="markers", name="Datos (x<sub>i</sub>, y<sub>i</sub>)",
         customdata=[[float(e), y - float(e)] for y, e in zip(ys_f, estimados)],
         marker=dict(size=[13 if i == mayor else 10 for i in range(len(xs_f))], color=COLOR_DATOS,
                     line=dict(color=[COLOR_RESIDUO if i == mayor else "#0B1020" for i in range(len(xs_f))],
                               width=[2.6 if i == mayor else 1.5 for i in range(len(xs_f))])),
-        hovertemplate="<b>Dato</b> (%{x:.6g}, %{y:.6g})<br>ŷ = %{customdata[0]:.6g}<br>"
-                      "r = y − ŷ = %{customdata[1]:.6g}<extra></extra>"))
+        hovertemplate="<b>Dato</b> (%{x:.6g}, %{y:.6g})<br>ŷ<sub>i</sub> = %{customdata[0]:.6g}<br>"
+                      "r<sub>i</sub> = y<sub>i</sub> − ŷ<sub>i</sub> = %{customdata[1]:.6g}<extra></extra>"))
     if mayor is not None and residuos[mayor] != 0:
-        fig.add_annotation(x=xs_f[mayor], y=ys_f[mayor], text=f"mayor |rᵢ| = {abs(residuos[mayor]):.4g}",
+        fig.add_annotation(x=xs_f[mayor], y=ys_f[mayor], text=f"mayor |r<sub>i</sub>| = {abs(residuos[mayor]):.4g}",
                            showarrow=True, arrowhead=0, ax=0, ay=-34 if residuos[mayor] > 0 else 34,
                            arrowcolor=COLOR_RESIDUO, font=dict(size=11, color=COLOR_RESIDUO))
     fig.update_layout(xaxis=_eje("x"), yaxis=_eje("y"), hovermode="closest")
@@ -202,7 +219,7 @@ def _y_log(valor):
 
 def _serie(ks, valores, nombre, color, simbolo, guion="solid", detalle=None, especiales=None):
     """detalle: {k: texto extra para el cursor}; especiales: {k: color del borde resaltado}."""
-    puntos, ceros = _positivos(ks, valores)
+    puntos, ceros = positivos(ks, valores)
     trazas = []
     if puntos:
         xs = [p[0] for p in puntos]
@@ -225,14 +242,25 @@ def _serie(ks, valores, nombre, color, simbolo, guion="solid", detalle=None, esp
 
 # Estado final según el código de terminación del núcleo (algebra/.../ejecucion.py).
 # El texto se elige por el código: nunca se deduce «converge» a partir de la curva.
+# {d}, {r} y {kmax} se rellenan con la forma del símbolo que corresponda (estado_final).
 ESTADOS_FINALES = {
-    "TOLERANCIA_CAMBIO": ("Criterio A cumplido en k = {k}: d_k < ε", COLOR_EPSILON),
-    "TOLERANCIA_RESIDUO": ("Criterio B cumplido en k = {k}: r_k < ε", COLOR_EPSILON),
+    "TOLERANCIA_CAMBIO": ("Criterio A cumplido en k = {k}: {d} < ε", COLOR_EPSILON),
+    "TOLERANCIA_RESIDUO": ("Criterio B cumplido en k = {k}: {r} < ε", COLOR_EPSILON),
     "N_COMPLETADAS": ("Se completaron N = {k} iteraciones (criterio C: no demuestra convergencia)", SUAVE),
-    "MAXIMO_ITERACIONES": ("Se alcanzó k_max = {k} sin cumplir el criterio", COLOR_RESIDUO),
+    "MAXIMO_ITERACIONES": ("Se alcanzó {kmax} = {k} sin cumplir el criterio", COLOR_RESIDUO),
     "ERROR_NO_FINITO": ("Aparecieron valores no finitos: el cálculo se detuvo en k = {k}", "#F87171"),
 }
 COLOR_SELECCION = "#E6ECF7"
+
+
+def estado_final(codigo, k, forma="html"):
+    """Texto del estado final con la notación de `forma` ("html" para Plotly, "texto"
+    para insignias y tablas).  None si el código no tiene estado final."""
+    if codigo not in ESTADOS_FINALES:
+        return None
+    plantilla = ESTADOS_FINALES[codigo][0]
+    return plantilla.format(k=k, d=getattr(notacion.D_K, forma), r=getattr(notacion.R_K, forma),
+                            kmax=getattr(notacion.K_MAX, forma))
 
 
 def _tramos_crecientes(ks, valores):
@@ -254,15 +282,15 @@ def convergencia(historial, criterio, tolerancia=None, metodo=None, codigo=None,
                 alto=470)
     ks = [f.k for f in historial]
     k_final = ks[-1] if ks else None
-    detalle = {f.k: f"<br>x⁽ᵏ⁾ = {_texto_vector(f.x)}" for f in historial}
+    detalle = {f.k: f"<br>{notacion.X_K.html} = {_texto_vector(f.x)}" for f in historial}
     especiales = {}
     if ks:
         especiales[ks[0]] = SUAVE
         especiales[k_final] = COLOR_SELECCION
     if k_destacada is not None:
         especiales[k_destacada] = "#22D3EE"
-    series = [("d_k = ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞", [f.d for f in historial], COLOR_RECTA, "circle", "solid", "A"),
-              ("r_k = ‖b − Ax⁽ᵏ⁾‖∞", [f.r for f in historial], COLOR_RESIDUO, "square", "dash", "B")]
+    series = [(notacion.D_K_DEF.html, [f.d for f in historial], COLOR_RECTA, "circle", "solid", "A"),
+              (notacion.R_K_DEF.html, [f.r for f in historial], COLOR_RESIDUO, "square", "dash", "B")]
     for nombre, valores, color, simbolo, guion, letra in series:
         etiqueta = nombre + (" (criterio de parada)" if criterio == letra else " (informativo)")
         for traza in _serie(ks, valores, etiqueta, color, simbolo, guion,
@@ -276,12 +304,12 @@ def convergencia(historial, criterio, tolerancia=None, metodo=None, codigo=None,
     for k0, k1 in tramos:
         fig.add_vrect(x0=k0, x1=k1, fillcolor="rgba(251,191,36,0.08)", line_width=0, layer="below")
     if tramos:
-        fig.add_annotation(text="Sombreado: tramos en que d_k aumentó", xref="paper", yref="paper",
-                           x=0, y=1.0, xanchor="left", yanchor="bottom", showarrow=False,
+        fig.add_annotation(text=f"Sombreado: tramos en que {notacion.D_K.html} aumentó", xref="paper",
+                           yref="paper", x=0, y=1.0, xanchor="left", yanchor="bottom", showarrow=False,
                            font=dict(size=11, color=COLOR_RESIDUO))
     if codigo in ESTADOS_FINALES and k_final is not None:
-        texto, color = ESTADOS_FINALES[codigo]
-        fig.add_annotation(text=texto.format(k=k_final), xref="paper", yref="paper", x=1, y=1.0,
+        color = ESTADOS_FINALES[codigo][1]
+        fig.add_annotation(text=estado_final(codigo, k_final), xref="paper", yref="paper", x=1, y=1.0,
                            xanchor="right", yanchor="bottom", showarrow=False,
                            font=dict(size=12, color=color))
         serie = {"TOLERANCIA_CAMBIO": historial[-1].d, "TOLERANCIA_RESIDUO": historial[-1].r}.get(codigo)
@@ -299,8 +327,8 @@ def comparacion(resultados, metrica, errores_historial=None, destacado=None, k_d
                 criterio=None, tolerancia=None):
     """Una traza por método.  `destacado` atenúa los demás métodos; `k_destacada` marca una
     iteración; ε se dibuja solo si la métrica es la del criterio real (d con A, r con B)."""
-    titulos = TITULOS_METRICA
-    fig = _base("Comparación de métodos: " + titulos[metrica], alto=470)
+    simbolo, definicion = notacion.METRICAS[metrica]
+    fig = _base("Comparación de métodos: " + TITULOS_METRICA[metrica] + " " + simbolo.html, alto=470)
     for indice, r in enumerate(resultados):
         serie = serie_metrica(r, indice, metrica, errores_historial)
         if serie is None:
@@ -308,7 +336,7 @@ def comparacion(resultados, metrica, errores_historial=None, destacado=None, k_d
         ks, valores = serie
         metodo = r.configuracion.metodo
         nombre = metodo + (f" (ω = {float(r.configuracion.omega):.3g})" if metodo == "SOR" else "")
-        puntos, _ = _positivos(ks, valores)
+        puntos, _ = positivos(ks, valores)
         if puntos:
             xs = [p[0] for p in puntos]
             color = COLORES_METODOS.get(metodo)
@@ -323,7 +351,7 @@ def comparacion(resultados, metrica, errores_historial=None, destacado=None, k_d
                 line=dict(color=color, width=1.6 if atenuado else (3.2 if destacado else 2.4)),
                 marker=dict(symbol=SIMBOLOS[MARCADORES.get(metodo, "o")], size=tamanos,
                             color=color, line=dict(color=bordes, width=anchos)),
-                hovertemplate=f"<b>{nombre}</b><br>k = %{{x}}<br>{metrica}_k = %{{y:.6e}}<extra></extra>"))
+                hovertemplate=f"<b>{nombre}</b><br>k = %{{x}}<br>{simbolo.html} = %{{y:.6e}}<extra></extra>"))
             if not atenuado:
                 fig.add_annotation(x=xs[-1], y=_y_log(puntos[-1][1]), text=f"k = {xs[-1]}", showarrow=False,
                                    xshift=18, font=dict(size=11, color=color))
@@ -333,8 +361,7 @@ def comparacion(resultados, metrica, errores_historial=None, destacado=None, k_d
     if k_destacada is not None:
         fig.add_vline(x=k_destacada, line=dict(color="#22D3EE", dash="dot", width=1.4))
     fig.update_layout(xaxis=_eje("Iteración k", zeroline=False),
-                      yaxis=_eje({"d": "d_k", "r": "r_k", "e": "e_k = ‖x⁽ᵏ⁾ − x*‖∞"}[metrica] + " (escala log.)",
-                                 log=True), hovermode="x unified")
+                      yaxis=_eje(definicion.html + " (escala log.)", log=True), hovermode="x unified")
     return fig
 
 
@@ -376,7 +403,7 @@ def precondicionador(comparaciones):
     minimo, recortado = None, False
     for f in comparaciones:
         for resultado, guion, sufijo in ((f.original, "solid", "original"), (f.precondicionado, "dash", "con M = D")):
-            puntos, _ = _positivos([fila.k for fila in resultado.historial], [fila.d for fila in resultado.historial])
+            puntos, _ = positivos([fila.k for fila in resultado.historial], [fila.d for fila in resultado.historial])
             if not puntos:
                 continue
             recortado = recortado or max(p[1] for p in puntos) > TOPE_GRAFICA
@@ -387,8 +414,9 @@ def precondicionador(comparaciones):
                 name=f"{f.metodo} ({sufijo})", legendgroup=f.metodo,
                 line=dict(color=color, width=2.2, dash=guion),
                 marker=dict(symbol=SIMBOLOS[MARCADORES.get(f.metodo, "o")], size=6, color=color),
-                hovertemplate=f"<b>{f.metodo} ({sufijo})</b><br>k = %{{x}}<br>d_k = %{{y:.6e}}<extra></extra>"))
-    eje_y = _eje("d_k = ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞ (escala log.)", log=True)
+                hovertemplate=f"<b>{f.metodo} ({sufijo})</b><br>k = %{{x}}<br>{notacion.D_K.html} = %{{y:.6e}}"
+                              "<extra></extra>"))
+    eje_y = _eje(notacion.D_K_DEF.html + " (escala log.)", log=True)
     if recortado:
         # Vista inicial acotada: una curva divergente taparía a las demás.  Los datos
         # están completos; «Autoescala» o el zoom muestran la curva entera.

@@ -19,9 +19,9 @@ MODULOS = [
      "solución paramétrica e interpretación geométrica.",
      "Gauss · Gauss-Jordan · rango · det"),
     ("II", "Condicionamiento y sensibilidad", nav.CONDICIONAMIENTO,
-     "κ∞(A) = ‖A‖∞‖A⁻¹‖∞ con la inversa por Gauss-Jordan y el efecto de perturbar b "
+     "κ<sub>∞</sub>(A) = ‖A‖<sub>∞</sub>‖A⁻¹‖<sub>∞</sub> con la inversa por Gauss-Jordan y el efecto de perturbar b "
      "en la solución.",
-     "κ∞ · inversa · perturbación"),
+     "κ<sub>∞</sub> · inversa · perturbación"),
     ("III", "Mínimos cuadrados y ajuste lineal", nav.MINIMOS,
      "Ecuaciones normales AᵀA x̂ = Aᵀb, residuo y comprobación Aᵀr = 0; recta y = mx + c "
      "con verificación por Cramer.",
@@ -39,7 +39,7 @@ INCENTIVOS = [
      "barrido de ω y exportación del historial a CSV.",
      "IV → «Comparar métodos» y «Ejecutar un método» (botón CSV)"),
     ("Precondicionamiento", "hasta 1,5 %", nav.ITERATIVOS,
-     "Precondicionador diagonal M = D: κ∞(A) frente a κ∞(D⁻¹A), autovalores, iteraciones "
+     "Precondicionador diagonal M = D: κ<sub>∞</sub>(A) frente a κ<sub>∞</sub>(D⁻¹A), autovalores, iteraciones "
      "con y sin M y comparación exacta de la matriz de iteración.",
      "IV → pestaña «Precondicionamiento diagonal»"),
     ("Matrices dispersas", "hasta 1 %", nav.ITERATIVOS,
@@ -169,4 +169,4 @@ def mostrar():
         '<footer class="pie"><span><b>Universidad de Costa Rica</b> · Sede del Caribe · II Ciclo 2026</span>'
         '<span>Proyecto final · Grupo 01</span>'
         '<span>Núcleo: Python puro (biblioteca estándar) · Interfaz: Streamlit · '
-        'Gráficas: Plotly y Matplotlib</span></footer>', unsafe_allow_html=True)
+        'Gráficas: Plotly</span></footer>', unsafe_allow_html=True)

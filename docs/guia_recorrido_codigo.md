@@ -105,7 +105,7 @@ Las referencias `archivo:línea` corresponden al estado del 10-nov-2026. Si camb
 | Validación | `ejecucion.py:205` `validar_configuracion` | ε > 0, k_max y N enteros, 0 < ω < 2, aᵢᵢ ≠ 0 |
 | **Bucle común** | `ejecucion.py:259` `ejecutar` → `:274` `_ejecutar` | d_k = ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞, r_k, criterios A, B y C, motivo de parada |
 | Convergencia | `convergencia.py:25` `dominancia_diagonal`, `:50` `reordenamiento_dominante` | Condición suficiente; reordenar como en clase |
-| Radio espectral | `espectral.py:120` `matriz_iteracion` → `:159` `polinomio_caracteristico` → `:263` `raices` → `:405` `radio_espectral` | T_J = −D⁻¹(L+U), T_GS = −(D+L)⁻¹U; Sarrus en 3×3 (`:334` `desarrollo_sarrus`) |
+| Radio espectral | `matriz_iteracion.py` `matriz_iteracion` → `polinomio_raices.py` `polinomio_caracteristico` y `raices` → `espectral.py` `radio_espectral` | T_J = −D⁻¹(L+U), T_GS = −(D+L)⁻¹U; Sarrus en 3×3 (`matriz_iteracion.py` `desarrollo_sarrus`) |
 | Comparación | `comparacion.py:49` `comparar_metodos` | Los 3 métodos con la misma configuración; error final ‖x⁽ᵏ⁾ − x*‖∞ |
 | Incentivo CSR | `dispersas.py:61` `a_csr` y `paso_*_csr` | Recorre solo los no nulos |
 | Incentivo precondicionador | `precondicionamiento.py:85` `precondicionar_diagonal`, `:128` `analizar_precondicionador` | M = D; T y c idénticas; Richardson como extensión |

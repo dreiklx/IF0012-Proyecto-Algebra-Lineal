@@ -37,18 +37,18 @@ class TestConvergencia(unittest.TestCase):
         r = ejecutar(S, B, ConfiguracionIterativa())
         self.assertEqual(r.codigo, "TOLERANCIA_CAMBIO")
         fig = interactivas.convergencia(r.historial, "A", 1e-3, metodo="Jacobi", codigo=r.codigo)
-        self.assertIn(f"Criterio A cumplido en k = {r.k_final}: d_k < ε", textos(fig))
+        self.assertIn(f"Criterio A cumplido en k = {r.k_final}: d<sub>k</sub> < ε", textos(fig))
         self.assertIn("ε alcanzado", textos(fig))
         # los datos siguen siendo los del historial
-        self.assertEqual(list(traza(fig, "d_k").y), [f.d for f in r.historial if f.d is not None])
-        self.assertEqual(list(traza(fig, "r_k").y), [f.r for f in r.historial])
+        self.assertEqual(list(traza(fig, "d<sub>k</sub>").y), [f.d for f in r.historial if f.d is not None])
+        self.assertEqual(list(traza(fig, "r<sub>k</sub>").y), [f.r for f in r.historial])
         self.assertEqual(fig.layout.shapes[0].y0, 1e-3)          # ε sigue siendo la primera forma
 
     def test_k_max_no_se_presenta_como_convergencia(self):
         r = ejecutar(S, B, ConfiguracionIterativa(k_max=2))
         self.assertEqual(r.codigo, "MAXIMO_ITERACIONES")
         fig = interactivas.convergencia(r.historial, "A", 1e-3, codigo=r.codigo)
-        self.assertIn("Se alcanzó k_max = 2 sin cumplir el criterio", textos(fig))
+        self.assertIn("Se alcanzó k<sub>max</sub> = 2 sin cumplir el criterio", textos(fig))
         self.assertNotIn("ε alcanzado", textos(fig))
         self.assertFalse(any("cumplido en" in t for t in textos(fig)))
 
@@ -71,12 +71,12 @@ class TestConvergencia(unittest.TestCase):
         fig = interactivas.convergencia(r.historial, "A", 1e-3, k_destacada=3)
         lineas = [f for f in fig.layout.shapes if f.type == "line" and f.x0 == 3 and f.x1 == 3]
         self.assertEqual(len(lineas), 1)
-        rk = traza(fig, "r_k")
+        rk = traza(fig, "r<sub>k</sub>")
         self.assertEqual(rk.marker.size[list(rk.x).index(3)], 13)
         # el cursor muestra x⁽ᵏ⁾ exactamente como está en el historial
         for k, texto in zip(rk.x, rk.customdata):
             fila = r.historial[k]
-            self.assertEqual(texto, "<br>x⁽ᵏ⁾ = (" + ", ".join(f"{v:.6g}" for v in fila.x) + ")")
+            self.assertEqual(texto, "<br>x<sup>(k)</sup> = (" + ", ".join(f"{v:.6g}" for v in fila.x) + ")")
 
     def test_criterio_c_sin_linea_epsilon(self):
         r = ejecutar(S, B, ConfiguracionIterativa(criterio="C", n_iteraciones=4))

@@ -1,52 +1,16 @@
-"""Componentes comunes de la interfaz Streamlit.
+"""Componentes comunes de la interfaz Streamlit: lectura de datos con mensajes de
+error, procedimiento paso a paso y gráficas interactivas (barra de herramientas,
+selección de puntos).  Las fórmulas LaTeX están en formulas.py.
 
-Aquí solo hay presentación: convertir resultados del núcleo a LaTeX o a
-tablas y mostrar errores de entrada.  Ningún cálculo matemático vive aquí.
+Aquí solo hay presentación.  Ningún cálculo matemático vive aquí.
 """
-
-from fractions import Fraction
 
 import streamlit as st
 
 from algebra.compartido.matriz import ErrorMatriz
-from algebra.compartido.validacion import ErrorEntrada, formatear_numero, leer_matriz, leer_vector
-
-
-# ---------------------------------------------------------------------------
-# LaTeX
-# ---------------------------------------------------------------------------
-
-def latex_numero(valor, cifras=6):
-    """Fracción exacta como \\frac{p}{q}; el resto como decimal."""
-    if isinstance(valor, Fraction) and valor.denominator != 1:
-        if len(str(valor)) <= 14:
-            signo = "-" if valor < 0 else ""
-            return rf"{signo}\frac{{{abs(valor.numerator)}}}{{{valor.denominator}}}"
-        return formatear_numero(float(valor), cifras)
-    if isinstance(valor, complex):
-        return formatear_numero(valor, cifras).replace("−", "-").replace("i", r"\,i")
-    return formatear_numero(valor, cifras)
-
-
-def latex_matriz(M, separador=None, cifras=6):
-    """Matriz entre corchetes; `separador` es el índice de columna antes del que
-    se dibuja una línea vertical (para [A | b])."""
-    n = len(M[0])
-    columnas = "".join("c" if separador is None or j != separador else "|c" for j in range(n))
-    # Las fracciones apiladas (\frac) quedan montadas entre filas si no se añade
-    # espacio vertical (defecto visual detectado en la revisión manual).
-    hay_fracciones = any(isinstance(v, Fraction) and v.denominator != 1 for fila in M for v in fila)
-    salto = r" \\[6pt] " if hay_fracciones else r" \\ "
-    filas = salto.join(" & ".join(latex_numero(v, cifras) for v in fila) for fila in M)
-    return rf"\left[\begin{{array}}{{{columnas}}} {filas} \end{{array}}\right]"
-
-
-def latex_vector(v, cifras=6):
-    return latex_matriz([[x] for x in v], cifras=cifras)
-
-
-def texto_vector(v, cifras=6):
-    return "(" + ", ".join(formatear_numero(x, cifras) for x in v) + ")"
+from algebra.compartido.validacion import ErrorEntrada, leer_matriz, leer_vector
+from interfaz.compartido.formulas import latex_matriz
+from visualizacion import notacion
 
 
 # ---------------------------------------------------------------------------
@@ -58,7 +22,7 @@ def leer_matriz_ui(texto, nombre):
     try:
         return leer_matriz(texto, nombre)
     except (ErrorEntrada, ErrorMatriz) as error:
-        st.error(f"❌ {error}")
+        st.error(f"❌ {notacion.md(str(error))}")
         return None
 
 
@@ -66,26 +30,8 @@ def leer_vector_ui(texto, nombre):
     try:
         return leer_vector(texto, nombre)
     except (ErrorEntrada, ErrorMatriz) as error:
-        st.error(f"❌ {error}")
+        st.error(f"❌ {notacion.md(str(error))}")
         return None
-
-
-def ayuda_formato():
-    st.caption(
-        "Formato: una fila por línea y los números separados por espacios. "
-        "Se aceptan enteros, decimales con punto o coma (2.5 o 2,5), fracciones (1/3) "
-        "y notación científica (1e-3).")
-
-
-def tabla_vector(v, nombre="x", cifras=6):
-    """Filas para st.table: componente, valor exacto (si es fracción) y decimal."""
-    filas = []
-    for i, valor in enumerate(v, start=1):
-        fila = {"Componente": f"{nombre}{i}", "Valor": formatear_numero(valor, cifras)}
-        if isinstance(valor, Fraction):
-            fila["Decimal"] = f"{float(valor):.10g}"
-        filas.append(fila)
-    return filas
 
 
 def mostrar_pasos(pasos, separador):
@@ -94,12 +40,13 @@ def mostrar_pasos(pasos, separador):
     Si el paso trae la notación de clase («−2F₁ + F₂»), se muestra primero y la
     forma Fᵢ → Fᵢ − m·Fⱼ queda como aclaración."""
     for numero, paso in enumerate(pasos):
-        notacion = getattr(paso, "notacion", "")
-        if notacion:
-            st.markdown(f"**Paso {numero}.** {notacion} &nbsp;·&nbsp; <small>{paso.descripcion}</small>",
+        de_clase = getattr(paso, "notacion", "")
+        descripcion = notacion.md(paso.descripcion)        # F2 → F₂, x3 → x₃
+        if de_clase:
+            st.markdown(f"**Paso {numero}.** {de_clase} &nbsp;·&nbsp; <small>{descripcion}</small>",
                         unsafe_allow_html=True)
         else:
-            st.markdown(f"**Paso {numero}.** {paso.descripcion}")
+            st.markdown(f"**Paso {numero}.** {descripcion}")
         st.latex(latex_matriz(paso.matriz, separador=separador))
 
 
@@ -173,3 +120,5 @@ def iteracion_elegida(clave, clave_deslizador, ks, firma):
         st.session_state[clave_deslizador] = elegidas[0]
     st.session_state[ultima_sel] = elegidas
     return st.session_state[clave_deslizador]
+
+

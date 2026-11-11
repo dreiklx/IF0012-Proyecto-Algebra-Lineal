@@ -94,7 +94,7 @@ class TestAplicacion(unittest.TestCase):
         at.button(key="it_ejecutar").click()
         at.run()
         self.assertFalse(at.exception)
-        self.assertIn("Criterio satisfecho: d_7", textos(at.success))
+        self.assertIn("Criterio satisfecho: $d_{7}$", textos(at.success))
         at.button(key="it_comparar").click()
         at.run()
         self.assertFalse(at.exception)
@@ -129,7 +129,7 @@ class TestAplicacion(unittest.TestCase):
         self.assertIn("Formato CSR: nnz = 9", textos(at.info))
         # La estrategia CSR se explica en la aplicación (incentivo «Matrices dispersas»).
         self.assertIn("O(nnz)", " ".join(str(m.value) for m in at.markdown))
-        self.assertIn("Criterio satisfecho: d_7", textos(at.success))
+        self.assertIn("Criterio satisfecho: $d_{7}$", textos(at.success))
 
     def test_modulo_IV_precondicionamiento(self):
         at = self.abrir(nav.ITERATIVOS)
@@ -165,7 +165,7 @@ class TestAplicacion(unittest.TestCase):
         at.run()
         self.assertFalse(at.exception, at.exception)
         texto = " | ".join(str(m.value) for m in at.markdown)
-        self.assertIn("det([A | b]) = **-11**", texto)
+        self.assertIn(r"$\det[A \mid b]$ = **−11**", texto)       # el valor −11 de la hoja
         self.assertIn("coincide exactamente", texto)
 
     def test_modulo_IV_jacobi_no_converge(self):
@@ -190,7 +190,7 @@ class TestComponentes(unittest.TestCase):
 
     def test_latex_separa_filas_con_fracciones(self):
         from fractions import Fraction
-        from interfaz.compartido.componentes import latex_matriz
+        from interfaz.compartido.formulas import latex_matriz
         con = latex_matriz([[Fraction(65, 33)], [Fraction(-29, 33)]])
         self.assertIn(r"\[6pt]", con)
         self.assertIn(r"\frac{65}{33}", con)

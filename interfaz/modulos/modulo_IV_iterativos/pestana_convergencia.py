@@ -8,20 +8,18 @@ import streamlit as st
 from algebra.compartido.matriz import ErrorMatriz
 from algebra.compartido.validacion import ErrorEntrada, formatear_numero, leer_omega
 from algebra.modulo_IV_iterativos.convergencia import dominancia_diagonal, reordenamiento_dominante
-from algebra.modulo_IV_iterativos.espectral import (
-    CONVERGE,
-    NO_CALCULADO,
-    NO_CONVERGE,
-    desarrollo_sarrus,
-    radio_espectral,
-)
+from algebra.modulo_IV_iterativos.espectral import CONVERGE, NO_CALCULADO, NO_CONVERGE, radio_espectral
+from algebra.modulo_IV_iterativos.matriz_iteracion import desarrollo_sarrus
 from algebra.modulo_IV_iterativos.metodos import GAUSS_SEIDEL, JACOBI, METODOS, SOR
 from interfaz.compartido.componentes import (
-    latex_matriz,
-    latex_vector,
     leer_matriz_ui,
     leer_vector_ui,
     mostrar_interactiva,
+)
+from interfaz.compartido.formulas import (
+    latex_matriz,
+    latex_polinomio,
+    latex_vector,
 )
 from interfaz.compartido.estilo import (
     insignias,
@@ -29,7 +27,7 @@ from interfaz.compartido.estilo import (
     tarjeta_resultado,
     valor_destacado,
 )
-from visualizacion import interactivas
+from visualizacion import interactivas, notacion
 
 
 def convergencia(texto_A, texto_b, texto_omega, bloqueado=False):
@@ -53,24 +51,26 @@ def convergencia(texto_A, texto_b, texto_omega, bloqueado=False):
                     st.session_state["it_convergencia"] = (
                         st.session_state["it_convergencia"][0], None, str(error))
                 else:
-                    st.error(f"❌ {error}")
+                    st.error(f"❌ {notacion.md(str(error))}")
     if "it_convergencia" not in st.session_state:
         return
     dom, esp, error_T = st.session_state["it_convergencia"]
 
     marca_incentivo("Extensión matemática: radio espectral con autovalores complejos", "1 %")
     st.subheader("1. Dominancia diagonal estricta por filas")
-    st.table([{"Fila": f[0] + 1, "|aᵢᵢ|": formatear_numero(f[1]),
-               "Σ_{j≠i} |aᵢⱼ|": formatear_numero(f[2]), "¿|aᵢᵢ| > Σ?": "✔" if f[3] else "✘"}
+    # Encabezados de st.table: renderizan LaTeX.
+    st.table([{"Fila $i$": f[0] + 1, r"$|a_{ii}|$": formatear_numero(f[1]),
+               r"$\sum_{j \ne i} |a_{ij}|$": formatear_numero(f[2]),
+               r"¿$|a_{ii}| > \sum_{j \ne i} |a_{ij}|$?": "✔" if f[3] else "✘"}
               for f in dom.filas])
-    (st.success if dom.estricta else st.warning)(dom.mensaje)
+    (st.success if dom.estricta else st.warning)(notacion.md(dom.mensaje))
     if not dom.estricta:
         reorden = st.session_state.get("it_reorden")
         if reorden is not None:
             A_r, b_r, orden = reorden
             st.info("🔀 Reordenando las ecuaciones como en clase (Tarea II #2-3), la matriz SÍ es "
                     "estrictamente dominante con el orden " +
-                    ", ".join(f"E{i + 1}" for i in orden) + ":")
+                    ", ".join(f"E{notacion.subindice(i + 1)}" for i in orden) + ":")
             st.latex(r"A' = " + latex_matriz(A_r) + r",\quad b' = " + latex_vector(b_r))
             st.caption("La aplicación no reordena por su cuenta: copie A' y b' en los campos "
                        "de entrada si desea usar ese orden.")
@@ -78,35 +78,47 @@ def convergencia(texto_A, texto_b, texto_omega, bloqueado=False):
             st.caption("Ningún reordenamiento de las ecuaciones logra dominancia diagonal estricta.")
 
     if esp is None:
-        st.error(f"❌ {error_T}")
+        st.error(f"❌ {notacion.md(error_T)}")
         return
     it = esp.iteracion
     st.subheader(f"2. Matriz de iteración de {it.metodo}")
+    # Pasos y nombres de los manuscritos (S9-07/10 pp. 3-7): T_J, C_J; T_GS, C_GS.
+    nombre_T, nombre_C, nombre_inv = {
+        JACOBI: ("T_J", "C_J", "D^{-1}"),
+        GAUSS_SEIDEL: ("T_{GS}", "C_{GS}", "(D+L)^{-1}"),
+        SOR: (r"T_\omega", r"C_\omega", r"(D+\omega L)^{-1}"),
+    }[it.metodo]
     formulas = {
-        JACOBI: r"T_J=-D^{-1}(L+U),\qquad c=D^{-1}b",
-        GAUSS_SEIDEL: r"T_{GS}=-(D+L)^{-1}U,\qquad c=(D+L)^{-1}b",
-        SOR: r"T_\omega=(D+\omega L)^{-1}\left[(1-\omega)D-\omega U\right],\qquad c=\omega(D+\omega L)^{-1}b",
+        JACOBI: r"T_J=-D^{-1}(L+U),\qquad C_J=D^{-1}b",
+        GAUSS_SEIDEL: r"T_{GS}=-(D+L)^{-1}U,\qquad C_{GS}=(D+L)^{-1}b",
+        SOR: r"T_\omega=(D+\omega L)^{-1}\left[(1-\omega)D-\omega U\right],\qquad C_\omega=\omega(D+\omega L)^{-1}b",
     }
-    st.latex(formulas[it.metodo])
+    st.latex(r"x^{(k+1)} = " + nombre_T + r"\,x^{(k)} + " + nombre_C + r",\qquad " + formulas[it.metodo])
     if it.metodo == SOR:
         st.caption("Cat. C · La matriz de iteración de SOR no aparece en los PDF del curso (en clase "
                    "SOR se calcula por componentes): es una extensión, necesaria para obtener ρ(T).")
     else:
-        st.caption("Cat. A · Como en los manuscritos de clase (S9-07/10 pp. 3-7): A = D + L + U, "
-                   "T y c, y ρ(T) = máx |λ| con det(T − λI) = 0.")
+        st.caption("Cat. A · Los mismos pasos de los manuscritos de clase (S9-07/10 pp. 3-7).")
+    st.markdown(r"**① Descomponer** $A = D + L + U$:")
     st.latex(r"D=" + latex_matriz(it.D) + r",\; L=" + latex_matriz(it.L) + r",\; U=" + latex_matriz(it.U))
-    st.latex(r"T=" + latex_matriz(it.T) + r",\qquad c=" + latex_vector(it.c))
+    if it.inversa is not None:
+        st.markdown(rf"**② Calcular** ${nombre_inv}$:")
+        st.latex(nombre_inv + " = " + latex_matriz(it.inversa))
+    st.markdown(rf"**③ Calcular** ${nombre_T}$ **y ④** ${nombre_C}$:")
+    st.latex(nombre_T + "=" + latex_matriz(it.T) + r",\qquad " + nombre_C + "=" + latex_vector(it.c))
 
     st.subheader("3. Polinomio característico, autovalores y radio espectral")
+    st.markdown(r"**⑤ Hallar** $\rho(T) = \max\{|\lambda|\}$ con $\det(T - \lambda I) = 0$:")
     if esp.conclusion == NO_CALCULADO:
-        st.warning(esp.mensaje)
+        st.warning(notacion.md(esp.mensaje))
         return
-    st.markdown(f"`{esp.polinomio_curso} = 0`")
+    # El mismo polinomio que esp.polinomio_curso, con fracciones apiladas (−4/9λ era ambiguo).
+    st.latex(r"\det(T - \lambda I) = " + latex_polinomio(esp.coeficientes) + " = 0")
     if len(it.T) == 3:
         traza, menores, det = desarrollo_sarrus(it.T)
         coincide = [-1, traza, -menores, det] == [-c for c in esp.coeficientes]
         st.caption(
-            "Desarrollo de clase (Sarrus): det(T − λI) = −λ³ + tr(T)λ² − (Σ menores 2×2)λ + det(T), "
+            r"Desarrollo de clase (Sarrus): $\det(T - \lambda I) = -\lambda^3 + \operatorname{tr}(T)\lambda^2 - (\Sigma\ \text{menores } 2\times 2)\lambda + \det(T)$, "
             f"con tr(T) = {formatear_numero(traza)}, Σ menores = {formatear_numero(menores)} y "
             f"det(T) = {formatear_numero(det)} — "
             + ("coincide con el polinomio calculado." if coincide else "⚠️ no coincide."))
@@ -120,7 +132,7 @@ def convergencia(texto_A, texto_b, texto_omega, bloqueado=False):
     with tarjeta_resultado("espectral"):
         izquierda, derecha = st.columns([2, 3])
         with izquierda:
-            valor_destacado(f"ρ(T) de {it.metodo}", formatear_numero(esp.rho, 8), "máx |λᵢ| de T")
+            valor_destacado(f"ρ(T) de {it.metodo}", formatear_numero(esp.rho, 8), "máx |λ<sub>i</sub>| de T")
         with derecha:
             insignias([{CONVERGE: ("Converge para todo x⁽⁰⁾", "ok"),
                         NO_CONVERGE: ("No converge para todo x⁽⁰⁾", "error")}.get(
@@ -130,13 +142,13 @@ def convergencia(texto_A, texto_b, texto_omega, bloqueado=False):
                         "ok" if esp.decision_exacta or esp.fiable else "aviso"),
                        ("Dominante" if dom.estricta else "No dominante", "ok" if dom.estricta else "")])
             if esp.conclusion == CONVERGE:
-                st.success("✅ " + esp.mensaje)
+                st.success("✅ " + notacion.md(esp.mensaje))
             elif esp.conclusion == NO_CONVERGE:
-                st.error("🚫 " + esp.mensaje)
+                st.error("🚫 " + notacion.md(esp.mensaje))
             else:
-                st.warning("⚠️ " + esp.mensaje)
+                st.warning("⚠️ " + notacion.md(esp.mensaje))
     for aviso in esp.advertencias:
-        st.warning("⚠️ " + aviso)
+        st.warning("⚠️ " + notacion.md(aviso))
     v = esp.verificaciones
     st.caption(f"Verificación: suma de autovalores = {formatear_numero(v['suma de autovalores'], 8)}, "
                f"traza(T) = {formatear_numero(v['traza de T'], 8)}; "
@@ -152,5 +164,5 @@ def convergencia(texto_A, texto_b, texto_omega, bloqueado=False):
                     "- El círculo discontinuo tiene radio ρ(T) = máx |λ|.\n"
                     "- Si todos los autovalores quedan dentro del círculo verde, el método "
                     "converge para cualquier x⁽⁰⁾; cuanto menor es ρ(T), más rápido.")
-    st.info("💡 Teorema: x⁽ᵏ⁺¹⁾ = T x⁽ᵏ⁾ + c converge para todo x⁽⁰⁾ si y solo si ρ(T) < 1. "
+    st.info(r"💡 Teorema: $x^{(k+1)} = Tx^{(k)} + c$ converge para todo $x^{(0)}$ si y solo si $\rho(T) < 1$. "
             "La dominancia diagonal es solo una condición suficiente.")

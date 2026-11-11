@@ -16,13 +16,15 @@ from interfaz.compartido import control_gestual, ejemplos
 from interfaz.compartido.componentes import (
     CONTROLES_2D,
     CONTROLES_3D,
-    latex_matriz,
-    latex_numero,
-    latex_vector,
     leer_matriz_ui,
     leer_vector_ui,
     mostrar_interactiva,
     mostrar_pasos,
+)
+from interfaz.compartido.formulas import (
+    latex_matriz,
+    latex_numero,
+    latex_vector,
     tabla_vector,
 )
 from interfaz.compartido.editor import (
@@ -42,6 +44,7 @@ from interfaz.compartido.estilo import (
     seccion,
     tarjeta_resultado,
 )
+from visualizacion import notacion
 from visualizacion.interactivas import planos_3d, rectas_2d
 
 
@@ -104,7 +107,7 @@ def mostrar():
             try:
                 st.session_state["dir_resultado"] = (A, b, resolver(A, b, estrategia))
             except ErrorMatriz as error:
-                st.error(f"❌ {error}")
+                st.error(f"❌ {notacion.md(str(error))}")
     # El resultado se guarda en la sesión para que no desaparezca al interactuar.
     if "dir_resultado" in st.session_state:
         mostrar_resultado(*st.session_state["dir_resultado"])
@@ -115,18 +118,18 @@ def mostrar_resultado(A, b, r):
     seccion("3", "Resultado")
     with tarjeta_resultado("directos"):
         if r.clasificacion == UNICA:
-            st.success("✅ " + r.mensaje)
+            st.success("✅ " + notacion.md(r.mensaje))
             estado = [("Solución única", "ok")]
         elif r.clasificacion == INFINITAS:
-            st.warning("♾️ " + r.mensaje)
+            st.warning("♾️ " + notacion.md(r.mensaje))
             estado = [("Infinitas soluciones", "aviso"),
                       (f"{len(r.variables_libres)} variable(s) libre(s)", "")]
         else:
-            st.error("🚫 " + r.mensaje)
+            st.error("🚫 " + notacion.md(r.mensaje))
             estado = [("Sistema inconsistente", "error")]
         insignias(estado + [(r.metodo, "info"), ("Resultado exacto", "ok")])
         for aviso in r.advertencias:
-            st.warning("⚠️ " + aviso)
+            st.warning("⚠️ " + notacion.md(aviso))
 
         st.caption(clasificacion_de_clase(r))
         if r.clasificacion == UNICA:
@@ -150,11 +153,11 @@ def mostrar_resultado(A, b, r):
         if r.sustitucion and r.metodo == "Gauss":
             with st.expander("Sustitución hacia atrás"):
                 for linea in r.sustitucion:
-                    st.markdown(f"- {linea}")
+                    st.markdown(f"- {notacion.md(linea)}")
         verificar(A, b, r.solucion)
     elif r.clasificacion == INFINITAS:
         st.subheader("Solución general (forma paramétrica)")
-        libres = ", ".join(f"t{i} = x{j + 1}" for i, j in enumerate(r.variables_libres, start=1))
+        libres = ", ".join(f"$t_{{{i}}} = x_{{{j + 1}}}$" for i, j in enumerate(r.variables_libres, start=1))
         st.caption(f"Parámetros: {libres}. Con todos los parámetros en 0 se obtiene una "
                    f"solución particular.")
         verificar(A, b, r.solucion_particular)
@@ -205,5 +208,5 @@ def clasificacion_de_clase(r):
 def verificar(A, b, x):
     r = residuo(A, x, b)
     exacto = all(v == 0 for v in r)
-    st.caption("Verificación: b − A x = " + "(" + ", ".join(formatear_numero(v) for v in r) + ")"
+    st.caption("Verificación: $b - Ax$ = " + "(" + ", ".join(formatear_numero(v) for v in r) + ")"
                + (" → la solución satisface exactamente el sistema." if exacto else ""))

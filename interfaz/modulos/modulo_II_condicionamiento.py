@@ -2,7 +2,7 @@
 
 import streamlit as st
 
-from algebra.compartido.matriz import ErrorMatriz
+from algebra.compartido.matriz import ErrorMatriz, sumas_absolutas_por_fila
 from algebra.compartido.validacion import ErrorEntrada, formatear_numero, leer_vector
 from algebra.modulo_II_condicionamiento.condicion import (
     MATRIZ_SINGULAR,
@@ -17,12 +17,11 @@ from algebra.modulo_II_condicionamiento.condicion import (
 from algebra.modulo_I_sistemas.directos import ErrorSistema
 from interfaz.compartido import ejemplos
 from interfaz.compartido.componentes import (
-    latex_matriz,
-    latex_numero,
     leer_matriz_ui,
     leer_vector_ui,
     mostrar_pasos,
 )
+from interfaz.compartido.formulas import latex_matriz, latex_numero
 from interfaz.compartido.editor import (
     MATRIZ,
     VECTOR,
@@ -41,6 +40,7 @@ from interfaz.compartido.estilo import (
     tarjeta_resultado,
     valor_destacado,
 )
+from visualizacion import notacion
 
 ETIQUETA_SENSIBILIDAD = {SENSIBILIDAD_BAJA: ("Sensibilidad baja", "ok"),
                          SENSIBILIDAD_ALTA: ("Sensibilidad alta", "error")}
@@ -49,9 +49,10 @@ ETIQUETA_SENSIBILIDAD = {SENSIBILIDAD_BAJA: ("Sensibilidad baja", "ok"),
 def mostrar():
     encabezado_modulo(
         "II", "Condicionamiento y sensibilidad",
-        r"Calcula κ∞(A) = ‖A‖∞ · ‖A⁻¹‖∞ con la inversa obtenida por <b>nuestro</b> Gauss-Jordan "
+        "Calcula κ<sub>∞</sub>(A) = ‖A‖<sub>∞</sub> · ‖A⁻¹‖<sub>∞</sub> con la inversa obtenida por "
+        "<b>nuestro</b> Gauss-Jordan "
         "y compara la solución de A x = b con la del sistema perturbado A x̃ = b + Δb.",
-        [("Inversa propia [A | I] → [I | A⁻¹]", "info"), ("Norma ∞", ""), ("Escala 10 / 100", "")])
+        [("Inversa propia [A | I] → [I | A⁻¹]", "info"), ("Norma ‖·‖<sub>∞</sub>", ""), ("Escala 10 / 100", "")])
     procedencia([
         ("A", "κ(A) = ‖A‖ ‖A⁻¹‖ y sus 5 pasos", "S7-21/09 pp. 17 y 19"),
         ("A", "Inversa por Gauss-Jordan", "S3-24/08 pp. 6-8"),
@@ -107,7 +108,7 @@ def mostrar():
                     perturbacion = analizar_perturbacion(A, b, delta_b)
                 st.session_state["cond_resultado"] = (A, condicion, perturbacion)
             except (ErrorEntrada, ErrorMatriz, ErrorSistema) as error:
-                st.error(f"❌ {error}")
+                st.error(f"❌ {notacion.md(str(error))}")
     if "cond_resultado" in st.session_state:
         mostrar_resultado(*st.session_state["cond_resultado"])
 
@@ -118,7 +119,7 @@ def mostrar_resultado(A, c, p):
     if c.clasificacion == MATRIZ_SINGULAR:
         with tarjeta_resultado("condicion"):
             insignias([("Matriz singular", "error"), ("κ no está definido", "error")])
-            st.error("🚫 " + c.interpretacion)
+            st.error("🚫 " + notacion.md(c.interpretacion))
             st.info("💡 Recomendación: una matriz singular no tiene inversa. Revise si alguna fila "
                     "es combinación de otras; el Módulo I muestra el rango y la clasificación del sistema.")
         with st.expander("Procedimiento de Gauss-Jordan (sin pivote en alguna columna)"):
@@ -128,7 +129,7 @@ def mostrar_resultado(A, c, p):
     with tarjeta_resultado("condicion"):
         izquierda, derecha = st.columns([2, 3])
         with izquierda:
-            valor_destacado("κ∞(A)", formatear_numero(c.kappa),
+            valor_destacado("κ<sub>∞</sub>(A)", formatear_numero(c.kappa),
                             f"≈ {float(c.kappa):.6g}" if formatear_numero(c.kappa) != f"{float(c.kappa):.6g}" else "")
             etiqueta = ETIQUETA_SENSIBILIDAD.get(c.clasificacion, ("Sensibilidad moderada", "aviso"))
             insignias([etiqueta, ("A·A⁻¹ = I verificado" if c.resultado_inversa.verificacion_identidad
@@ -136,17 +137,15 @@ def mostrar_resultado(A, c, p):
         with derecha:
             escala_kappa(c.kappa)
             c1, c2 = st.columns(2)
-            c1.metric("‖A‖∞", formatear_numero(c.norma_A))
-            c2.metric("‖A⁻¹‖∞", formatear_numero(c.norma_inversa))
+            c1.metric(r"$\|A\|_\infty$", formatear_numero(c.norma_A))
+            c2.metric(r"$\|A^{-1}\|_\infty$", formatear_numero(c.norma_inversa))
         if c.clasificacion == SENSIBILIDAD_BAJA:
-            st.success("🟢 " + c.interpretacion)
+            st.success("🟢 " + notacion.md(c.interpretacion))
         elif c.clasificacion == SENSIBILIDAD_ALTA:
-            st.error("🔴 " + c.interpretacion)
+            st.error("🔴 " + notacion.md(c.interpretacion))
         else:
-            st.warning("🟠 " + c.interpretacion)
-    st.latex(r"A^{-1} = " + latex_matriz(c.inversa))
-    st.caption("Verificación: A·A⁻¹ = I se comprobó de forma exacta."
-               if c.resultado_inversa.verificacion_identidad else "⚠️ A·A⁻¹ ≠ I")
+            st.warning("🟠 " + notacion.md(c.interpretacion))
+    procedimiento_de_clase(A, c)
     with st.expander("Cálculo de la inversa por Gauss-Jordan: [A | I] → [I | A⁻¹]"):
         mostrar_pasos(c.resultado_inversa.pasos, separador=n)
 
@@ -155,18 +154,18 @@ def mostrar_resultado(A, c, p):
     seccion("4", "Análisis de la perturbación")
     with tarjeta_resultado("perturbacion"):
         d1, d2, d3 = st.columns(3)
-        d1.metric("‖Δb‖∞ / ‖b‖∞", formatear_numero(p.error_relativo_b) if p.error_relativo_b is not None else "no definido")
-        d2.metric("‖Δx‖∞ / ‖x‖∞", formatear_numero(p.error_relativo_x) if p.error_relativo_x is not None else "no definido")
-        d3.metric("Cota κ∞·‖Δb‖/‖b‖", formatear_numero(p.cota) if p.cota is not None else "no definida")
+        d1.metric(r"$\|\Delta b\|_\infty / \|b\|_\infty$", formatear_numero(p.error_relativo_b) if p.error_relativo_b is not None else "no definido")
+        d2.metric(r"$\|\Delta x\|_\infty / \|x\|_\infty$", formatear_numero(p.error_relativo_x) if p.error_relativo_x is not None else "no definido")
+        d3.metric(r"Cota $\kappa_\infty(A)\,\|\Delta b\|_\infty / \|b\|_\infty$", formatear_numero(p.cota) if p.cota is not None else "no definida")
         if p.cumple_cota is not None:
             insignias([("La cota teórica se cumple", "ok") if p.cumple_cota else ("La cota NO se cumple", "error")]
                       + ([(f"Amplificación observada: {formatear_numero(p.amplificacion)}", "info")]
                          if p.amplificacion is not None else []))
         st.latex(r"\frac{\|\Delta x\|_\infty}{\|x\|_\infty} \le \kappa_\infty(A)\,"
                  r"\frac{\|\Delta b\|_\infty}{\|b\|_\infty}")
-        st.info("💡 " + p.interpretacion)
+        st.info("💡 " + notacion.md(p.interpretacion))
     for aviso in p.avisos:
-        st.warning("⚠️ " + aviso)
+        st.warning("⚠️ " + notacion.md(aviso))
     filas = []
     for i in range(n):
         filas.append({
@@ -178,7 +177,41 @@ def mostrar_resultado(A, c, p):
         })
     st.table(filas)
     if p.error_relativo_x is not None and p.error_relativo_b:
-        st.caption(f"Valores exactos: ‖Δb‖/‖b‖ = {formatear_numero(p.error_relativo_b)}, "
-                   f"‖Δx‖/‖x‖ = {formatear_numero(p.error_relativo_x)}.")
+        st.caption(r"Valores exactos: $\|\Delta b\|_\infty / \|b\|_\infty$ = "
+                   f"{formatear_numero(p.error_relativo_b)}, "
+                   r"$\|\Delta x\|_\infty / \|x\|_\infty$ = "
+                   f"{formatear_numero(p.error_relativo_x)}.")
     st.markdown(rf"$x = ({', '.join(latex_numero(v) for v in p.x)})$, "
                 rf"$\tilde x = ({', '.join(latex_numero(v) for v in p.x_perturbada)})$")
+
+
+def _norma_por_filas(M, nombre):
+    """Paso de clase: «Fila i: |a| + |b| = s» y la norma ∞ como el máximo de esas sumas.
+    Las sumas las calcula el núcleo (sumas_absolutas_por_fila); aquí solo se escriben."""
+    sumas = sumas_absolutas_por_fila(M)
+    lineas = []
+    for i, (fila, suma) in enumerate(zip(M, sumas), start=1):
+        terminos = " + ".join(f"|{latex_numero(v)}|" for v in fila)
+        lineas.append(rf"Fila {i}: ${terminos} = {latex_numero(suma)}$")
+    st.markdown("  \n".join(lineas))
+    maximo = ", ".join(latex_numero(v) for v in sumas)
+    st.markdown(rf"${nombre} = \max\{{{maximo}\}} = {latex_numero(max(sumas))}$")
+
+
+def procedimiento_de_clase(A, c):
+    """Los 5 pasos de la lámina S7-21/09 p. 19, con los valores calculados por el núcleo."""
+    st.markdown("**Procedimiento de clase** (S7-21/09 p. 19), en la norma ∞ que exige el enunciado:")
+    with st.container(border=True, key="cond_pasos"):
+        st.markdown(r"**1. Elegir la norma:** $\|\cdot\|_\infty$, suma de valores absolutos por fila.")
+        st.markdown(r"**2. Calcular** $\|A\|_\infty$:")
+        _norma_por_filas(A, r"\|A\|_\infty")
+        st.markdown("**3. Calcular** $A^{-1}$ con Gauss-Jordan (pasos abajo) y verificar que $A$ es invertible:")
+        st.latex(r"A^{-1} = " + latex_matriz(c.inversa))
+        st.caption("Verificación: A·A⁻¹ = I se comprobó de forma exacta."
+                   if c.resultado_inversa.verificacion_identidad else "⚠️ A·A⁻¹ ≠ I")
+        st.markdown(r"**4. Calcular** $\|A^{-1}\|_\infty$ en la misma norma:")
+        _norma_por_filas(c.inversa, r"\|A^{-1}\|_\infty")
+        st.markdown("**5. Multiplicar:**")
+        st.latex(r"\kappa_\infty(A) = \|A\|_\infty\,\|A^{-1}\|_\infty = "
+                 + latex_numero(c.norma_A) + r" \cdot " + latex_numero(c.norma_inversa)
+                 + " = " + latex_numero(c.kappa))

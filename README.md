@@ -47,7 +47,7 @@ python -m venv .venv
 .venv\Scripts\python -m unittest
 ```
 
-También se puede usar `ejecutar_pruebas.bat`. Son **281 pruebas**: el núcleo matemático, la validación, la interfaz (con `streamlit.testing`) y el empaquetado.
+También se puede usar `ejecutar_pruebas.bat`. Son **295 pruebas**: el núcleo matemático, la validación, la interfaz (con `streamlit.testing`) y el empaquetado.
 
 Auditoría matemática independiente: compara el núcleo con oráculos escritos aparte, con semilla fija, y tarda unos 20 s. Debe decir «fallos 0».
 
@@ -66,11 +66,12 @@ algebra/            núcleo matemático (Python puro)
   modulo_I_sistemas/  directos.py            (Gauss, Gauss-Jordan, inversa, determinante)
   modulo_II_condicionamiento/  condicion.py  (κ∞, perturbación)
   modulo_III_minimos/ minimos.py             (ecuaciones normales, residuo, recta)
-  modulo_IV_iterativos/  metodos, ejecucion, convergencia, espectral, comparacion,
-                      dispersas (CSR), precondicionamiento (M = D)
-interfaz/           Streamlit: compartido/ (estilo, editor, componentes, ejemplos) y
-                    modulos/ (una vista por módulo); no hace cálculos
-visualizacion/      gráficas Plotly y Matplotlib; solo dibujan resultados ya calculados
+  modulo_IV_iterativos/  metodos, ejecucion, convergencia, matriz_iteracion, espectral,
+                      polinomio_raices (extensiones), comparacion, dispersas (CSR),
+                      precondicionamiento (M = D)
+interfaz/           Streamlit: compartido/ (editor, componentes, formulas LaTeX, estilo,
+                    ejemplos) y modulos/ (una vista por módulo); no hace cálculos
+visualizacion/      gráficas Plotly (interactivas.py) y notación (notacion.py); solo dibujan
 gestos/             control gestual de la gráfica 3D (cámara, MediaPipe, gestos, cámara orbital);
                     separado del núcleo matemático
 tests/              pruebas automáticas (unittest), una carpeta por módulo
@@ -80,6 +81,8 @@ docs/               manual, guías, decisiones, matriz de cumplimiento
 dist/               entrega estable: ZIP, su SHA-256 y la guía en HTML
 empaquetar.py       genera el ZIP de entrega
 ```
+
+Mapa detallado (qué hay en cada archivo y el recorrido de cada módulo): [docs/mapa_completo_del_codigo.md](docs/mapa_completo_del_codigo.md). Cada carpeta principal tiene su `README.md`.
 
 El detalle está en [docs/arquitectura.md](docs/arquitectura.md); el recorrido de estudio, en [docs/guia_recorrido_codigo.md](docs/guia_recorrido_codigo.md).
 

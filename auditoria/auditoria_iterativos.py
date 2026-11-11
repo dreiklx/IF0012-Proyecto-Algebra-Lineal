@@ -5,22 +5,14 @@ Uso (desde la raíz del proyecto):  .venv\Scripts\python auditoria/auditoria_ite
 Compara el núcleo con oráculos independientes (fórmula de Leibniz, adjunta,
 Cramer, implementación separada de las iteraciones, fórmula de Gelfand).
 No forma parte de la suite rápida de tests/ porque tarda unos 20 segundos y es aleatoria (semilla fija)."""
-import sys, random, math, cmath, itertools
+import sys, random, math, itertools
 from fractions import Fraction as F
 sys.path.insert(0, sys.argv[1] if len(sys.argv) > 1 else ".")
 from algebra.modulo_IV_iterativos.ejecucion import (
     ConfiguracionIterativa,
     ejecutar,
 )
-from algebra.modulo_IV_iterativos.espectral import (
-    CONVERGE,
-    INDETERMINADO,
-    NO_CONVERGE,
-    matriz_iteracion,
-    polinomio_caracteristico,
-    radio_espectral,
-    raices,
-)
+from algebra.modulo_IV_iterativos.espectral import CONVERGE, INDETERMINADO, NO_CONVERGE, radio_espectral
 from algebra.modulo_IV_iterativos.metodos import (
     GAUSS_SEIDEL,
     JACOBI,

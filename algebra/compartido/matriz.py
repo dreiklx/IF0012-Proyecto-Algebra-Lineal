@@ -252,6 +252,23 @@ def norma_infinito_vector(v):
     return mayor
 
 
+def sumas_absolutas_por_fila(A):
+    """Devuelve [sum_j |a_1j|, ..., sum_j |a_mj|]: la suma de valores absolutos de cada fila.
+
+    Son los números que la profesora escribe antes de tomar el máximo
+    (S7-21/09 p. 19: "Fila 1: |1| + |2| = 3, Fila 2: |3| + |1| = 4").
+    Su máximo es norma_infinito_matriz(A).
+    """
+    validar_matriz(A)
+    sumas = []
+    for fila in A:
+        suma_fila = 0
+        for valor in fila:
+            suma_fila = suma_fila + abs(valor)
+        sumas.append(suma_fila)
+    return sumas
+
+
 def norma_infinito_matriz(A):
     """Devuelve la norma infinito de A: la mayor suma de valores absolutos por fila.
 

@@ -7,7 +7,6 @@ líneas de las figuras de Matplotlib; para los planos, la ecuación a·p = bᵢ.
 
 import os
 import unittest
-from fractions import Fraction as F
 
 from algebra.modulo_III_minimos.minimos import ajuste_lineal
 from algebra.modulo_IV_iterativos.comparacion import (
@@ -23,8 +22,9 @@ from algebra.modulo_IV_iterativos.precondicionamiento import analizar_precondici
 from algebra.modulo_I_sistemas.directos import resolver_gauss
 from interfaz import navegacion as nav
 from tests.rutas import RUTA_APP
-from visualizacion import graficos, interactivas
-from visualizacion.geometria_3d import _centro_y_radio, _esquinas_plano
+from visualizacion import interactivas
+from visualizacion import referencia_matplotlib
+from visualizacion.datos_graficas import centro_y_radio, esquinas_plano
 
 S = [[10, -1, 2], [-1, 11, -1], [2, -1, 10]]
 B = [6, 25, -11]
@@ -39,15 +39,15 @@ class TestDatosIdenticos(unittest.TestCase):
     def test_convergencia_igual_al_historial_y_a_matplotlib(self):
         r = ejecutar(S, B, ConfiguracionIterativa())
         fig = interactivas.convergencia(r.historial, "A", 1e-3)
-        d = trazas(fig, "d_k")[0]
-        rk = trazas(fig, "r_k")[0]
+        d = trazas(fig, "d<sub>k</sub>")[0]
+        rk = trazas(fig, "r<sub>k</sub>")[0]
         self.assertEqual(list(d.x), [f.k for f in r.historial if f.d is not None])
         self.assertEqual(list(d.y), [f.d for f in r.historial if f.d is not None])
         self.assertEqual(list(rk.y), [f.r for f in r.historial])
-        estatica = graficos.grafica_convergencia(r.historial, "A", 1e-3)
+        estatica = referencia_matplotlib.grafica_convergencia(r.historial, "A", 1e-3)
         linea_d = estatica.axes[0].lines[0].get_xydata()
         self.assertEqual([tuple(p) for p in linea_d], list(zip(d.x, d.y)))
-        graficos.cerrar(estatica)
+        referencia_matplotlib.cerrar(estatica)
         # el eje es logarítmico y la línea ε está en su lugar
         self.assertEqual(fig.layout.yaxis.type, "log")
         self.assertEqual(fig.layout.shapes[0].y0, 1e-3)
@@ -63,7 +63,7 @@ class TestDatosIdenticos(unittest.TestCase):
                 self.assertEqual(list(zip(traza.x, traza.y)), pares)
         # color fijo por método, el mismo que en las figuras estáticas
         self.assertEqual([t.line.color for t in fig.data],
-                         [graficos.COLORES[m] for m in ("Jacobi", "Gauss-Seidel", "SOR")])
+                         [referencia_matplotlib.COLORES[m] for m in ("Jacobi", "Gauss-Seidel", "SOR")])
 
     def test_autovalores(self):
         esp = radio_espectral([[3, 3, 3], [3, 3, 2], [-3, -2, 3]], [9, 9, -2], "Jacobi")
@@ -80,9 +80,9 @@ class TestDatosIdenticos(unittest.TestCase):
         fig = interactivas.planos_3d(A, b, r)
         superficies = [t for t in fig.data if t.type == "surface"]
         self.assertEqual(len(superficies), 3)
-        centro, radio = _centro_y_radio(r)
+        centro, radio = centro_y_radio(r)
         for i, s in enumerate(superficies):
-            esquinas = _esquinas_plano([float(v) for v in A[i]], float(b[i]), centro, radio)
+            esquinas = esquinas_plano([float(v) for v in A[i]], float(b[i]), centro, radio)
             dibujadas = [(s.x[f][c], s.y[f][c], s.z[f][c]) for f, c in ((0, 0), (0, 1), (1, 1), (1, 0))]
             self.assertEqual(dibujadas, esquinas)                    # mismas esquinas que la figura estática
             for p in dibujadas:                                      # cada esquina está en su plano
@@ -144,7 +144,7 @@ class TestGraficasEnLaAplicacion(unittest.TestCase):
         self.assertFalse(at.exception, at.exception)
         graficas = at.get("plotly_chart")
         self.assertEqual(len(graficas), 1)
-        self.assertIn("d_k", graficas[0].proto.spec)
+        self.assertIn("d\\u003csub\\u003ek", graficas[0].proto.spec)   # d<sub>k</sub>; el JSON escapa «<»
 
 
 if __name__ == "__main__":

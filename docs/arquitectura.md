@@ -1,12 +1,12 @@
 # Arquitectura
 
-**Versión:** reorganización del 09/10-nov-2026 (rama `refactor/arquitectura-modular`).
+**Versión:** reorganización del 09/10-nov-2026 (rama `refactor/arquitectura-modular`), ajustada el 11-nov (rama `feature/notacion-y-organizacion`, sección 2.1).
 **Regla de oro:** la reorganización **solo movió código**. No cambió ninguna fórmula ni ningún resultado.
 
 - **Pruebas:** después de cada etapa pasaron las 232 pruebas.
 - **Volcado de comparación:** se volcaron 273 resultados de los ejemplos precargados (todas las variantes de método, criterio, formato y pivoteo) y salieron idénticos byte a byte a los anteriores.
 
-Para un recorrido de estudio, ver [guia_recorrido_codigo.md](guia_recorrido_codigo.md).
+Este documento explica **por qué** el código está organizado así. **Qué hay en cada archivo y cómo seguir cada módulo de punta a punta** está en [mapa_completo_del_codigo.md](mapa_completo_del_codigo.md).
 
 ## 1. Estructura actual
 
@@ -30,7 +30,9 @@ proyecto-algebra/
 │       ├── metodos.py              fórmulas: un paso de Jacobi, Gauss-Seidel, SOR (y Richardson)
 │       ├── ejecucion.py            bucle común: validación, criterios A/B/C, tabla, motivo de parada
 │       ├── convergencia.py         dominancia diagonal y reordenamiento de ecuaciones
-│       ├── espectral.py            A = D + L + U, T y c, polinomio característico, ρ(T)
+│       ├── matriz_iteracion.py     A = D + L + U, D⁻¹ o (D+L)⁻¹, T y c (Cat. A)
+│       ├── polinomio_raices.py     Faddeev-LeVerrier y Durand-Kerner (Cat. C)
+│       ├── espectral.py            ρ(T) y conclusión de convergencia
 │       ├── comparacion.py          los tres métodos con la misma configuración; error final
 │       ├── dispersas.py            incentivo: formato CSR y pasos O(nnz)
 │       └── precondicionamiento.py  incentivo: M = D y comparación de su efecto
@@ -38,10 +40,12 @@ proyecto-algebra/
 ├── interfaz/                       PRESENTACIÓN — Streamlit; no hace cálculos
 │   ├── navegacion.py               lista de páginas (archivo, título, URL)
 │   ├── portada.py                  portada: módulos, incentivos, figura [A|b] → [I|x]
-│   ├── recursos/marca.svg          marca «Ax»
+│   ├── recursos/                   marca.svg (logo «Ax») y estilo.css (hoja de estilos)
 │   ├── compartido/
-│   │   ├── estilo.py               sistema de diseño: tokens, tipografía, componentes, animaciones
-│   │   ├── componentes.py          lectura con mensajes de error, LaTeX, gráficas Plotly
+│   │   ├── estilo.py               componentes HTML: encabezados, chips, procedencia, escala de κ
+│   │   ├── componentes.py          lectura con mensajes de error, paso a paso, gráficas Plotly
+│   │   ├── formulas.py             LaTeX: matrices, fracciones, polinomio, despejes
+│   │   ├── control_gestual.py      panel «Control con gestos» de la gráfica 3D
 │   │   ├── editor.py               editor interactivo de matrices, vectores y puntos
 │   │   └── ejemplos.py             ejemplos precargados del curso
 │   └── modulos/
@@ -56,10 +60,11 @@ proyecto-algebra/
 │           └── pestana_precondicionamiento.py
 │
 ├── visualizacion/                  GRÁFICAS — solo dibujan resultados ya calculados
-│   ├── tema.py                     colores y estilo común
+│   ├── tema.py                     colores
 │   ├── interactivas.py             gráficas Plotly que muestra la interfaz (2D y 3D)
-│   ├── graficos.py                 versión Matplotlib (respaldo y pruebas)
-│   └── geometria_3d.py             geometría de rectas y planos para dibujar el Módulo I
+│   ├── datos_graficas.py           datos que se dibujan (series, región y esquinas de los planos)
+│   ├── notacion.py                 cada símbolo en LaTeX, HTML o Unicode
+│   └── referencia_matplotlib.py    figura estática que las pruebas usan como oráculo
 │
 ├── gestos/                         CONTROL GESTUAL de la gráfica 3D (10-nov; no es parte del núcleo)
 │   ├── mano.py                     21 puntos de MediaPipe, conexiones, tamaño de la palma
@@ -71,7 +76,7 @@ proyecto-algebra/
 │   ├── servidor.py                 canal 127.0.0.1 (SSE) que lleva la cámara a la gráfica
 │   └── modelos/hand_landmarker.task  modelo de MediaPipe (Apache-2.0)
 │
-├── tests/                          281 pruebas (unittest), una carpeta por módulo
+├── tests/                          295 pruebas (unittest), una carpeta por módulo
 │   ├── compartido/  modulo_I/  modulo_II/  modulo_III/  modulo_IV/
 │   ├── interfaz/                   la aplicación completa con streamlit.testing (AppTest)
 │   ├── entrega/                    el ZIP no filtra archivos internos; .gitignore protege credenciales
@@ -108,11 +113,24 @@ proyecto-algebra/
 
 | Elemento | Decisión |
 |---|---|
-| `visualizacion/` | Se mantiene plana. Son 4 archivos con una responsabilidad clara cada uno. Separarlos en `graficas_2d/` y `graficas_3d/` partiría `interactivas.py`, que dibuja ambas, sin ganar claridad |
+| `visualizacion/` | Se mantiene plana. Son 5 archivos con una responsabilidad clara cada uno. Separarlos en `graficas_2d/` y `graficas_3d/` partiría `interactivas.py`, que dibuja ambas, sin ganar claridad |
 | `auditoria/` | Plana. Son 4 guiones independientes que se ejecutan por separado |
 | `directos.py` | No se dividió. Gauss, Gauss-Jordan, la inversa y el determinante comparten `_escalonar`. Dividirlo obligaría a importar funciones privadas entre archivos |
-| `espectral.py` (440 líneas) | No se dividió. Todo su contenido sirve a ρ(T): T, polinomio, raíces y conclusión |
+| `espectral.py` (440 líneas) | **11-nov:** se dividió en `matriz_iteracion.py` (clase, Cat. A), `polinomio_raices.py` (Faddeev-LeVerrier y Durand-Kerner, Cat. C) y `espectral.py` (ρ y conclusión), para que las extensiones queden separadas del procedimiento de clase |
 | `interfaz/compartido/editor.py`, función `identidad` | No duplica a `algebra/compartido/matriz.identidad`: es una plantilla de texto ("1"/"0") para el editor |
+
+### 2.1 Ajustes del 11-nov (analizados con Graphify)
+
+Graphify (1197 nodos, 3203 aristas) y un mapa AST de importaciones confirmaron que las capas ya estaban limpias. Se separaron solo los archivos que mezclaban responsabilidades; **ninguna función cambió su código** y el volcado de 273 resultados salió idéntico.
+
+| Antes | Ahora | Motivo |
+|---|---|---|
+| `espectral.py` (444 líneas): clase y extensiones juntas | `matriz_iteracion.py`, `polinomio_raices.py`, `espectral.py` | Separar el procedimiento de clase (Cat. A) de Faddeev-LeVerrier y Durand-Kerner (Cat. C) |
+| `visualizacion/graficos.py` y `geometria_3d.py` (Matplotlib) | `datos_graficas.py` + `referencia_matplotlib.py` | La app dibuja con Plotly; 6 figuras Matplotlib no las usaba nadie y se eliminaron. Queda una figura como oráculo de las pruebas |
+| `tema.py` importaba Matplotlib | `tema.py` solo colores | La app ya no carga Matplotlib para elegir colores |
+| LaTeX dentro de `componentes.py` | `interfaz/compartido/formulas.py` | Dónde se escribe cada fórmula, separado de la lectura y las gráficas |
+| 240 líneas de CSS dentro de `estilo.py` | `interfaz/recursos/estilo.css` | CSS en su propio archivo; `estilo.py` queda con los componentes |
+| — | `visualizacion/notacion.py` | Cada símbolo en LaTeX, HTML o Unicode (ver `notacion_matematica.md`) |
 
 ## 3. Reglas de dependencia
 
@@ -133,6 +151,7 @@ proyecto-algebra/
 ```
 
 - `algebra/` no importa nada de `interfaz/` ni de `visualizacion/`, ni bibliotecas externas.
+- `visualizacion/` no importa `interfaz/`; `interfaz/` usa `visualizacion/` y `algebra/`.
 - `gestos/` no importa `algebra/` ni `interfaz/`. Solo `interfaz/compartido/control_gestual.py` lo usa. El hilo de visión nunca llama a `st.*`. Detalle: `investigacion_mediapipe.md` y `portabilidad_java_python.md`.
 - **El Módulo I es la base:** los módulos II, III y IV reutilizan su Gauss-Jordan y su Gauss, como pide el enunciado: «la inversa … con un algoritmo implementado por el grupo» y las ecuaciones normales «con un método directo ya implementado».
 - **No hay ciclos de importación.** Lo verificaron Graphify y un análisis AST propio.

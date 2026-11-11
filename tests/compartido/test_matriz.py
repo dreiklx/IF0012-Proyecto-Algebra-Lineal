@@ -29,6 +29,7 @@ from algebra.compartido.matriz import (
     restar_vectores,
     sumar_matrices,
     sumar_vectores,
+    sumas_absolutas_por_fila,
     transpuesta,
     validar_cuadrada,
     validar_matriz,
@@ -289,6 +290,15 @@ class TestResiduo(unittest.TestCase):
 
 
 class TestOperacionesAuxiliares(unittest.TestCase):
+
+    def test_sumas_por_fila_como_en_clase(self):
+        # S7-21/09 p. 19: B = [[1, 2], [3, 1]] -> Fila 1: 3, Fila 2: 4; ||B||inf = máx{3, 4} = 4
+        B = [[1, 2], [3, 1]]
+        self.assertEqual(sumas_absolutas_por_fila(B), [3, 4])
+        self.assertEqual(max(sumas_absolutas_por_fila(B)), norma_infinito_matriz(B))
+        # B^-1 = [[-1/5, 2/5], [3/5, -1/5]] -> 3/5 y 4/5; ||B^-1||inf = 4/5
+        inversa = [[Fraction(-1, 5), Fraction(2, 5)], [Fraction(3, 5), Fraction(-1, 5)]]
+        self.assertEqual(sumas_absolutas_por_fila(inversa), [Fraction(3, 5), Fraction(4, 5)])
 
     def test_norma_infinito_matriz(self):
         # S7-21/09 p. 19: B = [[1, 2], [3, 1]] -> filas 3 y 4 -> ||B||_inf = 4

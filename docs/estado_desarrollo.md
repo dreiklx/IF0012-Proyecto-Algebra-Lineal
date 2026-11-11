@@ -1,6 +1,6 @@
 # Estado del desarrollo
 
-**Última actualización:** 10-nov-2026 (tarde): textos adaptados a la notación de la profesora, categorías Cat. A/B/C/D en la interfaz y control gestual con MediaPipe en Python. El historial completo está en `git log`.
+**Última actualización:** 11-nov-2026: notación, procedimientos de clase y organización. Antes: 10-nov-2026 (tarde): textos adaptados a la notación de la profesora, categorías Cat. A/B/C/D en la interfaz y control gestual con MediaPipe en Python. El historial completo está en `git log`.
 
 ## Datos del proyecto
 
@@ -11,6 +11,15 @@
 | Entrega | **11 de noviembre de 2026** |
 | Defensa individual | Semana del **16 de noviembre de 2026** |
 | Número de grupo | **01, confirmado por el equipo (03-nov-2026)**. Integrantes, exclusivamente los cuatro de arriba |
+
+## Notación, gráficas, procedimientos y organización (11-nov-2026; rama `feature/notacion-y-organizacion`)
+
+- **Notación:** `visualizacion/notacion.py` (LaTeX, HTML o Unicode según el elemento); 22 errores corregidos; 7819 textos visibles revisados con AppTest, ninguno con notación de programación. Ver `notacion_matematica.md`.
+- **Gráficas:** el enunciado exige solo las de III y IV, y están. Ver `cumplimiento_graficas.md`.
+- **PDF:** 52 páginas manuscritas revisadas otra vez en imagen. Se agregaron los despejes (IV), los pasos ①-⑤ con T_J/C_J y D⁻¹ (IV), los 5 pasos de κ con las sumas por fila (II) y Cramer con D y Dᵢ (III). Ver `auditoria_procedimientos_pdf.md`.
+- **Organización** (Graphify): `espectral.py` dividido en clase y extensiones; `visualizacion/` sin código Matplotlib muerto; `formulas.py`; CSS en su propio archivo; README por carpeta y `mapa_completo_del_codigo.md`.
+- **Guía de estudio:** de 779 a 454 líneas, con búsqueda en todo el texto.
+- **Verificación:** 295 pruebas OK; auditoría con 0 fallos; volcado idéntico (salvo el campo nuevo `MatrizIteracion.inversa`); Brave a 1440, 1366 y 1024 px sin desbordes ni excepciones.
 
 ## Textos de la profesora y control gestual (10-nov-2026, tarde; ramas `feature/textos-profesora` y `feature/mediapipe-python`)
 

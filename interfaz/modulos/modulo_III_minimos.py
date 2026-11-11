@@ -12,11 +12,13 @@ from algebra.modulo_III_minimos.minimos import (
 )
 from interfaz.compartido import ejemplos
 from interfaz.compartido.componentes import (
-    latex_matriz,
-    latex_vector,
     leer_matriz_ui,
     leer_vector_ui,
     mostrar_interactiva,
+)
+from interfaz.compartido.formulas import (
+    latex_matriz,
+    latex_vector,
     tabla_vector,
 )
 from interfaz.compartido.editor import (
@@ -37,6 +39,7 @@ from interfaz.compartido.estilo import (
     tarjeta_resultado,
     valor_destacado,
 )
+from visualizacion import notacion
 from visualizacion.interactivas import ajuste as grafica_ajuste_interactiva
 
 
@@ -88,7 +91,7 @@ def sistema():
             try:
                 st.session_state["mc_resultado"] = minimos_cuadrados(A, b)
             except ErrorMatriz as error:
-                st.error(f"❌ {error}")
+                st.error(f"❌ {notacion.md(str(error))}")
     if "mc_resultado" in st.session_state:
         mostrar_minimos(st.session_state["mc_resultado"])
 
@@ -96,19 +99,19 @@ def sistema():
 def mostrar_minimos(r, nombres=None):
     seccion("2" if nombres is None else "3", "Ecuaciones normales y solución")
     if r.tipo == SOBREDETERMINADO:
-        st.info("🔎 " + r.mensaje_tipo)
+        st.info("🔎 " + notacion.md(r.mensaje_tipo))
     else:
-        st.warning("🔎 " + r.mensaje_tipo)
+        st.warning("🔎 " + notacion.md(r.mensaje_tipo))
     st.markdown("**Ecuaciones normales** AᵀA x̂ = Aᵀb:")
     st.latex(r"A^TA = " + latex_matriz(r.AtA) + r",\qquad A^Tb = " + latex_vector(r.Atb))
     if r.solucion is None:
         for aviso in r.advertencias:
-            st.error("🚫 " + aviso)
+            st.error("🚫 " + notacion.md(aviso))
         st.info("💡 Recomendación: elimine las columnas que sean combinación de otras (o agregue "
                 "datos que las distingan) para que AᵀA sea invertible.")
         return
     with tarjeta_resultado("minimos" if nombres is None else "minimos_ajuste"):
-        st.success("✅ " + r.mensaje)
+        st.success("✅ " + notacion.md(r.mensaje))
         insignias([("Sobredeterminado" if r.tipo == SOBREDETERMINADO else r.tipo.capitalize(), "info"),
                    ("b ∈ Col(A): solución exacta" if r.b_en_espacio_columna else "b ∉ Col(A): aproximación",
                     "ok" if r.b_en_espacio_columna else "aviso"),
@@ -139,27 +142,32 @@ def mostrar_minimos(r, nombres=None):
     st.caption("Comprobación: Aᵀr = (" + ", ".join(formatear_numero(v) for v in r.ortogonalidad)
                + ") — el residuo es ortogonal a las columnas de A, propiedad que caracteriza "
                  "a la solución de mínimos cuadrados.")
-    with st.expander("Verificación con el procedimiento de clase (S8-30/09 pp. 6-7)"):
+    with st.expander("Procedimiento de clase (S8-30/09 pp. 5-7): det[A | b], ecuaciones normales y Cramer"):
         if r.det_aumentada is not None:
-            st.markdown(
-                f"1. det([A | b]) = **{formatear_numero(r.det_aumentada)}** "
-                + ("≠ 0: b no es combinación lineal de las columnas de A (no hay solución exacta)."
+            st.markdown(notacion.md(
+                rf"1. $\det[A \mid b]$ = **{formatear_numero(r.det_aumentada)}** "
+                + (r"≠ 0: $b$ es linealmente independiente de las columnas de $A$, $b \notin \mathrm{Col}(A)$ "
+                   "(no hay solución exacta)."
                    if r.det_aumentada != 0 else
-                   "= 0: b es combinación lineal de las columnas de A (hay solución exacta)."))
+                   "= 0: $b$ es combinación lineal de las columnas de $A$ (hay solución exacta).")))
         else:
-            st.markdown("1. det([A | b]) solo aplica cuando m = n + 1; la consistencia se "
+            st.markdown(r"1. $\det[A \mid b]$ solo aplica cuando $m = n + 1$; la consistencia se "
                         "decidió con el rango (Gauss).")
-        st.markdown("2. Ecuaciones normales AᵀA x̂ = Aᵀb (arriba).")
+        st.markdown(r"2. Sistema de ecuaciones normales asociado $A^TA\,\hat x = A^Tb$ (arriba).")
         if r.cramer is not None:
-            detalle = ", ".join(f"det(M_{j + 1}) = {formatear_numero(d)}"
+            # Notación de la lámina de Cramer (S8-30/09 p. 4): D = det(A), Dᵢ = det(Aᵢ), xᵢ = Dᵢ/D;
+            # aquí la matriz del sistema es AᵀA y Aᵢ reemplaza su columna i por Aᵀb.
+            detalle = ", ".join(f"$D_{{{j + 1}}}$ = {formatear_numero(d)}"
                                 for j, d in enumerate(r.cramer["dets"]))
             coincide = r.cramer["solucion"] == r.solucion
-            st.markdown(
-                f"3. Regla de Cramer: det(AᵀA) = {formatear_numero(r.cramer['det'])}, {detalle} → "
-                f"x̂ = (" + ", ".join(formatear_numero(v) for v in r.cramer["solucion"]) + ")"
-                + (" — **coincide exactamente** con Gauss." if coincide else " — ⚠️ no coincide."))
+            st.markdown(notacion.md(
+                rf"3. Regla de Cramer: $D = \det(A^TA)$ = {formatear_numero(r.cramer['det'])}, {detalle} "
+                r"→ $\hat x_i = D_i / D$ = (" + ", ".join(formatear_numero(v) for v in r.cramer["solucion"]) + ")"
+                + (" — **coincide exactamente** con Gauss." if coincide else " — ⚠️ no coincide.")))
+            st.caption(r"$D_i = \det(A_i)$, donde $A_i$ es $A^TA$ con la columna $i$ reemplazada por "
+                       r"$A^Tb$ (en el manuscrito: $|A|$, $|A_x|$ y $|A_y|$).")
         else:
-            st.markdown("3. Cramer se muestra como verificación para n ≤ 3 incógnitas.")
+            st.markdown(r"3. Cramer se muestra como verificación para $n \le 3$ incógnitas.")
     st.info("💡 ‖r‖₂ mide la distancia entre b y el vector A x̂ más cercano del espacio "
             "columna de A: cuanto menor, mejor se aproximan los datos. ‖r‖₂ = 0 solo si el "
             "sistema tiene solución exacta.")
@@ -194,7 +202,7 @@ def ajuste():
             try:
                 st.session_state["aj_resultado"] = ajuste_lineal(xs, ys)
             except ErrorAjuste as error:
-                st.error(f"❌ {error}")
+                st.error(f"❌ {notacion.md(str(error))}")
     if "aj_resultado" not in st.session_state:
         return
     r = st.session_state["aj_resultado"]

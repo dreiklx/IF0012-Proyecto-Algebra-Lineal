@@ -13,6 +13,8 @@
 - [referencia_oficial_procedimientos.md](referencia_oficial_procedimientos.md): lo que enseñan los 18 PDF (457 páginas revisadas en imagen el 09-nov);
 - [investigacion_richardson.md](investigacion_richardson.md): clasificación A/B/C/D de todos los procedimientos.
 
+> **11-nov-2026, notación, gráficas y procedimientos:** se releyó el enunciado. Solo los Módulos III y IV exigen gráfica y ambas están ([cumplimiento_graficas.md](cumplimiento_graficas.md)). Se corrigió la notación en toda la aplicación ([notacion_matematica.md](notacion_matematica.md)) y se volvió a auditar contra los PDF ([auditoria_procedimientos_pdf.md](auditoria_procedimientos_pdf.md)): se agregaron los despejes, los pasos ①-⑤ y los 5 pasos de κ. Pruebas: **295 OK**; auditoría: 0 fallos.
+
 > **10-nov-2026, reorganización y reauditoría:** se reorganizó el código por módulos sin cambiar ningún resultado (volcado de 273 resultados idéntico). Se volvió a auditar la rúbrica contra los PDF completos y se añadió la sección 3b, con la verificación estricta de cada incentivo. Las rutas de esta matriz son las nuevas.
 
 > **03-nov-2026, gráficas interactivas:** las matrices vigentes de la rúbrica y de los incentivos, con la presentación de cada criterio, están en [diseno_visual.md §7](diseno_visual.md). Pruebas: **228 OK**; auditoría: 0 fallos.
@@ -74,7 +76,7 @@ Los detalles de cada fila están en las secciones 1, 3 y 3b.
 |---|---:|---|---|---|---|
 | Módulo I: sistemas lineales | 8 % | «Implementación correcta, clasificación de soluciones, validaciones y procedimiento completo» | `algebra/modulo_I_sistemas/directos.py` (`_escalonar`, `_resolver`, `_rango_aumentada`, `_sustitucion_atras`); `interfaz/modulos/modulo_I_sistemas.py` | `test_directos` (26); auditoría de 4500 sistemas contra rangos por menores y Cramer; `test_app` con los 3 tipos; pasos visibles | COMPLETADO |
 | Módulo II: condicionamiento | 8 % | «κ correcto, perturbación, errores relativos e interpretación coherente» | `algebra/modulo_II_condicionamiento/condicion.py` (`numero_condicion_infinito`, `construir_delta_b`, `analizar_perturbacion`, `_interpretar`) | `test_condicion` (13); 400 κ por adjunta; 200 perturbaciones por Cramer; mensajes vistos | COMPLETADO |
-| Módulo III: mínimos cuadrados | 8 % | «Ecuaciones normales, residual, error, ajuste y gráfica correctos» | `algebra/modulo_III_minimos/minimos.py` (`minimos_cuadrados`, `ajuste_lineal`, `cramer`); `graficos.grafica_ajuste` | `test_minimos`; 300 casos con Aᵀr = 0; verificación de clase (det([A\|b]) y Cramer) idéntica al manuscrito S8-30/09 pp. 6-7 (`test_minimos_como_el_manuscrito`) | COMPLETADO |
+| Módulo III: mínimos cuadrados | 8 % | «Ecuaciones normales, residual, error, ajuste y gráfica correctos» | `algebra/modulo_III_minimos/minimos.py` (`minimos_cuadrados`, `ajuste_lineal`, `cramer`); `interactivas.ajuste` | `test_minimos`; 300 casos con Aᵀr = 0; verificación de clase (det([A\|b]) y Cramer) idéntica al manuscrito S8-30/09 pp. 6-7 (`test_minimos_como_el_manuscrito`) | COMPLETADO |
 | Módulo IV: métodos iterativos | 8 % | «Jacobi, Gauss-Seidel y SOR correctos; convergencia, error y comparación bien presentados» | `algebra/modulo_IV_iterativos/`, `algebra/modulo_IV_iterativos/espectral.py`; 4 pestañas en `interfaz/modulos/modulo_IV_iterativos/` | P1–P21; 600 ejecuciones frente a una implementación independiente; `test_espectral` (25); «error final» igual a la definición de la lámina S9-05/10 p. 17 | COMPLETADO |
 | Procedimiento matemático | 7 % | «Desarrollo claro, completo y justificable en los módulos» | Pasos de Gauss; [A\|I] → [I\|A⁻¹]; AᵀA y Aᵀb; det([A\|b]) y Cramer; D, L, U, T, c, polinomio y desarrollo de Sarrus en 3×3; tabla de iteraciones | `test_app` (pasos y verificación de Cramer y Sarrus); [comparacion_procedimientos.md](comparacion_procedimientos.md) | COMPLETADO |
 | Análisis e interpretación | 6 % | «Interpreta estabilidad, sensibilidad, residual, error y convergencia correctamente» | Textos automáticos: sensibilidad (`_interpretar`), b ∈ Col(A), residuo, motivos de parada (sin afirmar divergencia), dominancia como condición suficiente, ρ, precondicionador | `test_app`; los textos dependen de los resultados calculados | COMPLETADO (la calidad la juzga la docente) |
@@ -177,7 +179,7 @@ Los detalles de cada fila están en las secciones 1, 3 y 3b.
 | M3-03 | Resolver con el método directo propio | `resolver_gauss` | `test_minimos` | COMPLETADO |
 | M3-04 | r y ‖r‖₂ | ídem | Aᵀr = 0 exacto | COMPLETADO |
 | M3-05 | Ajuste lineal y ecuación | `ajuste_lineal` | Fórmula cerrada | COMPLETADO |
-| M3-06 | Gráfica de datos y recta | `grafica_ajuste` | `test_app`; vista el 27-oct | COMPLETADO |
+| M3-06 | Gráfica de datos y recta | `interactivas.ajuste` | `test_app`; vista el 27-oct | COMPLETADO |
 
 ### Módulo IV
 
@@ -190,7 +192,7 @@ Los detalles de cada fila están en las secciones 1, 3 y 3b.
 | M4-05 | T y ρ(T) sin bibliotecas | `matriz_iteracion`, `analizar_matriz`, `desarrollo_sarrus` | `test_espectral`; 300 casos | COMPLETADO para n ≤ 8. **Alcance de los métodos que no se vieron en clase: PENDIENTE DE CONFIRMACIÓN (P-5)** |
 | M4-06 | Motivo de finalización | Códigos de `ejecutar` | P8–P16 | COMPLETADO |
 | M4-07 | Comparación por iteraciones y error final | `comparar_metodos` (e = ‖x⁽ᵏ⁾ − x*‖∞) | P18, P19; coincide con la definición de la lámina S9-05/10 p. 17 | COMPLETADO (**P-4 resuelto por la lámina**) |
-| M4-08 | Gráfica de error frente a iteración | `grafica_convergencia`, `grafica_comparacion` | `test_app`; gráfica individual revisada como imagen el 02-nov | COMPLETADO |
+| M4-08 | Gráfica de error frente a iteración | `interactivas.convergencia`, `interactivas.comparacion` | `test_app`; gráfica individual revisada como imagen el 02-nov | COMPLETADO |
 
 ### Validaciones obligatorias (OFICIAL p. 3)
 

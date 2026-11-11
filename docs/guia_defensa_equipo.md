@@ -70,7 +70,9 @@ proyecto-algebra/
 │       ├── metodos.py             ← fórmulas de Jacobi, GS y SOR (un paso cada uno)
 │       ├── ejecucion.py           ← bucle común, criterios A/B/C, motivo de parada
 │       ├── convergencia.py        ← dominancia diagonal y reordenamiento
-│       ├── espectral.py           ← D, L, U, T, polinomio, autovalores, ρ(T)
+│       ├── matriz_iteracion.py    ← D, L, U, D⁻¹, T y c (clase)
+│       ├── polinomio_raices.py    ← polinomio y raíces (extensiones Cat. C)
+│       ├── espectral.py           ← autovalores, ρ(T) y conclusión
 │       ├── comparacion.py         ← comparación de los 3 métodos, error final
 │       ├── dispersas.py           ← Incentivo: formato CSR
 │       └── precondicionamiento.py ← Incentivo: precondicionador diagonal M = D
@@ -80,8 +82,8 @@ proyecto-algebra/
 │   ├── compartido/                ← estilo.py, componentes.py, editor.py, ejemplos.py
 │   └── modulos/                   ← modulo_I_sistemas.py, modulo_II_condicionamiento.py,
 │                                    modulo_III_minimos.py, modulo_IV_iterativos/ (una vista por pestaña)
-├── visualizacion/                 ← Plotly (interactivas.py) y Matplotlib (graficos.py): solo dibujan
-├── tests/                         ← 281 pruebas, una carpeta por módulo
+├── visualizacion/                 ← Plotly (interactivas.py); Matplotlib solo como oráculo de las pruebas
+├── tests/                         ← 295 pruebas, una carpeta por módulo
 ├── auditoria/                     ← comparación aleatoria contra oráculos independientes
 ├── casos_prueba/                  ← casos documentados por módulo (entrada, esperado, obtenido)
 └── docs/                          ← manual, guías, referencia oficial, matriz de cumplimiento
@@ -158,12 +160,12 @@ interfaz/modulos/… (mostrar_resultado) ──► st.latex / st.table / st.metr
 | `algebra/modulo_IV_iterativos/convergencia.py:25` `dominancia_diagonal` | \|aᵢᵢ\| > Σ_{j≠i}\|aᵢⱼ\| fila por fila |
 | `algebra/modulo_IV_iterativos/convergencia.py:50` `reordenamiento_dominante` | Orden de las ecuaciones que logra la dominancia (como en la Tarea II) |
 | `algebra/modulo_IV_iterativos/comparacion.py:49` `comparar_metodos` | Los 3 métodos con las mismas condiciones; error final e = ‖x⁽ᵏ⁾ − x*‖∞ |
-| `algebra/modulo_IV_iterativos/espectral.py:120` `matriz_iteracion` | T y c exactas para Jacobi, GS y SOR |
-| `algebra/modulo_IV_iterativos/espectral.py:159` `polinomio_caracteristico` | Faddeev-LeVerrier (exacto) |
-| `algebra/modulo_IV_iterativos/espectral.py:334` `desarrollo_sarrus` | Procedimiento de clase en 3×3: tr(T), Σ menores, det(T) por Sarrus |
-| `algebra/modulo_IV_iterativos/espectral.py:211` `durand_kerner` / `:263` `raices` | Raíces: λ = 0 exactas, grado ≤ 2 por fórmula, grado ≥ 3 por Durand-Kerner |
-| `algebra/modulo_IV_iterativos/espectral.py:366` `analizar_matriz` | Autovalores, ρ, verificaciones y p(±1) = 0 de cualquier matriz |
-| `algebra/modulo_IV_iterativos/espectral.py:319` `concluir` / `:405` `radio_espectral` | ρ(T), verificaciones y conclusión |
+| `algebra/modulo_IV_iterativos/matriz_iteracion.py` `matriz_iteracion` | T y c exactas para Jacobi, GS y SOR |
+| `algebra/modulo_IV_iterativos/polinomio_raices.py` `polinomio_caracteristico` | Faddeev-LeVerrier (exacto) |
+| `algebra/modulo_IV_iterativos/matriz_iteracion.py` `desarrollo_sarrus` | Procedimiento de clase en 3×3: tr(T), Σ menores, det(T) por Sarrus |
+| `algebra/modulo_IV_iterativos/polinomio_raices.py` `durand_kerner` / `raices` | Raíces: λ = 0 exactas, grado ≤ 2 por fórmula, grado ≥ 3 por Durand-Kerner |
+| `algebra/modulo_IV_iterativos/espectral.py` `analizar_matriz` | Autovalores, ρ, verificaciones y p(±1) = 0 de cualquier matriz |
+| `algebra/modulo_IV_iterativos/espectral.py` `concluir` / `radio_espectral` | ρ(T), verificaciones y conclusión |
 | `algebra/modulo_IV_iterativos/dispersas.py:61` `a_csr` | Densa → CSR (`valores`, `columnas`, `inicio`) |
 | `algebra/modulo_IV_iterativos/precondicionamiento.py:85` `precondicionar_diagonal` / `:128` `analizar_precondicionador` | M = D, B = D⁻¹A, b̃; comparación original frente a precondicionado |
 
@@ -202,7 +204,7 @@ interfaz/modulos/… (mostrar_resultado) ──► st.latex / st.table / st.metr
       - Cada **dirección** vⱼ se obtiene resolviendo el sistema homogéneo con la libre j igual a 1 y las demás iguales a 0.
       - La solución general es x = xₚ + t₁v₁ + ….
 7. **Resultados (`ResultadoSistema`):** `clasificacion`, `mensaje`, `rango_A`, `rango_aumentada`, `solucion` o `solucion_particular` con `direcciones`, `variables_libres`, `pasos`, `sustitucion`, `advertencias`, `matriz_final` y `determinante` (solo si A es cuadrada).
-   - La pantalla además verifica b − Ax con `matriz.residuo` (debe dar 0) y dibuja rectas o planos si n = 2 o 3 (`geometria_3d.py`).
+   - La pantalla además verifica b − Ax con `matriz.residuo` (debe dar 0) y dibuja rectas o planos si n = 2 o 3 (`visualizacion/interactivas.py` `rectas_2d` / `planos_3d`).
 8. **Validaciones:**
    - texto vacío o no numérico, con la posición exacta;
    - filas de distinta longitud;
@@ -272,7 +274,7 @@ interfaz/modulos/… (mostrar_resultado) ──► st.latex / st.table / st.metr
      1. exige listas de la misma longitud, al menos 2 puntos y que no todos los x sean iguales;
      2. arma la matriz de diseño `[[xᵢ, 1]]` y llama a `minimos_cuadrados`;
      3. de x̂ = (m, c) sale la ecuación «y = m x + c».
-6. **Resultados:** `ResultadoMinimos` (`tipo`, `AtA`, `Atb`, `solucion`, `estimados`, `residuo`, `norma_residuo_2`, `norma_residuo_2_cuadrado`, `norma_residuo_inf`, `ortogonalidad` = Aᵀr y `mensaje`) y `ResultadoAjuste` (pendiente, intercepto, ecuación). `grafica_ajuste` dibuja los puntos, la recta y los residuos.
+6. **Resultados:** `ResultadoMinimos` (`tipo`, `AtA`, `Atb`, `solucion`, `estimados`, `residuo`, `norma_residuo_2`, `norma_residuo_2_cuadrado`, `norma_residuo_inf`, `ortogonalidad` = Aᵀr y `mensaje`) y `ResultadoAjuste` (pendiente, intercepto, ecuación). `visualizacion/interactivas.py::ajuste` dibuja los puntos, la recta y los residuos.
 7. **Validaciones y errores:**
    - dimensiones;
    - AᵀA singular;
@@ -282,7 +284,7 @@ interfaz/modulos/… (mostrar_resultado) ──► st.latex / st.table / st.metr
 
 ### Módulo IV — Métodos iterativos y convergencia
 
-**Archivos:** `algebra/modulo_IV_iterativos/`, `algebra/modulo_IV_iterativos/espectral.py`, `algebra/modulo_IV_iterativos/dispersas.py`, `algebra/modulo_IV_iterativos/precondicionamiento.py` e `interfaz/modulos/modulo_IV_iterativos/`. La pantalla tiene cuatro pestañas: «Ejecutar un método», «Comparar métodos», «Convergencia» y «Precondicionamiento diagonal».
+**Archivos:** `algebra/modulo_IV_iterativos/`, `algebra/modulo_IV_iterativos/matriz_iteracion.py`, `polinomio_raices.py`, `espectral.py`, `algebra/modulo_IV_iterativos/dispersas.py`, `algebra/modulo_IV_iterativos/precondicionamiento.py` e `interfaz/modulos/modulo_IV_iterativos/`. La pantalla tiene cuatro pestañas: «Ejecutar un método», «Comparar métodos», «Convergencia» y «Precondicionamiento diagonal».
 
 1. **Problema.** Aproximar la solución de Ax = b (A n×n) con iteraciones x⁽ᵏ⁾, y saber si convergen.
 2. **Entrada:**
@@ -332,7 +334,7 @@ interfaz/modulos/… (mostrar_resultado) ──► st.latex / st.table / st.metr
      8. `concluir` → CONVERGE, NO_CONVERGE o INDETERMINADO.
 8. **Resultados:**
    - `ResultadoIterativo`: `codigo`, `mensaje`, `criterio_cumplido`, `historial`, `advertencias`, `k_final`, `x_final`, `d_final` y `r_final`.
-   - La tabla (`filas_tabla`) rotula la columna que actúa como criterio. Hay gráfica (`grafica_convergencia`) y CSV (`csv_historial`).
+   - La tabla (`filas_tabla`) rotula la columna que actúa como criterio. Hay gráfica (`interactivas.convergencia`) y CSV (`csv_historial`).
    - `ResultadoComparacion` y `ResultadoEspectral` (T, polinomio, autovalores, ρ, `fiable`, `decision_exacta`, verificaciones y avisos).
 9. **Códigos de terminación:**
 
@@ -359,7 +361,7 @@ interfaz/modulos/… (mostrar_resultado) ──► st.latex / st.table / st.metr
       - la ejecución de Jacobi, GS, SOR y **Richardson** (`paso_richardson`) sobre los dos sistemas, con la misma configuración;
       - ρ de cada matriz de iteración;
       - la comparación **exacta** de T y c (`T_identicas`) y si las iteraciones coinciden (`mismas_iteraciones`).
-    - Devuelve `ResultadoPrecondicionamiento` con la lista `comparaciones` (de tipo `ComparacionMetodo`) y las `conclusiones` en texto. La gráfica es `grafica_precondicionador`.
+    - Devuelve `ResultadoPrecondicionamiento` con la lista `comparaciones` (de tipo `ComparacionMetodo`) y las `conclusiones` en texto. La gráfica es `interactivas.precondicionador`.
 
 ---
 
@@ -716,11 +718,11 @@ Cada respuesta se puede comprobar en el código (se indica dónde) o con la apli
 
 3. **¿Cómo está organizado el código y por qué así?**
    - Hay tres capas: `algebra/` (cálculos), `interfaz/` (pantallas) y `visualizacion/` (dibujos).
-   - El núcleo no depende de la interfaz. Por eso se prueba solo (281 pruebas) y la interfaz no repite cálculos.
+   - El núcleo no depende de la interfaz. Por eso se prueba solo (295 pruebas) y la interfaz no repite cálculos.
    - En los iterativos, cada método es una función `paso_*` y el bucle de parada es uno solo (`_ejecutar`), para no triplicar la lógica.
 
 4. **¿Cómo saben que los resultados son correctos?**
-   - Hay 281 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.
+   - Hay 295 pruebas con valores esperados calculados aparte: a mano, con Cramer, con la adjunta, con fórmulas cerradas o con teoremas.
    - La auditoría aleatoria (`auditoria/`) compara miles de casos con oráculos escritos aparte (Leibniz, adjunta, Cramer, una implementación separada de las iteraciones, Gelfand) y da 0 fallos.
    - La aplicación además se autoverifica:
      - b − Ax = 0 en el Módulo I;
@@ -921,7 +923,7 @@ python -m venv .venv
 .venv\Scripts\python -m streamlit run app.py
 ```
 
-5. Pruebas: `ejecutar_pruebas.bat` o `.venv\Scripts\python -m unittest`. Deben salir **281 pruebas OK**.
+5. Pruebas: `ejecutar_pruebas.bat` o `.venv\Scripts\python -m unittest`. Deben salir **295 pruebas OK**.
 6. Auditoría (opcional, unos 20 s): `.venv\Scripts\python auditoria\auditoria_directos.py .` y `.venv\Scripts\python auditoria\auditoria_iterativos.py .` (y `auditoria_precondicionamiento.py`). Deben dar «fallos 0».
 
 > **Antes de la defensa:** cada integrante debe hacer la instalación **en su propia computadora** al menos una vez. La primera instalación necesita internet; no la dejen para el aula.

@@ -17,7 +17,8 @@ from algebra.modulo_IV_iterativos.espectral import radio_espectral
 from algebra.modulo_IV_iterativos.metodos import SOR
 from interfaz.compartido.componentes import iteracion_elegida, mostrar_interactiva
 from interfaz.compartido.estilo import marca_incentivo
-from visualizacion import interactivas
+from visualizacion import interactivas, notacion
+from visualizacion.notacion import D_K, E_K, E_K_DEF, R_K
 
 
 def comparar(leer_todo, bloqueado=False):
@@ -45,7 +46,7 @@ def comparar(leer_todo, bloqueado=False):
         return
     comp, radios = st.session_state["it_comparacion"]
     if comp.resultados[0].codigo == ENTRADA_INVALIDA:
-        st.error("❌ " + comp.resultados[0].mensaje)
+        st.error("❌ " + notacion.md(comp.resultados[0].mensaje))
         return
     if comp.homogeneo:
         st.success("✅ Experimento homogéneo: mismas condiciones para los tres métodos.")
@@ -58,33 +59,35 @@ def comparar(leer_todo, bloqueado=False):
             "Método": r.configuracion.metodo + (f" (ω = {formatear_numero(float(r.configuracion.omega))})"
                                                 if r.configuracion.metodo == SOR else ""),
             "Iteraciones": r.k_final if r.k_final is not None else "—",
-            "Motivo de parada": r.codigo,
+            "Motivo de parada": notacion.motivo(r.codigo),
             "¿Criterio cumplido?": {True: "Sí", False: "No", None: "No aplica"}[r.criterio_cumplido],
-            "d final": "—" if r.d_final is None else formatear_numero(r.d_final, 6),
-            "r final": "—" if r.r_final is None else formatear_numero(r.r_final, 6),
-            "Error final e = ‖x⁽ᵏ⁾ − x*‖∞": "no disponible" if e is None else formatear_numero(e, 6),
+            f"{D_K.texto} final": "—" if r.d_final is None else formatear_numero(r.d_final, 6),
+            f"{R_K.texto} final": "—" if r.r_final is None else formatear_numero(r.r_final, 6),
+            f"Error final {E_K_DEF.texto}": "no disponible" if e is None else formatear_numero(e, 6),
             "ρ(T)": "—" if rho is None or rho.rho is None else formatear_numero(rho.rho, 6),
         })
     st.dataframe(filas, hide_index=True, width="stretch")
     st.caption("ℹ️ " + comp.nota)
     if comp.referencia is not None:
-        st.caption("x* = solución del método directo (Gauss exacto): (" +
+        st.caption("$x^*$ = solución del método directo (Gauss exacto): (" +
                    ", ".join(formatear_numero(v, 10) for v in comp.referencia) + "). "
-                   "El error final e es el error respecto a esa solución, como en la tabla "
-                   "comparativa de la lámina S9-05/10 p. 17 (‖x⁽ᵏ⁾ − x‖∞); no es d_k ni r_k.")
+                   f"El error final {E_K.md()} es el error respecto a esa solución, como en la tabla "
+                   r"comparativa de la lámina S9-05/10 p. 17 ($\|x^{(k)} - x\|_\infty$); "
+                   f"no es {D_K.md()} ni {R_K.md()}.")
     else:
         st.caption("No hay solución de referencia (el sistema no tiene solución única): "
-                   "e final no está disponible.")
+                   f"{E_K.md()} final no está disponible.")
     for r in comp.resultados:
         if r.codigo not in ("TOLERANCIA_CAMBIO", "TOLERANCIA_RESIDUO", "N_COMPLETADAS"):
-            st.warning(f"{r.configuracion.metodo}: {r.mensaje}")
+            st.warning(f"{r.configuracion.metodo}: {notacion.md(r.mensaje)}")
     # e_k primero: es el «error final ‖x⁽ᵏ⁾ − x‖∞» de la lámina S9-05/10 p. 17 (diapositiva 13).
-    opciones = {"e": "Error respecto a la solución del método directo e_k",
-                "d": "Cambio entre iteraciones d_k", "r": "Residuo r_k"}
+    # Opciones de st.radio: renderizan LaTeX.
+    opciones = {"e": f"Error respecto a la solución del método directo {E_K.md()}",
+                "d": f"Cambio entre iteraciones {D_K.md()}", "r": f"Residuo {R_K.md()}"}
     metrica = st.radio("Métrica a graficar", list(opciones), format_func=opciones.get,
                        horizontal=True, key="it_metrica")
     if metrica == "e" and comp.referencia is None:
-        st.info("No hay solución de referencia para graficar e_k.")
+        st.info(f"No hay solución de referencia para graficar {E_K.md()}.")
     else:
         explorar_comparacion(comp, metrica)
 
@@ -110,12 +113,13 @@ def comparar(leer_todo, bloqueado=False):
                         rho = radio_espectral(datos["A"], datos["b"], SOR, w).rho
                     except (ErrorEntrada, ErrorMatriz):
                         rho = None
-                    filas.append({"ω": formatear_numero(w), "Iteraciones": r.k_final,
-                                  "Motivo": r.codigo,
-                                  "r final": "—" if r.r_final is None else formatear_numero(r.r_final, 6),
-                                  "ρ(T_ω)": "—" if rho is None else formatear_numero(rho, 6)})
-                st.dataframe(filas, hide_index=True, width="stretch")
-                st.caption("Cuanto menor es ρ(T_ω), más rápida es la convergencia asintótica. "
+                    # st.table: sus encabezados sí renderizan LaTeX (ρ(T_ω) con subíndice)
+                    filas.append({r"$\omega$": formatear_numero(w), "Iteraciones": r.k_final,
+                                  "Motivo": notacion.motivo(r.codigo),
+                                  f"{R_K.md()} final": "—" if r.r_final is None else formatear_numero(r.r_final, 6),
+                                  r"$\rho(T_\omega)$": "—" if rho is None else formatear_numero(rho, 6)})
+                st.table(filas)
+                st.caption(r"Cuanto menor es $\rho(T_\omega)$, más rápida es la convergencia asintótica. "
                            "Con ω = 1, SOR coincide con Gauss-Seidel.")
 
 
@@ -147,12 +151,12 @@ def explorar_comparacion(comp, metrica):
         fila = next((f for f in r.historial if f.k == k), None)
         if fila is None:
             filas.append({"Método": nombre, f"Estado en k = {k}": f"ya terminó en k = {r.k_final}",
-                          "d_k": "—", "r_k": "—", "e_k": "—"})
+                          D_K.texto: "—", R_K.texto: "—", E_K.texto: "—"})
             continue
         e = errores[r.historial.index(fila)] if errores else None
         filas.append({"Método": nombre,
                       f"Estado en k = {k}": "última iteración" if fila.k == r.k_final else "iterando",
-                      "d_k": "—" if fila.d is None else formatear_numero(fila.d, 6),
-                      "r_k": formatear_numero(fila.r, 6),
-                      "e_k": "—" if e is None else formatear_numero(e, 6)})
+                      D_K.texto: "—" if fila.d is None else formatear_numero(fila.d, 6),
+                      R_K.texto: formatear_numero(fila.r, 6),
+                      E_K.texto: "—" if e is None else formatear_numero(e, 6)})
     st.dataframe(filas, hide_index=True, width="stretch")

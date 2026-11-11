@@ -10,9 +10,10 @@ from algebra.compartido.validacion import ErrorEntrada, formatear_numero
 from algebra.modulo_IV_iterativos.ejecucion import ConfiguracionIterativa
 from algebra.modulo_IV_iterativos.metodos import METODOS
 from algebra.modulo_IV_iterativos.precondicionamiento import analizar_precondicionador
-from interfaz.compartido.componentes import latex_matriz, latex_vector, mostrar_interactiva
+from interfaz.compartido.componentes import mostrar_interactiva
+from interfaz.compartido.formulas import latex_matriz, latex_vector
 from interfaz.compartido.estilo import insignias, marca_incentivo, tarjeta_resultado
-from visualizacion import interactivas
+from visualizacion import interactivas, notacion
 
 
 def precondicionamiento(leer_todo, bloqueado=False):
@@ -20,8 +21,9 @@ def precondicionamiento(leer_todo, bloqueado=False):
     st.markdown(
         "Precondicionador diagonal de clase (S9-05/10, diapositivas 16-18): "
         r"$M = D = \mathrm{diag}(a_{11},\dots,a_{nn})$ y sistema equivalente "
-        r"$M^{-1}Ax = M^{-1}b$. Se comparan κ∞, los autovalores y las iteraciones del sistema "
-        "original y del precondicionado con **la misma** configuración (criterio, ε, k_max, x⁽⁰⁾ y ω).")
+        r"$M^{-1}Ax = M^{-1}b$. Se comparan $\kappa_\infty$, los autovalores y las iteraciones del sistema "
+        "original y del precondicionado con **la misma** configuración "
+        r"(criterio, $\varepsilon$, $k_{\max}$, $x^{(0)}$ y $\omega$).")
     if st.button("Analizar el precondicionador M = D", type="primary", key="it_prec",
                  disabled=bloqueado):
         st.session_state.pop("it_precondicionado", None)
@@ -35,7 +37,7 @@ def precondicionamiento(leer_todo, bloqueado=False):
                 st.session_state["it_precondicionado"] = analizar_precondicionador(
                     datos["A"], datos["b"], config, datos["omega"])
             except (ErrorEntrada, ErrorMatriz) as error:
-                st.error(f"❌ {error}")
+                st.error(f"❌ {notacion.md(str(error))}")
     if "it_precondicionado" not in st.session_state:
         return
     r = st.session_state["it_precondicionado"]
@@ -52,12 +54,13 @@ def precondicionamiento(leer_todo, bloqueado=False):
                           ("κ aumenta" if r.kappa_B > r.kappa_A else "κ no cambia"),
                           "ok" if r.kappa_B < r.kappa_A else ("aviso" if r.kappa_B > r.kappa_A else "")))
         for f in richardson:
-            chips.append((f"Richardson: {f.original.codigo} → {f.precondicionado.codigo}",
+            chips.append((f"Richardson: {notacion.motivo(f.original.codigo)} → "
+                          f"{notacion.motivo(f.precondicionado.codigo).lower()}",
                           "ok" if f.precondicionado.criterio_cumplido else "aviso"))
         insignias(chips)
         c1, c2 = st.columns(2)
-        c1.metric("κ∞(A)", "singular" if r.kappa_A is None else formatear_numero(r.kappa_A))
-        c2.metric("κ∞(D⁻¹A)", "singular" if r.kappa_B is None else formatear_numero(r.kappa_B))
+        c1.metric(r"$\kappa_\infty(A)$", "singular" if r.kappa_A is None else formatear_numero(r.kappa_A))
+        c2.metric(r"$\kappa_\infty(D^{-1}A)$", "singular" if r.kappa_B is None else formatear_numero(r.kappa_B))
     if r.analisis_A is not None:
         st.table([{"Matriz": nombre,
                    "Autovalores": ", ".join(formatear_numero(z.real if z.imag == 0 else z, 6)
@@ -69,10 +72,10 @@ def precondicionamiento(leer_todo, bloqueado=False):
         filas.append({
             "Método": f.metodo,
             "Iteraciones (original)": "—" if f.original.k_final is None else f.original.k_final,
-            "Motivo (original)": f.original.codigo,
+            "Motivo (original)": notacion.motivo(f.original.codigo),
             "Iteraciones (precondicionado)":
                 "—" if f.precondicionado.k_final is None else f.precondicionado.k_final,
-            "Motivo (precondicionado)": f.precondicionado.codigo,
+            "Motivo (precondicionado)": notacion.motivo(f.precondicionado.codigo),
             "ρ(T) original": "—" if f.rho_original is None else formatear_numero(f.rho_original, 6),
             "ρ(T) precondicionado":
                 "—" if f.rho_precondicionado is None else formatear_numero(f.rho_precondicionado, 6),
@@ -81,9 +84,9 @@ def precondicionamiento(leer_todo, bloqueado=False):
         })
     st.dataframe(filas, hide_index=True, width="stretch")
     for texto in r.conclusiones:
-        st.info("💡 " + texto)
+        st.info("💡 " + notacion.md(texto))
     st.warning("**Extensión no vista en clase — método de Richardson.** "
-               "La fila «Richardson» (x ← x + (b − Ax), matriz de iteración I − A) no es uno de los "
+               r"La fila «Richardson» ($x^{(k+1)} = x^{(k)} + (b - Ax^{(k)})$, matriz de iteración $I - A$) no es uno de los "
                "métodos del enunciado ni aparece en los PDF del curso: se incluye como herramienta "
                "de demostración, porque es el método estacionario más simple sobre el que M = D sí "
                "tiene efecto. Richardson precondicionado con M = D es exactamente Jacobi. La lámina "
