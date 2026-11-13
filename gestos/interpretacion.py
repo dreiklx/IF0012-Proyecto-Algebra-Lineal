@@ -23,9 +23,7 @@ from dataclasses import dataclass, field
 from gestos.mano import DEDOS, INDICE, MUNECA, PULGAR, distancia, punto_medio, tamano_palma
 from gestos.movimiento import Suavizador
 
-# Gestos de un fotograma
 NINGUNO, PALMA, PUNO, PINZA, VICTORIA = "ninguno", "palma abierta", "puño", "pinza", "victoria"
-# Estados del control
 ESPERANDO, LISTO, GIRANDO, ZOOM, PAUSADO = "esperando palma", "listo", "girando", "zoom", "pausado"
 
 PINZA_ENTRA = 0.25       # |pulgar − índice| / palma por debajo de esto: empieza la pinza
@@ -34,7 +32,7 @@ EXTENDIDO = 1.15         # un dedo está extendido si punta–muñeca > 1,15 · 
 
 
 def dedo_extendido(mano, dedo):
-    mcp, pip, _, punta = dedo
+    _, pip, _, punta = dedo
     return distancia(mano[punta], mano[MUNECA]) > EXTENDIDO * distancia(mano[pip], mano[MUNECA])
 
 
@@ -84,7 +82,6 @@ class InterpreteGestos:
         self._previo = None             # último punto de agarre suavizado
         self._dist_zoom = None
 
-    # calibración
     def calibrar(self, mano):
         """Con la palma abierta mide la separación natural pulgar–índice de ESTA mano y
         ajusta los umbrales de la pinza (umbral adaptativo), dentro de límites seguros."""
@@ -92,7 +89,6 @@ class InterpreteGestos:
         self.umbral_entra = min(PINZA_ENTRA, max(0.18, 0.35 * abierta))
         self.umbral_sale = self.umbral_entra * 1.5
 
-    # utilidades
     def _sostenido(self, gesto, t, duracion):
         """True una sola vez cuando `gesto` lleva `duracion` segundos seguidos."""
         if self._candidato is None or self._candidato[0] != gesto:
@@ -113,7 +109,6 @@ class InterpreteGestos:
         self._dist_zoom = None
         self.suave.reiniciar()
 
-    # paso principal
     def actualizar(self, manos, t):
         if manos:
             self._ultima_mano = t

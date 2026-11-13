@@ -22,8 +22,7 @@ Resultado matemático que la aplicación verifica de forma EXACTA:
     iteraciones de Jacobi, Gauss-Seidel ni SOR (son invariantes al escalado de
     las filas).  Las tablas de la diapositiva 19, que muestran una mejora para
     Jacobi, no se pueden reproducir: la aplicación lo muestra con evidencia.
-  * M = D sí cambia el condicionamiento κ∞ (Módulo II). Richardson, que aparecía en versiones
-    anteriores, se retiró: no está en los materiales del curso.
+  * M = D sí cambia el condicionamiento κ∞ (Módulo II).
 """
 
 from dataclasses import dataclass, field, replace

@@ -23,7 +23,6 @@ from interfaz.compartido.formulas import (
 )
 from interfaz.compartido.estilo import (
     insignias,
-    marca_incentivo,
     tarjeta_resultado,
     valor_destacado,
 )

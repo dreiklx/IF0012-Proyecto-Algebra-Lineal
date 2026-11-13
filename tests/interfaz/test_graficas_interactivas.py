@@ -5,7 +5,6 @@ Oráculos: los resultados del núcleo (historiales, autovalores, solución) y la
 líneas de las figuras de Matplotlib; para los planos, la ecuación a·p = bᵢ.
 """
 
-import os
 import unittest
 
 from algebra.modulo_III_minimos.minimos import ajuste_lineal
@@ -18,7 +17,6 @@ from algebra.modulo_IV_iterativos.ejecucion import (
     ejecutar,
 )
 from algebra.modulo_IV_iterativos.espectral import radio_espectral
-from algebra.modulo_IV_iterativos.precondicionamiento import analizar_precondicionador
 from algebra.modulo_I_sistemas.directos import resolver_gauss
 from interfaz import navegacion as nav
 from tests.rutas import RUTA_APP

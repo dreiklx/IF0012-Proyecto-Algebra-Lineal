@@ -132,7 +132,7 @@ def raices(coeficientes):
         return autovalores, ceros
     if grado == 2:
         c1, c2 = reducido[1], reducido[2]
-        discriminante = c1 * c1 - 4 * c2                   # exacto
+        discriminante = c1 * c1 - 4 * c2
         if discriminante >= 0:
             raiz = math.sqrt(float(discriminante))
             autovalores += [complex((-float(c1) + raiz) / 2), complex((-float(c1) - raiz) / 2)]

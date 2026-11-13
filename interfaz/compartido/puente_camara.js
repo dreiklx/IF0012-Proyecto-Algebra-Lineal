@@ -1,8 +1,5 @@
-// Puente mínimo entre Python y las gráficas de Plotly (único JavaScript propio de la aplicación).
-// Aprobado por el equipo el 10-nov: Python calcula TODO (cámara, MediaPipe, gestos, cámara
-// orbital y vista 2D); este código solo aplica en la gráfica de st.plotly_chart la vista que
-// llega desde 127.0.0.1 y avisa a Python cuando el ratón mueve la vista.  No usa la cámara web
-// ni recibe imágenes.
+// Puente entre Python y las gráficas de Plotly: aplica en el navegador la vista que calcula
+// Python (127.0.0.1) y le avisa cuando el ratón mueve la gráfica.  No usa la cámara ni imágenes.
 //   data.tipo === "3d" (por defecto): aplica «scene.camera» (Módulo I).
 //   data.tipo === "2d": aplica «xaxis.range» e «yaxis.range» (Módulo IV).
 export default function (component) {

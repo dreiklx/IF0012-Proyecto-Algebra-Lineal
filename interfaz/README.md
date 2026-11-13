@@ -13,7 +13,7 @@ Aquí no se calcula nada. Cada vista lee los datos, llama al núcleo (`algebra/`
 | `modulo_IV_iterativos/pestana_ejecutar.py` | `ejecutar_un_metodo()` | despejes, tabla de iteraciones, CSV, gráfica de convergencia explorable |
 | `modulo_IV_iterativos/pestana_comparar.py` | `comparar()` | los 3 métodos, error final, gráfica comparativa, barrido de ω |
 | `modulo_IV_iterativos/pestana_convergencia.py` | `convergencia()` | dominancia, pasos ①-⑤ (T_J, C_J), polinomio, autovalores, ρ(T) |
-| `modulo_IV_iterativos/pestana_precondicionamiento.py` | `precondicionamiento()` | M = D, κ antes y después, Richardson (extensión) |
+| `modulo_IV_iterativos/pestana_precondicionamiento.py` | `precondicionamiento()` | M = D, κ antes y después |
 
 `portada.py` es la página de inicio y `navegacion.py` la lista de páginas que usa `app.py`. Los archivos de `paginas/` solo llaman a `mostrar()`: Streamlit necesita un archivo por página.
 

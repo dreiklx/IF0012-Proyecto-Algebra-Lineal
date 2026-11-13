@@ -80,7 +80,7 @@ class CamaraOrbital:
         self._pendiente = (0.0, 0.0)
         # Mano a la derecha → la escena gira hacia la derecha (el ojo se mueve a la izquierda),
         # como al arrastrar con el ratón.
-        # Eje vertical invertido a pedido del equipo (10-nov): mano arriba (dy < 0) → el ojo
+        # Eje vertical invertido: mano arriba (dy < 0) → el ojo
         # baja (se mira más desde abajo); mano abajo → se mira más desde arriba.
         self.theta -= dx * self.sensibilidad
         self.phi = min(ELEVACION_MAX, max(ELEVACION_MIN, self.phi + dy * self.sensibilidad))

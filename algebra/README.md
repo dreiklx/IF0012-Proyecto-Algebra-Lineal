@@ -10,7 +10,7 @@ Todos los cálculos de Ax están aquí, implementados desde cero en Python puro.
 | `modulo_I_sistemas/` | `directos.py` | Gauss, Gauss-Jordan, pivoteo, clasificación por rangos, inversa [A \| I] → [I \| A⁻¹], determinante | A |
 | `modulo_II_condicionamiento/` | `condicion.py` | κ∞(A) = ‖A‖∞‖A⁻¹‖∞, escala 10/100 del enunciado, perturbación de b | A y B |
 | `modulo_III_minimos/` | `minimos.py` | ecuaciones normales AᵀAx̂ = Aᵀb resueltas con Gauss, residuo, ‖r‖₂, Cramer de verificación, recta y = mx + c | A y B |
-| `modulo_IV_iterativos/` | `metodos.py` | **una** iteración de Jacobi, Gauss-Seidel y SOR (Richardson: Cat. C) | A |
+| `modulo_IV_iterativos/` | `metodos.py` | **una** iteración de Jacobi, Gauss-Seidel y SOR | A |
 | | `ejecucion.py` | el bucle común: criterios A, B y C, tabla k, x⁽ᵏ⁾, dₖ, rₖ y motivo de parada | A y B |
 | | `convergencia.py` | dominancia diagonal estricta y reordenamiento de ecuaciones | A |
 | | `matriz_iteracion.py` | A = D + L + U, D⁻¹ o (D+L)⁻¹, T y c; desarrollo por Sarrus | A (T de SOR: C) |

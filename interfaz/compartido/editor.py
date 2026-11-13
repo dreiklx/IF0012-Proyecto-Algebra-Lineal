@@ -79,7 +79,6 @@ def ceros(filas, columnas):
     return [["0"] * columnas for _ in range(filas)]
 
 
-# Estado en session_state
 
 def _k(clave, sufijo):
     return f"{clave}__{sufijo}"
@@ -186,7 +185,6 @@ def analizar(texto, tipo, nombre):
         return None, str(error), "error"
 
 
-# Componente
 
 def editor(clave, etiqueta, ejemplo, tipo=MATRIZ, nombre=None, css="ed", encabezados=None,
            etiqueta_fila=None, ayuda=None, altura=130):

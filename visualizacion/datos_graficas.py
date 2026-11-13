@@ -7,7 +7,7 @@ seleccionan y ordenan datos que ya calculó el núcleo (algebra/).
 """
 
 
-MARCADORES = {"Jacobi": "o", "Gauss-Seidel": "s", "SOR": "^", "Richardson": "D"}
+MARCADORES = {"Jacobi": "o", "Gauss-Seidel": "s", "SOR": "^"}
 
 
 def positivos(ks, valores):

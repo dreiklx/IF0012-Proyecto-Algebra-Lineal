@@ -10,7 +10,6 @@ El HTML es autónomo salvo las imágenes, que van con rutas relativas.  Sin recu
 Uso: python herramientas/generar_auditoria_html.py
 """
 import csv
-import glob
 import html
 import os
 from collections import Counter, defaultdict

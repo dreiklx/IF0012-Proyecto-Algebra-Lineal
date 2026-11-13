@@ -1,6 +1,6 @@
 """Canal local entre Python y la gráfica: solo viajan los 9 números de la cámara.
 
-Por qué existe: medido en Brave (10-nov), una actualización por rerun de Streamlit llega
+Por qué existe: medido en Brave, una actualización por rerun de Streamlit llega
 al navegador ~1 a 3 veces por segundo, porque Streamlit agrupa los reruns.  Con este
 canal la cámara llega a ~30 veces por segundo sin rerun.  Ver docs/portabilidad_java_python.md.
 

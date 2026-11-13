@@ -13,7 +13,6 @@ from interfaz.compartido.formulas import latex_matriz
 from visualizacion import notacion
 
 
-# Entrada de datos
 
 def leer_matriz_ui(texto, nombre):
     """Lee una matriz; si hay error lo muestra y devuelve None."""

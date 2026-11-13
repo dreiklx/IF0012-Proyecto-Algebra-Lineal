@@ -11,8 +11,7 @@ SUAVE = "#93A1BC"
 REJILLA = "#2A3653"
 
 # Un color por método, el mismo en todas las gráficas.
-COLORES_METODOS = {"Jacobi": "#4F8CFF", "Gauss-Seidel": "#F472B6", "SOR": "#22D3EE",
-                   "Richardson": "#FBBF24"}
+COLORES_METODOS = {"Jacobi": "#4F8CFF", "Gauss-Seidel": "#F472B6", "SOR": "#22D3EE"}
 COLOR_DATOS = "#22D3EE"
 COLOR_RECTA = "#4F8CFF"
 COLOR_EPSILON = "#34D399"

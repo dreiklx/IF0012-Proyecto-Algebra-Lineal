@@ -1,4 +1,4 @@
-/* 1. Tokens ---------------------------------------------------------------- */
+/* 1. Tokens */
 :root{
   --fondo:#0B1020;--barra:#0D1326;--panel:#141C30;--panel2:#18223A;--campo:#0E1528;
   --borde:#26324D;--regla:#1C2640;--texto:#E6ECF7;--claro:#C9D3E6;--suave:#93A1BC;--tenue:#6B7894;
@@ -9,7 +9,7 @@
   --t-rapida:140ms;--t-media:200ms;--t-larga:220ms;--curva:cubic-bezier(.2,.7,.2,1);
 }
 
-/* 2. Estructura: barra superior y ancho del contenido ---------------------- */
+/* 2. Estructura: barra superior y ancho del contenido */
 [data-testid="stAppViewContainer"]{background:var(--fondo)}
 [data-testid="stHeader"]{background:var(--barra);border-bottom:1px solid var(--regla);height:3.6rem}
 [data-testid="stToolbar"]{height:3.6rem}
@@ -28,7 +28,7 @@
 [data-testid="stTopNavLink"]:focus-visible{outline:2px solid var(--cian);outline-offset:2px}
 [data-testid="stMainBlockContainer"]{max-width:1320px;padding:5.2rem 2.5rem 4rem}
 
-/* 3. Tipografía y fórmulas ------------------------------------------------- */
+/* 3. Tipografía y fórmulas */
 h1,h2,h3,h4{font-family:var(--f-titulo) !important;letter-spacing:-.012em}
 h2{font-size:1.4rem !important}
 h3{font-size:1.15rem !important;color:var(--texto)}
@@ -39,7 +39,7 @@ h3{font-size:1.15rem !important;color:var(--texto)}
 [data-testid="stMetricValue"],[data-testid="stTable"] td,[data-testid="stDataFrame"]{font-variant-numeric:tabular-nums}
 textarea{font-family:var(--f-mono) !important;font-size:.92rem !important}
 
-/* 4. Portada --------------------------------------------------------------- */
+/* 4. Portada */
 .st-key-portada_hero{padding:.4rem 0 2.2rem;border-bottom:1px solid var(--regla);margin-bottom:.4rem}
 .eyebrow{font-family:var(--f-mono);color:var(--cian);font-size:.76rem;letter-spacing:.06em}
 .st-key-portada_hero h1{font-size:clamp(2.3rem,3.4vw,3.3rem) !important;font-weight:700;line-height:1.05;
@@ -98,7 +98,7 @@ h2.rotulo .rotulo-nota{font-family:var(--f-mono);font-size:.72rem;font-weight:40
   font-size:.78rem;color:var(--suave)}
 .pie b{color:var(--claro)}
 
-/* 5. Cabecera de módulo, secciones y chips --------------------------------- */
+/* 5. Cabecera de módulo, secciones y chips */
 .cabecera{padding:.6rem 0 1.2rem;margin-bottom:.6rem;border-bottom:1px solid var(--regla)}
 .cabecera-num{display:flex;align-items:center;gap:.6rem;font-family:var(--f-mono);font-size:.76rem;
   color:var(--cian);letter-spacing:.08em}
@@ -128,7 +128,7 @@ div[class*="st-key-graf_"]:not(.st-key-graf_planos){overflow:visible !important}
 .procedencia{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem;margin:.1rem 0 .4rem;font-size:.74rem;color:var(--suave)}
 .procedencia .chip{font-size:.72rem;cursor:help}
 
-/* 6. Resultado principal, métricas y escala de κ --------------------------- */
+/* 6. Resultado principal, métricas y escala de κ */
 div[class*="st-key-res_"]{border:1px solid rgba(34,211,238,.32) !important;border-radius:var(--r-l) !important;
   background:var(--panel) !important;box-shadow:inset 3px 0 0 var(--cian);padding:.5rem .6rem .5rem .8rem}
 div[class*="st-key-res_"] .katex-display .katex{font-size:1.45em}
@@ -155,7 +155,7 @@ div[class*="st-key-res_"] .katex-display .katex{font-size:1.45em}
   box-shadow:0 0 0 3px rgba(11,16,32,.85)}
 .escala-rotulos{display:flex;justify-content:space-between;color:var(--suave);font-size:.75rem;margin-top:.35rem}
 
-/* 7. Controles ------------------------------------------------------------- */
+/* 7. Controles */
 .stButton>button,.stDownloadButton>button,[data-testid="stPopover"] button{font-weight:600;
   transition:background-color var(--t-rapida) var(--curva),border-color var(--t-rapida) var(--curva),
              color var(--t-rapida) var(--curva),transform var(--t-rapida) var(--curva)}
@@ -193,7 +193,7 @@ div[class*="st-key-res_"] .katex-display .katex{font-size:1.45em}
 [data-testid="stAlert"]{border-radius:var(--r-m)}
 [data-testid="stPlotlyChart"]{border-top:1px solid var(--regla);padding-top:.4rem}
 
-/* 8. Editor de matrices (interfaz/compartido/editor.py) ------------------------------- */
+/* 8. Editor de matrices (interfaz/compartido/editor.py) */
 div[class*="st-key-editor_"]{border:1px solid var(--borde);border-radius:var(--r-l);padding:.55rem .75rem .85rem;
   background:#111830;transition:border-color var(--t-media) var(--curva)}
 div[class*="st-key-editor_"]:focus-within{border-color:#34446A}
@@ -213,7 +213,7 @@ div[class*="st-key-editor_"] [data-testid="stTab"] p{font-size:.85rem !important
 [data-testid="stElementContainer"]:has(> [data-testid="stMarkdown"] .ed-marca){display:none}
 div[class*="st-key-editor_"]:has(.ed-cargado){animation:ax-carga var(--t-larga) var(--curva)}
 
-/* 9. Movimiento ------------------------------------------------------------ */
+/* 9. Movimiento */
 @keyframes ax-entrada{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @keyframes ax-fundido{from{opacity:0}to{opacity:1}}
 @keyframes ax-carga{from{border-color:var(--cian);transform:scale(.996)}to{transform:none}}
@@ -227,7 +227,7 @@ div[class*="st-key-res_"]{animation:ax-entrada var(--t-larga) var(--curva) both}
   .stButton>button:hover:not(:disabled){transform:none}
 }
 
-/* 10. Anchos intermedios --------------------------------------------------- */
+/* 10. Anchos intermedios */
 @media (max-width: 1280px){
   [data-testid="stMainBlockContainer"]{padding-left:2rem;padding-right:2rem}
   [data-testid="stMetricValue"]{font-size:1.2rem !important}

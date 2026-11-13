@@ -82,7 +82,7 @@ def mostrar():
                                                       analizar(texto_b, VECTOR, "vector b")[0]))
 
     seccion("2", "Método")
-    col3, col4 = st.columns(2)
+    col3, _ = st.columns(2)
     with col3:
         metodo = st.radio("Método", ["Gauss", "Gauss-Jordan"], horizontal=True, key="dir_metodo",
                           help="Gauss: forma escalonada y sustitución hacia atrás. "
@@ -127,7 +127,7 @@ def mostrar_resultado(A, b, r):
                      + r"\right)\right\}")
         elif r.clasificacion == INFINITAS:
             terminos = latex_vector(r.solucion_particular)
-            for indice, (libre, v) in enumerate(zip(r.variables_libres, r.direcciones), start=1):
+            for indice, (_, v) in enumerate(zip(r.variables_libres, r.direcciones), start=1):
                 terminos += rf" + t_{{{indice}}}\,{latex_vector(v)}"
             st.latex(r"x = " + terminos + r",\quad t_i \in \mathbb{R}")
         c1, c2, c3 = st.columns(3)

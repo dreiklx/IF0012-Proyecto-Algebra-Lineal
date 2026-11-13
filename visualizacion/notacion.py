@@ -40,12 +40,8 @@ E_K = Simbolo(r"e_k", "e<sub>k</sub>", "eₖ")
 # Como la lámina S8-28/09 p. 6: «número máximo de iteraciones k_max».
 K_MAX = Simbolo(r"k_{\max}", "k<sub>max</sub>", "kₘₐₓ")
 X_K = Simbolo(r"x^{(k)}", "x<sup>(k)</sup>", "x⁽ᵏ⁾")
-X_0 = Simbolo(r"x^{(0)}", "x<sup>(0)</sup>", "x⁽⁰⁾")
 T_J = Simbolo(r"T_J", "T<sub>J</sub>", "T de Jacobi")
 T_GS = Simbolo(r"T_{GS}", "T<sub>GS</sub>", "T de Gauss-Seidel")
-T_OMEGA = Simbolo(r"T_\omega", "T<sub>ω</sub>", "T de SOR")
-KAPPA_INF = Simbolo(r"\kappa_\infty(A)", "κ<sub>∞</sub>(A)", "κ∞(A)")
-NORMA_INF = Simbolo(r"\|\cdot\|_\infty", "‖·‖<sub>∞</sub>", "‖·‖∞")
 
 # d_k, r_k y e_k completos (la definición junto al símbolo)
 D_K_DEF = Simbolo(r"d_k = \|x^{(k)} - x^{(k-1)}\|_\infty",
@@ -160,6 +156,7 @@ def md(texto):
                    for p in partes)
 
 
+
 def unicode(texto):
     """Como md(), pero solo con Unicode (para st.dataframe, selectores y HTML propio)."""
     return _reemplazar(texto, latex=False)
@@ -175,7 +172,6 @@ def _codigos(texto):
     return re.sub(r"\b[A-Z]+(?:_[A-Z]+)+\b", palabras, texto)
 
 
-# Expresiones
 
 def ecuacion(coeficientes, variables, independiente):
     """«2x − y + 3z = 5» con signos correctos (nunca «+ -1y»).  Formato :g."""
