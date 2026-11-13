@@ -28,6 +28,9 @@ from interfaz.compartido.componentes import (
     iteraciones_seleccionadas,
     mostrar_interactiva,
 )
+from gestos.vista2d import rango_inicial
+from interfaz.compartido import control_gestual
+from interfaz.compartido.control_gestual import rango_para_figura
 from interfaz.compartido.formulas import latex_despejes
 from interfaz.compartido.estilo import (
     insignias,
@@ -192,7 +195,13 @@ def explorar_convergencia(r):
     tolerancia = config.tolerancia if config.criterio != CRITERIO_ITERACIONES else None
     fig = interactivas.convergencia(r.historial, config.criterio, tolerancia, metodo=config.metodo,
                                     codigo=r.codigo, k_destacada=k)
+    # Vista 2D: rango por defecto de los datos; si el control gestual 2D está activo, el rango
+    # que él dejó.  Solo cambian los ejes: los datos, la selección y los historiales no.
+    por_defecto = rango_inicial(r.historial, tolerancia)
+    x0, x1, y0, y1 = rango_para_figura(por_defecto)
+    fig.update_layout(xaxis_range=[x0, x1], yaxis_range=[y0, y1])
     mostrar_interactiva(fig, "convergencia", seleccion=True)
+    control_gestual.panel("graf_convergencia", tipo="2d", rango_inicial=por_defecto)
     if len(ks) > 1:
         st.slider("Iteración a explorar", min_value=ks[0], max_value=ks[-1], key="it_k_conv",
                   help="También puede hacer clic en un punto de la gráfica.")

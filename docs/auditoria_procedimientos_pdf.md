@@ -107,3 +107,41 @@ Todas siguen en `referencia_oficial_procedimientos.md` §9; Ax muestra los valor
 - **Volcado** de 273 resultados de los ejemplos: idéntico a `main`. Las únicas líneas distintas son el campo nuevo `MatrizIteracion.inversa`.
 - **Auditoría:** 0 fallos (4500 + 400 + 200 + 300 + 600 + 300 + 150 casos).
 - **Pruebas nuevas:** despejes de los tres manuscritos, sumas por fila de S7-21/09 p. 19, D⁻¹ y (D+L)⁻¹ de S9-07/10.
+
+---
+
+## Revisión del 12-nov-2026 (auditoría de la norma y del OCR)
+
+### 2.2 Criterio A: norma absoluta (Ax) frente a norma relativa (lámina)
+
+| Fuente | Fórmula escrita | Tipo |
+|---|---|---|
+| Lámina S8-28/09 p. 6 (OCR, ver nota) | ‖x⁽ᵏ⁺¹⁾ − x⁽ᵏ⁾‖ / ‖x⁽ᵏ⁾‖ < ε, titulada «norma del error relativo» | relativa |
+| Enunciado OFICIAL p. 2 | «mostrar… el error utilizado como criterio de parada»; no fija la norma | libre |
+| Ax, `algebra/modulo_IV_iterativos/ejecucion.py` | d_k = ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞ < ε | absoluta, norma ∞ |
+
+**Diferencia:** la absoluta depende de la escala de x; la relativa la normaliza. Son criterios equivalentes solo si ‖x⁽ᵏ⁾‖ ≈ 1.
+
+**Medido** (tridiagonal 4×4 de la guía, b = (1, 0, 0, 1), ε = 10⁻³, x⁽⁰⁾ = 0): Jacobi para en k = 7 con la absoluta y en k = 8 con la relativa; Gauss-Seidel en k = 5 y k = 6.
+
+**Decisión:** se mantiene la absoluta. Cambiarla alteraría todos los historiales y las pruebas de referencia, y el enunciado no la prescribe. Para evitar contradicciones:
+- La interfaz muestra una nota bajo el selector de criterio (`interfaz/modulos/modulo_IV_iterativos/principal.py`).
+- La procedencia dice «versión absoluta; la lámina usa la relativa».
+- La guía express explica la diferencia y avisa de que los números de iteración de la guía corresponden a la absoluta.
+
+**Pendiente:** añadir la relativa como opción explícita (no hecho).
+
+### 2.3 Erratas verificadas
+
+| Documento y página | Dice | Verificado | Estado en Ax |
+|---|---|---|---|
+| S9-07/10 p. 4 | ρ(T_J) = 0 | ρ ≈ 1,174 (polinomio −λ³ − (4/9)λ + 4/3) | Corregido, ver guía |
+| S9-05/10 p. 23 | M = D acelera Jacobi | Iteraciones idénticas: D⁻¹A tiene diagonal 1, así que T_J es la misma | Documentado (`precondicionamiento.py`) |
+| S8-28/09 p. 6 | Fórmula relativa | Ver 2.2 | Documentado |
+
+### 2.4 Estado de la revisión visual
+
+- **OCR:** las 457 páginas de los 15 PDF de clase se pasaron por OCR (RapidOCR). Textos en `scratchpad\ocr_out\`.
+- **Revisión visual completa:** **no completada en esta sesión.** La herramienta de lectura bloquea imágenes grandes, así que no pude ver las láminas. Solo se confirmaron por OCR los puntos de las secciones 2.2 y 2.3 y la ausencia de Richardson, Faddeev-LeVerrier y Durand-Kerner (0 coincidencias).
+- **Requiere revisión visual adicional:** todos los procedimientos de los módulos I-IV (Gauss, Gauss-Jordan, determinantes, normas, mínimos cuadrados, Cramer, Jacobi, Gauss-Seidel, SOR, matrices de iteración y det(T−λI)).
+- **Pendiente externo:** P-2 (IA): el programa §6.2 habla de uso «no autorizado»; confirmar con la docente.
