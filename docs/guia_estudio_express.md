@@ -39,6 +39,8 @@ Repaso breve para la defensa. La guía completa (`docs/guia_estudio_if0012.md`) 
 
 **Pruebas de los ejemplos de la profesora:** 13, en `tests/referencia_profesora/` (S6-16/09 p. 29; S7-21/09 p. 19; S9-07/10 pp. 3-7). Ejemplos sin revisar en imagen: `docs/auditoria/pruebas_ejemplos_profesora.md`.
 
+**Verificación visual (13-nov):** S8-30/09 pp. 6-7 (mínimos cuadrados del ejemplo: AᵀA, Aᵀb, Cramer con |A| = 363, |Aₓ| = 715, |A_y| = −319, x̂ = (65/33, −29/33)) y S8-28/09 p. 6: la fórmula de parada es absoluta, ‖x⁽ᵏ⁺¹⁾ − x⁽ᵏ⁾‖ < ε; el título dice «relativo» y la conclusión usa ε = 0,01 frente a 10⁻³ del ejemplo (errata interna). Lo anterior (criterio «relativo») era un error de lectura.
+
 **Verificación visual (12-nov):** revisadas visualmente S6-16/09 p. 29 (Gauss, comparada con Ax) y S9-07/10 pp. 2–7 (Jacobi, Gauss-Seidel, radio espectral; pp. 4–7 comparadas con Ax). El resto de páginas está en `docs/auditoria/inventario_paginas.csv` como «Solo OCR», sin verificar visualmente.
 
 ---
@@ -117,6 +119,8 @@ El enunciado pide un método directo ya implementado (B). **Ax resuelve con Gaus
 - Aᵀr = 0: el residuo es ortogonal a Col(A). De ahí salen las ecuaciones normales.
 - Recta y = mx + c: matriz de diseño con filas [xᵢ, 1].
 
+**MediaPipe en III:** la gráfica de mínimos cuadrados tiene el mismo control gestual 2D (pinza desplaza, dos pinzas acercan, puño pausa, victoria restablece). Solo cambia la vista; datos, recta y residuos no cambian. Pruebas: `tests/modulo_III/test_control_gestual_m3.py`. Sin prueba física con manos.
+
 **Módulo III, visualización:** la gráfica exigida ya muestra los residuos como segmentos verticales. Además, una tabla con yᵢ, ŷᵢ = m·xᵢ + c y rᵢ = yᵢ − ŷᵢ (complementaria; Σ rᵢ = 0 con intercepto). Si cambian los datos sin recalcular, la interfaz avisa.
 
 **Código:** `algebra/modulo_III_minimos/minimos.py`: `clasificar_forma`, `minimos_cuadrados`, `cramer`, `ajuste_lineal`. **Gráfica obligatoria:** `visualizacion/interactivas.py::ajuste`.
@@ -149,7 +153,7 @@ Con A = D + L + U (L y U estrictamente triangulares):
 
 | Criterio | Condición | Nombre en Ax |
 |---|---|---|
-| A (S8-28/09 p. 6) | Ax: ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞ < ε (absoluta). La lámina escribe la **relativa** ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖/‖x⁽ᵏ⁾‖ | dₖ (cambio entre iteraciones) |
+| A (S8-28/09 p. 6) | ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞ < ε (absoluta; la lámina escribe la misma fórmula, con el título «error relativo») | dₖ (cambio entre iteraciones) |
 | B | ‖b − Ax⁽ᵏ⁾‖∞ < ε | rₖ (residuo) |
 | C | N iteraciones fijas | **no demuestra convergencia** |
 
@@ -178,7 +182,7 @@ Siempre hay un máximo k_max. El motivo de parada sale del código de terminaci�
 **Gráficas obligatorias:** `interactivas.convergencia` (dₖ y rₖ frente a k, con ε) e `interactivas.comparacion`.
 
 **Ejemplos:**
-- Tridiagonal [−1, 4, −1] 4×4, b = (1, 0, 0, 1), ε = 10⁻³, x⁽⁰⁾ = 0, ω = 1,2: Jacobi 7 iteraciones, Gauss-Seidel 5, SOR 7 (criterio A absoluto de Ax; con la relativa de la lámina serían 8 y 6). Solución (1/3, 1/15, 1/15, 1/3) (S9-05/10 p. 14).
+- Tridiagonal [−1, 4, −1] 4×4, b = (1, 0, 0, 1), ε = 10⁻³, x⁽⁰⁾ = 0, ω = 1,2: Jacobi 7 iteraciones, Gauss-Seidel 5, SOR 7 (criterio A de Ax, absoluto). Solución (1/3, 1/15, 1/15, 1/3) (S9-05/10 p. 14).
 - S9-07/10, Jacobi con A = [[3, 3, 3], [3, 3, 2], [−3, −2, 3]]: det(T − λI) = −λ³ − (4/9)λ + 4/3; **ρ ≈ 1,174 > 1: no converge.** La hoja dice ρ = 0 (errata: omite el 4/3).
 
 **Debe explicar:** por qué Gauss-Seidel suele ser más rápido; qué es dₖ y qué es rₖ; por qué la dominancia no basta para decidir no convergencia; qué es ρ(T).
@@ -267,7 +271,7 @@ cámara ─► captura.py ─► deteccion.py ─► interpretacion.py ─► mo
 
 ## H. Rúbrica e incentivos (OFICIAL pp. 4-5)
 
-**Caso obligatorio de validación:** el enunciado lo contempla (OFICIAL p. 3, §4). Lo proporciona la docente y **no lo hemos recibido**. Es un entregable externo, no un error de Ax. No se inventa ni se atribuye a la profesora. Los casos de `casos_prueba/` son internos y no lo sustituyen.
+**Caso de validación de la docente:** el enunciado prevé que la docente lo proporcione (OFICIAL p. 3, §4). El equipo confirma que no lo recibió. No es tarea técnica de Ax; no se inventa ni se atribuye. Los casos de `casos_prueba/` son internos.
 
 **Requisitos obligatorios:**
 

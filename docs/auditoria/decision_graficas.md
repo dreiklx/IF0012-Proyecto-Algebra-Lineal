@@ -69,3 +69,9 @@ Lo mismo ocurre en el Módulo II al cambiar A, b o la perturbación.
 | II | No | Normas ∞ (filas, con MediaPipe 2D) y norma 1 (columnas), sensibilidad (complementarias) | **Añadidas**; determinante geométrico **retirado** |
 | III | Sí | Ajuste con residuos verticales; tabla de residuos (complementaria) | **Tabla añadida**; gráfica verificada sin duplicar |
 | IV | Sí | Convergencia, comparación, autovalores, precondicionador | Ninguna |
+
+## Actualización 13-nov-2026 (MediaPipe en el Módulo III)
+
+La gráfica de mínimos cuadrados (obligatoria, OFICIAL p. 2) tiene control gestual 2D con
+objetivo propio `2d_m3`. Solo cambia la vista de los ejes: datos, recta, estimados y residuos
+no cambian (ver `docs/mediapipe_2d.md`, sección Módulo III).

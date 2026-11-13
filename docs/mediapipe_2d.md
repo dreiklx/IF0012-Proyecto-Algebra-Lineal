@@ -114,3 +114,21 @@ funciona igual.
   barras sin ejes continuos.
 - Prueba automatizada: las mismas de `tests/gestos/test_vista2d.py` (la vista) y
   `tests/modulo_II/test_visualizaciones.py` (las barras). Validación física: pendiente del usuario.
+
+## Módulo III: gráfica de mínimos cuadrados (13-nov-2026)
+
+- Objetivo propio «Gráfica de mínimos cuadrados · Módulo III» (`tipo="2d_m3"`). Reutiliza
+  `VistaPlano2D`, el hilo, la cámara y el servidor de los módulos II y IV. Un solo objetivo
+  gestual activo a la vez.
+- Controles (mismos gestos): pinza con una mano desplaza, dos pinzas acercan y alejan, puño
+  pausa, victoria restablece la vista inicial. El panel muestra objetivo, estado de cámara y gesto.
+- **Solo cambia la vista de los ejes.** No cambian: los datos introducidos, los coeficientes
+  m y c, los valores estimados ŷ = A x̂, los residuos r = b − A x̂ ni ningún resultado. La
+  función `visualizacion/interactivas.py::ajuste` acepta `rango=` y solo fija los ejes; los
+  trazos son idénticos con y sin él (prueba `test_rango_solo_cambia_la_vista_no_los_trazos`).
+- Pruebas sintéticas: `tests/modulo_III/test_control_gestual_m3.py` (desplazamiento, zoom, pausa,
+  restablecimiento, límites, exclusión de objetivos y ausencia de cambios en los datos).
+- Verificado en el navegador: la gráfica aparece tras «Calcular recta de ajuste», en la pestaña
+  «Ajuste lineal de datos», con puntos, recta y residuos; el panel de MediaPipe aparece con sus
+  botones (captura en `docs/auditoria/evidencias/capturas/`).
+- **No se ha probado con manos reales.** Validación física: pendiente del usuario.

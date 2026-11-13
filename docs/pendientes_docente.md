@@ -21,7 +21,7 @@ Se usó un solo criterio: si el enunciado oficial (OFICIAL) basta para decidir, 
 |---|---|---|---|---|
 | P-1 | Número de grupo | **Resuelto:** grupo 01, confirmado por el equipo | Nombre del ZIP | Ninguno |
 | P-2 | Uso de IA | **Sí:** no hay ningún requisito de autorización previa; se exige declarar y defender | Integridad académica (PROG p. 7, §6.2) | Bajo. **No bloquea la entrega**; se mantiene la declaración |
-| P-3 | Caso de validación obligatorio | No: la docente lo debe entregar (OFICIAL p. 3); no está en ningún PDF | Rúbrica «Casos de prueba» (3 %) | Medio |
+| P-3 | Caso de validación obligatorio | **Cerrado como hecho documental (13-nov-2026):** el enunciado lo prevé (OFICIAL p. 3, §4); la docente no lo entregó y el equipo no lo recibió. No es tarea técnica de Ax | Rúbrica «Casos de prueba» (3 %) | Medio |
 | P-4 | Significado de «error final» | **Sí: la lámina S9-05/10 p. 17 lo define** | M4-07 | **Resuelto** |
 | P-5 | Alcance del radio espectral | En parte | M4-05 e incentivo I-05 | Medio |
 | P-6 | NumPy como dependencia interna de Streamlit y Matplotlib | **Sí**, en lo esencial | R-02, R-03 | Bajo |
@@ -63,6 +63,8 @@ Se usó un solo criterio: si el enunciado oficial (OFICIAL) basta para decidir, 
 > «Profesora, para su conocimiento: en el proyecto final usamos asistentes de inteligencia artificial (Claude Code y ChatGPT) como apoyo en la programación y la revisión, y lo declaramos en docs/herramientas_y_bibliotecas.md. Todos los integrantes estudiamos el código para defenderlo. Si tiene alguna indicación sobre cómo declararlo, la aplicaremos.»
 
 ## P-3. Caso de validación obligatorio
+
+**Estado: no recibido (confirmado por el equipo, 13-nov-2026).** Caso de validación de la docente: el enunciado prevé que la docente proporcione un caso (OFICIAL p. 3, §4). El equipo confirma que **no lo recibió**. No es una tarea técnica pendiente de Ax, no se inventa y no se atribuye a la profesora. Los casos de `casos_prueba/` son casos internos independientes.
 
 **Qué dice exactamente el enunciado** (releído el 03-nov-2026; no hay otro documento que lo trate):
 

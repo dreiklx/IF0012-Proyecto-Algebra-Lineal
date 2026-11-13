@@ -79,7 +79,7 @@ Revisado sobre capturas reales de la aplicación (`docs/capturas/antes_modulo_I.
 | Validaciones y errores | 4 % | `validacion.py`, `validar_configuracion`, `ejecutar` sin excepciones | Errores en rojo con la celda exacta; recomendaciones | `test_validacion`, `test_modulo_I_entrada_invalida` | COMPLETADO |
 | Interfaz y usabilidad | 5 % | — | Identidad visual propia; navegación con el módulo activo resaltado; etapas numeradas; portada con accesos directos; probado a 1440 y 1024 px | `capturas/0_inicio.png`, `9_modulo_IV_1024px.png` | COMPLETADO (juicio de la docente) |
 | Manual de usuario | 3 % | `docs/manual_usuario.md` | Actualizado con la portada y los accesos | Probado en otra computadora (equipo, 03-nov) | COMPLETADO |
-| Casos de prueba | 3 % | `casos_prueba/`, `tests/` | — | 204 pruebas | Casos propios: COMPLETADO. **Caso obligatorio: PENDIENTE (externo)** |
+| Casos de prueba | 3 % | `casos_prueba/`, `tests/` | — | 204 pruebas | Casos propios: COMPLETADO. Caso de la docente: no recibido (no es tarea técnica) |
 
 ## 4. Incentivos (hasta 5 %): funcionalidad real y dónde se ve
 
@@ -177,7 +177,7 @@ Capturas reales de la aplicación en ejecución (Edge sin interfaz controlado po
 | Validaciones y errores | 4 % | `validacion.py`, `validar_configuracion` | Validación previa en el editor y bloqueo por dimensiones incompatibles | `test_validacion`, `test_editor` | COMPLETADO |
 | Interfaz y usabilidad | 5 % | — | Identidad Ax, **navegación superior** con el módulo activo marcado, editor interactivo, **gráficas interactivas**, probado a 1440, 1366 y 1024 px | Capturas en `docs/capturas/`; `TestNavegacion` | COMPLETADO (juicio de la docente) |
 | Manual de usuario | 3 % | `docs/manual_usuario.md` (editor y gráficas documentados) | — | Probado en otra computadora (equipo) | COMPLETADO |
-| Casos de prueba | 3 % | `casos_prueba/`, 232 pruebas | — | — | Propios: COMPLETADO. **Caso obligatorio: PENDIENTE (externo, no recibido)** |
+| Casos de prueba | 3 % | `casos_prueba/`, 232 pruebas | — | — | Propios: COMPLETADO. Caso de la docente: no recibido (no es tarea técnica) |
 
 ### 7.2 Incentivos (hasta 5 %): versión vigente
 

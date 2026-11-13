@@ -21,6 +21,7 @@ from algebra.modulo_IV_iterativos.ejecucion import CRITERIO_ITERACIONES, Configu
 from algebra.modulo_IV_iterativos.matriz_iteracion import matriz_iteracion
 from algebra.modulo_IV_iterativos.metodos import GAUSS_SEIDEL, JACOBI
 from algebra.modulo_IV_iterativos.polinomio_raices import polinomio_caracteristico
+from algebra.modulo_III_minimos.minimos import cramer, minimos_cuadrados
 
 
 def fr(valores):
@@ -137,6 +138,31 @@ class TestS907GaussSeidel(unittest.TestCase):
         r = radio_espectral(self.A, self.b, GAUSS_SEIDEL)
         self.assertAlmostEqual(r.rho, 0.9351, places=4)              # lámina p. 7: λ₁ = 0,9351
         self.assertLess(r.rho, 1)
+
+
+class TestS830MinimosCuadrados(unittest.TestCase):
+    """S8-30/09 pp. 6-7 (imágenes revisadas): A = [[1,3],[3,−2],[−2,5]], b = (−1, 8, −8)."""
+
+    A = [[1, 3], [3, -2], [-2, 5]]
+    b = [-1, 8, -8]
+
+    def test_sistema_no_tiene_solucion_exacta_y_ecuaciones_normales(self):
+        # Lámina p. 6: el sistema A x = b no tiene solución exacta (b no está en Col(A)).
+        r = minimos_cuadrados(self.A, self.b)
+        self.assertFalse(r.b_en_espacio_columna)
+        self.assertEqual(r.AtA, fm([[14, -13], [-13, 38]]))           # lámina p. 7
+        self.assertEqual(r.Atb, fr([39, -59]))                         # lámina p. 7
+
+    def test_cramer_determinantes_de_la_lamina(self):
+        # Lámina p. 7: |AᵀA| = 363; |A_x| = 715; |A_y| = −319.
+        c = cramer([[F(14), F(-13)], [F(-13), F(38)]], fr([39, -59]))
+        self.assertEqual(c["det"], 363)
+        self.assertEqual(c["dets"], [715, -319])
+        self.assertEqual(c["solucion"], fr([F(65, 33), F(-29, 33)]))   # Sol = {(65/33, −29/33)}
+
+    def test_solucion_por_gauss_coincide_con_cramer(self):
+        r = minimos_cuadrados(self.A, self.b)
+        self.assertEqual(r.solucion, fr([F(65, 33), F(-29, 33)]))
 
 
 if __name__ == "__main__":

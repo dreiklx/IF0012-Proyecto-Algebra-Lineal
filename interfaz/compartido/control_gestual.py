@@ -28,8 +28,9 @@ OBJETIVOS = {
     "3d": "Gráfica 3D · Módulo I (planos)",
     "2d": "Gráfica 2D · Módulo IV (convergencia)",
     "2d_m2": "Gráfica de normas · Módulo II",
+    "2d_m3": "Gráfica de mínimos cuadrados · Módulo III",
 }
-TIPOS_2D = ("2d", "2d_m2")
+TIPOS_2D = ("2d", "2d_m2", "2d_m3")
 
 GUIA = [
     ("✋ Palma abierta (½ s)", "activa el control y calibra la pinza con su mano"),
