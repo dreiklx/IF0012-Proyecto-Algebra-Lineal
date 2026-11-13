@@ -109,17 +109,11 @@ def comparar(leer_todo, bloqueado=False):
                         tolerancia=base.tolerancia, k_max=base.k_max,
                         n_iteraciones=base.n_iteraciones, omega=w)
                     r = ejecutar(datos["A"], datos["b"], config)
-                    try:
-                        rho = radio_espectral(datos["A"], datos["b"], SOR, w).rho
-                    except (ErrorEntrada, ErrorMatriz):
-                        rho = None
-                    # st.table: sus encabezados sí renderizan LaTeX (ρ(T_ω) con subíndice)
                     filas.append({r"$\omega$": formatear_numero(w), "Iteraciones": r.k_final,
                                   "Motivo": notacion.motivo(r.codigo),
-                                  f"{R_K.md()} final": "—" if r.r_final is None else formatear_numero(r.r_final, 6),
-                                  r"$\rho(T_\omega)$": "—" if rho is None else formatear_numero(rho, 6)})
+                                  f"{R_K.md()} final": "—" if r.r_final is None else formatear_numero(r.r_final, 6)})
                 st.table(filas)
-                st.caption(r"Cuanto menor es $\rho(T_\omega)$, más rápida es la convergencia asintótica. "
+                st.caption("ρ(T_ω) no se calcula: la matriz de iteración de SOR no está en los materiales del curso. "
                            "Con ω = 1, SOR coincide con Gauss-Seidel.")
 
 

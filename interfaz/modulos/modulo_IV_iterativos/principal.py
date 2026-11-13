@@ -66,7 +66,7 @@ def mostrar():
         ("A", "T<sub>J</sub>, T<sub>GS</sub> y ρ(T) por det(T − λI)", "S9-07/10 pp. 3-7"),
         ("B", "Tabla k, x⁽ᵏ⁾, error; motivo; comparación; gráfica", "OFICIAL p. 2"),
         ("C", "CSR y precondicionador M = D", "Incentivos, OFICIAL p. 5; S9-05/10"),
-        ("C", "T de SOR, Faddeev-LeVerrier, Durand-Kerner, Richardson", "Extensiones no vistas en clase"),
+        ("C", "Sin extensiones matemáticas: ρ(T) solo con Sarrus y fórmula cuadrática; ρ no se calcula para SOR", "Retirados: Richardson, Faddeev-LeVerrier, Durand-Kerner, matriz de SOR"),
     ])
 
     seccion("1", "Sistema A x = b", "A cuadrada, con diagonal no nula")

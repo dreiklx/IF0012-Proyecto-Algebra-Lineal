@@ -17,7 +17,6 @@ from algebra.modulo_II_condicionamiento.condicion import (
 from algebra.modulo_I_sistemas.directos import (
     INCONSISTENTE,
     INFINITAS,
-    PIVOTEO_PARCIAL,
     UNICA,
     determinante,
     inversa_gauss_jordan,
@@ -55,7 +54,7 @@ for _ in range(1500):
     b=[F(random.randint(-3,3)) for _ in range(m)]
     rA=rango(A); rAb=rango([A[i]+[b[i]] for i in range(m)])
     esperado = INCONSISTENTE if rA<rAb else (UNICA if rA==n else INFINITAS)
-    for res in (resolver_gauss(A,b), resolver_gauss_jordan(A,b), resolver_gauss(A,b,PIVOTEO_PARCIAL)):
+    for res in (resolver_gauss(A,b), resolver_gauss_jordan(A,b)):
         casos+=1
         ok = res.clasificacion==esperado and res.rango_A==rA and res.rango_aumentada==rAb
         if esperado==UNICA: ok = ok and mul(A,res.solucion)==b

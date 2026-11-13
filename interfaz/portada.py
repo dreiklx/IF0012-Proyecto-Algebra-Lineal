@@ -50,9 +50,9 @@ INCENTIVOS = [
      "Editor de matrices con validación previa, ejemplos del curso precargados, ayudas en cada "
      "campo, sugerencia de reordenamiento y gráficas interactivas.",
      "Todos los módulos; I → «Interpretación geométrica»"),
-    ("Extensión matemática", "hasta 1 %", nav.ITERATIVOS,
-     "Radio espectral con autovalores complejos (Faddeev-LeVerrier y Durand-Kerner), "
-     "decisiones exactas, matriz de iteración de SOR y Richardson (extensión no vista en clase).",
+    ("Extensión matemática", "no reclamada", nav.ITERATIVOS,
+     "Retiradas por fidelidad académica: Richardson, Faddeev-LeVerrier, Durand-Kerner, matriz de SOR "
+     "y pivoteo parcial. ρ(T) se calcula solo con Sarrus y fórmula cuadrática.",
      "IV → «Convergencia: dominancia y radio espectral»"),
 ]
 
@@ -140,8 +140,8 @@ def mostrar():
         '<div class="nota"><b>Procedencia de cada procedimiento.</b> En cada módulo, los distintivos '
         '«Cat.» indican de dónde sale lo que se calcula: <b>Cat. A</b>, visto en clase (con la página '
         'del PDF al pasar el cursor); <b>Cat. B</b>, exigido por el enunciado del proyecto; <b>Cat. C</b>, '
-        'extensión o incentivo no visto en clase (por ejemplo Richardson, Faddeev-LeVerrier y '
-        'Durand-Kerner); <b>Cat. D</b>, sin respaldo en el material.</div>', unsafe_allow_html=True)
+        'extensión no visto en clase (en esta versión no queda ninguna activa); <b>Cat. D</b>, sin respaldo '
+        'en el material.</div>', unsafe_allow_html=True)
 
     st.markdown('<h2 class="rotulo">Cómo introducir los datos</h2>', unsafe_allow_html=True)
     c1, c2 = st.columns([3, 2], gap="large")

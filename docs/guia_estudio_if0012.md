@@ -1,3 +1,5 @@
+> **OBSOLETO (13-nov-2026).** Este documento describe procedimientos que se retiraron de Ax por fidelidad académica (Richardson, Faddeev-LeVerrier, Durand-Kerner, matriz de SOR, pivoteo parcial). Estado vigente: `docs/guia_estudio_express.md` y `docs/auditoria/matriz_fidelidad_academica.md`.
+
 # Guía de estudio del proyecto Ax — IF0012 Álgebra Lineal
 
 **Versión:** 11-nov-2026.

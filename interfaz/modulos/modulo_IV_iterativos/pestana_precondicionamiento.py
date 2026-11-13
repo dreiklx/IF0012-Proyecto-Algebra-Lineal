@@ -44,7 +44,6 @@ def precondicionamiento(leer_todo, bloqueado=False):
     st.latex(r"M = " + latex_matriz(r.M) + r",\quad B = M^{-1}A = " + latex_matriz(r.B)
              + r",\quad \tilde b = M^{-1}b = " + latex_vector(r.b_tilde))
     clasicos = [f for f in r.comparaciones if f.metodo in METODOS]
-    richardson = [f for f in r.comparaciones if f.metodo not in METODOS]
     with tarjeta_resultado("precondicionador"):
         identicas = all(f.T_identicas for f in clasicos)
         chips = [("Jacobi, GS y SOR: T y c idénticas (exacto)" if identicas else
@@ -53,15 +52,11 @@ def precondicionamiento(leer_todo, bloqueado=False):
             chips.append(("κ disminuye" if r.kappa_B < r.kappa_A else
                           ("κ aumenta" if r.kappa_B > r.kappa_A else "κ no cambia"),
                           "ok" if r.kappa_B < r.kappa_A else ("aviso" if r.kappa_B > r.kappa_A else "")))
-        for f in richardson:
-            chips.append((f"Richardson: {notacion.motivo(f.original.codigo)} → "
-                          f"{notacion.motivo(f.precondicionado.codigo).lower()}",
-                          "ok" if f.precondicionado.criterio_cumplido else "aviso"))
         insignias(chips)
         c1, c2 = st.columns(2)
         c1.metric(r"$\kappa_\infty(A)$", "singular" if r.kappa_A is None else formatear_numero(r.kappa_A))
         c2.metric(r"$\kappa_\infty(D^{-1}A)$", "singular" if r.kappa_B is None else formatear_numero(r.kappa_B))
-    if r.analisis_A is not None:
+    if r.analisis_A is not None and r.analisis_A.autovalores is not None:
         st.table([{"Matriz": nombre,
                    "Autovalores": ", ".join(formatear_numero(z.real if z.imag == 0 else z, 6)
                                             for z in a.autovalores),
@@ -85,12 +80,6 @@ def precondicionamiento(leer_todo, bloqueado=False):
     st.dataframe(filas, hide_index=True, width="stretch")
     for texto in r.conclusiones:
         st.info("💡 " + notacion.md(texto))
-    st.warning("**Extensión no vista en clase — método de Richardson.** "
-               r"La fila «Richardson» ($x^{(k+1)} = x^{(k)} + (b - Ax^{(k)})$, matriz de iteración $I - A$) no es uno de los "
-               "métodos del enunciado ni aparece en los PDF del curso: se incluye como herramienta "
-               "de demostración, porque es el método estacionario más simple sobre el que M = D sí "
-               "tiene efecto. Richardson precondicionado con M = D es exactamente Jacobi. La lámina "
-               "de la diapositiva 19 (S9-05/10 p. 23) muestra una mejora para Jacobi que no se puede "
-               "reproducir, porque Jacobi, Gauss-Seidel y SOR ya están normalizados por la diagonal.",
-               icon="🧪")
+    st.caption("Lámina S9-05/10 p. 23: la afirmación de que M = D acelera Jacobi no se reproduce: con M = D "
+               "las iteraciones son idénticas (ver la columna «¿T y c idénticas?»).")
     mostrar_interactiva(interactivas.precondicionador(r.comparaciones), "precondicionador")

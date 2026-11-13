@@ -1,55 +1,86 @@
-"""Módulo IV (convergencia) — Polinomio característico y sus raíces.
+"""Módulo IV (convergencia) — Polinomio característico y sus raíces, solo con procedimientos de clase.
 
-EXTENSIONES NO VISTAS EN CLASE (Cat. C).  En clase det(T - λI) se desarrolla por
-Sarrus (3x3) y las raíces se obtienen a mano; para cualquier n la aplicación usa:
+  * det(T − λI) se desarrolla por Sarrus (3×3), como en S9-07/10 p. 5 y S9-07/10 p. 6, y en
+    2×2 por la fórmula directa.  Los coeficientes son exactos (fracciones).
+  * Las raíces se obtienen como en clase: se extrae λ = 0 (factor común) y se resuelve el
+    resto de grado 1 o 2 (fórmula cuadrática).
 
-  * Faddeev-LeVerrier: p(λ) = det(λI - T) = λⁿ + c1 λⁿ⁻¹ + ... + cn, exacto con
-    fracciones:
-        M0 = 0;   para k = 1..n:   M_k = T·M_{k-1} + c_{k-1}·I,   c_k = -tr(T·M_k) / k
-    Para 3x3 coincide con el desarrollo de clase:
-        det(T - λI) = -λ³ + tr(T) λ² - (suma de menores principales 2x2) λ + det(T).
-  * Raíces:
-      - las raíces λ = 0 se extraen de forma exacta (coeficientes finales nulos);
-      - grado 1 y 2: fórmula directa (cuadrática con raíz compleja si el
-        discriminante es negativo); con fracciones, la decisión |λ| < 1 es exacta
-        (condiciones de Schur-Cohn: grado 1 |c1| < 1; grado 2 |c2| < 1 y |c1| < 1 + c2);
-      - grado >= 3: método de Durand-Kerner, que aproxima a la vez todas las raíces
-        complejas:  z_i <- z_i - p(z_i) / Π_{j≠i} (z_i - z_j).
-        No tiene garantía teórica de convergencia global: espectral.py verifica cada
-        resultado (|p(λ)| pequeño, suma de raíces = traza) y avisa si falla o si hay
-        raíces casi repetidas (con raíces múltiples la precisión disminuye).
+Para n ≥ 4, o si el polinomio restante tiene grado ≥ 3 (sin factorización elemental), el
+radio espectral no se calcula: OFICIAL p. 2 exige ρ(T) «cuando el procedimiento estudiado lo
+permita».  No se usan métodos numéricos de búsqueda de raíces.
 """
 
-import cmath
 import math
 from fractions import Fraction
 
 from algebra.compartido.exactos import a_fraccion
-from algebra.compartido.matriz import identidad, multiplicar_matrices, validar_cuadrada
+from algebra.compartido.matriz import validar_cuadrada
 from algebra.compartido.validacion import formatear_numero
-from algebra.modulo_IV_iterativos.matriz_iteracion import escalar, sumar
 
-UMBRAL_RAICES_CERCANAS = 1e-6  # raíces más cercanas que esto: posible raíz múltiple
-AVISO_CASI_REPETIDOS = ("Hay autovalores casi repetidos: con raíces múltiples la "
-                        "precisión numérica disminuye.")
+N_MAX_CARACTERISTICO = 3   # Sarrus: solo matrices 2×2 y 3×3 (procedimiento de clase)
+
+
+class ErrorNoCalculable(ValueError):
+    """El procedimiento del curso no permite obtener el polinomio o sus raíces."""
+
+
+# --- polinomios con coeficientes exactos: lista [a0, a1, ...] de menor a mayor grado ---
+
+def _pmul(p, q):
+    r = [Fraction(0)] * (len(p) + len(q) - 1)
+    for i, a in enumerate(p):
+        for j, b in enumerate(q):
+            r[i + j] += a * b
+    return r
+
+
+def _padd(p, q, signo=1):
+    n = max(len(p), len(q))
+    p = p + [Fraction(0)] * (n - len(p))
+    q = q + [Fraction(0)] * (n - len(q))
+    return [a + signo * b for a, b in zip(p, q)]
+
+
+def _sarrus(M):
+    """Regla de Sarrus para una matriz 3×3 con entradas polinomiales."""
+    t1 = _pmul(_pmul(M[0][0], M[1][1]), M[2][2])
+    t2 = _pmul(_pmul(M[0][1], M[1][2]), M[2][0])
+    t3 = _pmul(_pmul(M[0][2], M[1][0]), M[2][1])
+    s1 = _pmul(_pmul(M[0][2], M[1][1]), M[2][0])
+    s2 = _pmul(_pmul(M[0][0], M[1][2]), M[2][1])
+    s3 = _pmul(_pmul(M[0][1], M[1][0]), M[2][2])
+    return _padd(_padd(_padd(t1, t2), t3), _padd(_padd(s1, s2), s3), -1)
 
 
 def polinomio_caracteristico(T):
-    """Coeficientes [1, c1, ..., cn] de p(λ) = det(λI - T), exactos."""
+    """Coeficientes [1, c1, ..., cn] de p(λ) = det(λI − T) en orden de grado descendente.
+
+    Calculado con Sarrus (3×3) o con la fórmula de 2×2: det(T − λI) = (−1)ⁿ p(λ)."""
     n = validar_cuadrada(T, "matriz T")
-    T_ex = [[a_fraccion(v) for v in fila] for fila in T]
-    I = [[Fraction(v) for v in fila] for fila in identidad(n)]
-    coeficientes = [Fraction(1)]
-    M = [[Fraction(0)] * n for _ in range(n)]
-    for k in range(1, n + 1):
-        M = sumar(multiplicar_matrices(T_ex, M), escalar(coeficientes[-1], I))
-        TM = multiplicar_matrices(T_ex, M)
-        traza = sum(TM[i][i] for i in range(n))
-        coeficientes.append(-traza / k)
-    return coeficientes
+    if n > N_MAX_CARACTERISTICO:
+        raise ErrorNoCalculable(
+            f"Para n > {N_MAX_CARACTERISTICO} el polinomio característico no se obtiene con "
+            "el procedimiento del curso (Sarrus solo cubre 2×2 y 3×3).")
+    M = [[[a_fraccion(T[i][j]), Fraction(0)] if i != j else [a_fraccion(T[i][j]), Fraction(-1)]
+          for j in range(n)] for i in range(n)]
+    if n == 1:
+        det = M[0][0]
+    elif n == 2:
+        det = _padd(_pmul(M[0][0], M[1][1]), _pmul(M[0][1], M[1][0]), -1)
+    else:
+        det = _sarrus(M)
+    while len(det) > 1 and det[-1] == 0:
+        det.pop()
+    # det(T − λI) = (−1)ⁿ p(λ): se normaliza a p mónico de grado n, en orden descendente.
+    signo = -1 if n % 2 else 1
+    mon = [Fraction(signo) * c for c in reversed(det)]
+    if mon[0] != 1:
+        mon = [c / mon[0] for c in mon]
+    return mon
+
 
 def texto_polinomio_curso(coeficientes):
-    """Escribe det(T - λI) = (-1)ⁿ p(λ) como en los apuntes (por ejemplo -λ³ + ...)."""
+    """Escribe det(T − λI) como en los apuntes, por ejemplo −λ³ − (4/9)λ + 4/3."""
     n = len(coeficientes) - 1
     signo = -1 if n % 2 else 1
     terminos = []
@@ -68,112 +99,45 @@ def texto_polinomio_curso(coeficientes):
     resto = "".join(f" {s} {t}" for s, t in terminos[1:])
     return f"det(T − λI) = {primero}{resto}"
 
+
 def _superindice(n):
     return str(n).translate(str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹"))
 
+
 def evaluar(coeficientes, z):
-    """Evalúa el polinomio en z por el esquema de Horner."""
+    """Evalúa el polinomio en z por Horner (solo para verificar raíces ya calculadas)."""
     valor = 0
     for c in coeficientes:
         valor = valor * z + c
     return valor
 
-def durand_kerner(coeficientes, max_iter=2000, tol=1e-12):
-    """Aproxima todas las raíces de un polinomio mónico de grado >= 1.
-
-    Devuelve (raices, convergio).  coeficientes: [1, c1, ..., cd] (float o Fraction).
-
-    La tolerancia relativa 1e-12 es alcanzable con raíces simples: al evaluar el
-    polinomio en punto flotante las correcciones se estancan en un ruido de
-    ~1e-15, por lo que una tolerancia de 1e-15 fallaba aleatoriamente (defecto
-    corregido en la auditoría final).  Con raíces múltiples la convergencia es
-    lenta y la precisión baja a ~eps^(1/m): no se alcanza 1e-12 y se informa.
-    """
-    c = [complex(float(v)) for v in coeficientes]
-    d = len(c) - 1
-    cota = 1 + max(abs(v) for v in c[1:])        # todas las raíces cumplen |z| <= cota
-    semilla = complex(0.4, 0.9)
-    z = [cota * 0.5 * semilla ** k for k in range(d)]
-    for _ in range(max_iter):
-        mayor_cambio = 0.0
-        for i in range(d):
-            producto = complex(1)
-            for j in range(d):
-                if j != i:
-                    producto *= (z[i] - z[j])
-            if producto == 0:
-                producto = complex(1e-300)
-            correccion = evaluar(c, z[i]) / producto
-            z[i] -= correccion
-            mayor_cambio = max(mayor_cambio, abs(correccion))
-        if mayor_cambio <= tol * max(1.0, max(abs(v) for v in z)):
-            return z, True
-    return z, False
-
-def _limpiar(z, escala):
-    """Anula partes imaginarias o reales despreciables (ruido de redondeo)."""
-    real, imag = z.real, z.imag
-    if abs(imag) < 1e-12 * escala:
-        imag = 0.0
-    if abs(real) < 1e-12 * escala:
-        real = 0.0
-    return complex(real, imag)
-
-def _schur_cohn(reducido):
-    """Decide de forma exacta si todas las raíces del polinomio mónico de grado
-    <= 2 cumplen |λ| < 1.  Devuelve True/False."""
-    if len(reducido) == 2:
-        return abs(reducido[1]) < 1
-    c1, c2 = reducido[1], reducido[2]
-    return abs(c2) < 1 and abs(c1) < 1 + c2
 
 def raices(coeficientes):
-    """Calcula las raíces de p(λ) = det(λI - T).
+    """Raíces de p(λ) con los procedimientos del curso.
 
-    Devuelve (autovalores, multiplicidad_cero, fiable, advertencias, decision_exacta)
-    donde decision_exacta es True/False (todas |λ|<1) si se pudo decidir exactamente,
-    o None.
+    Devuelve (autovalores, multiplicidad_cero) si se pueden obtener, o (None, ceros) si el
+    polinomio restante tiene grado ≥ 3 sin factorización elemental.
     """
-    advertencias = []
     reducido = list(coeficientes)
     ceros = 0
-    while len(reducido) > 1 and reducido[-1] == 0:   # extracción exacta de λ = 0
+    while len(reducido) > 1 and reducido[-1] == 0:      # factor común λ
         reducido.pop()
         ceros += 1
     grado = len(reducido) - 1
     autovalores = [complex(0)] * ceros
-    fiable = True
-    decision = None
     if grado == 0:
-        return autovalores, ceros, True, advertencias, True
-    if grado <= 2 and all(isinstance(v, Fraction) for v in reducido):
-        decision = _schur_cohn(reducido)
+        return autovalores, ceros
     if grado == 1:
         autovalores.append(complex(float(-reducido[1])))
-    elif grado == 2:
+        return autovalores, ceros
+    if grado == 2:
         c1, c2 = reducido[1], reducido[2]
-        discriminante = c1 * c1 - 4 * c2       # exacto
-        raiz = cmath.sqrt(float(discriminante)) if discriminante >= 0 else complex(0, math.sqrt(float(-discriminante)))
-        autovalores.append((-float(c1) + raiz) / 2)
-        autovalores.append((-float(c1) - raiz) / 2)
-        if discriminante == 0:
-            advertencias.append("Raíz doble (discriminante = 0).")
-    else:
-        aproximadas, convergio = durand_kerner(reducido)
-        if not convergio:
-            fiable = False
-            advertencias.append(
-                "El método de Durand-Kerner no alcanzó la precisión pedida: los "
-                "autovalores pueden ser imprecisos (lo más probable es un autovalor "
-                "múltiple, para el que la precisión numérica disminuye).")
-        escala = max(1.0, max(abs(z) for z in aproximadas))
-        autovalores.extend(_limpiar(z, escala) for z in aproximadas)
-        for i in range(len(aproximadas)):
-            for j in range(i + 1, len(aproximadas)):
-                if abs(aproximadas[i] - aproximadas[j]) < UMBRAL_RAICES_CERCANAS * escala:
-                    advertencias.append(AVISO_CASI_REPETIDOS)
-                    break
-            else:
-                continue
-            break
-    return autovalores, ceros, fiable, advertencias, decision
+        discriminante = c1 * c1 - 4 * c2                   # exacto
+        if discriminante >= 0:
+            raiz = math.sqrt(float(discriminante))
+            autovalores += [complex((-float(c1) + raiz) / 2), complex((-float(c1) - raiz) / 2)]
+        else:
+            parte = math.sqrt(float(-discriminante))
+            autovalores += [complex(-float(c1) / 2, parte / 2), complex(-float(c1) / 2, -parte / 2)]
+        return autovalores, ceros
+    return None, ceros

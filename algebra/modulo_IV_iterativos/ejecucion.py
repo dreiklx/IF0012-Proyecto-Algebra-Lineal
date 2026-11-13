@@ -29,7 +29,6 @@ from algebra.modulo_IV_iterativos.dispersas import (
     a_csr,
     paso_gauss_seidel_csr,
     paso_jacobi_csr,
-    paso_richardson_csr,
     paso_sor_csr,
     residuo_inf_csr,
 )
@@ -37,11 +36,9 @@ from algebra.modulo_IV_iterativos.metodos import (
     GAUSS_SEIDEL,
     JACOBI,
     METODOS,
-    RICHARDSON,
     SOR,
     paso_gauss_seidel,
     paso_jacobi,
-    paso_richardson,
     paso_sor,
 )
 
@@ -138,10 +135,8 @@ class ResultadoIterativo:
         return self.ultima.r if self.ultima else None
 
 
-PASOS = {JACOBI: paso_jacobi, GAUSS_SEIDEL: paso_gauss_seidel, SOR: paso_sor,
-         RICHARDSON: paso_richardson}
-PASOS_CSR = {JACOBI: paso_jacobi_csr, GAUSS_SEIDEL: paso_gauss_seidel_csr, SOR: paso_sor_csr,
-             RICHARDSON: paso_richardson_csr}
+PASOS = {JACOBI: paso_jacobi, GAUSS_SEIDEL: paso_gauss_seidel, SOR: paso_sor}
+PASOS_CSR = {JACOBI: paso_jacobi_csr, GAUSS_SEIDEL: paso_gauss_seidel_csr, SOR: paso_sor_csr}
 FORMATOS = ("densa", "csr")
 
 
@@ -271,7 +266,7 @@ def _ejecutar(A, b, config):
     # la copia guarda el x(0) efectivamente usado (por defecto, el vector cero).
     config = replace(config, x0=list(x0))
     n = len(A_f)
-    for i in range(n if config.metodo in METODOS else 0):   # Richardson no divide entre a_ii
+    for i in range(n):
         if A_f[i][i] == 0:
             return ResultadoIterativo(
                 configuracion=config, codigo=DIAGONAL_CERO, criterio_cumplido=None,

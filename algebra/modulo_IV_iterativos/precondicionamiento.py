@@ -12,8 +12,6 @@ Comparación que se implementa (todo con nuestro código, sin bibliotecas):
   2. Autovalores y radio espectral de A y de B (polinomio característico exacto).
   3. Iteraciones de Jacobi, Gauss-Seidel y SOR sobre el sistema original y el
      precondicionado, con la misma configuración, y sus matrices de iteración.
-  4. Iteraciones de Richardson, x ← x + (b − Ax), sobre ambos sistemas
-     (EXTENSIÓN NO VISTA EN CLASE; ver docs/investigacion_richardson.md).
 
 Resultado matemático que la aplicación verifica de forma EXACTA:
   * En B = D⁻¹A la diagonal es I, L̃ = D⁻¹L y Ũ = D⁻¹U, de modo que
@@ -24,31 +22,25 @@ Resultado matemático que la aplicación verifica de forma EXACTA:
     iteraciones de Jacobi, Gauss-Seidel ni SOR (son invariantes al escalado de
     las filas).  Las tablas de la diapositiva 19, que muestran una mejora para
     Jacobi, no se pueden reproducir: la aplicación lo muestra con evidencia.
-  * Donde M = D sí tiene efecto es en el condicionamiento (κ), en el residuo
-    (r̃ = D⁻¹r) y en un método que no se escala solo, como Richardson:
-        T_R = I − A   frente a   T̃_R = I − D⁻¹A = T_J.
-    Richardson precondicionado con M = D es exactamente Jacobi.
+  * M = D sí cambia el condicionamiento κ∞ (Módulo II). Richardson, que aparecía en versiones
+    anteriores, se retiró: no está en los materiales del curso.
 """
 
 from dataclasses import dataclass, field, replace
 from fractions import Fraction
 
 from algebra.compartido.exactos import a_fraccion
-from algebra.compartido.matriz import identidad, validar_cuadrada, validar_vector
+from algebra.compartido.matriz import validar_cuadrada, validar_vector
 from algebra.compartido.validacion import ErrorEntrada, formatear_numero
 from algebra.modulo_II_condicionamiento.condicion import numero_condicion_infinito
 from algebra.modulo_IV_iterativos.ejecucion import (
     ConfiguracionIterativa,
     ejecutar,
 )
-from algebra.modulo_IV_iterativos.espectral import N_MAX_ESPECTRAL, analizar_matriz, concluir
+from algebra.modulo_IV_iterativos.espectral import analizar_matriz, radio_espectral
 from algebra.modulo_IV_iterativos.matriz_iteracion import matriz_iteracion
-from algebra.modulo_IV_iterativos.polinomio_raices import AVISO_CASI_REPETIDOS
-from algebra.modulo_IV_iterativos.metodos import (
-    METODOS,
-    RICHARDSON,
-    SOR,
-)
+from algebra.modulo_IV_iterativos.metodos import GAUSS_SEIDEL, JACOBI, SOR
+from algebra.modulo_IV_iterativos.polinomio_raices import N_MAX_CARACTERISTICO, ErrorNoCalculable
 
 
 @dataclass
@@ -97,18 +89,9 @@ def precondicionar_diagonal(A, b):
 
 
 def _rho(A, b, metodo, omega):
-    """ρ de la matriz de iteración del método y su conclusión (o (None, None) si n > 8)."""
-    n = len(A)
-    if n > N_MAX_ESPECTRAL:
-        return None, None
-    if metodo == RICHARDSON:
-        I = identidad(n)
-        T = [[I[i][j] - a_fraccion(A[i][j]) for j in range(n)] for i in range(n)]
-    else:
-        T = matriz_iteracion(A, b, metodo, omega).T
-    analisis = analizar_matriz(T)
-    return analisis.rho, concluir(analisis.rho, analisis.fiable, analisis.decision,
-                                  AVISO_CASI_REPETIDOS in analisis.advertencias)
+    """ρ(T) y su conclusión con el procedimiento del curso (None si no se puede calcular)."""
+    r = radio_espectral(A, b, metodo, omega)
+    return r.rho, r.conclusion
 
 
 def _mismas_iteraciones(r1, r2):
@@ -125,7 +108,7 @@ def analizar_precondicionador(A, b, configuracion=None, omega=Fraction(6, 5)):
     """Compara el sistema original con el precondicionado por M = D (ver docstring del módulo).
 
     `configuracion` (ConfiguracionIterativa) fija criterio, ε, k_max, N y x⁽⁰⁾; el método
-    se sustituye por cada uno de Jacobi, Gauss-Seidel, SOR (con `omega`) y Richardson."""
+    se sustituye por Jacobi, Gauss-Seidel y SOR (con `omega`)."""
     M, M_inv, B, b_tilde = precondicionar_diagonal(A, b)
     A_ex = [[a_fraccion(v) for v in fila] for fila in A]
     b_ex = [a_fraccion(v) for v in b]
@@ -136,20 +119,22 @@ def analizar_precondicionador(A, b, configuracion=None, omega=Fraction(6, 5)):
     cond_A = numero_condicion_infinito(A_ex)
     cond_B = numero_condicion_infinito(B)
     resultado.kappa_A, resultado.kappa_B = cond_A.kappa, cond_B.kappa
-    if n <= N_MAX_ESPECTRAL:
-        resultado.analisis_A = analizar_matriz(A_ex)
-        resultado.analisis_B = analizar_matriz(B)
+    if n <= N_MAX_CARACTERISTICO:
+        try:
+            resultado.analisis_A = analizar_matriz(A_ex)
+            resultado.analisis_B = analizar_matriz(B)
+        except ErrorNoCalculable:
+            resultado.analisis_A = resultado.analisis_B = None
 
-    for metodo in METODOS + (RICHARDSON,):
+    for metodo in (JACOBI, GAUSS_SEIDEL, SOR):
         config = replace(base, metodo=metodo, omega=omega)
         fila = ComparacionMetodo(metodo=metodo, original=ejecutar(A_ex, b_ex, config),
                                  precondicionado=ejecutar(B, b_tilde, config))
         fila.rho_original, fila.conclusion_original = _rho(A_ex, b_ex, metodo, omega)
         fila.rho_precondicionado, fila.conclusion_precondicionado = _rho(B, b_tilde, metodo, omega)
-        if metodo != RICHARDSON:
-            w = omega if metodo == SOR else None
-            original = matriz_iteracion(A_ex, b_ex, metodo, w)
-            nueva = matriz_iteracion(B, b_tilde, metodo, w)
+        if metodo != SOR:          # la matriz de iteración de SOR no está en el curso
+            original = matriz_iteracion(A_ex, b_ex, metodo)
+            nueva = matriz_iteracion(B, b_tilde, metodo)
             fila.T_identicas = original.T == nueva.T and original.c == nueva.c
         fila.mismas_iteraciones = _mismas_iteraciones(fila.original, fila.precondicionado)
         resultado.comparaciones.append(fila)
@@ -174,24 +159,11 @@ def _conclusiones(r):
                if efecto == "no cambia" else ""))
     else:
         textos.append("A es singular: el número de condición no está definido.")
-    clasicos = [f for f in r.comparaciones if f.metodo != RICHARDSON]
+    clasicos = [f for f in r.comparaciones if f.metodo != SOR]
     if all(f.T_identicas for f in clasicos):
         textos.append(
             "Jacobi, Gauss-Seidel y SOR: la matriz de iteración T y el vector c del sistema "
             "precondicionado son EXACTAMENTE los mismos que los del original (verificado con "
             "fracciones). Por eso las iteraciones x⁽ᵏ⁾ coinciden: M = D no acelera estos "
             "métodos, porque ya están normalizados por la diagonal.")
-    richardson = next(f for f in r.comparaciones if f.metodo == RICHARDSON)
-    if richardson.rho_original is not None:
-        textos.append(
-            f"Richardson: ρ(I − A) = {formatear_numero(richardson.rho_original)} sin "
-            f"precondicionar y ρ(I − D⁻¹A) = {formatear_numero(richardson.rho_precondicionado)} "
-            f"con M = D (es la matriz de Jacobi). Aquí el precondicionador sí cambia la "
-            f"convergencia: {richardson.original.k_final} iteraciones "
-            f"({richardson.original.codigo}) frente a {richardson.precondicionado.k_final} "
-            f"({richardson.precondicionado.codigo}).")
-    if r.analisis_B is not None:
-        textos.append(
-            "Valores propios: los de B = D⁻¹A cumplen μ = 1 − λ(T_J); quedan agrupados cerca "
-            "de 1 exactamente cuando ρ(T_J) es pequeño, que es lo que ilustra la lámina.")
     return textos

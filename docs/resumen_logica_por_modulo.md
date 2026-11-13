@@ -1,3 +1,5 @@
+> **OBSOLETO (13-nov-2026).** Este documento describe procedimientos que se retiraron de Ax por fidelidad académica (Richardson, Faddeev-LeVerrier, Durand-Kerner, matriz de SOR, pivoteo parcial). Estado vigente: `docs/guia_estudio_express.md` y `docs/auditoria/matriz_fidelidad_academica.md`.
+
 # Resumen de la lógica por módulo — material de estudio para la defensa
 
 **Versión:** 10-nov-2026 (rutas de la nueva organización). Es la versión condensada de [guia_defensa_equipo.md](guia_defensa_equipo.md); allí están las demostraciones y las 35 preguntas con su respuesta completa.

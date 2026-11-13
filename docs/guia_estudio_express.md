@@ -143,7 +143,6 @@ Con A = D + L + U (L y U estrictamente triangulares):
 | Jacobi | xᵢ⁽ᵏ⁺¹⁾ = (bᵢ − Σ_{j≠i} aᵢⱼxⱼ⁽ᵏ⁾)/aᵢᵢ |
 | Gauss-Seidel | igual, pero usa xⱼ⁽ᵏ⁺¹⁾ para j < i en cuanto están calculados |
 | SOR | xᵢ⁽ᵏ⁺¹⁾ = (1 − ω)xᵢ⁽ᵏ⁾ + ω·xᵢ^GS. ω = 1 → Gauss-Seidel; 0 < ω < 1 subrelajación; 1 < ω < 2 sobrerrelajación |
-| Richardson (**C**) | x⁽ᵏ⁺¹⁾ = x⁽ᵏ⁾ + (b − Ax⁽ᵏ⁾) |
 
 **Despejes:** cada método se muestra despejando cada incógnita (S8-30/09 p. 19: x₁⁽ᵏ⁺¹⁾ = (22 − 2x₂⁽ᵏ⁾ − x₃⁽ᵏ⁾)/6).
 
@@ -171,11 +170,11 @@ Siempre hay un máximo k_max. El motivo de parada sale del código de terminaci�
 - **Comparación:** mismos datos para los tres métodos; error final ‖x⁽ᵏ⁾ − x*‖∞ en escala logarítmica (S9-05/10 p. 17).
 
 **Código:** `algebra/modulo_IV_iterativos/`
-- `metodos.py`: `paso_jacobi`, `paso_gauss_seidel`, `paso_sor`, `paso_richardson`.
+- `metodos.py`: `paso_jacobi`, `paso_gauss_seidel`, `paso_sor` (las ecuaciones por componentes de S8-30/09).
 - `ejecucion.py`: `ConfiguracionIterativa`, `ejecutar` (bucle común, criterios; no lanza excepciones).
 - `convergencia.py`: `dominancia_diagonal`, `reordenamiento_dominante`.
 - `matriz_iteracion.py`: `descomponer`, `matriz_iteracion`, `desarrollo_sarrus`.
-- `polinomio_raices.py`: Faddeev-LeVerrier y Durand-Kerner (C).
+- `polinomio_raices.py`: det(T − λI) por Sarrus (3×3) y raíces por factor λ y fórmula cuadrática. Sin extensiones.
 - `espectral.py`: `radio_espectral`, `concluir`.
 - `comparacion.py`: `comparar_metodos`. `dispersas.py` (CSR) y `precondicionamiento.py`: incentivos.
 
@@ -295,10 +294,10 @@ cámara ─► captura.py ─► deteccion.py ─► interpretacion.py ─► mo
 | Incentivo (máx.) | Qué tiene Ax | Cómo demostrarlo |
 |---|---|---|
 | Visualización avanzada (1 %) | Comparación superpuesta, historial explorable, CSV, autovalores, planos 3D | IV → «Comparar»; «Ejecutar» → CSV |
-| Precondicionamiento (1,5 %) | M = D; κ(A) frente a κ(B); T y c **idénticas** en Jacobi, GS y SOR; Richardson ρ 4,618 → 0,405 | IV → «Precondicionamiento» |
+| Precondicionamiento (1,5 %) | M = D; κ(A) frente a κ(B); T y c **idénticas** en Jacobi y GS (exacto; SOR no se verifica: su matriz no está en clase) | IV → «Precondicionamiento» |
 | Matrices dispersas (1 %) | CSR propio; memoria 2·nnz + n + 1; O(nnz) por iteración | IV → casilla «CSR» |
 | Experiencia de usuario (0,5 %) | Editor de rejilla; sugerencia de reordenamiento; distintivos Cat.; control gestual | I → panel de gestos; IV → «Convergencia» |
-| Extensión matemática (1 %) | ρ(T) para n ≤ 8 con complejas; decisiones exactas; T de SOR | IV → «Convergencia» con S9-07/10 |
+| Extensión matemática (1 %) | **No reclamada**: las extensiones (Richardson, Faddeev-LeVerrier, Durand-Kerner, matriz de SOR, pivoteo parcial) se retiraron por fidelidad académica. Impacto: se pierde este incentivo | — |
 
 ---
 
@@ -317,7 +316,7 @@ cámara ─► captura.py ─► deteccion.py ─► interpretacion.py ─► mo
 | 7 | La profesora usó Cramer, ¿por qué Gauss? | El enunciado pide un método directo implementado; Cramer se muestra como verificación |
 | 8 | ¿Por qué GS es más rápido? | Usa cada componente nueva en cuanto la calcula (tridiagonal: 5 frente a 7 iteraciones) |
 | 9 | ¿Qué garantiza convergencia? | ρ(T) < 1 es necesario y suficiente; dominancia diagonal solo suficiente |
-| 10 | ¿Cómo se calcula ρ? | Pasos ①-⑤ de S9-07/10; 3×3 con Sarrus; cualquier n con Faddeev-LeVerrier y Durand-Kerner (C) |
+| 10 | ¿Cómo se calcula ρ? | Pasos ①-⑤ de S9-07/10: T, det(T − λI) por Sarrus (3×3), raíces por factor λ y fórmula cuadrática. Si no se factoriza así, ρ **no se calcula** (OFICIAL p. 2) |
 | 11 | ¿Por qué 1,174 si la hoja dice 0? | La hoja omitió el término 4/3 del polinomio |
 | 12 | ¿Qué hace ω? | Mezcla (1 − ω)x⁽ᵏ⁾ + ω·x^GS. 0 < ω < 2 no garantiza convergencia por sí solo |
 | 13 | ¿Fracciones o float? | Exactas en I-III; float en IV (aproximación por tolerancia) |
@@ -333,11 +332,11 @@ cámara ─► captura.py ─► deteccion.py ─► interpretacion.py ─► mo
 | 23 | ¿Cómo se explora la gráfica de convergencia? | Pantalla completa, clic en punto o deslizador, «Destacar método» |
 | 24 | ¿Se graba la imagen? | No. Se procesa en memoria y se descarta |
 | 25 | ¿Por qué M = D no acelera Jacobi? | D⁻¹A tiene diagonal 1: T̃_J = T_J, iteraciones idénticas |
-| 26 | ¿Richardson se vio en clase? | No. Es extensión (C), rotulada así; con M = D se convierte en Jacobi |
+| 26 | ¿Richardson? | Se retiró: no está en los materiales del curso |
 | 27 | ¿Qué es CSR? | Guarda solo no nulos (valores, columnas, inicio de fila); O(nnz) por iteración |
 
 **Errores que evitar:**
-- Decir que Richardson, Faddeev-LeVerrier o Durand-Kerner se vieron en clase.
+- Decir que ρ se calcula para cualquier matriz: solo con Sarrus (3×3) y fórmula cuadrática.
 - Decir que la dominancia diagonal es **necesaria**.
 - Decir que completar N iteraciones (criterio C) demuestra convergencia.
 - Confundir dₖ, rₖ y el error real eₖ.
@@ -348,8 +347,9 @@ cámara ─► captura.py ─► deteccion.py ─► interpretacion.py ─► mo
 
 **Diferencias clase / extensión:**
 
-| Clase (A) | Extensión (C) |
+| Clase (A) | Sin extensiones activas |
 |---|---|
+| Gauss, Gauss-Jordan, det, Sarrus, κ∞, ecuaciones normales, Jacobi, GS, SOR por componentes, criterios A-C, ρ(T) por Sarrus y fórmula cuadrática, dominancia, M = D (S9-05/10) | Retirados: Richardson, Faddeev-LeVerrier, Durand-Kerner, matriz de SOR, pivoteo parcial |
 | Gauss, Gauss-Jordan, det, Sarrus, κ∞, ecuaciones normales, Jacobi, GS, SOR, criterios A-C, ρ(T) con 3×3, dominancia | Richardson, Faddeev-LeVerrier, Durand-Kerner, ρ para n ≤ 8, pivoteo parcial, CSR, precondicionador, MediaPipe, gráficas 2D de exploración |
 
 **Repaso final:**

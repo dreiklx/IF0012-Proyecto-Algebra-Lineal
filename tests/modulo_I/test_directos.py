@@ -14,7 +14,6 @@ from algebra.modulo_I_sistemas.directos import (
     ErrorSistema,
     INCONSISTENTE,
     INFINITAS,
-    PIVOTEO_PARCIAL,
     UNICA,
     determinante,
     inversa_gauss_jordan,
@@ -74,13 +73,6 @@ class TestSolucionUnica(unittest.TestCase):
         r = resolver_gauss([[1, 1, 1], [1, 1, 2], [1, 2, 1]], [3, 4, 4])
         self.assertEqual(r.solucion, [1, 1, 1])
         self.assertTrue(any("F2 ↔ F3" in p.descripcion for p in r.pasos))
-
-    def test_pivoteo_parcial_misma_solucion(self):
-        A, b = [[1, 1, 1], [2, 1, -1], [-1, 1, 2]], [6, 3, 7]
-        r = resolver_gauss(A, b, pivoteo=PIVOTEO_PARCIAL)
-        self.assertEqual(r.solucion, [F(1, 3), F(4), F(5, 3)])
-        # |2| > |1| en la columna 1 -> el pivoteo parcial intercambia F1 y F2
-        self.assertIn("F1 ↔ F2", r.pasos[1].descripcion)
 
     def test_sobredeterminado_compatible(self):
         # x+y=2, x-y=0, 2x=2 -> (1, 1)
