@@ -265,6 +265,23 @@ def sumas_absolutas_por_fila(A):
     return sumas
 
 
+def sumas_absolutas_por_columna(A):
+    """Suma de valores absolutos de cada columna: [sum_i |a_i1|, ..., sum_i |a_in|].
+
+    Su máximo es la norma 1 (no es la norma del cálculo de κ∞; se usa solo como referencia
+    en la visualización complementaria del Módulo II).
+    """
+    validar_matriz(A)
+    columnas = len(A[0])
+    sumas = []
+    for j in range(columnas):
+        suma_columna = 0
+        for fila in A:
+            suma_columna = suma_columna + abs(fila[j])
+        sumas.append(suma_columna)
+    return sumas
+
+
 def norma_infinito_matriz(A):
     """Devuelve la norma infinito de A: la mayor suma de valores absolutos por fila.
 

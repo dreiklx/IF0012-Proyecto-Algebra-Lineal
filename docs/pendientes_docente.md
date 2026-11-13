@@ -82,7 +82,13 @@ Se usó un solo criterio: si el enunciado oficial (OFICIAL) basta para decidir, 
 - si la docente da también la salida esperada;
 - la fecha y el medio de entrega.
 
-**Búsqueda realizada:** el texto de los 18 PDF de la carpeta del curso (`pdftotext`) y la auditoría visual de las láminas. **No contienen ningún caso obligatorio.** Al 03-nov-2026 se considera **no recibido**.
+**Estado (12-nov-2026):**
+
+- El enunciado **sí contempla** un caso de validación proporcionado por la docente (OFICIAL p. 3, §4; referencias en las páginas 1, 4 y 5 indicadas arriba).
+- El equipo **no ha recibido** ese caso. La docente no lo ha entregado.
+- **No se inventa** un caso ni se atribuye a la profesora. Los casos de la carpeta casos_prueba/ son casos internos de Ax, independientes del caso oficial.
+- **No es un error de implementación** de Ax: es un entregable externo que depende de la docente. Así se documenta en la matriz de rúbrica.
+- Búsqueda: texto de los 18 PDF (`pdftotext`) y OCR de las 457 páginas. Ningún archivo contiene un caso obligatorio.
 
 **Qué hay que hacer cuando llegue** (ya está preparado):
 

@@ -59,7 +59,7 @@ Repaso breve para la defensa. La guía completa (`docs/guia_estudio_if0012.md`) 
 | rango(A) = rango([A \| b]) = n | solución única |
 | rango(A) = rango([A \| b]) < n | infinitas: x = xₚ + t₁v₁ + …, con n − rango variables libres |
 
-**Determinante:** det(A) = (−1)^intercambios × producto de pivotes (S2-19/08 p. 38).
+**Determinante:** las propiedades de S2-19/08 p. 38 (intercambio de filas cambia el signo; sumar un múltiplo no cambia el valor; triangular = producto de la diagonal). De ellas sale det(A) = (−1)^intercambios × producto de pivotes. La fórmula con pivotes es una consecuencia, no una fórmula escrita en esa lámina.
 
 **Código:** `algebra/modulo_I_sistemas/directos.py`
 - `resolver_gauss`, `resolver_gauss_jordan`: entradas del módulo.
@@ -89,6 +89,8 @@ Repaso breve para la defensa. La guía completa (`docs/guia_estudio_if0012.md`) 
 - Cota: ‖Δx‖∞/‖x‖∞ ≤ κ∞(A) · ‖Δb‖∞/‖b‖∞.
 - Perturbación porcentual (interpretación propia, Cat. B): Δbᵢ = (p/100)·bᵢ.
 
+**Visualizaciones complementarias del Módulo II** (no son materia expresamente explicada en clase): (1) determinante como factor de área en 2×2, con la cuadrícula y el paralelogramo de la matriz introducida; área = |det| y área 0 si det = 0; (2) sumas absolutas por fila con la norma ∞ destacada y por columna como referencia de la norma 1; (3) perturbación frente a la cota κ∞·‖Δb‖/‖b‖. No hay extensión 3D. Código: `visualizacion/geometria_modulo_II.py`. Pruebas: `tests/modulo_II/test_visualizaciones.py`.
+
 **Código:** `algebra/modulo_II_condicionamiento/condicion.py`: `numero_condicion_infinito`, `clasificar_kappa`, `construir_delta_b`, `analizar_perturbacion`. Sumas por fila: `algebra/compartido/matriz.py`.
 
 **Ejemplo (S7-21/09 p. 19):** B = [[1, 2], [3, 1]]; ‖B‖∞ = 4; B⁻¹ = [[−1/5, 2/5], [3/5, −1/5]]; ‖B⁻¹‖∞ = 4/5; **κ∞ = 16/5 ≈ 3,2**: sensibilidad baja.
@@ -112,6 +114,8 @@ El enunciado pide un método directo ya implementado (B). **Ax resuelve con Gaus
 - r = b − Ax̂; ‖r‖₂ = √(Σrᵢ²).
 - Aᵀr = 0: el residuo es ortogonal a Col(A). De ahí salen las ecuaciones normales.
 - Recta y = mx + c: matriz de diseño con filas [xᵢ, 1].
+
+**Módulo III, visualización:** la gráfica exigida ya muestra los residuos como segmentos verticales. Además, una tabla con yᵢ, ŷᵢ = m·xᵢ + c y rᵢ = yᵢ − ŷᵢ (complementaria; Σ rᵢ = 0 con intercepto). Si cambian los datos sin recalcular, la interfaz avisa.
 
 **Código:** `algebra/modulo_III_minimos/minimos.py`: `clasificar_forma`, `minimos_cuadrados`, `cramer`, `ajuste_lineal`. **Gráfica obligatoria:** `visualizacion/interactivas.py::ajuste`.
 
@@ -260,6 +264,8 @@ cámara ─► captura.py ─► deteccion.py ─► interpretacion.py ─► mo
 ---
 
 ## H. Rúbrica e incentivos (OFICIAL pp. 4-5)
+
+**Caso obligatorio de validación:** el enunciado lo contempla (OFICIAL p. 3, §4). Lo proporciona la docente y **no lo hemos recibido**. Es un entregable externo, no un error de Ax. No se inventa ni se atribuye a la profesora. Los casos de `casos_prueba/` son internos y no lo sustituyen.
 
 **Requisitos obligatorios:**
 
