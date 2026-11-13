@@ -113,7 +113,7 @@ class TestComparacion(unittest.TestCase):
 class TestOtras(unittest.TestCase):
 
     def test_autovalor_dominante_resaltado(self):
-        esp = radio_espectral(NO_CONVERGE, [9, 9, -2], "Jacobi")
+        esp = radio_espectral([[3, 3, 3], [3, 3, 2], [-3, -2, 3]], [9, 9, -2], "Gauss-Seidel")
         fig = interactivas.autovalores(esp.autovalores, esp.rho)
         puntos = traza(fig, "Autovalores")
         for z, tam in zip(esp.autovalores, puntos.marker.size):

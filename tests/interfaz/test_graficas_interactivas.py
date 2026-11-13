@@ -66,7 +66,7 @@ class TestDatosIdenticos(unittest.TestCase):
                          [referencia_matplotlib.COLORES[m] for m in ("Jacobi", "Gauss-Seidel", "SOR")])
 
     def test_autovalores(self):
-        esp = radio_espectral([[3, 3, 3], [3, 3, 2], [-3, -2, 3]], [9, 9, -2], "Jacobi")
+        esp = radio_espectral([[3, 3, 3], [3, 3, 2], [-3, -2, 3]], [9, 9, -2], "Gauss-Seidel")
         fig = interactivas.autovalores(esp.autovalores, esp.rho)
         puntos = trazas(fig, "Autovalores")[0]
         self.assertEqual(list(puntos.x), [z.real for z in esp.autovalores])
@@ -114,20 +114,6 @@ class TestDatosIdenticos(unittest.TestCase):
         m, c = float(r.pendiente), float(r.intercepto)
         for x, y in zip(recta.x, recta.y):
             self.assertAlmostEqual(y, m * x + c, places=12)
-
-    def test_precondicionador_vista_acotada_pero_datos_completos(self):
-        A = [[4, -1, 0, 0], [-1, 4, -1, 0], [0, -1, 4, -1], [0, 0, -1, 4]]
-        r = analizar_precondicionador(A, [1, 0, 0, 1], ConfiguracionIterativa(tolerancia=1e-4, k_max=60))
-        fig = interactivas.precondicionador(r.comparaciones)
-        rich = trazas(fig, "Richardson (original)")[0]
-        historial = [f for f in r.comparaciones if f.metodo == "Richardson"][0].original.historial
-        self.assertEqual(list(rich.y), [f.d for f in historial if f.d is not None and f.d > 0])
-        self.assertGreater(max(rich.y), interactivas.TOPE_GRAFICA)    # el dato divergente está entero
-        self.assertEqual(fig.layout.yaxis.range[1], 6.0)               # solo la vista inicial se acota
-
-
-@unittest.skipIf(os.environ.get("SIN_APPTEST"), "AppTest desactivado")
-class TestGraficasEnLaAplicacion(unittest.TestCase):
 
     def test_los_modulos_muestran_graficas_plotly(self):
         try:

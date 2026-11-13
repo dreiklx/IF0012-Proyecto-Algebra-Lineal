@@ -6,8 +6,8 @@ Oráculos escritos aparte del núcleo, con semilla fija:
   * B = D⁻¹A y b̃ = D⁻¹b calculados aquí a mano;
   * κ∞ con la inversa por adjunta y determinantes de Leibniz;
   * iteraciones de Jacobi sobre B (bucle propio) comparadas con las del sistema original;
-  * Richardson precondicionado (bucle propio x ← x + D⁻¹(b − Ax)) igual a Jacobi;
-  * ρ(I − A) comparado con la fórmula de Gelfand ‖(I − A)ᵏ‖∞^(1/k)."""
+  * T y c de Jacobi y Gauss-Seidel idénticos con y sin M = D (procedimiento de clase).
+  Richardson se retiró de la aplicación (no aparece en los materiales del curso)."""
 import itertools
 import random
 import sys
@@ -15,7 +15,7 @@ from fractions import Fraction as F
 
 sys.path.insert(0, sys.argv[1] if len(sys.argv) > 1 else ".")
 from algebra.modulo_IV_iterativos.ejecucion import ConfiguracionIterativa
-from algebra.modulo_IV_iterativos.metodos import JACOBI, RICHARDSON
+from algebra.modulo_IV_iterativos.metodos import GAUSS_SEIDEL, JACOBI
 from algebra.modulo_IV_iterativos.precondicionamiento import analizar_precondicionador
 
 random.seed(11)
@@ -72,23 +72,8 @@ for _ in range(150):
     if r.kappa_A != kappa_adjunta(A) or r.kappa_B != kappa_adjunta(B):
         errores.append("κ")
     por_metodo = {f.metodo: f for f in r.comparaciones}
-    if not all(f.T_identicas for f in r.comparaciones if f.metodo != RICHARDSON):
+    if not all(f.T_identicas for f in r.comparaciones if f.metodo in (JACOBI, GAUSS_SEIDEL)):
         errores.append("T distintas")
-    # Richardson precondicionado (bucle propio) = Jacobi del núcleo, iteración a iteración
-    jac = por_metodo[JACOBI].original
-    x = [0.0] * n
-    for fila in jac.historial[1:]:
-        ax = [sum(float(A[i][j]) * x[j] for j in range(n)) for i in range(n)]
-        x = [x[i] + (float(b[i]) - ax[i]) / float(A[i][i]) for i in range(n)]
-        if max(abs(x[i] - fila.x[i]) for i in range(n)) > 1e-9 * max(1.0, max(map(abs, x))):
-            errores.append("Richardson precondicionado ≠ Jacobi")
-            break
-    # ρ(I − A) frente a Gelfand (solo como cota de coherencia con k grande)
-    T = [[float((1 if i == j else 0) - A[i][j]) for j in range(n)] for i in range(n)]
-    gelfand = potencia_norma(T, 64)
-    rho = por_metodo[RICHARDSON].rho_original
-    if rho is not None and abs(gelfand - rho) > 0.08 * max(1.0, rho):
-        errores.append(f"ρ(I−A) {rho} vs Gelfand {gelfand}")
     if errores:
         fallos += 1
         print("FALLO", A, b, errores)

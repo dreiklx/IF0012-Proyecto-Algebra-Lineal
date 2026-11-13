@@ -40,7 +40,6 @@ INFINITAS = "INFINITAS"
 INCONSISTENTE = "INCONSISTENTE"
 
 PIVOTEO_PRIMER_NO_NULO = "primer_no_nulo"
-PIVOTEO_PARCIAL = "parcial"
 
 # Umbral técnico de advertencia (no matemático): un pivote cuyo valor absoluto
 # es menor que UMBRAL_PIVOTE_PEQUENO veces el mayor |a_ij| de la matriz
@@ -149,17 +148,11 @@ def _buscar_pivote(M, fila_inicio, columna, estrategia):
 
     primer_no_nulo: la primera fila (desde fila_inicio) con elemento no nulo,
                     como en los ejemplos de clase (solo se intercambia si hace falta).
-    parcial:        la fila con el mayor |elemento| (pivoteo parcial).
     """
-    elegido = None
     for p in range(fila_inicio, len(M)):
-        if M[p][columna] == 0:
-            continue
-        if estrategia == PIVOTEO_PRIMER_NO_NULO:
+        if M[p][columna] != 0:
             return p
-        if elegido is None or abs(M[p][columna]) > abs(M[elegido][columna]):
-            elegido = p
-    return elegido
+    return None
 
 
 def _describir_combinacion(i, factor, r):
@@ -178,7 +171,7 @@ def _escalonar(M, n_columnas_pivote, estrategia, reducida, pasos, advertencias, 
       producto_pivotes producto de los pivotes antes de normalizar.
     Si `reducida` es True hace Gauss-Jordan (pivote 1 y ceros arriba y abajo).
     """
-    if estrategia not in (PIVOTEO_PRIMER_NO_NULO, PIVOTEO_PARCIAL):
+    if estrategia != PIVOTEO_PRIMER_NO_NULO:
         raise ValueError(f"Estrategia de pivoteo desconocida: {estrategia}")
     m = len(M)
     fila = 0
@@ -194,10 +187,7 @@ def _escalonar(M, n_columnas_pivote, estrategia, reducida, pasos, advertencias, 
         if p != fila:
             M[fila], M[p] = M[p], M[fila]
             signo = -signo
-            if estrategia == PIVOTEO_PARCIAL:
-                motivo = "pivoteo parcial: se elige el mayor |elemento| de la columna"
-            else:
-                motivo = f"el elemento ({fila + 1}, {c + 1}) es 0"
+            motivo = f"el elemento ({fila + 1}, {c + 1}) es 0"
             pasos.append(Paso(f"{_texto_fila(fila)} ↔ {_texto_fila(p)}  ({motivo})", _copiar(M),
                               f"{_fila_clase(fila)} ↔ {_fila_clase(p)}"))
         pivote = M[fila][c]

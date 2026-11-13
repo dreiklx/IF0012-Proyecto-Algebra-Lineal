@@ -49,22 +49,22 @@ Los radios espectrales se verificaron con oráculos independientes:
 
 | ID | Caso | Salida esperada | Resultado obtenido | ¿Coincide? |
 |---|---|---|---|---|
-| IV-18 | A = [[−4, −1, 3, −1], [2, 5, 1, 0], [1, −3, 5, 0], [2, 2, 2, 5]], SOR ω = 1/2 | Autovalores simples; ρ ≈ 0.5951 < 1; conclusión «converge» y resultado fiable (antes salía «indeterminado» por un defecto). Comprobación independiente: las iteraciones de SOR alcanzan ε = 10⁻¹⁰ | ρ = 0.5950974, CONVERGE, fiable; la ejecución termina por tolerancia | Sí |
-| IV-19 | A = [[2, 1, 1], [1, 2, 1], [3, 3, 2]] (singular), SOR ω = 1/2 | λ = 1 es autovalor exacto de T, luego ρ ≥ 1: «no converge», con decisión exacta | NO_CONVERGE, decisión exacta | Sí |
-| IV-20 | T con el autovalor 1/2 triple (bloque de Jordan) | ρ = 1/2, pero con raíz múltiple Durand-Kerner es impreciso: debe declararse «no fiable», no presentarse como garantizado | No fiable, aviso de autovalor múltiple, \|λ\| ≈ 0.500 | Sí |
+| IV-18 (RETIRADO: procedimiento de extensión, ver matriz de fidelidad) | A = [[−4, −1, 3, −1], [2, 5, 1, 0], [1, −3, 5, 0], [2, 2, 2, 5]], SOR ω = 1/2 | Autovalores simples; ρ ≈ 0.5951 < 1; conclusión «converge» y resultado fiable (antes salía «indeterminado» por un defecto). Comprobación independiente: las iteraciones de SOR alcanzan ε = 10⁻¹⁰ | ρ = 0.5950974, CONVERGE, fiable; la ejecución termina por tolerancia | Sí |
+| IV-19 (RETIRADO: procedimiento de extensión, ver matriz de fidelidad) | A = [[2, 1, 1], [1, 2, 1], [3, 3, 2]] (singular), SOR ω = 1/2 | λ = 1 es autovalor exacto de T, luego ρ ≥ 1: «no converge», con decisión exacta | NO_CONVERGE, decisión exacta | Sí |
+| IV-20 (RETIRADO: procedimiento de extensión, ver matriz de fidelidad) | T con el autovalor 1/2 triple (bloque de Jordan) | ρ = 1/2, pero con raíz múltiple Durand-Kerner es impreciso: debe declararse «no fiable», no presentarse como garantizado | No fiable, aviso de autovalor múltiple, \|λ\| ≈ 0.500 | Sí |
 | IV-21 | ε = 10⁻⁴⁰⁰ (se anula en float) y ε = 10⁴⁰⁰ | Mensajes claros y específicos | «…en punto flotante vale 0…» / «…demasiado grande…» | Sí |
 
 ## Caso añadido en la revisión del 02-nov-2026
 
 | ID | Caso | Salida esperada | Resultado obtenido | ¿Coincide? |
 |---|---|---|---|---|
-| IV-22 | S9-07/10 (A = [[3, 3, 3], [3, 3, 2], [−3, −2, 3]]) con SOR, ω = 6/5 (el ω por defecto de la interfaz) | λ = −1 es autovalor de T_ω si y solo si det((2 − ω)D + ωL − ωU) = 0. Con ω = 6/5 esa matriz es (6/5)·[[2, −3, −3], [3, 2, −2], [−3, −2, 2]], cuya fila 3 es la fila 2 con el signo cambiado: es singular. Por tanto ρ ≥ 1 y el método **no converge**, con decisión exacta (oráculo a mano) | Polinomio λ³ + (11/125)λ² − (113/125)λ + 1/125; aviso «λ = −1 es autovalor exacto de T»; NO_CONVERGE, decisión exacta. En la comparación, SOR llega a k_max = 50 | Sí |
+| IV-22 (RETIRADO: procedimiento de extensión, ver matriz de fidelidad) | S9-07/10 (A = [[3, 3, 3], [3, 3, 2], [−3, −2, 3]]) con SOR, ω = 6/5 (el ω por defecto de la interfaz) | λ = −1 es autovalor de T_ω si y solo si det((2 − ω)D + ωL − ωU) = 0. Con ω = 6/5 esa matriz es (6/5)·[[2, −3, −3], [3, 2, −2], [−3, −2, 2]], cuya fila 3 es la fila 2 con el signo cambiado: es singular. Por tanto ρ ≥ 1 y el método **no converge**, con decisión exacta (oráculo a mano) | Polinomio λ³ + (11/125)λ² − (113/125)λ + 1/125; aviso «λ = −1 es autovalor exacto de T»; NO_CONVERGE, decisión exacta. En la comparación, SOR llega a k_max = 50 | Sí |
 
 ## Casos añadidos en la revisión del 03-nov-2026 (precondicionamiento, reordenamiento, Sarrus)
 
 | ID | Caso | Salida esperada (oráculo) | Resultado obtenido | ¿Coincide? |
 |---|---|---|---|---|
-| IV-23 | Tridiagonal [−1, 4, −1] 4×4, b = (1, 0, 0, 1), precondicionador M = D | Lámina S9-05/10 diap. 18: M = 4I, M⁻¹A = A/4. Teoría: κ(A/4) = κ(A); T_J, T_GS y T_ω no cambian. Richardson: ρ(I − A) = 3 + 2cos(π/5) ≈ 4.618 (no converge); con M = D, ρ = cos(π/5)/2 ≈ 0.405 | B = A/4; κ∞ = 30/11 en ambos; T y c idénticas (exacto); Richardson: máximo o desbordamiento sin precondicionar, y converge con M = D en las mismas iteraciones que Jacobi | Sí |
+| IV-23 (RETIRADO: procedimiento de extensión, ver matriz de fidelidad) | Tridiagonal [−1, 4, −1] 4×4, b = (1, 0, 0, 1), precondicionador M = D | Lámina S9-05/10 diap. 18: M = 4I, M⁻¹A = A/4. Teoría: κ(A/4) = κ(A); T_J, T_GS y T_ω no cambian. Richardson: ρ(I − A) = 3 + 2cos(π/5) ≈ 4.618 (no converge); con M = D, ρ = cos(π/5)/2 ≈ 0.405 | B = A/4; κ∞ = 30/11 en ambos; T y c idénticas (exacto); Richardson: máximo o desbordamiento sin precondicionar, y converge con M = D en las mismas iteraciones que Jacobi | Sí |
 | IV-24 | A = [[100, 1], [1, 1/50]], M = D | Inversas 2×2 a mano: κ∞(A) = 101·101 = 10201; κ∞(D⁻¹A) = 51·102 = 5202 | 10201 y 5202; conclusión «mejora» | Sí |
 | IV-25 | Ecuaciones de la Tarea II #3 desordenadas: [[−1, 4, −1], [0, −1, 3], [4, −1, 0]], b = (10, 10, 15) | El orden (E3, E1, E2) da [[4, −1, 0], [−1, 4, −1], [0, −1, 3]], b = (15, 10, 10), que es estrictamente dominante | Mismo orden y matriz. La pestaña «Convergencia» lo sugiere aunque a₃₃ = 0 | Sí |
-| IV-26 | T_J de S9-07/10, desarrollo de Sarrus | tr = 0, Σ menores = 4/9, det = 4/3 (a mano) → −λ³ − (4/9)λ + 4/3 | (0, 4/9, 4/3); coincide con Faddeev-LeVerrier | Sí |
+| IV-26 (RETIRADO: procedimiento de extensión, ver matriz de fidelidad) | T_J de S9-07/10, desarrollo de Sarrus | tr = 0, Σ menores = 4/9, det = 4/3 (a mano) → −λ³ − (4/9)λ + 4/3 | (0, 4/9, 4/3); coincide con Faddeev-LeVerrier | Sí |

@@ -6,7 +6,6 @@ from algebra.compartido.matriz import ErrorMatriz, residuo
 from algebra.compartido.validacion import formatear_numero
 from algebra.modulo_I_sistemas.directos import (
     INFINITAS,
-    PIVOTEO_PARCIAL,
     PIVOTEO_PRIMER_NO_NULO,
     UNICA,
     resolver_gauss,
@@ -62,7 +61,6 @@ def mostrar():
         ("A", "Gauss-Jordan", "S3-24/08 pp. 4-5; S6-14/09 p. 30"),
         ("A", "Tipos de solución", "S6-14/09 p. 26; S6-16/09 p. 29"),
         ("B", "Pivotes nulos o problemáticos", "OFICIAL p. 2"),
-        ("C", "Pivoteo parcial", "S6-14/09 p. 34 solo menciona PA = LU"),
         ("C", "Gráfica de rectas y planos", "UX; interpretación de S6-14/09 p. 26"),
     ])
 
@@ -89,23 +87,14 @@ def mostrar():
         metodo = st.radio("Método", ["Gauss", "Gauss-Jordan"], horizontal=True, key="dir_metodo",
                           help="Gauss: forma escalonada y sustitución hacia atrás. "
                                "Gauss-Jordan: forma escalonada reducida.")
-    with col4:
-        pivoteo = st.radio(
-            "Elección del pivote",
-            ["Primer elemento no nulo (como en clase)", "Pivoteo parcial (mayor |elemento|)"],
-            key="dir_pivoteo",
-            help="Con aritmética exacta ambos dan la misma solución; el pivoteo parcial "
-                 "es la estrategia recomendada cuando se trabaja en punto flotante.")
-
     if st.button("Resolver", type="primary", key="dir_resolver", disabled=bloqueado):
         st.session_state.pop("dir_resultado", None)
         A = leer_matriz_ui(texto_A, "matriz A")
         b = leer_vector_ui(texto_b, "vector b")
         if A is not None and b is not None:
-            estrategia = PIVOTEO_PARCIAL if pivoteo.startswith("Pivoteo") else PIVOTEO_PRIMER_NO_NULO
             resolver = resolver_gauss if metodo == "Gauss" else resolver_gauss_jordan
             try:
-                st.session_state["dir_resultado"] = (A, b, resolver(A, b, estrategia))
+                st.session_state["dir_resultado"] = (A, b, resolver(A, b, PIVOTEO_PRIMER_NO_NULO))
             except ErrorMatriz as error:
                 st.error(f"❌ {notacion.md(str(error))}")
     # El resultado se guarda en la sesión para que no desaparezca al interactuar.

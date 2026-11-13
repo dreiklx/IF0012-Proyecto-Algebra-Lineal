@@ -128,12 +128,6 @@ def paso_sor_csr(M, b, x_anterior, omega):
     return x
 
 
-def paso_richardson_csr(M, b, x_anterior, omega=None):
-    """Richardson en CSR (extensión; ver metodos.paso_richardson)."""
-    ax = producto_csr_vector(M, x_anterior)
-    return [x_anterior[i] + (b[i] - ax[i]) for i in range(M.n)]
-
-
 def residuo_inf_csr(M, b, x):
     """||b - A x||∞ con el producto disperso."""
     ax = producto_csr_vector(M, x)

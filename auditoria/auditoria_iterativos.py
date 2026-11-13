@@ -83,13 +83,16 @@ for _ in range(300):
         A[i][i]=F(random.choice([1,2,3,5,-4]))
     met=random.choice([JACOBI,GAUSS_SEIDEL,SOR]); w=random.choice([F(1,2),F(6,5),F(3,2)])
     b=[F(1)]*n
-    e=radio_espectral(A,b,met,w); T=e.iteracion.T; c2+=1
+    e=radio_espectral(A,b,met,w)
+    if e.rho is None:               # ρ no calculable con el curso (SOR, n > 3, grado ≥ 3)
+        continue
+    T=e.iteracion.T; c2+=1
     # T coincide con un paso del método: x1 = T x0 + c para x0 aleatorio
     x0=[random.random() for _ in range(n)]
     r=ejecutar(A,b,ConfiguracionIterativa(metodo=met,criterio='C',n_iteraciones=1,x0=x0,omega=float(w)))
     x1=[sum(float(T[i][j])*x0[j] for j in range(n))+float(e.iteracion.c[i]) for i in range(n)]
     ok=max(abs(a-b2) for a,b2 in zip(r.historial[1].x,x1))<1e-9*max(1,max(map(abs,x1)))
-    # cada autovalor anula det(T - λI) (Leibniz, independiente de Faddeev)
+    # cada autovalor anula det(T - λI) (Leibniz, independiente del núcleo)
     esc=max(1,max(abs(float(v)) for f in T for v in f))**n
     for z in e.autovalores:
         M=[[complex(float(T[i][j]))-(z if i==j else 0) for j in range(n)] for i in range(n)]

@@ -56,7 +56,6 @@ def convergencia(texto_A, texto_b, texto_omega, bloqueado=False):
         return
     dom, esp, error_T = st.session_state["it_convergencia"]
 
-    marca_incentivo("Extensión matemática: radio espectral con autovalores complejos", "1 %")
     st.subheader("1. Dominancia diagonal estricta por filas")
     # Encabezados de st.table: renderizan LaTeX.
     st.table([{"Fila $i$": f[0] + 1, r"$|a_{ii}|$": formatear_numero(f[1]),
@@ -80,6 +79,10 @@ def convergencia(texto_A, texto_b, texto_omega, bloqueado=False):
     if esp is None:
         st.error(f"❌ {notacion.md(error_T)}")
         return
+    if esp.iteracion is None:
+        # SOR: el curso da sus ecuaciones solo por componentes; no hay T ni ρ que mostrar.
+        st.info(notacion.md(esp.mensaje))
+        return
     it = esp.iteracion
     st.subheader(f"2. Matriz de iteración de {it.metodo}")
     # Pasos y nombres de los manuscritos (S9-07/10 pp. 3-7): T_J, C_J; T_GS, C_GS.
@@ -94,11 +97,7 @@ def convergencia(texto_A, texto_b, texto_omega, bloqueado=False):
         SOR: r"T_\omega=(D+\omega L)^{-1}\left[(1-\omega)D-\omega U\right],\qquad C_\omega=\omega(D+\omega L)^{-1}b",
     }
     st.latex(r"x^{(k+1)} = " + nombre_T + r"\,x^{(k)} + " + nombre_C + r",\qquad " + formulas[it.metodo])
-    if it.metodo == SOR:
-        st.caption("Cat. C · La matriz de iteración de SOR no aparece en los PDF del curso (en clase "
-                   "SOR se calcula por componentes): es una extensión, necesaria para obtener ρ(T).")
-    else:
-        st.caption("Cat. A · Los mismos pasos de los manuscritos de clase (S9-07/10 pp. 3-7).")
+    st.caption("Cat. A · Los mismos pasos de los manuscritos de clase (S9-07/10 pp. 3-7).")
     st.markdown(r"**① Descomponer** $A = D + L + U$:")
     st.latex(r"D=" + latex_matriz(it.D) + r",\; L=" + latex_matriz(it.L) + r",\; U=" + latex_matriz(it.U))
     if it.inversa is not None:
@@ -109,7 +108,7 @@ def convergencia(texto_A, texto_b, texto_omega, bloqueado=False):
 
     st.subheader("3. Polinomio característico, autovalores y radio espectral")
     st.markdown(r"**⑤ Hallar** $\rho(T) = \max\{|\lambda|\}$ con $\det(T - \lambda I) = 0$:")
-    if esp.conclusion == NO_CALCULADO:
+    if esp.coeficientes is None:
         st.warning(notacion.md(esp.mensaje))
         return
     # El mismo polinomio que esp.polinomio_curso, con fracciones apiladas (−4/9λ era ambiguo).
@@ -122,10 +121,11 @@ def convergencia(texto_A, texto_b, texto_omega, bloqueado=False):
             f"con tr(T) = {formatear_numero(traza)}, Σ menores = {formatear_numero(menores)} y "
             f"det(T) = {formatear_numero(det)} — "
             + ("coincide con el polinomio calculado." if coincide else "⚠️ no coincide."))
-    st.caption("Coeficientes calculados de forma exacta con el método de Faddeev-LeVerrier "
-               "(Cat. C, extensión no vista en clase; para 3×3 coincide con el desarrollo por Sarrus "
-               "visto en clase). Raíces: λ = 0 exactas, fórmula cuadrática o método de Durand-Kerner "
-               "(Cat. C, extensión no vista en clase; ver guía matemática).")
+    st.caption("Cat. A · Coeficientes exactos por la regla de Sarrus (3×3). Raíces: se extrae el factor λ "
+               "y se resuelve el resto por la fórmula cuadrática, como en S9-07/10 pp. 5-7.")
+    if esp.conclusion == NO_CALCULADO:
+        st.warning(notacion.md(esp.mensaje))
+        return
     st.table([{"λ": formatear_numero(z, 8), "Parte real": f"{z.real:.8g}",
                "Parte imaginaria": f"{z.imag:.8g}", "|λ|": f"{abs(z):.8g}"}
               for z in esp.autovalores])
@@ -137,9 +137,8 @@ def convergencia(texto_A, texto_b, texto_omega, bloqueado=False):
             insignias([{CONVERGE: ("Converge para todo x⁽⁰⁾", "ok"),
                         NO_CONVERGE: ("No converge para todo x⁽⁰⁾", "error")}.get(
                            esp.conclusion, ("Indeterminado", "aviso")),
-                       ("Decisión exacta" if esp.decision_exacta else
-                        ("Cálculo fiable" if esp.fiable else "Cálculo no fiable"),
-                        "ok" if esp.decision_exacta or esp.fiable else "aviso"),
+                       ("Cálculo fiable" if esp.fiable else "Cálculo no fiable",
+                        "ok" if esp.fiable else "aviso"),
                        ("Dominante" if dom.estricta else "No dominante", "ok" if dom.estricta else "")])
             if esp.conclusion == CONVERGE:
                 st.success("✅ " + notacion.md(esp.mensaje))

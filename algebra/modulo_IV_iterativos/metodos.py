@@ -14,9 +14,6 @@ Fórmulas por componentes (A = D + L + U; i = 1..n en orden):
   SOR           (S8-30/09 p. 28) — combina el valor anterior y el de Gauss-Seidel
       x_i(k) = (1-ω) x_i(k-1) + ω · ( b_i - Σ_{j<i} a_ij x_j(k) - Σ_{j>i} a_ij x_j(k-1) ) / a_ii
 
-  Richardson    (EXTENSIÓN NO VISTA EN CLASE; solo para el incentivo de
-                precondicionamiento, ver docs/investigacion_richardson.md)
-      x(k) = x(k-1) + (b - A x(k-1))
 
 La aritmética es de punto flotante (float): las iteraciones son aproximaciones.
 Las versiones que recorren solo los no nulos (formato CSR) están en dispersas.py.
@@ -26,10 +23,6 @@ JACOBI = "Jacobi"
 GAUSS_SEIDEL = "Gauss-Seidel"
 SOR = "SOR"
 METODOS = (JACOBI, GAUSS_SEIDEL, SOR)
-# Richardson no es uno de los métodos del enunciado: solo se usa en el análisis del
-# precondicionador diagonal (precondicionamiento.py), porque es el método
-# estacionario más simple sobre el que M = D sí tiene efecto.
-RICHARDSON = "Richardson"
 
 
 def paso_jacobi(A, b, x_anterior, omega=None):
@@ -72,16 +65,3 @@ def paso_sor(A, b, x_anterior, omega):
     return x
 
 
-def paso_richardson(A, b, x_anterior, omega=None):
-    """Una iteración de Richardson (paso 1): x(k) = x(k-1) + (b - A x(k-1)).
-
-    Su matriz de iteración es T_R = I - A.  Aplicado al sistema precondicionado
-    D⁻¹A x = D⁻¹b da x(k) = x(k-1) + D⁻¹(b - A x(k-1)), que es exactamente Jacobi."""
-    n = len(A)
-    x_nuevo = [0.0] * n
-    for i in range(n):
-        ax = 0.0
-        for j in range(n):
-            ax += A[i][j] * x_anterior[j]
-        x_nuevo[i] = x_anterior[i] + (b[i] - ax)
-    return x_nuevo

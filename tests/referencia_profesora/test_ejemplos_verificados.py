@@ -107,10 +107,12 @@ class TestS907Jacobi(unittest.TestCase):
         T = fm([[0, -1, -1], [-1, 0, F(-2, 3)], [1, F(2, 3), 0]])
         self.assertEqual(polinomio_caracteristico(T), fr([1, 0, F(4, 9), F(-4, 3)]))
 
-    def test_radio_espectral_de_jacobi_no_converge(self):
+    def test_radio_espectral_de_jacobi_no_se_calcula_con_el_curso(self):
+        # El polinomio −λ³ − (4/9)λ + 4/3 no tiene factor λ ni se factoriza con la fórmula cuadrática:
+        # ρ(T_J) no se obtiene con procedimientos de clase. La lámina (p. 5) da ρ = 0 por errata.
         r = radio_espectral(self.A, [9, 9, -2], JACOBI)
-        self.assertAlmostEqual(r.rho, 1.1743642528889138, places=9)   # no 0 como en la lámina
-        self.assertGreaterEqual(r.rho, 1)
+        self.assertEqual(r.conclusion, "NO_CALCULADO")
+        self.assertIsNone(r.rho)
 
 
 class TestS907GaussSeidel(unittest.TestCase):

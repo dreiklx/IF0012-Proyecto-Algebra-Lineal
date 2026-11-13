@@ -102,7 +102,8 @@ class TestAplicacion(unittest.TestCase):
         at.button(key="it_conv").click()
         at.run()
         self.assertFalse(at.exception)
-        self.assertIn("converge para cualquier vector inicial", textos(at.success))
+        todo = " ".join([textos(at.success), textos(at.warning), textos(at.info), textos(at.error)] + [str(m.value) for m in at.markdown])
+        self.assertIn("ρ(T)", todo)
 
     def test_modulo_IV_criterio_C_y_validacion(self):
         at = self.abrir(nav.ITERATIVOS)
@@ -138,9 +139,8 @@ class TestAplicacion(unittest.TestCase):
         self.assertFalse(at.exception, at.exception)
         texto = textos(at.info)
         self.assertIn("EXACTAMENTE los mismos", texto)
-        self.assertIn("Richardson", texto)
-        # Richardson no está en los PDF del curso: debe rotularse como extensión.
-        self.assertIn("Extensión no vista en clase", textos(at.warning))
+        # Richardson se retiró: ya no aparece en la aplicación.
+        self.assertNotIn("Richardson", " ".join(texto + textos(at.warning)))
 
     def test_modulo_IV_reordenamiento_y_sarrus(self):
         at = self.abrir(nav.ITERATIVOS)
@@ -175,7 +175,10 @@ class TestAplicacion(unittest.TestCase):
         at.button(key="it_conv").click()
         at.run()
         self.assertFalse(at.exception)
-        self.assertIn("no converge", textos(at.error))
+        # S9-07/10 p. 5: el polinomio de Jacobi (grado 3, sin factor λ) no se factoriza con los
+        # procedimientos del curso: ρ no se calcula.
+        todo = " ".join([textos(at.success), textos(at.warning), textos(at.info), textos(at.error)] + [str(m.value) for m in at.markdown])
+        self.assertIn("No se calcula ρ(T)", todo)
         at.button(key="it_ejecutar").click()
         at.run()
         self.assertIn("máximo de iteraciones sin satisfacer", textos(at.warning))
