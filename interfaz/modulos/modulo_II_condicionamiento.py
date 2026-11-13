@@ -2,7 +2,8 @@
 
 import streamlit as st
 
-from algebra.compartido.matriz import ErrorMatriz, sumas_absolutas_por_fila
+from algebra.compartido.exactos import a_fraccion
+from algebra.compartido.matriz import ErrorMatriz, sumas_absolutas_por_columna, sumas_absolutas_por_fila
 from algebra.compartido.validacion import ErrorEntrada, formatear_numero, leer_vector
 from algebra.modulo_II_condicionamiento.condicion import (
     MATRIZ_SINGULAR,
@@ -14,11 +15,12 @@ from algebra.modulo_II_condicionamiento.condicion import (
     construir_delta_b,
     numero_condicion_infinito,
 )
-from algebra.modulo_I_sistemas.directos import ErrorSistema
+from algebra.modulo_I_sistemas.directos import ErrorSistema, determinante
 from interfaz.compartido import ejemplos
 from interfaz.compartido.componentes import (
     leer_matriz_ui,
     leer_vector_ui,
+    mostrar_interactiva,
     mostrar_pasos,
 )
 from interfaz.compartido.formulas import latex_matriz, latex_numero
@@ -41,6 +43,7 @@ from interfaz.compartido.estilo import (
     valor_destacado,
 )
 from visualizacion import notacion
+from visualizacion.geometria_modulo_II import normas_barras, sensibilidad_barras, transformacion_2x2
 
 ETIQUETA_SENSIBILIDAD = {SENSIBILIDAD_BAJA: ("Sensibilidad baja", "ok"),
                          SENSIBILIDAD_ALTA: ("Sensibilidad alta", "error")}
@@ -107,9 +110,13 @@ def mostrar():
                     delta_b = construir_delta_b(b, modo_nucleo, valor)
                     perturbacion = analizar_perturbacion(A, b, delta_b)
                 st.session_state["cond_resultado"] = (A, condicion, perturbacion)
+                st.session_state["cond_firma"] = (texto_A, texto_b, texto_p, modo)
             except (ErrorEntrada, ErrorMatriz, ErrorSistema) as error:
                 st.error(f"❌ {notacion.md(str(error))}")
     if "cond_resultado" in st.session_state:
+        if st.session_state.get("cond_firma") != (texto_A, texto_b, texto_p, modo):
+            st.warning("Los datos han cambiado desde el último cálculo: pulse «Calcular» para actualizar "
+                       "los resultados y las gráficas.")
         mostrar_resultado(*st.session_state["cond_resultado"])
 
 
@@ -149,6 +156,7 @@ def mostrar_resultado(A, c, p):
     with st.expander("Cálculo de la inversa por Gauss-Jordan: [A | I] → [I | A⁻¹]"):
         mostrar_pasos(c.resultado_inversa.pasos, separador=n)
 
+    visualizaciones_complementarias(A, c, p)
     if p is None:
         return
     seccion("4", "Análisis de la perturbación")
@@ -183,6 +191,40 @@ def mostrar_resultado(A, c, p):
                    f"{formatear_numero(p.error_relativo_x)}.")
     st.markdown(rf"$x = ({', '.join(latex_numero(v) for v in p.x)})$, "
                 rf"$\tilde x = ({', '.join(latex_numero(v) for v in p.x_perturbada)})$")
+
+
+def visualizaciones_complementarias(A, c, p):
+    """Tres gráficas de apoyo (no son procedimientos de la profesora): determinante como factor
+    de área (solo 2×2), sumas de filas y columnas con la norma ∞ destacada, y la cota de
+    sensibilidad con los valores de la perturbación introducida."""
+    st.markdown("**Visualizaciones complementarias** · apoyo para interpretar los cálculos; "
+                "no son procedimientos de clase salvo que se indique.")
+    pestanas = st.tabs(["Determinante (2×2)", "Normas ∞ y 1", "Sensibilidad"])
+    with pestanas[0]:
+        if len(A) != 2:
+            st.info("La visualización geométrica del determinante está implementada para matrices 2×2. "
+                    "La extensión a 3×3 no se implementó.")
+        else:
+            A_exacta = [[a_fraccion(v) for v in fila] for fila in A]
+            figura, _area = transformacion_2x2(A_exacta, determinante(A_exacta))
+            mostrar_interactiva(figura, "modulo_II_determinante", mostrar_ayuda=False)
+            st.caption("Cuadrícula original (gris) y transformada por A (azul). Dato del curso: "
+                       "el determinante aparece en S2-19/08 p. 38; la lectura geométrica como área es complementaria.")
+    with pestanas[1]:
+        columnas = sumas_absolutas_por_columna(A)
+        filas_inv = sumas_absolutas_por_fila(c.inversa) if c.inversa is not None else None
+        figura = normas_barras(sumas_absolutas_por_fila(A), filas_inv, columnas)
+        mostrar_interactiva(figura, "modulo_II_normas", mostrar_ayuda=False)
+        st.caption("La barra destacada es el máximo de las filas: ‖A‖∞ y ‖A⁻¹‖∞ (la norma del proyecto). "
+                   "El panel de columnas es la norma 1, solo como referencia.")
+    with pestanas[2]:
+        if p is None or p.error_relativo_b is None or p.error_relativo_x is None or p.cota is None:
+            st.info("Sin perturbación válida para comparar (Δb = 0 o un denominador es cero).")
+        else:
+            figura = sensibilidad_barras(p.error_relativo_b, p.error_relativo_x, p.cota)
+            mostrar_interactiva(figura, "modulo_II_sensibilidad", mostrar_ayuda=False)
+            st.caption("Visualización complementaria: la barra de la solución debe quedar por debajo de la "
+                       "cota κ∞ · ‖Δb‖/‖b‖. La cota es el peor caso; la amplificación observada puede ser menor.")
 
 
 def _norma_por_filas(M, nombre):

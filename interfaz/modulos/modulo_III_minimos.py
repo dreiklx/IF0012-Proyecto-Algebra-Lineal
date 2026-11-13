@@ -173,6 +173,17 @@ def mostrar_minimos(r, nombres=None):
             "sistema tiene solución exacta.")
 
 
+def tabla_ajuste(r):
+    """Tabla de valores observados yᵢ, estimados ŷᵢ = (A x̂)ᵢ y residuos rᵢ = yᵢ − ŷᵢ.
+    Usa los vectores exactos del núcleo; no recalcula el ajuste."""
+    filas = []
+    for i, (x, y, y_est) in enumerate(zip(r.xs, r.ys, r.minimos.estimados), start=1):
+        filas.append({"i": i, "xᵢ": formatear_numero(x), "yᵢ (observado)": formatear_numero(y),
+                      "ŷᵢ = m·xᵢ + c (estimado)": formatear_numero(y_est),
+                      "rᵢ = yᵢ − ŷᵢ": formatear_numero(y - y_est)})
+    return filas
+
+
 def ajuste():
     seccion("1", "Datos (xᵢ, yᵢ)", "al menos 2 puntos con x distintos")
     sel, boton = st.columns([4, 1], vertical_alignment="bottom")
@@ -201,10 +212,14 @@ def ajuste():
         if xs is not None and ys is not None:
             try:
                 st.session_state["aj_resultado"] = ajuste_lineal(xs, ys)
+                st.session_state["aj_firma"] = texto_xy
             except ErrorAjuste as error:
                 st.error(f"❌ {notacion.md(str(error))}")
     if "aj_resultado" not in st.session_state:
         return
+    if st.session_state.get("aj_firma") != texto_xy:
+        st.warning("Los datos han cambiado desde el último cálculo: pulse «Calcular recta de ajuste» "
+                   "para actualizar la recta, la gráfica y las tablas.")
     r = st.session_state["aj_resultado"]
     seccion("2", "Recta de mejor ajuste")
     with tarjeta_resultado("ajuste"):
@@ -215,6 +230,9 @@ def ajuste():
                         f"‖r‖₂ ≈ {r.minimos.norma_residuo_2:.6g}")
         mostrar_interactiva(grafica_ajuste_interactiva(r.xs, r.ys, r.pendiente, r.intercepto,
                                                        r.minimos.estimados), "ajuste")
+    st.caption("Gráfica: puntos (xᵢ, yᵢ), recta ŷ = m·x + c y residuos rᵢ = yᵢ − ŷᵢ dibujados como segmentos "
+               "verticales. Visualización complementaria a la exigida; los valores salen de la misma solución.")
+    st.table(tabla_ajuste(r))
     st.latex(r"A=\begin{bmatrix} x_1 & 1\\ \vdots & \vdots\\ x_k & 1\end{bmatrix},\quad "
              r"b=\begin{bmatrix} y_1\\ \vdots\\ y_k\end{bmatrix},\quad "
              r"A^TA\begin{bmatrix} m\\ c\end{bmatrix}=A^Tb")

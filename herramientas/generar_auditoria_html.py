@@ -71,13 +71,19 @@ def main():
             cuerpo.append('<p class="pen">Sin revisión visual todavía. Estas páginas están marcadas como '
                           '«Solo OCR (pendiente de revisión visual)» en docs/auditoria/inventario_paginas.csv.</p>')
         for f in por_modulo[clave]:
-            img = evidencia(f["fuente"], f["pagina"], clave)
+            img = (f"auditoria/evidencias/{f['imagen']}" if f.get("imagen")
+                   else evidencia(f["fuente"], f["pagina"], clave))
+            es_pdf = not f["fuente"].startswith("Visualización")
             cuerpo.append('<article class="proc">')
             cuerpo.append(f'<h3>{html.escape(f["procedimiento"])}</h3>')
-            cuerpo.append(f'<p class="fuente"><b>Fuente:</b> {html.escape(f["fuente"])}, página {html.escape(f["pagina"])}'
-                          ' · imagen extraída del PDF original (sin recrear)</p>')
+            if es_pdf:
+                cuerpo.append(f'<p class="fuente"><b>Fuente:</b> {html.escape(f["fuente"])}, página {html.escape(f["pagina"])}'
+                              ' · imagen extraída del PDF original (sin recrear)</p>')
+            else:
+                cuerpo.append('<p class="fuente"><b>Visualización complementaria</b> (no es materia expresamente '
+                              'explicada en clase): captura de la aplicación real.</p>')
             if img:
-                cuerpo.append(f'<a href="{img}" target="_blank"><img src="{img}" alt="Página original {html.escape(f["fuente"])} p. {html.escape(f["pagina"])}"></a>')
+                cuerpo.append(f'<a href="{img}" target="_blank"><img src="{img}" alt="{html.escape(f["procedimiento"])}"></a>')
             cuerpo.append('<h4>Cómo lo hace la profesora</h4>')
             cuerpo.append(f'<p class="mono">{html.escape(f["formula_o_paso_profesora"])}</p>')
             cuerpo.append('<h4>Implementación en Ax</h4>')
