@@ -90,3 +90,30 @@ Próximo paso: continuar la primera pasada en el orden del inventario, desde `IF
 - context-mode: desinstalado (no aparece en `claude plugin list`; ausente de `enabledPlugins`). Entrada residual en `extraKnownMarketplaces` (inofensiva, pendiente de limpiar).
 - Prueba en sesión nueva: `s905_p19.jpg` (191 KB) leída completa sin bloqueo.
 - Auditoría: primera pasada 3/457 revisadas visualmente, 454 pendientes. Segunda pasada no iniciada.
+
+## 10. Progreso de la primera pasada (automático)
+
+Revisadas: 20 de 457 páginas. Pendientes: 437.
+
+| Documento | Revisadas/total |
+|---|---|
+| IF0012-IITarea-Álgebra Lineal-IIC26.pdf | 3/3 |
+| IF0012_Álgebra_Lineal_para_Informática_Empresarial_II_2026.pdf | 12/12 |
+| INTRUCCIONES-PROYECTO FINAL-ÁLGEBRA LINEAL-IIC2026.pdf | 5/5 |
+| Semana01-10-08-2026-Álgebra Lineal-IIC.pdf | 0/24 |
+| Semana01-12-08-2026-Álgebra Lineal-IIC.pdf | 0/28 |
+| Semana02-17-08-2026-Álgebra Lineal-IIC.pdf | 0/40 |
+| Semana02-19-08-2026-Álgebra Lineal.pdf | 0/48 |
+| Semana03-24-08-2026-Álgebra Lineal-IIC26.pdf | 0/32 |
+| Semana03-26-08-2026-Álgebra Lineal-IIC26.pdf | 0/38 |
+| Semana04-02-09-2026-Álgebra Lineal-IIC26.pdf | 0/32 |
+| Semana05-07-09-2026-Álgebra Lineal-Resolución I QUIZ.pdf | 0/8 |
+| Semana06-14-09-2026-Álgebra Lineal-IIC26.pdf | 0/35 |
+| Semana06-16-09-2026-Álgebra Lineal-IIC26.pdf | 0/36 |
+| Semana07-21-09-2026-Algebra Lineal-IIC26.pdf | 0/20 |
+| Semana08-28-09-20220-Álgebra Lineal-IIC26.pdf | 0/15 |
+| Semana08-30-09-2026-Álgebra Lineal-IIC26.pdf | 0/40 |
+| Semana09-05-10-2026-Álgebra Lineal-IIC26.pdf | 0/34 |
+| Semana09-07-10-2026-Álgebra Lineal-IIC26.pdf | 0/7 |
+
+Desglose de estados: Revisada visualmente: 20; Pendiente: 437
