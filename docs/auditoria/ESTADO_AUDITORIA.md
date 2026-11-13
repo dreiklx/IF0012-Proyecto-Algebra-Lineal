@@ -66,3 +66,17 @@ No se debe declarar ninguna auditoría completa mientras existan filas «Pendien
 - No hay `hooks` de context-mode en `settings.json`: el hook `PreToolUse` lo registra el propio plugin al cargarse.
 - **Prueba:** tras el cambio, la lectura de `s905_p19.jpg` (191 KB) seguía bloqueada en la sesión actual. Los plugins se cargan al iniciar Claude Code: hace falta reiniciarlo para que el cambio tenga efecto.
 - Pendiente: reiniciar Claude Code y repetir la prueba de lectura antes de continuar la auditoría.
+
+## 8. Pasada nocturna 13-nov-2026 (checkpoint)
+
+Rama de trabajo: `auditoria/primera-pasada` (no se integra en `main` hasta cerrar todas las fases).
+
+- **Fase 1 (context-mode):** desinstalado con `claude plugin uninstall context-mode@context-mode --scope user --keep-data` (datos conservados). Ya no figura en `installed_plugins.json` ni en `claude plugin list`. Caché inerte `plugins/cache/context-mode` no eliminada. Copias de seguridad: `~/.claude/backups-doctor-20261113-021851/`.
+  - Pruebas: imágenes de 84 KB y 70 KB leídas sin bloqueo; texto de 17 KB leído completo; varias imágenes seguidas sin bloqueo.
+  - Salida Bash de 44,8 KB: el harness la guarda en archivo (límite de salida, no context-mode) y ese archivo se lee completo.
+- **Fase 2 (respaldo):** rama `backup/antes-auditoria-final-7acc153` y etiqueta `restore/7acc153` en el commit `7acc153`. Suite base: 331 pruebas OK.
+- **Fase 3 (inventario):** 18 PDF, 457 páginas: 20 de documentos oficiales (enunciado, tarea, instrucciones) y 437 de material de clase. ZIP de estudiantes excluido. Sin texto en páginas de imagen: se trabaja con imagen.
+- **Fase 4 (primera pasada):** renders en carpeta temporal fuera del repo, generados con `herramientas/renderizar_fuentes.py` (1600 px). Revisadas: 3 de 457 (`IF0012-IITarea…pdf` p. 1-3). Pendientes: 454. Las 14 filas de la revisión previa figuran como «Pendiente» hasta verificarse.
+- **Fases 5-15:** no iniciadas.
+
+Próximo paso: continuar la primera pasada en el orden del inventario, desde `IF0012_Álgebra…pdf` p. 1.
