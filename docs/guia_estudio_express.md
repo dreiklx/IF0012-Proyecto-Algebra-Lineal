@@ -35,6 +35,10 @@ Repaso breve para la defensa. La guía completa (`docs/guia_estudio_if0012.md`) 
 
 **Tecnologías:** Python con `fractions`, `math` y `cmath` (núcleo); Streamlit 1.66 y Plotly 6.3 (interfaz y gráficas); MediaPipe 1.2.2 y OpenCV (gestos); Matplotlib solo como referencia en pruebas. Ningún archivo importa NumPy, SciPy ni SymPy.
 
+**Gráficas (decisión 12-nov, `docs/auditoria/decision_graficas.md`):** exigidas solo en III (datos y recta) y IV (error frente a iteración). I tiene rectas 2D y planos 3D, que ya muestran la geometría de clase. II no tiene gráfica: κ es un número y su cálculo no necesita figura.
+
+**Verificación visual (12-nov):** revisadas visualmente S6-16/09 p. 29 (Gauss, comparada con Ax) y S9-07/10 pp. 2–7 (Jacobi, Gauss-Seidel, radio espectral; pp. 4–7 comparadas con Ax). El resto de páginas está en `docs/auditoria/inventario_paginas.csv` como «Solo OCR», sin verificar visualmente.
+
 ---
 
 ## B. Módulo I · Sistemas lineales (Cat. A y B)

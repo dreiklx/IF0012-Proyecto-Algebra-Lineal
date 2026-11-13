@@ -37,9 +37,7 @@ def serie_metrica(r, indice, metrica, errores_historial=None):
     return ks, errores_historial[indice]
 
 
-# ---------------------------------------------------------------------------
 # Geometría de la interpretación del Módulo I (rectas y planos)
-# ---------------------------------------------------------------------------
 
 def centro_y_radio(resultado):
     """Elige la región a dibujar alrededor de la solución (o del origen)."""
