@@ -59,7 +59,8 @@ def mostrar():
          ("CSR", "incentivo"), ("Precondicionador M = D", "incentivo")])
     procedencia([
         ("A", "Jacobi, Gauss-Seidel y SOR por componentes", "S8-30/09 pp. 15-33"),
-        ("A", "Parada ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞ < ε o residuo", "S8-28/09 p. 6; S8-30/09 p. 28"),
+        ("A", "Parada por tolerancia o residuo (Ax: versión absoluta; la lámina usa la relativa)",
+         "S8-28/09 p. 6; S8-30/09 p. 28"),
         ("A", "x⁽⁰⁾ = bᵢ/aᵢᵢ", "S8-30/09 pp. 19-20 y 24"),
         ("A", "Dominancia diagonal y reordenamiento", "S8-30/09 p. 37; S9-05/10 pp. 32-33"),
         ("A", "T<sub>J</sub>, T<sub>GS</sub> y ρ(T) por det(T − λI)", "S9-07/10 pp. 3-7"),
@@ -86,6 +87,10 @@ def mostrar():
     seccion("2", "Parámetros y criterio de parada", "comunes a las cuatro pestañas")
     criterio = st.radio("Criterio de parada", list(ETIQUETAS_CRITERIO),
                         format_func=ETIQUETAS_CRITERIO.get, key="it_criterio")
+    if criterio == CRITERIO_CAMBIO:
+        st.caption("Ax usa la diferencia **absoluta** ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞. La lámina S8-28/09 p. 6 escribe "
+                   "la **relativa** ‖x⁽ᵏ⁺¹⁾ − x⁽ᵏ⁾‖ / ‖x⁽ᵏ⁾‖. Las dos son criterios válidos, pero paran "
+                   "en iteraciones distintas. Ver docs/auditoria_procedimientos_pdf.md, sección 2.2.")
     c1, c2, c3 = st.columns(3)
     if criterio == CRITERIO_ITERACIONES:
         texto_n = c1.text_input("N (iteraciones a ejecutar)", "5", key="it_N")

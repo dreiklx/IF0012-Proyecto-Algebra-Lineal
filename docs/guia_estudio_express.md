@@ -139,7 +139,7 @@ Con A = D + L + U (L y U estrictamente triangulares):
 
 | Criterio | Condición | Nombre en Ax |
 |---|---|---|
-| A (S8-28/09 p. 6) | ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞ < ε | dₖ (cambio entre iteraciones) |
+| A (S8-28/09 p. 6) | Ax: ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖∞ < ε (absoluta). La lámina escribe la **relativa** ‖x⁽ᵏ⁾ − x⁽ᵏ⁻¹⁾‖/‖x⁽ᵏ⁾‖ | dₖ (cambio entre iteraciones) |
 | B | ‖b − Ax⁽ᵏ⁾‖∞ < ε | rₖ (residuo) |
 | C | N iteraciones fijas | **no demuestra convergencia** |
 
@@ -168,7 +168,7 @@ Siempre hay un máximo k_max. El motivo de parada sale del código de terminaci�
 **Gráficas obligatorias:** `interactivas.convergencia` (dₖ y rₖ frente a k, con ε) e `interactivas.comparacion`.
 
 **Ejemplos:**
-- Tridiagonal [−1, 4, −1] 4×4, b = (1, 0, 0, 1), ε = 10⁻³, x⁽⁰⁾ = 0, ω = 1,2: Jacobi 7 iteraciones, Gauss-Seidel 5, SOR 7. Solución (1/3, 1/15, 1/15, 1/3) (S9-05/10 p. 14).
+- Tridiagonal [−1, 4, −1] 4×4, b = (1, 0, 0, 1), ε = 10⁻³, x⁽⁰⁾ = 0, ω = 1,2: Jacobi 7 iteraciones, Gauss-Seidel 5, SOR 7 (criterio A absoluto de Ax; con la relativa de la lámina serían 8 y 6). Solución (1/3, 1/15, 1/15, 1/3) (S9-05/10 p. 14).
 - S9-07/10, Jacobi con A = [[3, 3, 3], [3, 3, 2], [−3, −2, 3]]: det(T − λI) = −λ³ − (4/9)λ + 4/3; **ρ ≈ 1,174 > 1: no converge.** La hoja dice ρ = 0 (errata: omite el 4/3).
 
 **Debe explicar:** por qué Gauss-Seidel suele ser más rápido; qué es dₖ y qué es rₖ; por qué la dominancia no basta para decidir no convergencia; qué es ρ(T).
