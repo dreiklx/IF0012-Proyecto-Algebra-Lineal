@@ -101,3 +101,16 @@ cámara. Las manos de las pruebas son geometrías construidas en `tests/gestos/m
 
 Si la cámara falla durante la defensa: el ratón (arrastrar, rueda y los botones de Plotly)
 funciona igual.
+
+## Módulo II: gráfica de normas (13-nov-2026)
+
+- Objetivo propio «Gráfica de normas · Módulo II» (`tipo="2d_m2"`). Usa el mismo `VistaPlano2D`,
+  el mismo hilo y la misma cámara que el módulo IV. Un solo objetivo activo: al activar uno,
+  los demás se detienen.
+- Gráfica: barras de las sumas de fila de A y de A⁻¹ (S7-21/09 p. 19). Es la norma ∞ del
+  procedimiento. Los gestos solo cambian el rango visible (desplazar y acercar). No cambian
+  ninguna suma ni ningún cálculo de κ.
+- La gráfica de sensibilidad (cota de S7-21/09 p. 18) **no** lleva control gestual: son tres
+  barras sin ejes continuos.
+- Prueba automatizada: las mismas de `tests/gestos/test_vista2d.py` (la vista) y
+  `tests/modulo_II/test_visualizaciones.py` (las barras). Validación física: pendiente del usuario.

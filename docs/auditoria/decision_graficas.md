@@ -26,14 +26,20 @@ Una gráfica adicional de Gauss duplicaría `planos_3d` sin aportar.
 
 ## Módulo II (determinantes, inversa, normas, condicionamiento)
 
-Se implementan **tres visualizaciones complementarias** (`visualizacion/geometria_modulo_II.py`),
-todas con la matriz introducida por el usuario y los valores del núcleo:
+Se implementan **dos visualizaciones complementarias** (`visualizacion/geometria_modulo_II.py`),
+con la matriz introducida por el usuario y los valores del núcleo. La interpretación del
+determinante como factor de área **se retiró** (ver abajo):
 
 | Visualización | Materia de clase relacionada | Tipo | Verificación |
 |---|---|---|---|
-| **Determinante como factor de área (2×2)**: cuadrícula original y transformada por A, cuadrado unitario y paralelogramo A·(cuadrado); texto con det(A), área y factor | Propiedades del determinante (S2-19/08 p. 38). La lectura geométrica como área **no se enseña** en las láminas revisadas | **Complementaria** | Área del paralelogramo = |det(A)| (prueba con 4 matrices); det = 0 ⇒ área 0 y mensaje de no invertibilidad (prueba). Captura de la aplicación |
 | **Sumas absolutas por fila (norma ∞, máximo destacado) y por columna (norma 1, referencia)** | Norma ∞ = máxima suma de fila (S7-21/09 p. 19, pasos 2 y 4 de κ; la p. 17 solo por OCR) | Filas: procedimiento de clase. Columnas (norma 1): **complementaria** y no interviene en κ∞ | Las sumas coinciden con `sumas_absolutas_por_fila` (prueba); la barra destacada es la de la norma ∞ (prueba). Captura |
 | **Perturbación frente a la cota κ∞·‖Δb‖/‖b‖** (tres barras) | Cota ‖Δx‖/‖x‖ ≤ κ·‖Δb‖/‖b‖ (S7-21/09 p. 18) | **Complementaria** (la cota es materia; el gráfico es apoyo) | Las barras coinciden con `analizar_perturbacion` (prueba). Captura |
+
+**Retirado el 13-nov-2026: determinante como factor de área (2×2).** En S2-19/08 p. 38 (imagen
+revisada) solo aparecen las propiedades del determinante (intercambio de filas, suma de múltiplos,
+triangular, fila de ceros). La interpretación geométrica como área no aparece en los materiales.
+Se elimina la visualización y su explicación. La captura se conserva en
+`docs/auditoria/evidencias/capturas/retiradas/`.
 
 **Qué no se implementa y por qué:**
 - Extensión 3D (paralelepípedo para 3×3): no implementada. Requiere teoría de volumen que la
@@ -60,6 +66,6 @@ Lo mismo ocurre en el Módulo II al cambiar A, b o la perturbación.
 | Módulo | Gráfica exigida | Gráficas en Ax | Acción en esta etapa |
 |---|---|---|---|
 | I | No | Rectas 2D y planos 3D | Ninguna |
-| II | No | Determinante (2×2), normas ∞ y 1, sensibilidad (complementarias) | **Añadidas** |
+| II | No | Normas ∞ (filas, con MediaPipe 2D) y norma 1 (columnas), sensibilidad (complementarias) | **Añadidas**; determinante geométrico **retirado** |
 | III | Sí | Ajuste con residuos verticales; tabla de residuos (complementaria) | **Tabla añadida**; gráfica verificada sin duplicar |
 | IV | Sí | Convergencia, comparación, autovalores, precondicionador | Ninguna |

@@ -2,7 +2,6 @@
 
 import streamlit as st
 
-from algebra.compartido.exactos import a_fraccion
 from algebra.compartido.matriz import ErrorMatriz, sumas_absolutas_por_columna, sumas_absolutas_por_fila
 from algebra.compartido.validacion import ErrorEntrada, formatear_numero, leer_vector
 from algebra.modulo_II_condicionamiento.condicion import (
@@ -15,8 +14,9 @@ from algebra.modulo_II_condicionamiento.condicion import (
     construir_delta_b,
     numero_condicion_infinito,
 )
-from algebra.modulo_I_sistemas.directos import ErrorSistema, determinante
-from interfaz.compartido import ejemplos
+from algebra.modulo_I_sistemas.directos import ErrorSistema
+from interfaz.compartido import control_gestual, ejemplos
+from interfaz.compartido.control_gestual import rango_para_figura
 from interfaz.compartido.componentes import (
     leer_matriz_ui,
     leer_vector_ui,
@@ -43,7 +43,7 @@ from interfaz.compartido.estilo import (
     valor_destacado,
 )
 from visualizacion import notacion
-from visualizacion.geometria_modulo_II import normas_barras, sensibilidad_barras, transformacion_2x2
+from visualizacion.geometria_modulo_II import normas_columnas, normas_filas, rango_normas_inicial, sensibilidad_barras
 
 ETIQUETA_SENSIBILIDAD = {SENSIBILIDAD_BAJA: ("Sensibilidad baja", "ok"),
                          SENSIBILIDAD_ALTA: ("Sensibilidad alta", "error")}
@@ -194,30 +194,28 @@ def mostrar_resultado(A, c, p):
 
 
 def visualizaciones_complementarias(A, c, p):
-    """Tres gráficas de apoyo (no son procedimientos de la profesora): determinante como factor
-    de área (solo 2×2), sumas de filas y columnas con la norma ∞ destacada, y la cota de
-    sensibilidad con los valores de la perturbación introducida."""
+    """Dos gráficas de apoyo: sumas de filas y columnas con la norma ∞ destacada, y la cota de
+    sensibilidad (S7-21/09 p. 18) con los valores de la perturbación introducida."""
     st.markdown("**Visualizaciones complementarias** · apoyo para interpretar los cálculos; "
                 "no son procedimientos de clase salvo que se indique.")
-    pestanas = st.tabs(["Determinante (2×2)", "Normas ∞ y 1", "Sensibilidad"])
+    pestanas = st.tabs(["Normas ∞ y 1", "Sensibilidad"])
     with pestanas[0]:
-        if len(A) != 2:
-            st.info("La visualización geométrica del determinante está implementada para matrices 2×2. "
-                    "La extensión a 3×3 no se implementó.")
-        else:
-            A_exacta = [[a_fraccion(v) for v in fila] for fila in A]
-            figura, _area = transformacion_2x2(A_exacta, determinante(A_exacta))
-            mostrar_interactiva(figura, "modulo_II_determinante", mostrar_ayuda=False)
-            st.caption("Cuadrícula original (gris) y transformada por A (azul). Dato del curso: "
-                       "el determinante aparece en S2-19/08 p. 38; la lectura geométrica como área es complementaria.")
-    with pestanas[1]:
-        columnas = sumas_absolutas_por_columna(A)
-        filas_inv = sumas_absolutas_por_fila(c.inversa) if c.inversa is not None else None
-        figura = normas_barras(sumas_absolutas_por_fila(A), filas_inv, columnas)
+        sumas_A = sumas_absolutas_por_fila(A)
+        sumas_inv = sumas_absolutas_por_fila(c.inversa) if c.inversa is not None else None
+        rango = rango_normas_inicial(sumas_A, sumas_inv)
+        x0, x1, y0, y1 = rango_para_figura(rango, tipo="2d_m2")
+        figura = normas_filas(sumas_A, sumas_inv)
+        figura.update_layout(xaxis_range=[x0, x1], yaxis_range=[y0, y1])
         mostrar_interactiva(figura, "modulo_II_normas", mostrar_ayuda=False)
-        st.caption("La barra destacada es el máximo de las filas: ‖A‖∞ y ‖A⁻¹‖∞ (la norma del proyecto). "
-                   "El panel de columnas es la norma 1, solo como referencia.")
-    with pestanas[2]:
+        control_gestual.panel("graf_modulo_II_normas", tipo="2d_m2", rango_inicial=rango)
+        st.caption("Barras de las sumas de fila de A (y de A⁻¹). La barra naranja es el máximo: "
+                   "es la norma ∞ del procedimiento (S7-21/09 p. 19). Los gestos (si el control está activo) "
+                   "solo cambian la vista.")
+        figura_col = normas_columnas(sumas_absolutas_por_columna(A))
+        mostrar_interactiva(figura_col, "modulo_II_normas_columnas", mostrar_ayuda=False)
+        st.caption("Referencia: suma de columnas (norma 1, S7-21/09 p. 19). No interviene en κ∞; "
+                   "se muestra solo como comparación.")
+    with pestanas[1]:
         if p is None or p.error_relativo_b is None or p.error_relativo_x is None or p.cota is None:
             st.info("Sin perturbación válida para comparar (Δb = 0 o un denominador es cero).")
         else:

@@ -27,7 +27,9 @@ _puente = st.components.v2.component("ax_puente_camara", js=_JS)
 OBJETIVOS = {
     "3d": "Gráfica 3D · Módulo I (planos)",
     "2d": "Gráfica 2D · Módulo IV (convergencia)",
+    "2d_m2": "Gráfica de normas · Módulo II",
 }
+TIPOS_2D = ("2d", "2d_m2")
 
 GUIA = [
     ("✋ Palma abierta (½ s)", "activa el control y calibra la pinza con su mano"),
@@ -42,7 +44,7 @@ GUIA = [
 def control(tipo="3d"):
     """Un control por objetivo y servidor: la cámara es un solo dispositivo físico."""
     from gestos.control import ControlGestual
-    if tipo == "2d":
+    if tipo in TIPOS_2D:
         from gestos.vista2d import VistaPlano2D
         return ControlGestual(destino=VistaPlano2D(0.0, 1.0, 0.0, 1.0))
     return ControlGestual()
@@ -53,16 +55,17 @@ def _clave(base, tipo):
     return base if tipo == "3d" else f"{base}_{tipo}"
 
 
-def _otro(tipo):
-    return "2d" if tipo == "3d" else "3d"
+def _otros(tipo):
+    return [t for t in OBJETIVOS if t != tipo]
 
 
 def _activar(tipo, rango=None):
     """on_click: detiene el otro objetivo y arranca este.  Antes de arrancar fija la vista
     inicial (rango de la gráfica) para que el primer gesto parta de la vista que se ve."""
-    otro = control(_otro(tipo))
-    if otro.activo:
-        otro.detener(motivo="se activó el control de la otra gráfica")
+    for otro_tipo in _otros(tipo):
+        otro = control(otro_tipo)
+        if otro.activo:
+            otro.detener(motivo="se activó el control de otra gráfica")
     c = control(tipo)
     if rango is not None and not c.activo:
         from gestos.vista2d import VistaPlano2D
@@ -80,13 +83,13 @@ def camara_para_figura():
     return c.camara_actual() if c.activo else None
 
 
-def rango_para_figura(rango_inicial):
+def rango_para_figura(rango_inicial, tipo="2d"):
     """Rango (x0, x1, y0, y1) para dibujar la gráfica 2D: el de la vista gestual si el control
     2D está activo; si no, `rango_inicial`.  Mantiene el zoom al volver a dibujar."""
     ok, _ = gestos.disponible()
     if not ok:
         return rango_inicial
-    c = control("2d")
+    c = control(tipo)
     if not c.activo:
         return rango_inicial
     vista = c.camara_actual()
@@ -121,7 +124,8 @@ def panel(clave_grafica, tipo="3d", rango_inicial=None):
     servidor = c.servidor
     if activo and servidor is not None:
         _puente(key=_clave("gest_puente", tipo), data={"clave": clave_grafica, "puerto": servidor.puerto,
-                                                  "token": servidor.token, "tipo": tipo})
+                                                  "token": servidor.token,
+                                                  "tipo": "2d" if tipo in TIPOS_2D else "3d"})
         _estado_en_vivo(tipo)
     else:
         e = c.estado()

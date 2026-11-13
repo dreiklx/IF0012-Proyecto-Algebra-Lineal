@@ -37,6 +37,8 @@ Repaso breve para la defensa. La guía completa (`docs/guia_estudio_if0012.md`) 
 
 **Gráficas (decisión 12-nov, `docs/auditoria/decision_graficas.md`):** exigidas solo en III (datos y recta) y IV (error frente a iteración). I tiene rectas 2D y planos 3D, que ya muestran la geometría de clase. II no tiene gráfica: κ es un número y su cálculo no necesita figura.
 
+**Pruebas de los ejemplos de la profesora:** 13, en `tests/referencia_profesora/` (S6-16/09 p. 29; S7-21/09 p. 19; S9-07/10 pp. 3-7). Ejemplos sin revisar en imagen: `docs/auditoria/pruebas_ejemplos_profesora.md`.
+
 **Verificación visual (12-nov):** revisadas visualmente S6-16/09 p. 29 (Gauss, comparada con Ax) y S9-07/10 pp. 2–7 (Jacobi, Gauss-Seidel, radio espectral; pp. 4–7 comparadas con Ax). El resto de páginas está en `docs/auditoria/inventario_paginas.csv` como «Solo OCR», sin verificar visualmente.
 
 ---
@@ -89,7 +91,7 @@ Repaso breve para la defensa. La guía completa (`docs/guia_estudio_if0012.md`) 
 - Cota: ‖Δx‖∞/‖x‖∞ ≤ κ∞(A) · ‖Δb‖∞/‖b‖∞.
 - Perturbación porcentual (interpretación propia, Cat. B): Δbᵢ = (p/100)·bᵢ.
 
-**Visualizaciones complementarias del Módulo II** (no son materia expresamente explicada en clase): (1) determinante como factor de área en 2×2, con la cuadrícula y el paralelogramo de la matriz introducida; área = |det| y área 0 si det = 0; (2) sumas absolutas por fila con la norma ∞ destacada y por columna como referencia de la norma 1; (3) perturbación frente a la cota κ∞·‖Δb‖/‖b‖. No hay extensión 3D. Código: `visualizacion/geometria_modulo_II.py`. Pruebas: `tests/modulo_II/test_visualizaciones.py`.
+**Visualizaciones del Módulo II** (complementarias; apoyo, no procedimiento de clase): (1) barras de las sumas de fila de A y A⁻¹, con la máxima destacada: es la norma ∞ de S7-21/09 p. 19; (2) suma de columnas: norma 1, que también aparece en S7-21/09 p. 19 y es solo referencia (no entra en κ∞); (3) perturbación frente a la cota κ∞·‖Δb‖/‖b‖ (S7-21/09 p. 18). El determinante como factor de área **no** se enseña en los materiales: se retiró. Gestos 2D (MediaPipe) en la gráfica de filas: solo cambian la vista. Código: `visualizacion/geometria_modulo_II.py`. Pruebas: `tests/modulo_II/test_visualizaciones.py`.
 
 **Código:** `algebra/modulo_II_condicionamiento/condicion.py`: `numero_condicion_infinito`, `clasificar_kappa`, `construir_delta_b`, `analizar_perturbacion`. Sumas por fila: `algebra/compartido/matriz.py`.
 
