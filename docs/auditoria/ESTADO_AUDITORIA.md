@@ -117,3 +117,21 @@ Revisadas: 457 de 457 páginas. Pendientes: 0.
 | Semana09-07-10-2026-Álgebra Lineal-IIC26.pdf | 7/7 |
 
 Desglose de estados: Revisada visualmente: 453; Sin contenido matemático relevante: 4
+
+## 11. PAUSA de la auditoría (fecha de corte: 13-nov-2026)
+
+**Estado: PAUSADA, no cancelada.** No se continúa hasta que el usuario lo pida. Esta sección prevalece sobre las anteriores cuando se contradigan.
+
+- Rama de trabajo: `auditoria/primera-pasada`. HEAD local: `aed033d`. Ese commit tiene 26 commits sobre `origin/auditoria/primera-pasada` (`2451d60`), que deben subirse al remoto con `git push`.
+- Respaldo antes de la pausa: rama local y remota `backup/antes-manual-aed033d`; etiqueta `restore/aed033d` (`aed033d`).
+- Primera pasada: 457/457 páginas revisadas (ver sección 10).
+- Segunda pasada (`segunda_auditoria_completa.csv`, 457 filas), según el CSV en `aed033d`:
+  - Revisada visualmente (segunda pasada): **58**
+  - Revisada visualmente (primera pasada, sin segunda): 52
+  - Sin contenido matemático relevante: 1
+  - Ninguno: 1
+  - Pendiente: **345**
+  - Cifras anteriores de 44 o `df5a8c2` (d03 completo) están superadas: el progreso real es el del CSV.
+- Documentos de la segunda pasada completos: IF0012-IITarea (3/3), IF0012 Álgebra Lineal (12/12), Semana01-10 y Semana01-12 (lo que indique el CSV), y demás según el CSV.
+- Para retomar: leer `segunda_auditoria_completa.csv`, continuar con la primera fila `Pendiente` en el orden del inventario, y después de cada documento actualizar el CSV y la matriz.
+- No declarar la auditoría completa: quedan 345 páginas de segunda pasada sin revisar y la reconciliación sin hacer.
