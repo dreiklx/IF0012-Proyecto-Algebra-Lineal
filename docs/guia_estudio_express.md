@@ -239,6 +239,8 @@ cámara ─► captura.py ─► deteccion.py ─► interpretacion.py ─► mo
 | ✊ Puño (½ s) | **Pausa** (se reanuda con la palma) |
 | ✌️ Victoria (≈ 1 s) | **Restablece** la vista |
 
+**Módulo IV (2D):** los mismos gestos mueven el rango visible de la gráfica de convergencia (una pinza desplaza, dos pinzas acercan o alejan, puño pausa, victoria restablece). No cambian datos, criterios ni iteraciones. Un solo objetivo activo a la vez. Documento: `docs/mediapipe_2d.md`. **Probado solo con datos sintéticos**; la validación con mano real la hace el equipo.
+
 **Estabilidad:** antirrebote (0,35 s; victoria 0,8 s); histéresis (la pinza sale con 1,5× el umbral de entrada); calibración del umbral entre 0,18 y 0,25; suavizado s ← s + 0,35(x − s); zona muerta acumulada.
 
 **Conexión con Plotly:** `servidor.py` (solo 127.0.0.1, con token) envía la cámara ~30 veces por segundo; `puente_camara.js` (~50 líneas) la aplica con `Plotly.relayout`. Sin el puente, Streamlit daba 1-3 actualizaciones por segundo. El ratón funciona siempre.
