@@ -35,7 +35,9 @@ def _detector_real():
 
 class ControlGestual:
     def __init__(self, fabrica_camara=_camara_real, fabrica_detector=_detector_real,
-                 reloj=time.monotonic, con_servidor=True):
+                 reloj=time.monotonic, con_servidor=True, destino=None):
+        """`destino` recibe las acciones de los gestos (girar, zoom, restablecer, a_plotly,
+        desde_plotly): CamaraOrbital (3D, por defecto) o VistaPlano2D (gráficas 2D)."""
         self._fabrica_camara = fabrica_camara
         self._fabrica_detector = fabrica_detector
         self._reloj = reloj
@@ -44,7 +46,7 @@ class ControlGestual:
         self._hilo = None
         self._parar = threading.Event()
         self._latido = reloj()
-        self.camara = CamaraOrbital()
+        self.camara = destino if destino is not None else CamaraOrbital()
         self.servidor = None
         self._estado = self._estado_inicial()
 
