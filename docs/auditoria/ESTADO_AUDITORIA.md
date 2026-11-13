@@ -93,7 +93,7 @@ Próximo paso: continuar la primera pasada en el orden del inventario, desde `IF
 
 ## 10. Progreso de la primera pasada (automático)
 
-Revisadas: 72 de 457 páginas. Pendientes: 385.
+Revisadas: 112 de 457 páginas. Pendientes: 345.
 
 | Documento | Revisadas/total |
 |---|---|
@@ -102,7 +102,7 @@ Revisadas: 72 de 457 páginas. Pendientes: 385.
 | INTRUCCIONES-PROYECTO FINAL-ÁLGEBRA LINEAL-IIC2026.pdf | 5/5 |
 | Semana01-10-08-2026-Álgebra Lineal-IIC.pdf | 24/24 |
 | Semana01-12-08-2026-Álgebra Lineal-IIC.pdf | 28/28 |
-| Semana02-17-08-2026-Álgebra Lineal-IIC.pdf | 0/40 |
+| Semana02-17-08-2026-Álgebra Lineal-IIC.pdf | 40/40 |
 | Semana02-19-08-2026-Álgebra Lineal.pdf | 0/48 |
 | Semana03-24-08-2026-Álgebra Lineal-IIC26.pdf | 0/32 |
 | Semana03-26-08-2026-Álgebra Lineal-IIC26.pdf | 0/38 |
@@ -116,4 +116,4 @@ Revisadas: 72 de 457 páginas. Pendientes: 385.
 | Semana09-05-10-2026-Álgebra Lineal-IIC26.pdf | 0/34 |
 | Semana09-07-10-2026-Álgebra Lineal-IIC26.pdf | 0/7 |
 
-Desglose de estados: Revisada visualmente: 71; Sin contenido matemático relevante: 1; Pendiente: 385
+Desglose de estados: Revisada visualmente: 111; Sin contenido matemático relevante: 1; Pendiente: 345
