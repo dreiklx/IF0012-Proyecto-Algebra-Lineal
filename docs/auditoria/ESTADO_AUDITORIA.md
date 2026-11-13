@@ -80,3 +80,13 @@ Rama de trabajo: `auditoria/primera-pasada` (no se integra en `main` hasta cerra
 - **Fases 5-15:** no iniciadas.
 
 Próximo paso: continuar la primera pasada en el orden del inventario, desde `IF0012_Álgebra…pdf` p. 1.
+
+## 9. Reanudación 13-nov-2026 (verificada)
+
+- Repositorio local: rama `auditoria/primera-pasada`, HEAD `c7e977a`, árbol limpio. `main` = `origin/main` = `7acc153`.
+- Respaldo de esta etapa: rama `backup/antes-auditoria-completa-c7e977a` y etiqueta `restore/c7e977a` (`c7e977a`), subidas a origin. Rama `auditoria/primera-pasada` subida a origin. No se borró ni forzó nada.
+- Suite: `.venv\Scripts\python.exe -m unittest` → 331 pruebas OK.
+- ZIP `dist/Grupo01-IF0012-Proyecto-IIC.zip`: SHA-256 `990a81b6…008fe`, coincide con `dist/SHA256.txt`.
+- context-mode: desinstalado (no aparece en `claude plugin list`; ausente de `enabledPlugins`). Entrada residual en `extraKnownMarketplaces` (inofensiva, pendiente de limpiar).
+- Prueba en sesión nueva: `s905_p19.jpg` (191 KB) leída completa sin bloqueo.
+- Auditoría: primera pasada 3/457 revisadas visualmente, 454 pendientes. Segunda pasada no iniciada.
