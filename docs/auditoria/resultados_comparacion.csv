@@ -1,0 +1,12 @@
+modulo,fuente,pagina,procedimiento,formula_o_paso_profesora,implementacion_ax,resultado,revision
+IV,S9-07/10,2,Dominancia diagonal por filas,|a_ii| > sum_{j!=i}|a_ij| (tres ecuaciones) y conclusión de convergencia,dominancia_diagonal (convergencia.py),Coincide (dominancia es suficiente; la lámina la usa para concluir),Visual
+IV,S9-07/10,3,Radio espectral: definición,rho(T)=max{|lambda|} con det(T-lambda I)=0,radio_espectral / concluir (espectral.py),Coincide,Visual
+IV,S9-07/10,4,Descomposición A = D + L + U,D diagonal; L y U estrictamente triangulares,descomponer (matriz_iteracion.py),Coincide,Visual
+IV,S9-07/10,4,Jacobi: T_J = -D^-1 (L+U),T_J = [[0,-1,-1],[-1,0,-2/3],[1,2/3,0]],matriz_iteracion JACOBI,Coincide (exacto),Visual
+IV,S9-07/10,4,Jacobi: c_J = D^-1 b y x(1) = T_J x(0) + c_J con x(0)=0,c_J = (3,3,-2/3); x(1)=(3,3,-2/3),ejecutar JACOBI (ejecucion.py),Coincide,Visual
+IV,S9-07/10,5,Jacobi: iteración k=2,x(2)=T_J x(1)+c_J,"x(2)=(2/3, 4/9, 13/3)",ejecutar JACOBI,Coincide con el cálculo; la tercera componente de la lámina no se lee con certeza (ver discrepancias),Visual (parcial)
+IV,S9-07/10,5,Radio espectral de Jacobi por det(T-lambda I) con Sarrus,"-lambda^3 - (4/9) lambda + 4/3 = 0 (la lámina omite el término 4/3)",polinomio_caracteristico (polinomio_raices.py) → lambda^3 + (4/9)lambda - 4/3,Coincide con Ax; la lámina S9-07/10 p.5 omite 4/3: errata,Visual
+IV,S9-07/10,6,Gauss-Seidel: T_GS = -(D+L)^-1 U,"T_GS = [[0,-1,-1],[0,1,1/3],[0,-1/3,-7/9]]",matriz_iteracion GAUSS_SEIDEL,Coincide (exacto),Visual
+IV,S9-07/10,7,Gauss-Seidel: c_GS,"Lámina escribe 'C_GS = -(D+L)^-1 b' pero calcula T_GS·b = (-7, 25/3, -13/9)",c_GS = (D+L)^-1 b = (3, 0, 7/3),Error de la lámina: el valor correcto es (D+L)^-1 b y el signo positivo,Visual
+IV,S9-07/10,7,Gauss-Seidel: x(1) = T_GS x(0) + c_GS con x(0)=0,"Lámina: x(1)=(-7,25/3,-13/9) (consecuencia del error anterior)","Ax: x(1)=(3,0,7/3); x(2)=(2/3,7/9,14/27); x(3)=(46/27,77/81,406/243)",Error de la lámina; Ax correcto,Visual
+IV,S9-07/10,7,Radio espectral de T_GS,"lambda1=0.9351, lambda2=-0.7129, lambda3=0; rho=0.9351 < 1 => converge",radio_espectral GAUSS_SEIDEL: rho=0.935133,Coincide,Visual

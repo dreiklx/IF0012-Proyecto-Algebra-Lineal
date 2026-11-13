@@ -184,7 +184,8 @@ Siempre hay un máximo k_max. El motivo de parada sale del código de terminaci�
 | S8-30/09 p. 20 | T₁ = 2,402 «‖·‖∞» | es la norma 1; la ‖·‖∞ es 1,889 |
 | S9-05/10 p. 23 | M = D converge más rápido en Jacobi | iteraciones **idénticas** |
 | S9-07/10 p. 4 | ρ(T_J) = 0 | ≈ 1,174 |
-| S9-07/10 p. 7 | C_GS = −(D + L)⁻¹b | C_GS = (D + L)⁻¹b |
+| S9-07/10 p. 7 | C_GS = −(D + L)⁻¹b, y calcula T_GS·b = (−7, 25/3, −13/9) como x⁽¹⁾ | C_GS = (D + L)⁻¹b = (3, 0, 7/3); x⁽¹⁾ = (3, 0, 7/3) |
+| S9-05/10 p. 23 y S9-07/10 p. 5 | Polinomio de Jacobi −λ³ − (4/9)λ = 0, ρ = 0 | −λ³ − (4/9)λ + 4/3 = 0, ρ ≈ 1,174 |
 
 ---
 
