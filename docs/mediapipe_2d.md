@@ -84,7 +84,14 @@ de la imagen, que se aplica al desplazamiento acumulado para que el temblor no m
 **Qué NO está probado:** ningún gesto ha sido reconocido con una mano real frente a una
 cámara. Las manos de las pruebas son geometrías construidas en `tests/gestos/manos_sinteticas.py`.
 
-## Validación física pendiente (la hace el equipo)
+## Validación física
+
+- **Confirmada por el usuario (12-nov-2026):** la navegación 2D se probó personalmente con cámara
+  en Brave. El comportamiento se considera correcto y no se modificó tras la prueba.
+- Los resultados de las pruebas automatizadas (`tests/gestos/test_vista2d.py`) siguen siendo
+  sintéticos; la validación física es la prueba con mano real del usuario.
+
+## Validación física adicional (opcional)
 
 1. Abrir Ax en Brave: `http://localhost:8501`, módulo IV, pestaña «Ejecutar».
 2. Pulsar «📷 Activar cámara y gestos» en el panel 2D y mostrar la palma durante medio segundo.
