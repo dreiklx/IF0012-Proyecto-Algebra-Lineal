@@ -57,3 +57,12 @@ Pruebas de referencia: 16 (`tests/referencia_profesora/`). Cobertura **no** comp
 5. Solo después: guías, limpieza de comentarios, ZIP y SHA-256.
 
 No se debe declarar ninguna auditoría completa mientras existan filas «Pendiente».
+
+## 7. Desactivación de context-mode (13-nov-2026)
+
+- Configuración original: `~/.claude/settings.json`, línea `"context-mode@context-mode": true`.
+- Respaldo: `~/.claude/settings.json.bak-antes-context-mode-20261113-020036`.
+- Cambio: `"context-mode@context-mode": false`. JSON validado. Resto de la configuración intacta.
+- No hay `hooks` de context-mode en `settings.json`: el hook `PreToolUse` lo registra el propio plugin al cargarse.
+- **Prueba:** tras el cambio, la lectura de `s905_p19.jpg` (191 KB) seguía bloqueada en la sesión actual. Los plugins se cargan al iniciar Claude Code: hace falta reiniciarlo para que el cambio tenga efecto.
+- Pendiente: reiniciar Claude Code y repetir la prueba de lectura antes de continuar la auditoría.
