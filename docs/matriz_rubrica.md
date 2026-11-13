@@ -36,7 +36,7 @@ Categorías de procedencia: **A** visto en clase · **B** exigido por el enuncia
 | **M-IV: gráfica error vs. iteración** | OFICIAL p. 2 | B | `interactivas.convergencia` y `interactivas.comparacion` | `visualizacion/interactivas.py` | `tests/interfaz/test_graficas_interactivas.py` | Demostrado |
 | Validaciones: vacíos, formatos, dimensiones, singularidad, división por cero, tolerancia > 0, k_max entero > 0, 0 < ω < 2 | OFICIAL p. 3 | B | `validar_configuracion`, `analizar`, editor | `ejecucion.py`; `interfaz/compartido/editor.py` | `test_iterativos.py`; `test_editor.py` | Demostrado |
 | Casos de prueba documentados por módulo | OFICIAL p. 3 | B | `casos_prueba/modulo_I.md` … `modulo_IV.md` | `casos_prueba/` | Revisión documental | Implementado |
-| Caso obligatorio de validación de la docente | OFICIAL p. 3, §4: «La docente proporcionará al menos un caso de validación obligatorio antes de la entrega.». Lo mencionan también OFICIAL p. 1 («casos obligatorios indicados por la docente»), p. 4 (rúbrica «Casos de prueba», 3 %) y p. 5 (lista de cotejo) | B | Estructura lista en `casos_prueba/` (sin contenido) | — | — | **Pendiente externo, no error de implementación**: el enunciado contempla el caso proporcionado por la docente (OFICIAL p. 3, §4). El equipo no lo ha recibido; no se inventa ni se atribuye. Los casos internos de Ax son independientes |
+| Caso obligatorio de validación de la docente | OFICIAL p. 3, §4: «La docente proporcionará al menos un caso de validación obligatorio antes de la entrega.». Lo mencionan también OFICIAL p. 1 («casos obligatorios indicados por la docente»), p. 4 (rúbrica «Casos de prueba», 3 %) y p. 5 (lista de cotejo) | B | Estructura lista en `casos_prueba/` (sin contenido) | — | — | **No recibido (hecho documental)**: el enunciado prevé el caso proporcionado por la docente (OFICIAL p. 3, §4). El equipo confirma que no lo recibió; no es tarea técnica de Ax; no se inventa ni se atribuye. Los casos internos de Ax son independientes |
 | Manual de usuario | OFICIAL p. 3 | B | `docs/manual_usuario.md` | — | Revisión documental | Implementado |
 | Instrucciones de ejecución y dependencias | OFICIAL p. 1 | B | `README.md`, `requirements*.txt`, `ejecutar.bat` | — | Instalación limpia (ver `docs/instalacion_limpia.md`) | Implementado |
 | Declaración de herramientas de IA | Programa §6.2 | — | `docs/herramientas_y_bibliotecas.md` §4 | — | — | Implementado; **Pendiente** de confirmación de la docente |
@@ -67,13 +67,13 @@ El puntaje lo decide la docente. Esta tabla solo indica lo implementado y cómo 
 | S9-07/10 p. 4 | Sale ρ(T_J) = 0 | Polinomio correcto −λ³ − (4/9)λ + 4/3; ρ ≈ 1,174 > 1: no converge | Ax muestra 1,174 y explica la omisión del término 4/3 |
 | S9-05/10 p. 23 | «Jacobi con M = D converge más rápido» | Con M = D, D⁻¹A tiene diagonal 1 y T_J es la misma: iteraciones idénticas | Ax documenta que no acelera Jacobi; el efecto aparece en κ y en Richardson |
 | S8-30/09 pp. 32-33 | SOR presentado por componentes | La forma matricial T_ω = (D + ωL)⁻¹[(1 − ω)D − ωU] no aparece en las láminas | Ax la calcula y la rotula Cat. C |
-| S8-28/09 p. 6 | Criterio con norma relativa ‖x⁽ᵏ⁺¹⁾ − x⁽ᵏ⁾‖/‖x⁽ᵏ⁾‖ | Medido: Jacobi k = 7 (absoluta) frente a k = 8 (relativa) en la tridiagonal de la guía | Ax usa la absoluta; la interfaz lo indica (ver `docs/auditoria_procedimientos_pdf.md` §2.2) |
+| S8-28/09 p. 6 | Fórmula ‖x⁽ᵏ⁺¹⁾ − x⁽ᵏ⁾‖ < ε (absoluta, verificada en imagen); el título dice «error relativo» | Sin discrepancia de fórmula | Ax coincide. Errata interna: ε = 10⁻³ en el ejemplo y 0,01 en la conclusión |
 | Richardson, Faddeev-LeVerrier, Durand-Kerner | No aparecen en ninguna lámina (OCR de las 15 láminas: 0 coincidencias) | Búsqueda sobre el texto de las 457 páginas | **Cat. C**, rotulados como extensiones en la interfaz |
 | Erratas S2-19/08, S3-26/08, S6-14/09, S7-21/09, S8-30/09 p. 20, S9-07/10 p. 7 | Varias (ver `docs/referencia_oficial_procedimientos.md`) | Recalculadas | Ax muestra el valor correcto |
 
 ## 4. Estado global
 
-- Requisitos obligatorios: **implementados y demostrados** salvo el caso de validación de la docente (pendiente externo).
+- Requisitos obligatorios: **implementados y demostrados**. El caso de validación prevé la docente y no se recibió; no es tarea técnica de Ax.
 - Incentivos: **implementados**; el puntaje lo decide la docente. Ninguno está marcado como garantizado.
 - Gráficas: exactamente las exigidas (M-III y M-IV).
-- Pendientes externos: caso obligatorio de validación (P-3); confirmación sobre el uso de IA (P-2, programa §6.2).
+- Pendiente externo: confirmación sobre el uso de IA (P-2, programa §6.2). El caso de validación (P-3) queda registrado como no recibido.

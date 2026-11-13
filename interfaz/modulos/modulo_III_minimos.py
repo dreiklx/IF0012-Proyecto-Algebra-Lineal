@@ -40,7 +40,9 @@ from interfaz.compartido.estilo import (
     valor_destacado,
 )
 from visualizacion import notacion
-from visualizacion.interactivas import ajuste as grafica_ajuste_interactiva
+from visualizacion.interactivas import ajuste as grafica_ajuste_interactiva, rango_ajuste
+from interfaz.compartido import control_gestual
+from interfaz.compartido.control_gestual import rango_para_figura
 
 
 def mostrar():
@@ -228,8 +230,11 @@ def ajuste():
         valor_destacado("Ecuación", r.ecuacion,
                         f"m ≈ {float(r.pendiente):.8g} · c ≈ {float(r.intercepto):.8g} · "
                         f"‖r‖₂ ≈ {r.minimos.norma_residuo_2:.6g}")
+        rango = rango_ajuste(r.xs, r.ys, r.minimos.estimados)
+        vista = rango_para_figura(rango, tipo="2d_m3")
         mostrar_interactiva(grafica_ajuste_interactiva(r.xs, r.ys, r.pendiente, r.intercepto,
-                                                       r.minimos.estimados), "ajuste")
+                                                       r.minimos.estimados, rango=vista), "ajuste")
+        control_gestual.panel("graf_ajuste", tipo="2d_m3", rango_inicial=rango)
     st.caption("Gráfica: puntos (xᵢ, yᵢ), recta ŷ = m·x + c y residuos rᵢ = yᵢ − ŷᵢ dibujados como segmentos "
                "verticales. Visualización complementaria a la exigida; los valores salen de la misma solución.")
     st.table(tabla_ajuste(r))

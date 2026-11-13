@@ -112,7 +112,13 @@ Todas siguen en `referencia_oficial_procedimientos.md` §9; Ax muestra los valor
 
 ## Revisión del 12-nov-2026 (auditoría de la norma y del OCR)
 
-### 2.2 Criterio A: norma absoluta (Ax) frente a norma relativa (lámina)
+### 2.2 Criterio A: fórmula de la lámina y de Ax (CORREGIDO el 13-nov-2026)
+
+**Corrección:** la versión anterior afirmaba que la lámina usaba una norma relativa. Esa lectura fue un error de OCR. Verificado en imagen: S8-28/09 p. 6 y S8-30/09 p. 9 escriben ‖x⁽ᵏ⁺¹⁾ − x⁽ᵏ⁾‖ < ε, sin división. El título dice «norma del error relativo», pero la fórmula es absoluta. Ax coincide con la fórmula.
+
+La lámina S8-28/09 p. 6 tiene además una errata interna: el ejemplo fija ε = 10⁻³, pero la conclusión usa 0,01 y detiene en k = 8. Con 0,01 el criterio ya se cumple en k = 7 (0,005 < 0,01).
+
+Tabla original (superada):
 
 | Fuente | Fórmula escrita | Tipo |
 |---|---|---|

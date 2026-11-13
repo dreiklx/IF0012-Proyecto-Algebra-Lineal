@@ -84,7 +84,7 @@ Los detalles de cada fila están en las secciones 1, 3 y 3b.
 | Validaciones y errores | 4 % | «Validaciones completas y mensajes claros; no se producen cierres inesperados» | `validacion.py`, `matriz.validar_*`, `validar_configuracion`; `ejecutar` nunca lanza excepciones | V-01 a V-07 (abajo); `test_validacion`, P20, `test_tolerancias_extremas`, `test_app` | COMPLETADO |
 | Interfaz y usabilidad | 5 % | «Interfaz intuitiva, consistente y resultados fáciles de interpretar» | Ejemplos cargables, ayudas, errores con la posición, colores por tipo de resultado | `test_app` (15 pruebas de funcionamiento); revisión visual parcial | COMPLETADO. Falta una prueba con un usuario ajeno, que es recomendable |
 | Manual de usuario | 3 % | «Manual claro, completo, reproducible y coherente con la aplicación» | `docs/manual_usuario.md`: formato de entradas, instalación, un ejemplo por módulo, funciones principales, dependencias. Actualizado el 03-nov con las funciones nuevas | Instalación desde el ZIP en una carpeta limpia; **el equipo confirmó (03-nov) que funciona en otra computadora** siguiendo el manual | COMPLETADO |
-| Casos de prueba | 3 % | «Casos documentados y aplicación supera el caso obligatorio» | `casos_prueba/modulo_I..IV.md` (entrada, esperado, obtenido) | Las mismas comprobaciones automatizadas | Casos propios: COMPLETADO. **Caso obligatorio: PENDIENTE DE CONFIRMACIÓN** (no recibido) |
+| Casos de prueba | 3 % | «Casos documentados y aplicación supera el caso obligatorio» | `casos_prueba/modulo_I..IV.md` (entrada, esperado, obtenido) | Las mismas comprobaciones automatizadas | Casos propios: COMPLETADO. **Caso de la docente: no recibido (no es tarea técnica)** (no recibido) |
 
 ## 2. Rúbrica de la defensa oral (35 %, OFICIAL p. 4)
 
@@ -214,7 +214,7 @@ Los detalles de cada fila están en las secciones 1, 3 y 3b.
 | E-02 | Mecanismo de ejecución | `ejecutar.bat` | COMPLETADO (probado desde una copia limpia del ZIP en este equipo) |
 | E-03/E-04 | Manual e instrucciones | `docs/manual_usuario.md`, `README.md` | COMPLETADO (probado en otra computadora, confirmado por el equipo) |
 | E-05 | Código fuente comentado | Todo el proyecto | COMPLETADO |
-| E-06 | Carpeta de casos de prueba con los obligatorios | `casos_prueba/` | PENDIENTE DE CONFIRMACIÓN (caso obligatorio, P-3) |
+| E-06 | Carpeta de casos de prueba con los obligatorios | `casos_prueba/` | NO RECIBIDO: el enunciado lo prevé; no es tarea técnica de Ax (P-3) |
 
 ## 5. Lista de verificación final (OFICIAL p. 5)
 
@@ -224,7 +224,7 @@ Los detalles de cada fila están en las secciones 1, 3 y 3b.
 | Todos los algoritmos obligatorios implementados desde cero | COMPLETADO |
 | Los procedimientos matemáticos pueden visualizarse o verificarse | COMPLETADO |
 | Las entradas inválidas generan mensajes claros y no cierran la aplicación | COMPLETADO |
-| Hay casos de prueba y se verificó el caso obligatorio | Casos: COMPLETADO. Caso obligatorio: PENDIENTE DE CONFIRMACIÓN |
+| Hay casos de prueba y se verificó el caso obligatorio | Casos: COMPLETADO. Caso de la docente: no recibido (no es tarea técnica) |
 | El manual permite instalar, ejecutar y usar el programa sin ayuda del equipo | COMPLETADO (confirmado por el equipo en otra computadora, 03-nov) |
 | El ZIP tiene el nombre solicitado y todos los elementos | COMPLETADO (grupo 01 confirmado; contenido verificado). El caso obligatorio se añadirá cuando llegue |
 | Cada integrante está preparado para defender el trabajo | NO VERIFICABLE (material listo: guía, HTML y resumen) |

@@ -156,12 +156,23 @@ def rectas_2d(A, b, resultado):
 
 # Módulo III: ajuste lineal
 
-def ajuste(xs, ys, pendiente, intercepto, estimados):
+def rango_ajuste(xs, ys, estimados):
+    """Rango por defecto (x0, x1, y0, y1) de la gráfica de ajuste: datos, recta y residuos."""
+    xs_f = [float(v) for v in xs]
+    ys_f = [float(v) for v in ys]
+    margen = (max(xs_f) - min(xs_f)) * 0.08 or 1.0
+    ys_todos = ys_f + [float(e) for e in estimados]
+    my = (max(ys_todos) - min(ys_todos)) * 0.1 or 1.0
+    return (min(xs_f) - margen, max(xs_f) + margen, min(ys_todos) - my, max(ys_todos) + my)
+
+
+def ajuste(xs, ys, pendiente, intercepto, estimados, rango=None):
+    """Datos, recta de mejor ajuste y residuos.  `rango` (opcional) solo fija la vista de los
+    ejes; los datos y los trazos no cambian."""
     fig = _base("Ajuste lineal por mínimos cuadrados")
     xs_f, ys_f = [float(v) for v in xs], [float(v) for v in ys]
     m, c = float(pendiente), float(intercepto)
-    margen = (max(xs_f) - min(xs_f)) * 0.08 or 1.0
-    x0, x1 = min(xs_f) - margen, max(xs_f) + margen
+    x0, x1 = rango_ajuste(xs, ys, estimados)[0:2]
     rx, ry = [], []
     for x, y, y_est in zip(xs_f, ys_f, estimados):
         rx += [x, x, None]
@@ -188,6 +199,8 @@ def ajuste(xs, ys, pendiente, intercepto, estimados):
                            showarrow=True, arrowhead=0, ax=0, ay=-34 if residuos[mayor] > 0 else 34,
                            arrowcolor=COLOR_RESIDUO, font=dict(size=11, color=COLOR_RESIDUO))
     fig.update_layout(xaxis=_eje("x"), yaxis=_eje("y"), hovermode="closest")
+    if rango is not None:
+        fig.update_layout(xaxis_range=[rango[0], rango[1]], yaxis_range=[rango[2], rango[3]])
     return fig
 
 

@@ -24,7 +24,7 @@ Verificado el 12-nov-2026 con el commit de `main` 223d259 (rama de origen `featu
 
 - No prueba gestos con una mano real: solo pruebas sintéticas (ver `docs/mediapipe_2d.md`).
 - No prueba un equipo distinto con otra webcam ni otros navegadores fuera de Brave.
-- El caso obligatorio de la docente no está incluido (pendiente externo).
+- El caso de validación previsto por el enunciado no ha sido entregado por la docente (no es una tarea técnica de Ax).
 
 ## Uso del entorno de trabajo
 

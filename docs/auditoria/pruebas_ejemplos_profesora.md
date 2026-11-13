@@ -108,3 +108,18 @@ el de la lámina.
 - Pruebas de ejemplos de la profesora: 13 (13 aprobadas; 0 fallidas) con las páginas revisadas en imagen.
 - Ejemplos con página sin revisar visualmente: ver la tabla de pendientes.
 - Procedimientos sin prueba posible por falta de datos en la lámina: la tercera componente de x⁽²⁾ de Jacobi (ver D5).
+
+## Actualización 13-nov-2026
+
+**Añadidos (revisados en imagen):**
+- S8-30/09 pp. 6–7 (mínimos cuadrados del ejemplo x̂ = (65/33, −29/33)): `TestS830MinimosCuadrados`, 3 pruebas. Coinciden AᵀA, Aᵀb, |A| = 363, |Aₓ| = 715, |A_y| = −319 y la solución por Gauss y por Cramer.
+- S8-28/09 p. 6: el criterio de parada impreso es absoluto (sin división). Sin prueba numérica por la errata interna del ejemplo (ver `discrepancias.md`, D8).
+- Corrección: la nota anterior que decía que la lámina usaba una norma relativa era un error de OCR.
+
+**Total de pruebas de ejemplos de la profesora:** 16, todas aprobadas.
+
+**Pendientes sin revisar en imagen (no tienen prueba):**
+- S6-14/09 p. 29; S6-16/09 p. 35 (LU); S7-21/09 pp. 15 y 20; S8-28/09 p. 13 (κ).
+- S8-30/09 pp. 19 y 32 (Jacobi, Gauss-Seidel, SOR); S9-05/10 p. 14 (tridiagonal); S8-30/09 p. 37 (dominancia).
+- Se ha revisado S8-30/09 p. 9: es una diapositiva introductoria (objetivos y la fórmula ‖x⁽ᵏ⁺¹⁾ − x⁽ᵏ⁾‖ < ε, también absoluta). No contiene ejemplo numérico.
+- La recta y = 0,75x + 1,2 de la etiqueta de `ejemplos.py` no aparece en la página 8 (la mitad inferior está vacía); se corrigió la etiqueta a «datos; recta calculada».
