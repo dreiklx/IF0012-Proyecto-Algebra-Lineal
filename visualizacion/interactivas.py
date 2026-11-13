@@ -80,9 +80,7 @@ def _base(titulo, alto=440, revision=True):
     return fig
 
 
-# ---------------------------------------------------------------------------
 # Módulo I: rectas (2 incógnitas) y planos (3 incógnitas)
-# ---------------------------------------------------------------------------
 
 def planos_3d(A, b, resultado):
     """Cada ecuación a·(x, y, z) = bᵢ como una porción cuadrada del plano (las mismas
@@ -156,9 +154,7 @@ def rectas_2d(A, b, resultado):
     return fig
 
 
-# ---------------------------------------------------------------------------
 # Módulo III: ajuste lineal
-# ---------------------------------------------------------------------------
 
 def ajuste(xs, ys, pendiente, intercepto, estimados):
     fig = _base("Ajuste lineal por mínimos cuadrados")
@@ -195,9 +191,7 @@ def ajuste(xs, ys, pendiente, intercepto, estimados):
     return fig
 
 
-# ---------------------------------------------------------------------------
 # Módulo IV: convergencia, comparación, autovalores y precondicionador
-# ---------------------------------------------------------------------------
 
 def _texto_vector(x):
     return "(" + ", ".join(f"{v:.6g}" for v in x) + ")"

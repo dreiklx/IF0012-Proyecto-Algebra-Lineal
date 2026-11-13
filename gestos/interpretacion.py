@@ -84,7 +84,7 @@ class InterpreteGestos:
         self._previo = None             # último punto de agarre suavizado
         self._dist_zoom = None
 
-    # -- calibración -------------------------------------------------------
+    # calibración
     def calibrar(self, mano):
         """Con la palma abierta mide la separación natural pulgar–índice de ESTA mano y
         ajusta los umbrales de la pinza (umbral adaptativo), dentro de límites seguros."""
@@ -92,7 +92,7 @@ class InterpreteGestos:
         self.umbral_entra = min(PINZA_ENTRA, max(0.18, 0.35 * abierta))
         self.umbral_sale = self.umbral_entra * 1.5
 
-    # -- utilidades ----------------------------------------------------------
+    # utilidades
     def _sostenido(self, gesto, t, duracion):
         """True una sola vez cuando `gesto` lleva `duracion` segundos seguidos."""
         if self._candidato is None or self._candidato[0] != gesto:
@@ -113,7 +113,7 @@ class InterpreteGestos:
         self._dist_zoom = None
         self.suave.reiniciar()
 
-    # -- paso principal --------------------------------------------------
+    # paso principal
     def actualizar(self, manos, t):
         if manos:
             self._ultima_mano = t

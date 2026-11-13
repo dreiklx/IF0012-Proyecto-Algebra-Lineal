@@ -28,9 +28,7 @@ class ErrorDimension(ErrorMatriz):
     """Error de dimensiones: los tamaños de los operandos no son compatibles."""
 
 
-# ---------------------------------------------------------------------------
 # Validación
-# ---------------------------------------------------------------------------
 
 def es_numero(valor):
     """Indica si `valor` es un número aceptado por el núcleo.
@@ -133,9 +131,7 @@ def validar_sistema(A, b):
     return m, n
 
 
-# ---------------------------------------------------------------------------
 # Operaciones
-# ---------------------------------------------------------------------------
 
 def transpuesta(A):
     """Devuelve la transpuesta de A: el elemento (i, j) pasa a la posición (j, i).

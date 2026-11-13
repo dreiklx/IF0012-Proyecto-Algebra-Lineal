@@ -56,7 +56,7 @@ class ControlGestual:
                 "fps": 0.0, "deteccion_ms": 0.0, "latencia_ms": 0.0, "cpu_proceso": 0.0,
                 "fotogramas": 0, "motivo_fin": ""}
 
-    # -- API para Streamlit (no bloquea) ----------------------------------
+    # API para Streamlit (no bloquea)
     def iniciar(self):
         with self._candado:
             if self._hilo is not None and self._hilo.is_alive():
@@ -112,7 +112,7 @@ class ControlGestual:
     def activo(self):
         return self._hilo is not None and self._hilo.is_alive()
 
-    # -- hilo de trabajo -------------------------------------------------
+    # hilo de trabajo
     def _fijar(self, **cambios):
         with self._candado:
             self._estado.update(cambios)

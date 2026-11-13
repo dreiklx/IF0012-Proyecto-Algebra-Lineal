@@ -13,9 +13,7 @@ from interfaz.compartido.formulas import latex_matriz
 from visualizacion import notacion
 
 
-# ---------------------------------------------------------------------------
 # Entrada de datos
-# ---------------------------------------------------------------------------
 
 def leer_matriz_ui(texto, nombre):
     """Lee una matriz; si hay error lo muestra y devuelve None."""
@@ -50,9 +48,7 @@ def mostrar_pasos(pasos, separador):
         st.latex(latex_matriz(paso.matriz, separador=separador))
 
 
-# ---------------------------------------------------------------------------
 # Gráficas interactivas (Plotly)
-# ---------------------------------------------------------------------------
 
 CONTROLES_2D = ("Controles: ⛶ (arriba a la derecha) amplía la gráfica a pantalla completa y Esc la "
                 "devuelve · arrastre para ampliar una región · rueda para acercar o alejar · "

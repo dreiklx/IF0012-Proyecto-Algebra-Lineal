@@ -145,9 +145,7 @@ PASOS_CSR = {JACOBI: paso_jacobi_csr, GAUSS_SEIDEL: paso_gauss_seidel_csr, SOR: 
 FORMATOS = ("densa", "csr")
 
 
-# ---------------------------------------------------------------------------
 # Utilidades
-# ---------------------------------------------------------------------------
 
 def _a_float(valor, nombre):
     try:
@@ -198,9 +196,7 @@ def vector_diagonal(A, b):
     return [_a_float(b[i], "b") / _a_float(A[i][i], "a_ii") for i in range(n)]
 
 
-# ---------------------------------------------------------------------------
 # Validación de la configuración
-# ---------------------------------------------------------------------------
 
 def validar_configuracion(A, b, config):
     """Valida A, b y la configuración.  Lanza ErrorEntrada/ErrorMatriz si algo falla.
@@ -252,9 +248,7 @@ def validar_configuracion(A, b, config):
     return A_f, b_f, x0_f, advertencias
 
 
-# ---------------------------------------------------------------------------
 # Mecanismo común de iteración y parada
-# ---------------------------------------------------------------------------
 
 def ejecutar(A, b, config):
     """Ejecuta el método configurado.  Nunca lanza excepciones: todo problema

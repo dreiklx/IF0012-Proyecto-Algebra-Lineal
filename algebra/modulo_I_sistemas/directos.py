@@ -102,9 +102,7 @@ class ErrorSistema(ValueError):
         self.resultado = resultado
 
 
-# ---------------------------------------------------------------------------
 # Utilidades internas
-# ---------------------------------------------------------------------------
 
 def _copiar(M):
     return [list(fila) for fila in M]
@@ -262,9 +260,7 @@ def _sustitucion_atras(U, pivotes, n, libres_valores, columna_b=True):
     return x, textos
 
 
-# ---------------------------------------------------------------------------
 # Resolución de sistemas
-# ---------------------------------------------------------------------------
 
 def _resolver(A, b, metodo, estrategia):
     m, n = validar_sistema(A, b)
@@ -349,9 +345,7 @@ def solucion_unica(A, b, pivoteo=PIVOTEO_PRIMER_NO_NULO):
     return resultado.solucion
 
 
-# ---------------------------------------------------------------------------
 # Inversa por Gauss-Jordan
-# ---------------------------------------------------------------------------
 
 def inversa_gauss_jordan(A, pivoteo=PIVOTEO_PRIMER_NO_NULO):
     """Calcula A^-1 llevando [A | I] a [I | A^-1] (S3-24/08 pp. 6 y 28).

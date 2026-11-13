@@ -34,9 +34,7 @@ VACIA = "?"                # marca en el texto de una celda sin valor
 MATRIZ, VECTOR, PUNTOS = "matriz", "vector", "puntos"
 
 
-# ---------------------------------------------------------------------------
 # Conversión texto <-> celdas (funciones puras, probadas en tests/interfaz/test_editor.py)
-# ---------------------------------------------------------------------------
 
 def normalizar(texto):
     """Unifica los separadores admitidos en espacios, sin tocar los números."""
@@ -81,9 +79,7 @@ def ceros(filas, columnas):
     return [["0"] * columnas for _ in range(filas)]
 
 
-# ---------------------------------------------------------------------------
 # Estado en session_state
-# ---------------------------------------------------------------------------
 
 def _k(clave, sufijo):
     return f"{clave}__{sufijo}"
@@ -121,9 +117,7 @@ def _sincronizar(clave, columnas_fijas):
         _escribir(clave, celdas_de_texto(ss[clave], columnas_fijas), actualizar_texto=False)
 
 
-# ---------------------------------------------------------------------------
 # Acciones (callbacks: se ejecutan antes de dibujar los widgets)
-# ---------------------------------------------------------------------------
 
 def _al_editar_celda(clave):
     _escribir(clave, _leer_celdas(clave))
@@ -165,9 +159,7 @@ def restaurar(*claves):
             st.session_state[_k(clave, "cargado")] = True
 
 
-# ---------------------------------------------------------------------------
 # Estado de validación (antes de calcular)
-# ---------------------------------------------------------------------------
 
 def analizar(texto, tipo, nombre):
     """Devuelve (valor_leido_o_None, mensaje, tipo_de_chip) sin mostrar nada."""
@@ -194,9 +186,7 @@ def analizar(texto, tipo, nombre):
         return None, str(error), "error"
 
 
-# ---------------------------------------------------------------------------
 # Componente
-# ---------------------------------------------------------------------------
 
 def editor(clave, etiqueta, ejemplo, tipo=MATRIZ, nombre=None, css="ed", encabezados=None,
            etiqueta_fila=None, ayuda=None, altura=130):

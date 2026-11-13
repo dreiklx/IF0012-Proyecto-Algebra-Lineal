@@ -175,9 +175,7 @@ def _codigos(texto):
     return re.sub(r"\b[A-Z]+(?:_[A-Z]+)+\b", palabras, texto)
 
 
-# ---------------------------------------------------------------------------
 # Expresiones
-# ---------------------------------------------------------------------------
 
 def ecuacion(coeficientes, variables, independiente):
     """«2x − y + 3z = 5» con signos correctos (nunca «+ -1y»).  Formato :g."""

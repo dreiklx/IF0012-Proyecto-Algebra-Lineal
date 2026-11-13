@@ -45,15 +45,12 @@ def leer_csv(ruta):
         return list(csv.DictReader(f))
 
 
-def evidencia(fuente, pagina):
-    """Imagen real de la página, si existe en docs/auditoria/evidencias/."""
-    if not fuente.startswith("S9-07"):
-        return None
-    nombre = f"S9-07_p{pagina}.jpg"
-    for modulo in ("modulo_IV",):
-        ruta = os.path.join(AUD, "evidencias", modulo, nombre)
-        if os.path.exists(ruta):
-            return f"auditoria/evidencias/{modulo}/{nombre}"
+def evidencia(fuente, pagina, modulo):
+    """Imagen real de la página (docs/auditoria/evidencias/modulo_X/<doc>_p<n>.jpg), o None."""
+    nombre = f"{fuente.split('/')[0]}_p{pagina}.jpg"
+    ruta = os.path.join(AUD, "evidencias", f"modulo_{modulo}", nombre)
+    if os.path.exists(ruta):
+        return f"auditoria/evidencias/modulo_{modulo}/{nombre}"
     return None
 
 
@@ -74,7 +71,7 @@ def main():
             cuerpo.append('<p class="pen">Sin revisión visual todavía. Estas páginas están marcadas como '
                           '«Solo OCR (pendiente de revisión visual)» en docs/auditoria/inventario_paginas.csv.</p>')
         for f in por_modulo[clave]:
-            img = evidencia(f["fuente"], f["pagina"])
+            img = evidencia(f["fuente"], f["pagina"], clave)
             cuerpo.append('<article class="proc">')
             cuerpo.append(f'<h3>{html.escape(f["procedimiento"])}</h3>')
             cuerpo.append(f'<p class="fuente"><b>Fuente:</b> {html.escape(f["fuente"])}, página {html.escape(f["pagina"])}'
